@@ -183,7 +183,7 @@ export async function POST(req: NextRequest) {
       const salesEmail = buildSalesOrderEmail(emailData);
       const salesTo = process.env.SALES_EMAIL || process.env.SMTP_USER!;
 
-      await Promise.allSettled([
+      const [customerResult, salesResult] = await Promise.allSettled([
         sendEmail({
           to: email,
           subject: customerEmail.subject,
@@ -198,6 +198,18 @@ export async function POST(req: NextRequest) {
           replyTo: email,
         }),
       ]);
+
+      const summarize = (label: string, to: string, r: PromiseSettledResult<boolean>) => {
+        if (r.status === "rejected") {
+          console.error(`[POST /api/orders] ${label} email rejected (to=${to}):`, r.reason);
+        } else if (r.value === false) {
+          console.error(`[POST /api/orders] ${label} email returned false (to=${to}) — see [mailer] logs above for SMTP details.`);
+        } else {
+          console.log(`[POST /api/orders] ${label} email sent (to=${to})`);
+        }
+      };
+      summarize("customer", email, customerResult);
+      summarize("sales", salesTo, salesResult);
     } catch (mailErr) {
       console.error("[POST /api/orders] email dispatch failed:", mailErr);
     }
