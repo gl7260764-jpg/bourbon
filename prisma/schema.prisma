@@ -1,0 +1,250 @@
+// Bourbon & Oak — e-commerce schema
+// Neon Postgres + Prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Availability {
+  IN_STOCK
+  LOW_STOCK
+  ALLOCATED
+  PRE_ORDER
+  SOLD_OUT
+  ARCHIVED
+}
+
+enum ProductionStyle {
+  SINGLE_BARREL
+  SMALL_BATCH
+  BOTTLED_IN_BOND
+  BARREL_PROOF
+  STANDARD
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  name        String
+  description String?
+  // Hero image for the category landing
+  imageUrl    String?
+  // Ordering on the shop sidebar
+  sortOrder   Int       @default(0)
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  subtitle    String?
+  description String   @db.Text
+  story       String?  @db.Text
+
+  // Pricing — single bottle, optional case-of-N (null = bottle-only allocation)
+  bottlePrice    Decimal  @db.Decimal(10, 2)
+  casePrice      Decimal? @db.Decimal(10, 2)
+  bottlesPerCase Int?
+  compareAtPrice Decimal? @db.Decimal(10, 2)
+
+  // Whiskey specs
+  ageYears        Int?
+  isNAS           Boolean @default(false)
+  proof           Decimal @db.Decimal(5, 2)
+  abv             Decimal @db.Decimal(5, 2)
+  bottleSizeMl    Int     @default(750)
+
+  // Mash bill (percentages — should sum to ~100)
+  cornPercent     Int?
+  ryePercent      Int?
+  wheatPercent    Int?
+  maltedBarleyPct Int?
+
+  // Provenance
+  distillery     String
+  region         String
+  state          String?
+  masterDistiller String?
+  caskType       String?  // e.g. "New American White Oak"
+  charLevel      Int?     // 1-4
+  finishCask     String?  // e.g. "Sherry", "Port" — null if none
+  batchNumber    String?
+  barrelNumber   String?
+  releaseYear    Int?
+
+  // Production flags
+  productionStyle ProductionStyle @default(STANDARD)
+  isChillFiltered Boolean         @default(true)
+  isLimitedEdition Boolean        @default(false)
+  isAllocated      Boolean        @default(false)
+  totalBottlesProduced Int?
+
+  // Tasting profile
+  nose            String?  @db.Text
+  palate          String?  @db.Text
+  finish          String?  @db.Text
+  flavorTags      String[] @default([])
+  servingSuggestion String?
+  foodPairings    String?  @db.Text
+  videoUrl        String?
+
+  // Commerce
+  sku           String       @unique
+  stockBottles  Int          @default(0)
+  stockCases    Int          @default(0)
+  availability  Availability @default(IN_STOCK)
+  rating        Decimal?     @db.Decimal(2, 1)
+  reviewCount   Int          @default(0)
+  isFeatured    Boolean      @default(false)
+  badge         String?      // e.g. "Best Seller", "New Arrival"
+
+  categoryId String
+  category   Category       @relation(fields: [categoryId], references: [id])
+  images     ProductImage[]
+  awards     Award[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([availability])
+  @@index([isFeatured])
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  url       String
+  alt       String?
+  sortOrder Int     @default(0)
+  isPrimary Boolean @default(false)
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+}
+
+model Award {
+  id           String  @id @default(cuid())
+  name         String
+  organization String?
+  year         Int?
+  medal        String? // "Gold", "Double Gold", "Silver"
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CARD
+  PAYPAL
+  CHIME
+  APPLE_PAY
+  CRYPTO
+}
+
+enum ShippingMethod {
+  STANDARD
+  EXPRESS
+  OVERNIGHT
+  WHITE_GLOVE
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  orderNumber String      @unique
+  status      OrderStatus @default(PENDING)
+
+  // Contact
+  email String
+  phone String
+
+  // Shipping address
+  fullName     String
+  addressLine1 String
+  addressLine2 String?
+  city         String
+  region       String
+  postal       String
+  country      String
+
+  // Methods
+  shippingMethod ShippingMethod
+  shippingCost   Decimal        @db.Decimal(10, 2)
+  paymentMethod  PaymentMethod
+  discountRate   Decimal        @db.Decimal(4, 3) @default(0)
+
+  // Totals snapshot
+  subtotal Decimal @db.Decimal(10, 2)
+  discount Decimal @db.Decimal(10, 2) @default(0)
+  tax      Decimal @db.Decimal(10, 2)
+  total    Decimal @db.Decimal(10, 2)
+
+  notes String? @db.Text
+
+  items OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id           String  @id @default(cuid())
+  orderId      String
+  order        Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  // Snapshot at order time
+  productId    String?
+  productName  String
+  productImage String
+  ageLabel     String?
+  unitPrice    Decimal @db.Decimal(10, 2)
+  quantity     Int
+  isCase       Boolean @default(false)
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+enum MessageStatus {
+  UNREAD
+  READ
+  ARCHIVED
+}
+
+model ContactMessage {
+  id      String        @id @default(cuid())
+  name    String
+  email   String
+  subject String?
+  body    String        @db.Text
+  status  MessageStatus @default(UNREAD)
+
+  createdAt DateTime @default(now())
+
+  @@index([status])
+  @@index([createdAt])
+}
