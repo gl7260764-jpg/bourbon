@@ -76,7 +76,7 @@ export default function FeaturedProductsClient({
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {products.map((product, i) => (
             <motion.div
               key={product.id}
@@ -89,7 +89,7 @@ export default function FeaturedProductsClient({
             >
               <Link
                 href={`/products/${product.slug}`}
-                className="relative h-64 overflow-hidden bg-bourbon-deep/5 block"
+                className="relative h-44 sm:h-64 overflow-hidden bg-bourbon-deep/5 block"
               >
                 <Image
                   src={product.image}
@@ -138,12 +138,12 @@ export default function FeaturedProductsClient({
                 </div>
               </Link>
 
-              <div className="p-5">
-                <p className="text-bourbon-gold text-xs tracking-widest uppercase mb-1">
+              <div className="p-3 sm:p-5">
+                <p className="text-bourbon-gold text-[10px] sm:text-xs tracking-widest uppercase mb-1">
                   {product.ageLabel} Aged
                 </p>
                 <Link href={`/products/${product.slug}`}>
-                  <h3 className="font-[family-name:var(--font-playfair)] text-lg font-semibold text-bourbon-deep mb-2 group-hover:text-bourbon-gold transition-colors">
+                  <h3 className="font-[family-name:var(--font-playfair)] text-base sm:text-lg font-semibold text-bourbon-deep mb-2 group-hover:text-bourbon-gold transition-colors">
                     {product.name}
                   </h3>
                 </Link>
@@ -151,13 +151,13 @@ export default function FeaturedProductsClient({
                   <StarRating rating={product.rating} />
                   <span className="text-bourbon-stone text-xs">({product.reviews})</span>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="font-[family-name:var(--font-playfair)] text-xl font-bold text-bourbon-deep">
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <span className="font-[family-name:var(--font-playfair)] text-lg sm:text-xl font-bold text-bourbon-deep">
                     ${product.price.toFixed(2)}
                   </span>
                   <button
                     onClick={() => handleAddToCart(product)}
-                    className="text-xs tracking-wider uppercase text-bourbon-gold font-semibold hover:text-bourbon-amber transition-colors cursor-pointer"
+                    className="text-[10px] sm:text-xs tracking-wider uppercase text-bourbon-gold font-semibold hover:text-bourbon-amber transition-colors cursor-pointer"
                   >
                     Add to Cart
                   </button>

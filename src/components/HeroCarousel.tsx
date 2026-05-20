@@ -3,8 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { useCart } from "./CartContext";
-import { useToast } from "./CartToast";
+import Link from "next/link";
 
 const slides = [
   {
@@ -51,21 +50,6 @@ const slides = [
 
 export default function HeroCarousel() {
   const [current, setCurrent] = useState(0);
-
-  const { addItem } = useCart();
-  const { showToast } = useToast();
-
-  const handleAddToCart = () => {
-    const priceNum = parseFloat(slide.price.replace("$", ""));
-    addItem({
-      id: slide.id,
-      name: `${slide.title} ${slide.subtitle}`,
-      price: priceNum,
-      image: slide.image,
-      age: slide.age,
-    });
-    showToast(`${slide.title} ${slide.subtitle}`, slide.image, priceNum);
-  };
 
   const next = useCallback(() => {
     setCurrent((prev) => (prev + 1) % slides.length);
@@ -146,15 +130,15 @@ export default function HeroCarousel() {
                 <span className="font-[family-name:var(--font-playfair)] text-3xl sm:text-4xl font-bold text-bourbon-gold">
                   {slide.price}
                 </span>
-                <button
-                  onClick={handleAddToCart}
+                <Link
+                  href="/shop"
                   className="group w-full sm:w-auto justify-center px-6 sm:px-8 py-3 sm:py-4 bg-bourbon-gold text-bourbon-deep font-semibold tracking-wider uppercase text-sm hover:bg-bourbon-amber transition-all duration-300 flex items-center gap-3 cursor-pointer"
                 >
                   Shop Now
                   <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
-                </button>
+                </Link>
               </div>
             </motion.div>
           </AnimatePresence>

@@ -13,9 +13,9 @@ export default function Home() {
     <main>
       <HeroCarousel />
       <BrandStrip />
+      <HappyHour />
       <FeaturedProducts />
       <LimitedEdition />
-      <HappyHour />
       <OurProcess />
       <Testimonials />
       <RecentNews />
