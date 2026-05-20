@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Prisma, PaymentMethod, ShippingMethod } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
+import { sendEmail } from "@/lib/mailer";
+import {
+  buildCustomerOrderEmail,
+  buildSalesOrderEmail,
+  shippingLabel,
+  paymentLabel,
+} from "@/lib/emails/orderEmails";
 
 type ShippingId = "standard" | "express" | "overnight" | "white-glove";
 type PaymentId = "card" | "paypal" | "chime" | "apple-pay" | "crypto";
@@ -102,7 +109,7 @@ export async function POST(req: NextRequest) {
   const paymentMethod = PAYMENT_MAP[payment.id];
 
   try {
-    await prisma.order.create({
+    const createdOrder = await prisma.order.create({
       data: {
         orderNumber,
         status: "PENDING",
@@ -136,6 +143,64 @@ export async function POST(req: NextRequest) {
         },
       },
     });
+
+    try {
+      const emailData = {
+        orderNumber,
+        placedAt: createdOrder.createdAt,
+        customer: {
+          fullName: address.fullName!.trim(),
+          email,
+          phone: phone || undefined,
+        },
+        shippingAddress: {
+          line1: address.line1!.trim(),
+          line2: address.line2?.trim() || undefined,
+          city: address.city!.trim(),
+          region: address.region!.trim(),
+          postal: address.postal!.trim(),
+          country: address.country!.trim(),
+        },
+        shippingMethodLabel: shippingLabel(shipping.id),
+        paymentMethodLabel: paymentLabel(payment.id),
+        items: items.map((it) => ({
+          name: String(it.name ?? "Unnamed item"),
+          ageLabel: it.age ?? null,
+          quantity: Math.max(1, Math.floor(Number(it.quantity ?? 1))),
+          unitPrice: Number(it.price ?? 0),
+          image: it.image,
+        })),
+        totals: {
+          subtotal: Number(totals.subtotal ?? 0),
+          discount: Number(totals.discount ?? 0),
+          shippingCost: Number(totals.shippingCost ?? shipping.cost ?? 0),
+          tax: Number(totals.tax ?? 0),
+          total: Number(totals.total ?? 0),
+        },
+      };
+
+      const customerEmail = buildCustomerOrderEmail(emailData);
+      const salesEmail = buildSalesOrderEmail(emailData);
+      const salesTo = process.env.SALES_EMAIL || process.env.SMTP_USER!;
+
+      await Promise.allSettled([
+        sendEmail({
+          to: email,
+          subject: customerEmail.subject,
+          html: customerEmail.html,
+          text: customerEmail.text,
+        }),
+        sendEmail({
+          to: salesTo,
+          subject: salesEmail.subject,
+          html: salesEmail.html,
+          text: salesEmail.text,
+          replyTo: email,
+        }),
+      ]);
+    } catch (mailErr) {
+      console.error("[POST /api/orders] email dispatch failed:", mailErr);
+    }
 
     return NextResponse.json({ orderNumber }, { status: 201 });
   } catch (err) {
