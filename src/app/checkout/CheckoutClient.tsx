@@ -13,17 +13,17 @@ import {
   type SavedProfile,
 } from "./profileStorage";
 import {
-  AmexLogo,
+  // AmexLogo, // unused while credit card payment is disabled
   ApplePayLogo,
   BitcoinLogo,
   ChimeLogo,
   DhlLogo,
   EthereumLogo,
   FedexLogo,
-  MastercardLogo,
+  // MastercardLogo, // unused while credit card payment is disabled
   UpsLogo,
   UspsLogo,
-  VisaLogo,
+  // VisaLogo, // unused while credit card payment is disabled
 } from "./Logos";
 
 type ShippingId = "standard" | "express" | "overnight" | "white-glove";
@@ -101,18 +101,19 @@ interface PaymentOption {
 const CRYPTO_DISCOUNT_RATE = 0.1;
 
 const PAYMENT_OPTIONS: PaymentOption[] = [
-  {
-    id: "card",
-    label: "Credit or Debit Card",
-    detail: "Visa, Mastercard, Amex",
-    logos: (
-      <div className="flex items-center gap-1.5">
-        <VisaLogo />
-        <MastercardLogo />
-        <AmexLogo />
-      </div>
-    ),
-  },
+  // Credit/Debit card payment temporarily disabled.
+  // {
+  //   id: "card",
+  //   label: "Credit or Debit Card",
+  //   detail: "Visa, Mastercard, Amex",
+  //   logos: (
+  //     <div className="flex items-center gap-1.5">
+  //       <VisaLogo />
+  //       <MastercardLogo />
+  //       <AmexLogo />
+  //     </div>
+  //   ),
+  // },
   {
     id: "chime",
     label: "Chime",
@@ -187,7 +188,7 @@ export default function CheckoutClient() {
     country: "US",
   });
   const [shippingId, setShippingId] = useState<ShippingId>("standard");
-  const [paymentId, setPaymentId] = useState<PaymentId>("card");
+  const [paymentId, setPaymentId] = useState<PaymentId>("chime");
   const [placing, setPlacing] = useState(false);
   const [placeError, setPlaceError] = useState<string | null>(null);
 
@@ -623,8 +624,8 @@ export default function CheckoutClient() {
                 })}
               </div>
 
-              {/* Card details (only for card payment) */}
-              <AnimatePresence initial={false}>
+              {/* Card details form temporarily disabled along with the card payment option. */}
+              {/* <AnimatePresence initial={false}>
                 {paymentId === "card" && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
@@ -649,7 +650,9 @@ export default function CheckoutClient() {
                     </div>
                   </motion.div>
                 )}
+              </AnimatePresence> */}
 
+              <AnimatePresence initial={false}>
                 {paymentId === "crypto" && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
