@@ -277,3 +277,34 @@ model PushSubscription {
 
   @@index([createdAt])
 }
+
+model Visitor {
+  // `id` is the visitor cookie value (UUID). Re-using the cookie keeps
+  // someone "one unique" across visits even if their IP changes.
+  id          String   @id
+  country     String?
+  countryCode String?  // ISO-3166-1 alpha-2
+  region      String?
+  city        String?
+  userAgent   String?  @db.Text
+  firstSeenAt DateTime @default(now())
+  lastSeenAt  DateTime @updatedAt
+
+  visitDays VisitDay[]
+
+  @@index([firstSeenAt])
+  @@index([lastSeenAt])
+  @@index([countryCode])
+}
+
+model VisitDay {
+  id        String   @id @default(cuid())
+  visitorId String
+  visitor   Visitor  @relation(fields: [visitorId], references: [id], onDelete: Cascade)
+  // `date` is normalized to UTC midnight so we get one row per visitor per day.
+  date      DateTime @db.Date
+  createdAt DateTime @default(now())
+
+  @@unique([visitorId, date])
+  @@index([date])
+}
