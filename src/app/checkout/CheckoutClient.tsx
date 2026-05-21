@@ -359,6 +359,39 @@ export default function CheckoutClient() {
 
   return (
     <main className="bg-bourbon-cream min-h-screen pt-24 sm:pt-32 pb-16 sm:pb-20">
+      {/* Full-screen preloader shown while the order is being placed */}
+      <AnimatePresence>
+        {placing && (
+          <motion.div
+            key="placing-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[100] bg-bourbon-deep/80 backdrop-blur-sm flex items-center justify-center px-6"
+            aria-live="polite"
+            aria-busy="true"
+            role="status"
+          >
+            <div className="bg-bourbon-cream max-w-sm w-full px-8 py-10 text-center border border-bourbon-gold/40 shadow-2xl">
+              <div className="relative mx-auto mb-6 w-14 h-14">
+                <span className="absolute inset-0 rounded-full border-2 border-bourbon-deep/15" />
+                <span className="absolute inset-0 rounded-full border-2 border-transparent border-t-bourbon-gold animate-spin" />
+              </div>
+              <p className="text-bourbon-gold text-[10px] tracking-[0.3em] uppercase mb-2">
+                Processing
+              </p>
+              <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-bourbon-deep mb-2">
+                Placing your order
+              </h2>
+              <p className="text-bourbon-stone text-sm">
+                Hang tight while we confirm your details and send your receipt.
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8 sm:mb-12">

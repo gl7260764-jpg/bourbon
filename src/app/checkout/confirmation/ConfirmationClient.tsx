@@ -136,6 +136,12 @@ export default function ConfirmationClient() {
   const [order, setOrder] = useState<OrderSnapshot | null>(null);
   const [loaded, setLoaded] = useState(false);
 
+  // Always start the confirmation page at the top, even when the previous
+  // page (checkout) had been scrolled down to the place-order button.
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, []);
+
   useEffect(() => {
     let cancelled = false;
 
