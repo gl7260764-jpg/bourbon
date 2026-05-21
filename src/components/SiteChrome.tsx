@@ -7,6 +7,7 @@ import AgeVerification from "./AgeVerification";
 import Navbar from "./Navbar";
 import CartDrawer from "./CartDrawer";
 import Footer from "./Footer";
+import PushManager from "./PushManager";
 
 export default function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -20,6 +21,7 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
     <CartProvider>
       <ToastProvider>
         <AgeVerification />
+        <PushManager />
         <Navbar />
         <CartDrawer />
         {children}
