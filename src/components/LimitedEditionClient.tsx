@@ -1,6 +1,3 @@
-"use client";
-
-import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -41,20 +38,8 @@ export default function LimitedEditionClient({
           </div>
           <div className="absolute inset-0 bg-gradient-to-br from-bourbon-deep via-bourbon-deep/95 to-bourbon-dark" />
 
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="relative z-10 w-full max-w-xl"
-          >
-            <motion.span
-              initial={{ width: 0 }}
-              whileInView={{ width: "3rem" }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="block h-0.5 bg-bourbon-gold mb-6"
-            />
+          <div className="relative z-10 w-full max-w-xl">
+            <span className="block h-0.5 w-12 bg-bourbon-gold mb-6" />
             <p className="text-bourbon-gold text-xs tracking-[0.4em] uppercase mb-4">
               {product.totalBottles
                 ? `Only ${product.totalBottles.toLocaleString()} Bottles a Year`
@@ -102,7 +87,7 @@ export default function LimitedEditionClient({
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </Link>
-          </motion.div>
+          </div>
 
           <span className="absolute -bottom-6 -left-4 font-[family-name:var(--font-playfair)] text-[10rem] font-bold text-bourbon-cream/[0.02] uppercase leading-none pointer-events-none">
             PAPPY
@@ -114,13 +99,7 @@ export default function LimitedEditionClient({
           aria-label={`Shop the ${product.categoryName} collection`}
           className="relative min-h-[300px] sm:min-h-[400px] lg:min-h-full block group"
         >
-          <motion.div
-            initial={{ opacity: 0, scale: 1.1 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="absolute inset-0"
-          >
+          <div className="absolute inset-0">
             <Image
               src={product.image}
               alt={product.name}
@@ -129,13 +108,7 @@ export default function LimitedEditionClient({
             />
             <div className="absolute inset-0 bg-gradient-to-l from-transparent to-bourbon-deep/20 group-hover:to-bourbon-deep/30 transition-colors" />
 
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.5 }}
-              className="absolute bottom-4 right-4 sm:bottom-8 sm:right-8 bg-bourbon-deep/90 backdrop-blur-sm p-4 sm:p-6 border border-bourbon-gold/30"
-            >
+            <div className="absolute bottom-4 right-4 sm:bottom-8 sm:right-8 bg-bourbon-deep/90 backdrop-blur-sm p-4 sm:p-6 border border-bourbon-gold/30">
               <div className="text-center">
                 <span className="text-bourbon-gold text-[10px] sm:text-xs tracking-[0.2em] uppercase block mb-1">
                   Rated
@@ -145,8 +118,8 @@ export default function LimitedEditionClient({
                 </span>
                 <span className="text-bourbon-cream/60 text-xs sm:text-sm block">Points</span>
               </div>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </Link>
       </div>
     </section>

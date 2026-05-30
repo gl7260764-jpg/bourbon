@@ -1,11 +1,20 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 
-export const metadata = {
-  title: "Collections | Bourbon & Oak",
+export const metadata: Metadata = {
+  title: "Bourbon Collections — Pappy, Weller, E.H. Taylor | Bourbon & Oak",
   description:
-    "Browse every collection in our cellar — bourbon, rye, Pappy Van Winkle, limited editions, and more.",
+    "Every Kentucky bourbon collection in our cellar — Pappy Van Winkle, Weller, E.H. Taylor, Eagle Rare, rye whiskey, and limited-edition releases.",
+  alternates: { canonical: "/collection" },
+  openGraph: {
+    title: "Bourbon Collections — Pappy, Weller, E.H. Taylor",
+    description:
+      "Every Kentucky bourbon collection in our cellar — Pappy Van Winkle, Weller, E.H. Taylor, Eagle Rare, rye and limited editions.",
+    url: "/collection",
+    type: "website",
+  },
 };
 
 export default async function CollectionPage() {

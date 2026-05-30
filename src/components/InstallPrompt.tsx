@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
@@ -149,27 +148,17 @@ export default function InstallPrompt() {
         : "Install";
 
   return (
-    <AnimatePresence>
-      <motion.div
-        key="install-popup"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.25 }}
-        className="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6 bg-black/70 backdrop-blur-sm"
-        onClick={dismiss}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="install-popup-title"
+    <div
+      className="animate-fade-in fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6 bg-black/70 backdrop-blur-sm"
+      onClick={dismiss}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="install-popup-title"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="animate-pop-in relative w-full max-w-md bg-bourbon-deep border border-bourbon-gold/30 shadow-2xl shadow-black/60 overflow-hidden"
       >
-        <motion.div
-          initial={{ scale: 0.92, opacity: 0, y: 20 }}
-          animate={{ scale: 1, opacity: 1, y: 0 }}
-          exit={{ scale: 0.95, opacity: 0 }}
-          transition={{ type: "spring", stiffness: 280, damping: 26 }}
-          onClick={(e) => e.stopPropagation()}
-          className="relative w-full max-w-md bg-bourbon-deep border border-bourbon-gold/30 shadow-2xl shadow-black/60 overflow-hidden"
-        >
           <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-bourbon-gold/70 to-transparent" />
 
           <button
@@ -223,12 +212,7 @@ export default function InstallPrompt() {
           </div>
 
           {expanded && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="border-t border-bourbon-gold/15 bg-bourbon-dark/60 px-6 sm:px-8 py-5"
-            >
+            <div className="animate-fade-in border-t border-bourbon-gold/15 bg-bourbon-dark/60 px-6 sm:px-8 py-5">
               {platform === "ios-safari" ? (
                 <ol className="text-bourbon-cream/80 text-sm space-y-2 list-decimal list-inside leading-relaxed">
                   <li>
@@ -261,14 +245,13 @@ export default function InstallPrompt() {
                   to bookmark this page. In Chrome or Edge, you can also click the install icon in the address bar.
                 </div>
               )}
-            </motion.div>
+            </div>
           )}
 
           <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 font-[family-name:var(--font-playfair)] text-[6rem] font-bold text-bourbon-cream/[0.03] uppercase leading-none pointer-events-none whitespace-nowrap">
             BOURBON
           </span>
-        </motion.div>
-      </motion.div>
-    </AnimatePresence>
+      </div>
+    </div>
   );
 }

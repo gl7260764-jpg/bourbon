@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "@/components/CartContext";
 import { useRouter } from "next/navigation";
 import {
@@ -360,15 +359,9 @@ export default function CheckoutClient() {
   return (
     <main className="bg-bourbon-cream min-h-screen pt-24 sm:pt-32 pb-16 sm:pb-20">
       {/* Full-screen preloader shown while the order is being placed */}
-      <AnimatePresence>
-        {placing && (
-          <motion.div
-            key="placing-overlay"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[100] bg-bourbon-deep/80 backdrop-blur-sm flex items-center justify-center px-6"
+      {placing && (
+          <div
+            className="animate-fade-in fixed inset-0 z-[100] bg-bourbon-deep/80 backdrop-blur-sm flex items-center justify-center px-6"
             aria-live="polite"
             aria-busy="true"
             role="status"
@@ -388,9 +381,8 @@ export default function CheckoutClient() {
                 Hang tight while we confirm your details and send your receipt.
               </p>
             </div>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
@@ -685,24 +677,16 @@ export default function CheckoutClient() {
                 )}
               </AnimatePresence> */}
 
-              <AnimatePresence initial={false}>
-                {paymentId === "crypto" && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.25 }}
-                    className="overflow-hidden"
-                  >
-                    <div className="mt-5 p-4 bg-bourbon-gold/10 border border-bourbon-gold/30 text-bourbon-deep text-sm">
-                      <p className="font-semibold mb-1">10% off applied to your subtotal.</p>
-                      <p className="text-bourbon-stone text-xs">
-                        After placing the order you&apos;ll see a wallet address and QR for BTC, ETH, or USDC. Order confirms when the network confirms (~10 min for BTC).
-                      </p>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {paymentId === "crypto" && (
+                <div className="animate-fade-in overflow-hidden">
+                  <div className="mt-5 p-4 bg-bourbon-gold/10 border border-bourbon-gold/30 text-bourbon-deep text-sm">
+                    <p className="font-semibold mb-1">10% off applied to your subtotal.</p>
+                    <p className="text-bourbon-stone text-xs">
+                      After placing the order you&apos;ll see a wallet address and QR for BTC, ETH, or USDC. Order confirms when the network confirms (~10 min for BTC).
+                    </p>
+                  </div>
+                </div>
+              )}
             </section>
           </div>
 

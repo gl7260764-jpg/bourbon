@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/components/CartContext";
@@ -64,14 +63,10 @@ export default function ShopGrid({ products }: { products: ShopProductCard[] }) 
 
   return (
     <div className="grid grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-6">
-      {products.map((product, i) => (
-        <motion.div
+      {products.map((product) => (
+        <div
           key={product.id}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: Math.min(i * 0.05, 0.4), duration: 0.4 }}
-          whileHover={{ y: -6 }}
-          className="group bg-white border border-bourbon-deep/5 overflow-hidden shadow-sm hover:shadow-xl hover:shadow-bourbon-gold/5 transition-all duration-500 flex flex-col"
+          className="group bg-white border border-bourbon-deep/5 overflow-hidden shadow-sm hover:shadow-xl hover:shadow-bourbon-gold/5 hover:-translate-y-1.5 transition-all duration-500 flex flex-col"
         >
           <Link
             href={`/products/${product.slug}`}
@@ -128,7 +123,7 @@ export default function ShopGrid({ products }: { products: ShopProductCard[] }) 
               </button>
             </div>
           </div>
-        </motion.div>
+        </div>
       ))}
     </div>
   );

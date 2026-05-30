@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCart } from "./CartContext";
@@ -35,11 +34,8 @@ export default function Navbar() {
   }, []);
 
   return (
-    <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+    <header
+      className={`animate-fade-down fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         !isHome || scrolled
           ? "bg-bourbon-deep/95 backdrop-blur-md shadow-lg shadow-black/20"
           : "bg-transparent"
@@ -91,7 +87,6 @@ export default function Navbar() {
 
           {/* Right icons */}
           <div className="flex items-center gap-4">
-            {/* Search */}
             <button
               onClick={() => setSearchOpen(true)}
               aria-label="Open search"
@@ -101,13 +96,11 @@ export default function Navbar() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </button>
-            {/* User */}
             <button className="text-bourbon-cream/70 hover:text-bourbon-gold transition-colors cursor-pointer hidden sm:block">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
             </button>
-            {/* Cart */}
             <button
               onClick={toggleCart}
               className="relative text-bourbon-cream/70 hover:text-bourbon-gold transition-colors cursor-pointer"
@@ -115,21 +108,15 @@ export default function Navbar() {
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>
-              <AnimatePresence>
-                {totalItems > 0 && (
-                  <motion.span
-                    key={totalItems}
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    exit={{ scale: 0 }}
-                    className="absolute -top-2 -right-2 w-4 h-4 bg-bourbon-gold text-bourbon-deep text-[10px] font-bold rounded-full flex items-center justify-center"
-                  >
-                    {totalItems > 9 ? "9+" : totalItems}
-                  </motion.span>
-                )}
-              </AnimatePresence>
+              {totalItems > 0 && (
+                <span
+                  key={totalItems}
+                  className="animate-pop-in absolute -top-2 -right-2 w-4 h-4 bg-bourbon-gold text-bourbon-deep text-[10px] font-bold rounded-full flex items-center justify-center"
+                >
+                  {totalItems > 9 ? "9+" : totalItems}
+                </span>
+              )}
             </button>
-            {/* Mobile toggle */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
               className="md:hidden text-bourbon-cream/70 hover:text-bourbon-gold transition-colors cursor-pointer"
@@ -146,34 +133,29 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Search overlay */}
       <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
 
-      {/* Mobile menu */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden bg-bourbon-deep/98 backdrop-blur-md border-t border-bourbon-gold/20 overflow-hidden"
-          >
-            <nav className="flex flex-col py-4 px-6 gap-4">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="text-bourbon-cream/80 hover:text-bourbon-gold text-sm tracking-wider uppercase transition-colors py-2"
-                >
-                  {link.name}
-                </Link>
-              ))}
-            </nav>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.header>
+      {/* Mobile menu — grid-rows trick avoids `height: auto` animation issues */}
+      <div
+        className={`md:hidden grid bg-bourbon-deep/98 backdrop-blur-md border-t overflow-hidden transition-all duration-300 ease-out ${
+          mobileOpen
+            ? "grid-rows-[1fr] opacity-100 border-bourbon-gold/20"
+            : "grid-rows-[0fr] opacity-0 border-transparent"
+        }`}
+      >
+        <nav className="overflow-hidden flex flex-col py-4 px-6 gap-4">
+          {navLinks.map((link) => (
+            <Link
+              key={link.name}
+              href={link.href}
+              onClick={() => setMobileOpen(false)}
+              className="text-bourbon-cream/80 hover:text-bourbon-gold text-sm tracking-wider uppercase transition-colors py-2"
+            >
+              {link.name}
+            </Link>
+          ))}
+        </nav>
+      </div>
+    </header>
   );
 }

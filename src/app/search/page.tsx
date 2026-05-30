@@ -7,6 +7,7 @@ import SearchInline from "./SearchInline";
 export const metadata = {
   title: "Search | Bourbon & Oak",
   description: "Find bourbon, rye, Pappy and more by name, distillery, or flavor.",
+  robots: { index: false, follow: true },
 };
 
 interface PageProps {

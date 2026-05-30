@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
 
 interface SearchHit {
   id: string;
@@ -105,27 +104,19 @@ export default function SearchOverlay({ open, onClose }: SearchOverlayProps) {
     router.push(`/search?q=${encodeURIComponent(trimmed)}`);
   };
 
+  if (!open) return null;
+
   return (
-    <AnimatePresence>
-      {open && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.18 }}
-          className="fixed inset-0 z-[80] bg-bourbon-deep/80 backdrop-blur-sm flex items-start justify-center pt-20 sm:pt-28 px-4"
-          onClick={onClose}
-          aria-modal="true"
-          role="dialog"
-        >
-          <motion.div
-            initial={{ y: -16, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -8, opacity: 0 }}
-            transition={{ duration: 0.22 }}
-            className="relative w-full max-w-2xl bg-bourbon-cream shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          >
+    <div
+      className="animate-fade-in fixed inset-0 z-[80] bg-bourbon-deep/80 backdrop-blur-sm flex items-start justify-center pt-20 sm:pt-28 px-4"
+      onClick={onClose}
+      aria-modal="true"
+      role="dialog"
+    >
+      <div
+        className="animate-fade-up relative w-full max-w-2xl bg-bourbon-cream shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
             {/* Input row */}
             <form
               onSubmit={(e) => {
@@ -233,9 +224,7 @@ export default function SearchOverlay({ open, onClose }: SearchOverlayProps) {
                 View all results for &quot;{q.trim()}&quot; →
               </button>
             )}
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+      </div>
+    </div>
   );
 }

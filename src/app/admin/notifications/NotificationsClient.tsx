@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
 
 interface ProductPreview {
   id: string;
@@ -114,26 +113,15 @@ export default function NotificationsClient({
         </div>
       )}
 
-      <AnimatePresence>
-        {active && (
-          <motion.div
-            key="backdrop"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            onClick={closeModal}
-            className="fixed inset-0 z-50 bg-bourbon-deep/70 backdrop-blur-sm flex items-end sm:items-center justify-center p-4"
+      {active && (
+        <div
+          onClick={closeModal}
+          className="animate-fade-in fixed inset-0 z-50 bg-bourbon-deep/70 backdrop-blur-sm flex items-end sm:items-center justify-center p-4"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="animate-pop-in relative bg-bourbon-cream w-full max-w-md border border-bourbon-gold/30 shadow-2xl"
           >
-            <motion.div
-              key="panel"
-              initial={{ opacity: 0, y: 20, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 20, scale: 0.98 }}
-              transition={{ duration: 0.2 }}
-              onClick={(e) => e.stopPropagation()}
-              className="relative bg-bourbon-cream w-full max-w-md border border-bourbon-gold/30 shadow-2xl"
-            >
               <div className="px-6 pt-6 pb-4 border-b border-bourbon-deep/10 flex items-start justify-between gap-3">
                 <div>
                   <p className="text-bourbon-gold text-[10px] tracking-[0.3em] uppercase mb-1">
@@ -246,10 +234,9 @@ export default function NotificationsClient({
                       : `Send to ${subscriberCount}`}
                 </button>
               </div>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         )}
-      </AnimatePresence>
     </>
   );
 }

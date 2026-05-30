@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { useCart } from "@/components/CartContext";
 import { useToast } from "@/components/CartToast";
 import VideoModal from "./VideoModal";
@@ -197,12 +196,9 @@ export default function ProductDetailClient({ product }: { product: ProductDetai
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
           {/* Gallery */}
           <div>
-            <motion.div
+            <div
               key={activeImageIdx}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4 }}
-              className="relative aspect-square bg-bourbon-deep/5 overflow-hidden"
+              className="animate-fade-in relative aspect-square bg-bourbon-deep/5 overflow-hidden"
             >
               {activeImage && (
                 <Image
@@ -224,7 +220,7 @@ export default function ProductDetailClient({ product }: { product: ProductDetai
                   {product.availabilityLabel}
                 </span>
               )}
-            </motion.div>
+            </div>
 
             {(product.images.length > 1 || product.videoUrl) && (
               <div className="mt-3 sm:mt-4 grid grid-cols-5 gap-2 sm:gap-3">
@@ -532,10 +528,7 @@ export default function ProductDetailClient({ product }: { product: ProductDetai
               >
                 {t}
                 {tab === t && (
-                  <motion.span
-                    layoutId="pdp-tab-underline"
-                    className="absolute -bottom-px left-0 right-0 h-0.5 bg-bourbon-gold"
-                  />
+                  <span className="absolute -bottom-px left-0 right-0 h-0.5 bg-bourbon-gold" />
                 )}
               </button>
             ))}

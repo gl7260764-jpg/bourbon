@@ -1,15 +1,51 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import type { Prisma } from "@prisma/client";
 import { Availability } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import ShopFilters from "./ShopFilters";
 import ShopGrid, { type ShopProductCard } from "./ShopGrid";
 
-export const metadata = {
-  title: "Shop | Bourbon & Oak",
-  description:
-    "Browse our full collection of Kentucky bourbon, rye whiskey, and limited edition releases.",
-};
+export async function generateMetadata({
+  searchParams,
+}: PageProps): Promise<Metadata> {
+  const { category } = await searchParams;
+  if (category) {
+    const cat = await prisma.category.findUnique({
+      where: { slug: category },
+      select: { name: true, description: true },
+    });
+    if (cat) {
+      const description =
+        cat.description ??
+        `Shop ${cat.name} Kentucky bourbon online — hand-selected bottles, allocated releases, shipped from our Bardstown cellar.`;
+      return {
+        title: `${cat.name} Bourbon — Buy Online | Bourbon & Oak`,
+        description: description.slice(0, 158),
+        alternates: { canonical: `/shop?category=${category}` },
+        openGraph: {
+          title: `${cat.name} Bourbon — Buy Online`,
+          description: description.slice(0, 158),
+          url: `/shop?category=${category}`,
+          type: "website",
+        },
+      };
+    }
+  }
+  return {
+    title: "Buy Kentucky Bourbon Online — Single Barrel & Small Batch",
+    description:
+      "Shop Kentucky bourbon, rye whiskey, Pappy Van Winkle and allocated releases. Hand-selected bottles shipped from our Bardstown cellar.",
+    alternates: { canonical: "/shop" },
+    openGraph: {
+      title: "Buy Kentucky Bourbon Online — Single Barrel & Small Batch",
+      description:
+        "Shop Kentucky bourbon, rye whiskey, Pappy Van Winkle and allocated releases.",
+      url: "/shop",
+      type: "website",
+    },
+  };
+}
 
 const SORT_MAP: Record<string, Prisma.ProductOrderByWithRelationInput> = {
   featured: { isFeatured: "desc" },

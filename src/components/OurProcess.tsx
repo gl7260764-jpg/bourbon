@@ -1,6 +1,3 @@
-"use client";
-
-import { motion } from "framer-motion";
 import Image from "next/image";
 
 const steps = [
@@ -35,13 +32,7 @@ export default function OurProcess() {
     <section id="process" className="py-14 sm:py-24 bg-bourbon-deep relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12 sm:mb-20"
-        >
+        <div className="text-center mb-12 sm:mb-20">
           <span className="text-bourbon-gold text-[10px] sm:text-xs tracking-[0.3em] uppercase">
             Craftsmanship
           </span>
@@ -53,33 +44,25 @@ export default function OurProcess() {
             Every drop of Bourbon & Oak is the result of a meticulous process
             refined over six generations.
           </p>
-        </motion.div>
+        </div>
 
         {/* Process steps */}
         <div className="space-y-12 sm:space-y-24">
           {steps.map((step, i) => (
-            <motion.div
+            <div
               key={step.step}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.7 }}
               className={`flex flex-col ${
                 i % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
               } items-center gap-6 sm:gap-12`}
             >
               {/* Image */}
               <div className="flex-1 w-full">
-                <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.4 }}
-                  className="relative h-56 sm:h-80 lg:h-96 overflow-hidden"
-                >
+                <div className="relative h-56 sm:h-80 lg:h-96 overflow-hidden group">
                   <Image
                     src={step.image}
                     alt={step.title}
                     fill
-                    className="object-cover"
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                   />
                   <div className="absolute inset-0 bg-bourbon-deep/20" />
                   {/* Step number overlay */}
@@ -88,7 +71,7 @@ export default function OurProcess() {
                       {step.step}
                     </span>
                   </div>
-                </motion.div>
+                </div>
               </div>
 
               {/* Content */}
@@ -104,7 +87,7 @@ export default function OurProcess() {
                   {step.description}
                 </p>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

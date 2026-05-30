@@ -200,9 +200,9 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
     seo: {
       metaTitle:
-        "How Master Distillers Pick Single Barrel Bourbon — A Honey Barrel Guide",
+        "How Distillers Pick a Single Barrel Bourbon (Honey Barrel)",
       metaDescription:
-        "Inside the barrel pick: how master distillers walk a Kentucky rickhouse, what they taste for, and why char level, mash bill and rick position make a honey barrel.",
+        "Inside the barrel pick — how master distillers walk a Kentucky rickhouse, what they taste for, and why char and rick position make a honey barrel.",
       focusKeyword: "single barrel bourbon",
       primaryKeywords: [
         "single barrel bourbon",
@@ -509,9 +509,9 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
     seo: {
       metaTitle:
-        "5 Summer Bourbon Cocktails — Mint Julep, Smash, Sour, Paper Plane & More",
+        "5 Easy Summer Bourbon Cocktails (Julep, Smash, Sour)",
       metaDescription:
-        "Five tested summer bourbon cocktail recipes: a classic Kentucky Mint Julep, Bourbon Smash, Whiskey Sour, Paper Plane and our distillery's bourbon lemonade.",
+        "Five tested summer bourbon cocktails — Kentucky Mint Julep, Bourbon Smash, Whiskey Sour, Paper Plane and our distillery's bourbon lemonade recipe.",
       focusKeyword: "summer bourbon cocktails",
       primaryKeywords: [
         "summer bourbon cocktails",
@@ -756,9 +756,9 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
     seo: {
       metaTitle:
-        "Rickhouse No. 7 Opens — 20,000 Barrel Metal-Clad Aging Warehouse",
+        "Inside Rickhouse No. 7 — Our 20,000-Barrel Warehouse",
       metaDescription:
-        "Our seventh aging warehouse is now stocking barrels. Rickhouse No. 7 adds 20,000 barrels of metal-clad, temperature-monitored capacity at our Bardstown campus.",
+        "Our seventh aging warehouse is now stocking barrels. Rickhouse No. 7 adds 20,000 barrels of metal-clad, temperature-monitored bourbon capacity.",
       focusKeyword: "rickhouse",
       primaryKeywords: [
         "rickhouse",

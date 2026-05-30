@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 
 const testimonials = [
@@ -38,12 +37,7 @@ export default function Testimonials() {
   return (
     <section className="py-24 bg-bourbon-warm/50 relative overflow-hidden">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
+        <div className="text-center mb-16">
           <span className="text-bourbon-gold text-xs tracking-[0.3em] uppercase">
             Testimonials
           </span>
@@ -51,17 +45,9 @@ export default function Testimonials() {
             What They Say
           </h2>
           <div className="w-20 h-0.5 bg-bourbon-gold mx-auto" />
-        </motion.div>
+        </div>
 
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={t.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5 }}
-            className="text-center"
-          >
+        <div key={t.id} className="animate-fade-up text-center">
             {/* Quote icon */}
             <svg className="w-12 h-12 text-bourbon-gold/30 mx-auto mb-6" fill="currentColor" viewBox="0 0 24 24">
               <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10H14.017zM0 21v-7.391c0-5.704 3.731-9.57 8.983-10.609L9.978 5.151c-2.432.917-3.995 3.638-3.995 5.849h4v10H0z" />
@@ -90,8 +76,7 @@ export default function Testimonials() {
                 <p className="text-bourbon-stone text-sm">{t.title}</p>
               </div>
             </div>
-          </motion.div>
-        </AnimatePresence>
+        </div>
 
         {/* Navigation dots */}
         <div className="flex justify-center gap-3 mt-10">

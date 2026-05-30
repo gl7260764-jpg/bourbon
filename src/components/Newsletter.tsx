@@ -1,7 +1,6 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -50,13 +49,7 @@ export default function Newsletter() {
 
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-bourbon-gold/30 to-transparent" />
 
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.7 }}
-        className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
-      >
+      <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <span className="text-bourbon-gold text-[10px] sm:text-xs tracking-[0.25em] sm:tracking-[0.3em] uppercase">
           Stay Connected
         </span>
@@ -91,26 +84,21 @@ export default function Newsletter() {
           </button>
         </form>
 
-        <AnimatePresence mode="wait">
-          {message && (
-            <motion.p
-              key={message}
-              initial={{ opacity: 0, y: -4 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              className={`mt-4 text-sm tracking-wide ${
-                status === "success" ? "text-bourbon-gold" : "text-red-400"
-              }`}
-            >
-              {message}
-            </motion.p>
-          )}
-        </AnimatePresence>
+        {message && (
+          <p
+            key={message}
+            className={`animate-fade-in mt-4 text-sm tracking-wide ${
+              status === "success" ? "text-bourbon-gold" : "text-red-400"
+            }`}
+          >
+            {message}
+          </p>
+        )}
 
         <p className="text-bourbon-cream/30 text-[10px] sm:text-xs mt-4 sm:mt-6">
           By subscribing, you confirm you are 21+ and agree to our privacy policy.
         </p>
-      </motion.div>
+      </div>
 
       <span className="absolute bottom-0 left-1/2 -translate-x-1/2 font-[family-name:var(--font-playfair)] text-[10rem] md:text-[16rem] font-bold text-bourbon-cream/[0.015] uppercase leading-none pointer-events-none whitespace-nowrap">
         B&O

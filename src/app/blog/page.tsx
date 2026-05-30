@@ -4,9 +4,9 @@ import type { Metadata } from "next";
 import { formatPostDate, getAllPosts } from "@/lib/blog";
 
 export const metadata: Metadata = {
-  title: "From the Distillery — Bourbon Stories, Recipes & News | Bourbon & Oak",
+  title: "From the Distillery — Bourbon Stories & Cocktail Recipes",
   description:
-    "Long-form bourbon writing from our master distiller and head bartender. Single barrel selection, cocktail recipes, rickhouse architecture and Kentucky bourbon stories.",
+    "Long-form Kentucky bourbon writing from our master distiller and head bartender — barrel selection, cocktail recipes, and rickhouse stories.",
   keywords: [
     "bourbon blog",
     "Kentucky bourbon stories",
@@ -17,11 +17,19 @@ export const metadata: Metadata = {
     "barrel selection",
     "mint julep recipe",
   ],
+  alternates: { canonical: "/blog" },
   openGraph: {
-    title: "From the Distillery — Bourbon Stories, Recipes & News",
+    title: "From the Distillery — Bourbon Stories & Cocktail Recipes",
     description:
-      "Long-form bourbon writing from our master distiller and head bartender — single barrel picks, cocktail recipes, rickhouse architecture and Kentucky bourbon stories.",
+      "Long-form Kentucky bourbon writing — barrel selection, cocktail recipes, rickhouse stories.",
     type: "website",
+    url: "/blog",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "From the Distillery — Bourbon Stories & Cocktail Recipes",
+    description:
+      "Long-form Kentucky bourbon writing — barrel selection, cocktails, rickhouse stories.",
   },
 };
 

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 
 const SUBSCRIBED_KEY = "bol_push_subscribed";
 const DISMISSED_AT_KEY = "bol_push_banner_dismissed_at";
@@ -167,19 +166,14 @@ export default function PushManager() {
     setShow(false);
   };
 
+  if (!show) return null;
+
   return (
-    <AnimatePresence>
-      {show && (
-        <motion.div
-          key="push-banner"
-          initial={{ y: 100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 100, opacity: 0 }}
-          transition={{ type: "spring", stiffness: 320, damping: 30 }}
-          className="fixed bottom-4 inset-x-4 sm:inset-x-auto sm:right-4 sm:bottom-4 sm:max-w-sm z-[60]"
-          role="dialog"
-          aria-label="Enable notifications"
-        >
+    <div
+      className="animate-fade-up fixed bottom-4 inset-x-4 sm:inset-x-auto sm:right-4 sm:bottom-4 sm:max-w-sm z-[60]"
+      role="dialog"
+      aria-label="Enable notifications"
+    >
           <div className="bg-bourbon-deep text-bourbon-cream shadow-2xl border border-bourbon-gold/30">
             <div className="px-5 pt-5 pb-4">
               <div className="flex items-start gap-3">
@@ -240,8 +234,6 @@ export default function PushManager() {
               </button>
             </div>
           </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+    </div>
   );
 }

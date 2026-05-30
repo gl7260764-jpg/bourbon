@@ -1,9 +1,18 @@
+import type { Metadata } from "next";
 import ContactForm from "./ContactForm";
 
-export const metadata = {
-  title: "Contact Us | Bourbon & Oak",
+export const metadata: Metadata = {
+  title: "Contact Bourbon & Oak — Kentucky Bourbon Distillery",
   description:
-    "Questions about a release, an allocated bottle, or shipping? Send us a note — we read every one.",
+    "Contact the Bourbon & Oak distillery in Bardstown, KY — questions about a release, allocated bottles, shipping, or distillery tours. One business day reply.",
+  alternates: { canonical: "/contact" },
+  openGraph: {
+    title: "Contact Bourbon & Oak — Kentucky Bourbon Distillery",
+    description:
+      "Questions about a release, allocated bottles, shipping, or distillery tours. One business day reply.",
+    url: "/contact",
+    type: "website",
+  },
 };
 
 export default function ContactPage() {
@@ -42,10 +51,10 @@ export default function ContactPage() {
                 Email
               </p>
               <a
-                href="mailto:cellar@bourbonandoak.com"
+                href="mailto:support@bourbonandoak.com"
                 className="text-bourbon-deep font-semibold hover:text-bourbon-gold transition-colors"
               >
-                cellar@bourbonandoak.com
+                support@bourbonandoak.com
               </a>
             </div>
             <div>

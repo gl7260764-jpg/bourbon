@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "./CartContext";
@@ -57,13 +56,7 @@ export default function FeaturedProductsClient({
   return (
     <section id="products" className="py-20 bg-bourbon-cream">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-14"
-        >
+        <div className="text-center mb-14">
           <span className="text-bourbon-gold text-xs tracking-[0.3em] uppercase">
             Our Collection
           </span>
@@ -74,18 +67,13 @@ export default function FeaturedProductsClient({
           <p className="text-bourbon-stone max-w-2xl mx-auto">
             Each bottle tells a story of patience, tradition, and the art of distillation perfected over generations.
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          {products.map((product, i) => (
-            <motion.div
+          {products.map((product) => (
+            <div
               key={product.id}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.08, duration: 0.5 }}
-              whileHover={{ y: -8 }}
-              className="group bg-white border border-bourbon-deep/5 overflow-hidden shadow-sm hover:shadow-xl hover:shadow-bourbon-gold/5 transition-all duration-500"
+              className="group bg-white border border-bourbon-deep/5 overflow-hidden shadow-sm hover:shadow-xl hover:shadow-bourbon-gold/5 hover:-translate-y-2 transition-all duration-500"
             >
               <Link
                 href={`/products/${product.slug}`}
@@ -103,38 +91,28 @@ export default function FeaturedProductsClient({
                   </span>
                 )}
                 <div className="absolute inset-0 bg-bourbon-deep/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
+                  <button
                     onClick={(e) => {
                       e.preventDefault();
                       handleAddToCart(product);
                     }}
-                    className="w-10 h-10 bg-bourbon-cream flex items-center justify-center hover:bg-bourbon-gold transition-colors"
+                    className="w-10 h-10 bg-bourbon-cream flex items-center justify-center hover:bg-bourbon-gold transition-all hover:scale-110 active:scale-95"
                   >
                     <svg className="w-5 h-5 text-bourbon-deep" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                     </svg>
-                  </motion.button>
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="w-10 h-10 bg-bourbon-cream flex items-center justify-center hover:bg-bourbon-gold transition-colors"
-                  >
+                  </button>
+                  <button className="w-10 h-10 bg-bourbon-cream flex items-center justify-center hover:bg-bourbon-gold transition-all hover:scale-110 active:scale-95">
                     <svg className="w-5 h-5 text-bourbon-deep" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                     </svg>
-                  </motion.button>
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="w-10 h-10 bg-bourbon-cream flex items-center justify-center hover:bg-bourbon-gold transition-colors"
-                  >
+                  </button>
+                  <button className="w-10 h-10 bg-bourbon-cream flex items-center justify-center hover:bg-bourbon-gold transition-all hover:scale-110 active:scale-95">
                     <svg className="w-5 h-5 text-bourbon-deep" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                     </svg>
-                  </motion.button>
+                  </button>
                 </div>
               </Link>
 
@@ -163,20 +141,15 @@ export default function FeaturedProductsClient({
                   </button>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mt-12"
-        >
+        <div className="text-center mt-12">
           <button className="px-10 py-4 border-2 border-bourbon-deep text-bourbon-deep font-semibold tracking-wider uppercase text-sm hover:bg-bourbon-deep hover:text-bourbon-cream transition-all duration-300">
             View All Collection
           </button>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

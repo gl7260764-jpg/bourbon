@@ -1,31 +1,31 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Link from "next/link";
 
 const footerLinks = {
   Shop: [
-    { name: "All Bourbon", href: "#" },
-    { name: "Single Barrel", href: "#" },
-    { name: "Small Batch", href: "#" },
-    { name: "Limited Editions", href: "#" },
-    { name: "Gift Sets", href: "#" },
-    { name: "Accessories", href: "#" },
+    { name: "All Bourbon", href: "/shop" },
+    { name: "Pappy Van Winkle", href: "/shop?category=pappy" },
+    { name: "E.H. Taylor", href: "/shop?category=eh-taylor" },
+    { name: "Eagle Rare", href: "/shop?category=eagle-rare" },
+    { name: "Weller", href: "/shop?category=weller" },
+    { name: "Rye Whiskey", href: "/shop?category=rye" },
+    { name: "Limited Editions", href: "/shop?category=limited-edition" },
   ],
   Company: [
-    { name: "Our Story", href: "#" },
-    { name: "Distillery Tours", href: "#" },
-    { name: "Careers", href: "#" },
-    { name: "Press", href: "#" },
+    { name: "Our Story", href: "/about" },
+    { name: "Distillery Tours", href: "/tours" },
+    { name: "Stories", href: "/blog" },
+    { name: "Press", href: "/press" },
+    { name: "Careers", href: "/careers" },
     { name: "Contact", href: "/contact" },
   ],
   Support: [
-    { name: "FAQ", href: "#" },
-    { name: "Shipping", href: "#" },
-    { name: "Returns", href: "#" },
-    { name: "Track Order", href: "#" },
-    { name: "Privacy Policy", href: "#" },
-    { name: "Terms of Service", href: "#" },
+    { name: "FAQ", href: "/faq" },
+    { name: "Shipping", href: "/shipping" },
+    { name: "Returns", href: "/returns" },
+    { name: "Privacy Policy", href: "/privacy" },
+    { name: "Terms of Service", href: "/terms" },
   ],
 };
 
@@ -70,12 +70,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           {/* Brand column */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="lg:col-span-2"
-          >
+          <div className="lg:col-span-2">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 border-2 border-bourbon-gold flex items-center justify-center">
                 <span className="font-[family-name:var(--font-playfair)] text-bourbon-gold text-xl font-bold">
@@ -108,17 +103,11 @@ export default function Footer() {
                 </Link>
               ))}
             </div>
-          </motion.div>
+          </div>
 
           {/* Link columns */}
-          {Object.entries(footerLinks).map(([title, links], i) => (
-            <motion.div
-              key={title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-            >
+          {Object.entries(footerLinks).map(([title, links]) => (
+            <div key={title}>
               <h4 className="text-bourbon-cream font-semibold text-sm tracking-wider uppercase mb-4">
                 {title}
               </h4>
@@ -134,7 +123,7 @@ export default function Footer() {
                   </li>
                 ))}
               </ul>
-            </motion.div>
+            </div>
           ))}
         </div>
 
