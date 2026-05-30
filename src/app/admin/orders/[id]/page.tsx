@@ -241,7 +241,7 @@ export default async function AdminOrderDetailPage({
               Items
             </h2>
             <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+              <table className="w-full min-w-[560px] text-sm">
                 <thead className="bg-bourbon-deep/5 border-b border-bourbon-deep/10 text-left text-[10px] tracking-widest uppercase text-bourbon-stone">
                   <tr>
                     <th className="px-4 py-3 font-semibold">Bottle</th>

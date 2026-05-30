@@ -9,6 +9,7 @@ import CartDrawer from "./CartDrawer";
 import Footer from "./Footer";
 import PushManager from "./PushManager";
 import Analytics from "./Analytics";
+import ChatWidget from "./ChatWidget";
 
 export default function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -28,6 +29,7 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
         <CartDrawer />
         {children}
         <Footer />
+        <ChatWidget />
       </ToastProvider>
     </CartProvider>
   );

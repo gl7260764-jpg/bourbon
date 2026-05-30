@@ -129,7 +129,7 @@ export default async function AdminSubscribersPage({
           </p>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full min-w-[720px] text-sm">
               <thead>
                 <tr className="border-b border-bourbon-deep/10 text-left">
                   <th className="px-5 py-3 text-[10px] tracking-widest uppercase text-bourbon-stone font-semibold">

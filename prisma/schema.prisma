@@ -272,10 +272,68 @@ model PushSubscription {
   p256dh    String   @db.Text
   auth      String   @db.Text
   userAgent String?  @db.Text
+  // true = a logged-in admin device that should receive live-chat pings.
+  // false = a storefront visitor who opted into product announcements.
+  isAdmin   Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([createdAt])
+  @@index([isAdmin])
+}
+
+enum ChatSender {
+  VISITOR
+  ADMIN
+}
+
+enum ConversationStatus {
+  OPEN
+  CLOSED
+}
+
+model Conversation {
+  id        String             @id @default(cuid())
+  // The bol_vid visitor cookie value — ties the thread to a device.
+  visitorId String
+  status    ConversationStatus @default(OPEN)
+
+  // Denormalized for fast inbox sorting + unread badges without scanning messages.
+  lastMessageAt   DateTime @default(now())
+  lastMessageFrom ChatSender @default(VISITOR)
+  // Count of visitor messages the admin hasn't opened yet.
+  adminUnread     Int      @default(0)
+  // Last time we emailed the admin about this thread — throttles the email
+  // fallback so rapid-fire messages don't flood the inbox.
+  lastNotifiedAt  DateTime?
+
+  messages ChatMessage[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([visitorId])
+  @@index([status])
+  @@index([lastMessageAt])
+}
+
+model ChatMessage {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender         ChatSender
+  body           String       @db.Text
+  createdAt      DateTime     @default(now())
+
+  @@index([conversationId])
+  @@index([createdAt])
+}
+
+// Small key-value store for admin-editable config (e.g. the live-chat greeting).
+model Setting {
+  key       String   @id
+  value     String   @db.Text
+  updatedAt DateTime @updatedAt
 }
 
 model Visitor {

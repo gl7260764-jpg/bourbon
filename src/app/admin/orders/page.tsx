@@ -116,7 +116,7 @@ export default async function AdminOrdersPage({
           </p>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full min-w-[760px] text-sm">
               <thead className="bg-bourbon-deep/5 border-b border-bourbon-deep/10">
                 <tr className="text-left text-[10px] tracking-widest uppercase text-bourbon-stone">
                   <th className="px-4 py-3 font-semibold">Order #</th>

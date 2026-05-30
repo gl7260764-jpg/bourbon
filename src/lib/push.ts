@@ -36,10 +36,25 @@ export interface PushFanoutResult {
 }
 
 export async function sendToAllSubscribers(payload: PushPayload): Promise<PushFanoutResult> {
+  return fanout(payload, {});
+}
+
+/**
+ * Send only to registered admin devices (isAdmin = true). Used for live-chat
+ * pings so storefront subscribers never receive operational notifications.
+ */
+export async function sendToAdmins(payload: PushPayload): Promise<PushFanoutResult> {
+  return fanout(payload, { isAdmin: true });
+}
+
+async function fanout(
+  payload: PushPayload,
+  where: { isAdmin?: boolean },
+): Promise<PushFanoutResult> {
   const result: PushFanoutResult = { attempted: 0, sent: 0, removed: 0, failed: 0 };
   if (!ensureConfigured()) return result;
 
-  const subs = await prisma.pushSubscription.findMany();
+  const subs = await prisma.pushSubscription.findMany({ where });
   result.attempted = subs.length;
   if (subs.length === 0) return result;
 
