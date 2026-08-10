@@ -349,6 +349,7 @@ model Visitor {
   lastSeenAt  DateTime @updatedAt
 
   visitDays VisitDay[]
+  pageViews PageView[]
 
   @@index([firstSeenAt])
   @@index([lastSeenAt])
@@ -365,4 +366,22 @@ model VisitDay {
 
   @@unique([visitorId, date])
   @@index([date])
+}
+
+// One row per page a visitor lands on. Unlike VisitDay this is deliberately
+// NOT deduped — the sequence and the repeat hits are the point, since that's
+// what shows the path someone took through the site.
+model PageView {
+  id        String   @id @default(cuid())
+  visitorId String
+  visitor   Visitor  @relation(fields: [visitorId], references: [id], onDelete: Cascade)
+  // Pathname only, no query string or hash — keeps cardinality sane so the
+  // "top pages" rollup stays meaningful.
+  path      String
+  createdAt DateTime @default(now())
+
+  // Rollups filter by time; journeys read one visitor in chronological order.
+  @@index([createdAt])
+  @@index([path])
+  @@index([visitorId, createdAt])
 }

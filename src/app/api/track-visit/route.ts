@@ -15,6 +15,7 @@ export async function POST(req: NextRequest) {
 
   const res = NextResponse.json({ ok: true });
   const { id: visitorId, isNew } = getOrSetVisitorId(req, res);
+  const path = await readPath(req);
 
   try {
     if (isNew) {
@@ -65,12 +66,43 @@ export async function POST(req: NextRequest) {
       update: {},
       create: { visitorId, date: today },
     });
+
+    // One row per navigation — this is what reconstructs the visitor's path
+    // through the site, so it is intentionally not deduped.
+    if (path) {
+      await prisma.pageView.create({ data: { visitorId, path } });
+    }
   } catch (err) {
     console.error("[track-visit] failed:", err);
     // Still return ok so the client doesn't retry-spam us.
   }
 
   return res;
+}
+
+// The client posts { path }. Treat it as untrusted: it is attacker-controlled
+// and lands in the admin UI, so only accept a same-site pathname, drop any
+// query/hash, and cap the length.
+async function readPath(req: NextRequest): Promise<string | null> {
+  try {
+    const body = (await req.json()) as { path?: unknown };
+    if (typeof body.path !== "string") return null;
+
+    // Reject protocol-relative ("//evil.com") and absolute URLs outright.
+    const raw = body.path.trim();
+    if (!raw.startsWith("/") || raw.startsWith("//")) return null;
+
+    const path = raw.split(/[?#]/)[0];
+    if (path.length > 512) return null;
+
+    // Admin browsing is filtered client-side too; enforce it here so a stray
+    // caller can't pollute the numbers.
+    if (path.startsWith("/admin")) return null;
+
+    return path;
+  } catch {
+    return null;
+  }
 }
 
 function isLikelyBot(ua: string): boolean {
