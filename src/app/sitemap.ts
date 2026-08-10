@@ -56,6 +56,20 @@ function newest(dates: Date[], fallback: Date): Date {
     : fallback;
 }
 
+// Next interpolates these values into the XML raw — its serializer
+// (next/dist/build/webpack/loaders/metadata/resolve-route-data.js) escapes
+// nothing. A single unescaped "&" — e.g. an Unsplash URL ending in
+// "?w=1600&q=85" — makes the whole document malformed, and crawlers abort at
+// the first one and discover zero pages. Escape every URL we emit.
+function xmlSafe(url: string): string {
+  return url
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = [...BLOG_POSTS].sort((a, b) =>
     a.publishedAt < b.publishedAt ? 1 : -1,
@@ -129,26 +143,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // /shop?category=<slug> is self-canonical (see shop/page.tsx generateMetadata),
   // so these are legitimate index targets rather than parameter duplicates.
   const categoryUrls: MetadataRoute.Sitemap = categories.map((c) => ({
-    url: `${BASE_URL}/shop?category=${encodeURIComponent(c.slug)}`,
+    url: xmlSafe(`${BASE_URL}/shop?category=${encodeURIComponent(c.slug)}`),
     lastModified: c.updatedAt,
     changeFrequency: "weekly",
     priority: 0.7,
   }));
 
   const productUrls: MetadataRoute.Sitemap = products.map((p) => ({
-    url: `${BASE_URL}/products/${encodeURIComponent(p.slug)}`,
+    url: xmlSafe(`${BASE_URL}/products/${encodeURIComponent(p.slug)}`),
     lastModified: p.updatedAt,
     changeFrequency: "weekly",
     priority: 0.9,
-    images: p.images[0]?.url ? [p.images[0].url] : undefined,
+    images: p.images[0]?.url ? [xmlSafe(p.images[0].url)] : undefined,
   }));
 
   const blogUrls: MetadataRoute.Sitemap = posts.map((post) => ({
-    url: `${BASE_URL}/blog/${encodeURIComponent(post.slug)}`,
+    url: xmlSafe(`${BASE_URL}/blog/${encodeURIComponent(post.slug)}`),
     lastModified: new Date(post.publishedAt),
     changeFrequency: "monthly",
     priority: 0.7,
-    images: post.heroImage ? [post.heroImage] : undefined,
+    images: post.heroImage ? [xmlSafe(post.heroImage)] : undefined,
   }));
 
   return [
