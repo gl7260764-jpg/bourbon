@@ -242,8 +242,14 @@ model Subscriber {
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
 
+  // Which browsing session handed this address over. SetNull rather than
+  // Cascade: losing the visitor record must never lose the subscriber.
+  visitorId String?
+  visitor   Visitor? @relation(fields: [visitorId], references: [id], onDelete: SetNull)
+
   @@index([status])
   @@index([createdAt])
+  @@index([visitorId])
 }
 
 enum MessageStatus {
@@ -348,12 +354,20 @@ model Visitor {
   firstSeenAt DateTime @default(now())
   lastSeenAt  DateTime @updatedAt
 
-  visitDays VisitDay[]
-  pageViews PageView[]
+  // Set once the anonymous device behind `id` hands over an email (newsletter
+  // popup, footer form). This is what turns "visitor 4F2A" into a real person
+  // whose earlier, pre-signup browsing is already on record.
+  email          String?
+  emailCapturedAt DateTime?
+
+  visitDays   VisitDay[]
+  pageViews   PageView[]
+  subscribers Subscriber[]
 
   @@index([firstSeenAt])
   @@index([lastSeenAt])
   @@index([countryCode])
+  @@index([email])
 }
 
 model VisitDay {

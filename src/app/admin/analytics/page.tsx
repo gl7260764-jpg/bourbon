@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { countryFlag, countryName } from "@/lib/geo";
+import { visitorLabel, deviceLabel } from "@/lib/visitor";
 
 export const metadata = { title: "Analytics | Admin" };
 export const dynamic = "force-dynamic";
@@ -68,6 +69,8 @@ export default async function AnalyticsPage() {
     returningVisitorsWindow,
     repeatVisitorsAllTime,
     pageViewsWindow,
+    identifiedVisitors,
+    subscriberSources,
     newVsReturningRaw,
     topPagesRaw,
     journeyRowsRaw,
@@ -141,6 +144,18 @@ export default async function AnalyticsPage() {
 
     prisma.pageView.count({ where: { createdAt: { gte: since } } }),
 
+    // Anonymous devices that have handed over an email.
+    prisma.visitor.count({ where: { email: { not: null } } }),
+
+    // Where those addresses came from — tells you whether the popup is
+    // actually pulling its weight against the footer form.
+    prisma.subscriber.groupBy({
+      by: ["source"],
+      _count: { _all: true },
+      orderBy: { _count: { source: "desc" } },
+      take: 6,
+    }),
+
     // Per-day split. VisitDay is unique on (visitorId, date), so COUNT(*) is
     // already a distinct-visitor count.
     prisma.$queryRaw<{ day: Date; newv: bigint; returningv: bigint }[]>`
@@ -177,10 +192,12 @@ export default async function AnalyticsPage() {
         createdAt: Date;
         countryCode: string | null;
         firstSeenAt: Date;
+        email: string | null;
+        userAgent: string | null;
       }[]
     >`
       SELECT pv."visitorId", pv."path", pv."createdAt",
-             v."countryCode", v."firstSeenAt"
+             v."countryCode", v."firstSeenAt", v."email", v."userAgent"
       FROM "PageView" pv
       JOIN "Visitor" v ON v."id" = pv."visitorId"
       WHERE pv."visitorId" IN (
@@ -292,6 +309,8 @@ export default async function AnalyticsPage() {
       visitorId: string;
       countryCode: string | null;
       firstSeenAt: Date;
+      email: string | null;
+      userAgent: string | null;
       steps: { path: string; at: Date }[];
     }
   >();
@@ -302,6 +321,8 @@ export default async function AnalyticsPage() {
         visitorId: row.visitorId,
         countryCode: row.countryCode,
         firstSeenAt: row.firstSeenAt,
+        email: row.email,
+        userAgent: row.userAgent,
         steps: [],
       };
       journeyMap.set(row.visitorId, entry);
@@ -364,7 +385,41 @@ export default async function AnalyticsPage() {
           value={pageViewsWindow.toLocaleString()}
           sub={`${repeatVisitorsAllTime.toLocaleString()} repeat visitors all time`}
         />
+        <Kpi
+          label="Identified"
+          value={identifiedVisitors.toLocaleString()}
+          sub={
+            totalVisitors > 0
+              ? `${Math.round((identifiedVisitors / totalVisitors) * 100)}% of visitors gave an email`
+              : "no visitors yet"
+          }
+        />
       </div>
+
+      {subscriberSources.length > 0 && (
+        <section className="bg-white border border-bourbon-deep/10 p-5 sm:p-6 mb-10">
+          <div className="flex items-baseline justify-between mb-4 pb-4 border-b border-bourbon-deep/10">
+            <h2 className="font-[family-name:var(--font-playfair)] text-xl font-bold text-bourbon-deep">
+              Where emails come from
+            </h2>
+            <span className="text-bourbon-stone text-[10px] tracking-widest uppercase">
+              All time
+            </span>
+          </div>
+          <ul className="flex flex-wrap gap-x-8 gap-y-3">
+            {subscriberSources.map((s) => (
+              <li key={s.source ?? "unknown"}>
+                <p className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-bourbon-deep leading-none">
+                  {s._count._all.toLocaleString()}
+                </p>
+                <p className="text-bourbon-stone text-[10px] tracking-widest uppercase mt-1">
+                  {s.source ?? "unknown"}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
         <ChartCard title="Orders per day" data={ordersSeries} accent="gold" />
@@ -403,15 +458,21 @@ export default async function AnalyticsPage() {
                   key={j.visitorId}
                   className="pb-5 border-b border-bourbon-deep/5 last:border-0 last:pb-0"
                 >
-                  <div className="flex items-center gap-2 mb-2 flex-wrap">
+                  <div className="flex items-center gap-2 mb-1 flex-wrap">
                     <span className="text-lg leading-none">
                       {j.countryCode ? countryFlag(j.countryCode) : "🌐"}
                     </span>
-                    <span className="text-bourbon-deep text-xs font-semibold">
-                      {j.countryCode
-                        ? countryName(j.countryCode) ?? j.countryCode
-                        : "Unknown"}
-                    </span>
+                    {/* Identified visitors lead with the address; everyone
+                        else gets a stable codename derived from their id. */}
+                    {j.email ? (
+                      <span className="text-bourbon-deep text-sm font-semibold">
+                        {j.email}
+                      </span>
+                    ) : (
+                      <span className="text-bourbon-deep text-sm font-semibold">
+                        {visitorLabel(j.visitorId)}
+                      </span>
+                    )}
                     <span
                       className={`text-[10px] tracking-widest uppercase px-1.5 py-0.5 ${
                         j.isNew
@@ -421,8 +482,26 @@ export default async function AnalyticsPage() {
                     >
                       {j.isNew ? "New" : "Returning"}
                     </span>
-                    <span className="text-bourbon-stone text-[11px]">
-                      {j.steps.length} page{j.steps.length === 1 ? "" : "s"} ·{" "}
+                    {j.email && (
+                      <span className="text-[10px] tracking-widest uppercase px-1.5 py-0.5 bg-emerald-500/10 text-emerald-700">
+                        Identified
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2 mb-2 flex-wrap text-bourbon-stone text-[11px]">
+                    <span>
+                      {j.countryCode
+                        ? countryName(j.countryCode) ?? j.countryCode
+                        : "Unknown location"}
+                    </span>
+                    <span className="text-bourbon-stone/40">·</span>
+                    <span>{deviceLabel(j.userAgent)}</span>
+                    <span className="text-bourbon-stone/40">·</span>
+                    <span>
+                      {j.steps.length} page{j.steps.length === 1 ? "" : "s"}
+                    </span>
+                    <span className="text-bourbon-stone/40">·</span>
+                    <span>
                       {j.lastAt.toLocaleString("en-US", {
                         month: "short",
                         day: "numeric",
@@ -432,6 +511,14 @@ export default async function AnalyticsPage() {
                       })}{" "}
                       UTC
                     </span>
+                    {j.email && (
+                      <>
+                        <span className="text-bourbon-stone/40">·</span>
+                        <span className="font-mono">
+                          {visitorLabel(j.visitorId)}
+                        </span>
+                      </>
+                    )}
                   </div>
                   <div className="flex items-center gap-1 flex-wrap">
                     {shown.map((s, i) => (

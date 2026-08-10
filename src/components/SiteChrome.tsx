@@ -10,6 +10,7 @@ import Footer from "./Footer";
 import PushManager from "./PushManager";
 import Analytics from "./Analytics";
 import ChatWidget from "./ChatWidget";
+import EmailCapturePopup from "./EmailCapturePopup";
 
 export default function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -30,6 +31,7 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
         {children}
         <Footer />
         <ChatWidget />
+        <EmailCapturePopup />
       </ToastProvider>
     </CartProvider>
   );

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
+import { VISITOR_COOKIE } from "@/lib/visitor";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -22,12 +23,41 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // Cookie is httpOnly, so this is the server's read of who is submitting.
+  // It may be absent (cookie blocked, or track-visit never ran) — capturing
+  // the email still has to work in that case, just without the linkage.
+  const visitorId = req.cookies.get(VISITOR_COOKIE)?.value ?? null;
+
   try {
+    const linkedVisitorId = visitorId
+      ? (
+          await prisma.visitor.findUnique({
+            where: { id: visitorId },
+            select: { id: true },
+          })
+        )?.id ?? null
+      : null;
+
     await prisma.subscriber.upsert({
       where: { email },
-      create: { email, source },
-      update: { status: "SUBSCRIBED" },
+      create: { email, source, visitorId: linkedVisitorId },
+      update: {
+        status: "SUBSCRIBED",
+        // Only fill the link in; never overwrite the session that first
+        // captured them with a later one.
+        ...(linkedVisitorId ? { visitorId: linkedVisitorId } : {}),
+      },
     });
+
+    // Stamp the identity onto the visitor so their whole journey — including
+    // everything they browsed before signing up — is attributable.
+    if (linkedVisitorId) {
+      await prisma.visitor.update({
+        where: { id: linkedVisitorId },
+        data: { email, emailCapturedAt: new Date() },
+      });
+    }
+
     return NextResponse.json({ ok: true }, { status: 201 });
   } catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
