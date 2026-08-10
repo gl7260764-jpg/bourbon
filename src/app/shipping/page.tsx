@@ -198,10 +198,10 @@ export default function ShippingPage() {
           <p className="text-bourbon-stone text-sm sm:text-base leading-relaxed">
             Questions about a specific shipment? Email{" "}
             <a
-              href="mailto:support@bourbonandoak.com"
+              href="mailto:support@bourbonoaklover.com"
               className="text-bourbon-gold underline decoration-bourbon-gold/30 underline-offset-4 hover:decoration-bourbon-gold transition-colors"
             >
-              support@bourbonandoak.com
+              support@bourbonoaklover.com
             </a>{" "}
             with your order number. See also our{" "}
             <Link

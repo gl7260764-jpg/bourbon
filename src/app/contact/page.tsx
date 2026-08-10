@@ -51,10 +51,10 @@ export default function ContactPage() {
                 Email
               </p>
               <a
-                href="mailto:support@bourbonandoak.com"
+                href="mailto:support@bourbonoaklover.com"
                 className="text-bourbon-deep font-semibold hover:text-bourbon-gold transition-colors"
               >
-                support@bourbonandoak.com
+                support@bourbonoaklover.com
               </a>
             </div>
             <div>

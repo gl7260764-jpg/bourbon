@@ -63,10 +63,10 @@ export default function ReturnsPage() {
             <li>
               Email{" "}
               <a
-                href="mailto:support@bourbonandoak.com"
+                href="mailto:support@bourbonoaklover.com"
                 className="text-bourbon-gold underline decoration-bourbon-gold/30 underline-offset-4 hover:decoration-bourbon-gold transition-colors"
               >
-                support@bourbonandoak.com
+                support@bourbonoaklover.com
               </a>{" "}
               with the photos and your order number.
             </li>
@@ -151,10 +151,10 @@ export default function ReturnsPage() {
             </Link>
             . Still stuck? Email{" "}
             <a
-              href="mailto:support@bourbonandoak.com"
+              href="mailto:support@bourbonoaklover.com"
               className="text-bourbon-gold underline decoration-bourbon-gold/30 underline-offset-4 hover:decoration-bourbon-gold transition-colors"
             >
-              support@bourbonandoak.com
+              support@bourbonoaklover.com
             </a>
             .
           </p>

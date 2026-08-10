@@ -216,10 +216,10 @@ export default function ToursPage() {
             for the Heritage Tour and six for everything above. The Private
             Barrel Pick books two to three months in advance. Email{" "}
             <a
-              href="mailto:support@bourbonandoak.com"
+              href="mailto:support@bourbonoaklover.com"
               className="text-bourbon-gold underline decoration-bourbon-gold/30 underline-offset-4 hover:decoration-bourbon-gold transition-colors"
             >
-              support@bourbonandoak.com
+              support@bourbonoaklover.com
             </a>{" "}
             or use the{" "}
             <Link

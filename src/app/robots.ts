@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
-  "https://bourbonandoak.com";
+  "https://bourbonoaklover.com";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -11,13 +11,21 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: "*",
         allow: "/",
         disallow: [
+          // Private surfaces. Prefix matching means "/admin" also covers
+          // "/admin/..." — no trailing-slash twin needed.
           "/admin",
-          "/admin/",
           "/api",
-          "/api/",
           "/checkout",
-          "/checkout/",
-          "/search",
+
+          // /search itself stays crawlable so bots can read its
+          // `noindex, follow` tag and keep following links out of it;
+          // only the generated result URLs are held back.
+          "/search?",
+
+          // Sorted/filtered duplicates of /shop. The bare /shop and the
+          // self-canonical /shop?category=<slug> views stay crawlable.
+          "/*?sort=",
+          "/*?q=",
         ],
       },
     ],

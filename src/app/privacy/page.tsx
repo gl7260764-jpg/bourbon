@@ -117,10 +117,10 @@ export default function PrivacyPage() {
           <p className="text-bourbon-stone text-base leading-relaxed mt-3">
             Send any privacy request to{" "}
             <a
-              href="mailto:support@bourbonandoak.com"
+              href="mailto:support@bourbonoaklover.com"
               className="text-bourbon-gold underline decoration-bourbon-gold/30 underline-offset-4 hover:decoration-bourbon-gold transition-colors"
             >
-              support@bourbonandoak.com
+              support@bourbonoaklover.com
             </a>
             . We respond within 30 days.
           </p>

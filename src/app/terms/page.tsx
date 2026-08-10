@@ -32,7 +32,7 @@ export default function TermsPage() {
         </h1>
         <div className="w-20 h-0.5 bg-bourbon-gold mb-5" />
         <p className="text-bourbon-stone max-w-2xl text-base sm:text-lg leading-relaxed">
-          Last updated 1 January 2026. By using bourbonandoak.com or buying
+          Last updated 1 January 2026. By using bourbonoaklover.com or buying
           from us, you agree to these terms. Read them.
         </p>
       </header>
@@ -128,10 +128,10 @@ export default function TermsPage() {
             Reproduction for personal, non-commercial reference is permitted;
             commercial reproduction requires written permission to{" "}
             <a
-              href="mailto:support@bourbonandoak.com"
+              href="mailto:support@bourbonoaklover.com"
               className="text-bourbon-gold underline decoration-bourbon-gold/30 underline-offset-4 hover:decoration-bourbon-gold transition-colors"
             >
-              support@bourbonandoak.com
+              support@bourbonoaklover.com
             </a>
             .
           </p>

@@ -25,7 +25,7 @@ const inter = Inter({
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
-  "https://bourbonandoak.com";
+  "https://bourbonoaklover.com";
 
 const DEFAULT_OG_IMAGE = "/og/default.jpg";
 
@@ -100,7 +100,7 @@ const organizationJsonLd = {
     "@type": "ContactPoint",
     telephone: "+1-502-555-0199",
     contactType: "customer service",
-    email: "support@bourbonandoak.com",
+    email: "support@bourbonoaklover.com",
   },
   sameAs: [],
 };

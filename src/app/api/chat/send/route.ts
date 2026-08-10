@@ -92,7 +92,7 @@ async function notifyAdminByEmail(conversationId: string, message: string) {
   if (!to) return;
 
   const siteUrl = (
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.bourbonoaklover.com"
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://bourbonoaklover.com"
   ).replace(/\/$/, "");
   const link = `${siteUrl}/admin/chat?c=${conversationId}`;
   const safe = message

@@ -112,10 +112,10 @@ export default function CareersPage() {
           <p className="text-bourbon-stone text-base sm:text-lg leading-relaxed mb-4">
             Send a résumé and short note about the role to{" "}
             <a
-              href="mailto:support@bourbonandoak.com"
+              href="mailto:support@bourbonoaklover.com"
               className="text-bourbon-gold underline decoration-bourbon-gold/30 underline-offset-4 hover:decoration-bourbon-gold transition-colors"
             >
-              support@bourbonandoak.com
+              support@bourbonoaklover.com
             </a>
             . If you&apos;ve worked in another distillery before, tell us what
             you made and where. If you haven&apos;t, tell us why bourbon. All

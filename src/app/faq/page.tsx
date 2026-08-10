@@ -262,16 +262,16 @@ const faqs: QA[] = [
   },
   {
     q: "What happens if my bottle arrives broken?",
-    text: "Damaged-in-transit bottles are replaced free of charge. Photograph the package and the broken bottle, email support@bourbonandoak.com within 7 days of delivery, and we'll ship a replacement at no cost. Full policy and how to file a claim is on our returns page.",
+    text: "Damaged-in-transit bottles are replaced free of charge. Photograph the package and the broken bottle, email support@bourbonoaklover.com within 7 days of delivery, and we'll ship a replacement at no cost. Full policy and how to file a claim is on our returns page.",
     a: (
       <>
         Damaged-in-transit bottles are replaced free of charge. Photograph the
         package and the broken bottle, email{" "}
         <a
-          href="mailto:support@bourbonandoak.com"
+          href="mailto:support@bourbonoaklover.com"
           className="text-bourbon-gold underline decoration-bourbon-gold/30 underline-offset-4 hover:decoration-bourbon-gold transition-colors"
         >
-          support@bourbonandoak.com
+          support@bourbonoaklover.com
         </a>{" "}
         within seven days of delivery, and we&apos;ll ship a replacement at
         no cost. Full policy on the{" "}
@@ -322,10 +322,10 @@ export default function FAQPage() {
           some bottles are allocated, and how to store bourbon so it lasts.
           Have a question we haven&apos;t answered? Email{" "}
           <a
-            href="mailto:support@bourbonandoak.com"
+            href="mailto:support@bourbonoaklover.com"
             className="text-bourbon-gold underline decoration-bourbon-gold/30 underline-offset-4 hover:decoration-bourbon-gold transition-colors"
           >
-            support@bourbonandoak.com
+            support@bourbonoaklover.com
           </a>
           .
         </p>
