@@ -2,21 +2,17 @@
 
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
+import {
+  DEFAULT_POPUP_SETTINGS,
+  normalizePopupSettings,
+  type PopupSettings,
+} from "@/lib/popup-constants";
 
-// --- Tuning knobs -----------------------------------------------------------
-// Wait before asking. Used both for the first prompt and for every re-prompt
-// after a dismissal.
-const DELAY_MS = 10_000;
-// true  = keep re-asking every DELAY_MS until they subscribe. Dismissing only
-//         buys the visitor DELAY_MS of quiet.
-// false = ask once, then leave them alone for REPROMPT_AFTER_DAYS.
-const NAG_UNTIL_SUBSCRIBED = true;
-// Only consulted when NAG_UNTIL_SUBSCRIBED is false.
-const REPROMPT_AFTER_DAYS = 7;
-// Never interrupt these — the age gate owns the first one, and interrupting a
+// Timing lives in the DB and is edited at /admin/settings — these are only the
+// fallbacks used before the fetch lands or if it fails. Never interrupt the
+// suppressed routes: the age gate owns the first moment, and interrupting a
 // checkout to ask for an email costs an order.
 const SUPPRESSED_PREFIXES = ["/checkout"];
-// ----------------------------------------------------------------------------
 
 const CAPTURED_KEY = "bourbon-email-captured";
 const DISMISSED_KEY = "bourbon-email-dismissed-at";
@@ -24,17 +20,17 @@ const AGE_VERIFIED_KEY = "bourbon-age-verified";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
-function shouldAsk(): boolean {
+function shouldAsk(settings: PopupSettings): boolean {
   try {
     // Subscribing is the only thing that stops the prompt for good.
     if (localStorage.getItem(CAPTURED_KEY)) return false;
-    if (NAG_UNTIL_SUBSCRIBED) return true;
+    if (settings.nagUntilSubscribed) return true;
 
     const dismissedAt = localStorage.getItem(DISMISSED_KEY);
     if (!dismissedAt) return true;
-    if (REPROMPT_AFTER_DAYS <= 0) return true;
+    if (settings.repromptAfterDays <= 0) return true;
     const elapsed = Date.now() - Number(dismissedAt);
-    return elapsed > REPROMPT_AFTER_DAYS * 24 * 60 * 60 * 1000;
+    return elapsed > settings.repromptAfterDays * 24 * 60 * 60 * 1000;
   } catch {
     // Private mode / storage disabled — ask rather than never.
     return true;
@@ -50,13 +46,34 @@ export default function EmailCapturePopup() {
   // Bumped on every dismissal. Re-running the scheduling effect is what
   // arms the next countdown, so the prompt returns DELAY_MS after each close.
   const [attempt, setAttempt] = useState(0);
+  // Null until the admin's config arrives — we don't want to start a countdown
+  // on the fallback timing and then have the real value contradict it.
+  const [settings, setSettings] = useState<PopupSettings | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const dialogRef = useRef<HTMLDivElement>(null);
 
   const suppressed = SUPPRESSED_PREFIXES.some((p) => pathname?.startsWith(p));
 
+  // Pull the admin-configured timing once per mount.
   useEffect(() => {
-    if (suppressed || !shouldAsk()) return;
+    let cancelled = false;
+    fetch("/api/popup-settings")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (!cancelled) {
+          setSettings(data ? normalizePopupSettings(data) : DEFAULT_POPUP_SETTINGS);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setSettings(DEFAULT_POPUP_SETTINGS);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!settings || !settings.enabled) return;
+    if (suppressed || !shouldAsk(settings)) return;
 
     let timer: ReturnType<typeof setTimeout> | undefined;
 
@@ -65,7 +82,7 @@ export default function EmailCapturePopup() {
     // start the countdown from that moment.
     const startWhenVerified = () => {
       if (localStorage.getItem(AGE_VERIFIED_KEY)) {
-        timer = setTimeout(() => setShow(true), DELAY_MS);
+        timer = setTimeout(() => setShow(true), settings.delaySeconds * 1000);
         return true;
       }
       return false;
@@ -84,11 +101,11 @@ export default function EmailCapturePopup() {
       clearTimeout(timer);
     };
     // `attempt` is the re-arm trigger: each dismissal re-runs this effect and
-    // starts a fresh DELAY_MS countdown.
-  }, [suppressed, attempt]);
+    // starts a fresh countdown.
+  }, [suppressed, attempt, settings]);
 
   const dismiss = useCallback(() => {
-    if (!NAG_UNTIL_SUBSCRIBED) {
+    if (settings && !settings.nagUntilSubscribed) {
       try {
         localStorage.setItem(DISMISSED_KEY, String(Date.now()));
       } catch {
@@ -103,7 +120,7 @@ export default function EmailCapturePopup() {
     // Re-arm. shouldAsk() still gates this, so a visitor who has already
     // subscribed never comes back around.
     setAttempt((n) => n + 1);
-  }, []);
+  }, [settings]);
 
   // Escape to close, and focus the field on open so it's usable by keyboard.
   useEffect(() => {
@@ -154,19 +171,16 @@ export default function EmailCapturePopup() {
   if (!show) return null;
 
   return (
-    <div
-      className="animate-fade-in fixed inset-0 z-[90] flex items-center justify-center bg-bourbon-deep/90 backdrop-blur-sm px-4"
-      onMouseDown={(e) => {
-        // Backdrop click closes; clicks inside the card must not.
-        if (!dialogRef.current?.contains(e.target as Node)) dismiss();
-      }}
-    >
+    // `pointer-events-none` on the wrapper is what keeps the page usable: with
+    // no full-screen backdrop swallowing input, wheel and touch land on the
+    // content behind and the page scrolls normally. The card re-enables
+    // pointer events for itself, and scrolling over the card chains to the
+    // page because the card isn't itself scrollable.
+    <div className="animate-fade-in fixed inset-0 z-[90] flex items-center justify-center px-4 pointer-events-none">
       <div
-        ref={dialogRef}
         role="dialog"
-        aria-modal="true"
         aria-labelledby="email-capture-title"
-        className="animate-pop-in relative max-w-md w-full p-8 sm:p-10 bg-bourbon-dark border border-bourbon-gold/30 text-center"
+        className="animate-pop-in relative max-w-md w-full p-8 sm:p-10 bg-bourbon-dark border border-bourbon-gold/30 text-center shadow-2xl shadow-bourbon-deep/50 pointer-events-auto"
       >
         {/* Decorative corners — matches the age gate's framing. */}
         <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-bourbon-gold" />
