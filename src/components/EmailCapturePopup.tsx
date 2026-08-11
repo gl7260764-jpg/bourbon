@@ -4,11 +4,14 @@ import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 
 // --- Tuning knobs -----------------------------------------------------------
-// How long the visitor browses before we ask. Bump this if 10s feels pushy.
+// Wait before asking. Used both for the first prompt and for every re-prompt
+// after a dismissal.
 const DELAY_MS = 10_000;
-// After a dismissal we back off rather than re-asking on the next page — a
-// modal that returns every 10 seconds reads as broken and costs more traffic
-// than the addresses it wins. Set to 0 to ask again on every page load.
+// true  = keep re-asking every DELAY_MS until they subscribe. Dismissing only
+//         buys the visitor DELAY_MS of quiet.
+// false = ask once, then leave them alone for REPROMPT_AFTER_DAYS.
+const NAG_UNTIL_SUBSCRIBED = true;
+// Only consulted when NAG_UNTIL_SUBSCRIBED is false.
 const REPROMPT_AFTER_DAYS = 7;
 // Never interrupt these — the age gate owns the first one, and interrupting a
 // checkout to ask for an email costs an order.
@@ -23,14 +26,17 @@ type Status = "idle" | "submitting" | "success" | "error";
 
 function shouldAsk(): boolean {
   try {
+    // Subscribing is the only thing that stops the prompt for good.
     if (localStorage.getItem(CAPTURED_KEY)) return false;
+    if (NAG_UNTIL_SUBSCRIBED) return true;
+
     const dismissedAt = localStorage.getItem(DISMISSED_KEY);
     if (!dismissedAt) return true;
     if (REPROMPT_AFTER_DAYS <= 0) return true;
     const elapsed = Date.now() - Number(dismissedAt);
     return elapsed > REPROMPT_AFTER_DAYS * 24 * 60 * 60 * 1000;
   } catch {
-    // Private mode / storage disabled — ask once rather than never.
+    // Private mode / storage disabled — ask rather than never.
     return true;
   }
 }
@@ -41,6 +47,9 @@ export default function EmailCapturePopup() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState("");
+  // Bumped on every dismissal. Re-running the scheduling effect is what
+  // arms the next countdown, so the prompt returns DELAY_MS after each close.
+  const [attempt, setAttempt] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
 
@@ -74,15 +83,26 @@ export default function EmailCapturePopup() {
       clearInterval(poll);
       clearTimeout(timer);
     };
-  }, [suppressed]);
+    // `attempt` is the re-arm trigger: each dismissal re-runs this effect and
+    // starts a fresh DELAY_MS countdown.
+  }, [suppressed, attempt]);
 
   const dismiss = useCallback(() => {
-    try {
-      localStorage.setItem(DISMISSED_KEY, String(Date.now()));
-    } catch {
-      // Nothing to do — worst case we ask again next visit.
+    if (!NAG_UNTIL_SUBSCRIBED) {
+      try {
+        localStorage.setItem(DISMISSED_KEY, String(Date.now()));
+      } catch {
+        // Nothing to do — worst case we ask again next visit.
+      }
     }
     setShow(false);
+    // Clear any stale validation error so the next prompt opens fresh rather
+    // than reappearing with a red message from the previous attempt.
+    setStatus("idle");
+    setMessage("");
+    // Re-arm. shouldAsk() still gates this, so a visitor who has already
+    // subscribed never comes back around.
+    setAttempt((n) => n + 1);
   }, []);
 
   // Escape to close, and focus the field on open so it's usable by keyboard.
