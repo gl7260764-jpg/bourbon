@@ -50,6 +50,7 @@ export default function EmailCapturePopup() {
   // on the fallback timing and then have the real value contradict it.
   const [settings, setSettings] = useState<PopupSettings | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
 
   const suppressed = SUPPRESSED_PREFIXES.some((p) => pathname?.startsWith(p));
 
@@ -133,6 +134,19 @@ export default function EmailCapturePopup() {
     return () => document.removeEventListener("keydown", onKey);
   }, [show, dismiss]);
 
+  // Freeze the page behind the popup. The backdrop already swallows wheel and
+  // touch, but not space/arrow-key scrolling — this covers both. Restore the
+  // previous value rather than hardcoding "" so we can't stomp the age gate's
+  // own lock if the two ever overlap.
+  useEffect(() => {
+    if (!show) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [show]);
+
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (status === "submitting") return;
@@ -171,16 +185,22 @@ export default function EmailCapturePopup() {
   if (!show) return null;
 
   return (
-    // `pointer-events-none` on the wrapper is what keeps the page usable: with
-    // no full-screen backdrop swallowing input, wheel and touch land on the
-    // content behind and the page scrolls normally. The card re-enables
-    // pointer events for itself, and scrolling over the card chains to the
-    // page because the card isn't itself scrollable.
-    <div className="animate-fade-in fixed inset-0 z-[90] flex items-center justify-center px-4 pointer-events-none">
+    // Full-screen backdrop: it dims the page and, being interactive, swallows
+    // wheel and touch so nothing behind it scrolls. The body scroll lock above
+    // covers the rest (keyboard scrolling, and iOS Safari's touch handling).
+    <div
+      className="animate-fade-in fixed inset-0 z-[90] flex items-center justify-center px-4 bg-bourbon-deep/90 backdrop-blur-sm"
+      onMouseDown={(e) => {
+        // Backdrop click closes; clicks inside the card must not.
+        if (!dialogRef.current?.contains(e.target as Node)) dismiss();
+      }}
+    >
       <div
+        ref={dialogRef}
         role="dialog"
+        aria-modal="true"
         aria-labelledby="email-capture-title"
-        className="animate-pop-in relative max-w-md w-full p-8 sm:p-10 bg-bourbon-dark border border-bourbon-gold/30 text-center shadow-2xl shadow-bourbon-deep/50 pointer-events-auto"
+        className="animate-pop-in relative max-w-md w-full p-8 sm:p-10 bg-bourbon-dark border border-bourbon-gold/30 text-center shadow-2xl shadow-bourbon-deep/50"
       >
         {/* Decorative corners — matches the age gate's framing. */}
         <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-bourbon-gold" />
