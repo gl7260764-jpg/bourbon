@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { Availability, ProductionStyle } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
+import { buildProductMeta, getProductSeo } from "@/lib/product-seo";
 import ProductDetailClient, { type ProductDetailData } from "./ProductDetailClient";
 import RelatedProducts, { type RelatedProductCard } from "./RelatedProducts";
 
@@ -24,13 +25,11 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-// Trim a sentence at a word boundary so meta descriptions never cut mid-word.
-function trimAtWord(text: string, max: number): string {
-  if (text.length <= max) return text;
-  const cut = text.slice(0, max);
-  const lastSpace = cut.lastIndexOf(" ");
-  return (lastSpace > 0 ? cut.slice(0, lastSpace) : cut).trim() + "…";
-}
+// Canonical host — schema.org requires absolute URLs, so JSON-LD can't use
+// the relative paths that Next resolves for tags via metadataBase.
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
+  "https://bourbonoaklover.com";
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
@@ -40,6 +39,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       name: true,
       subtitle: true,
       description: true,
+      proof: true,
+      ageYears: true,
+      category: { select: { name: true } },
       images: { select: { url: true }, orderBy: { sortOrder: "asc" }, take: 1 },
     },
   });
@@ -49,26 +51,34 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       robots: { index: false, follow: false },
     };
   }
-  const rawDescription =
-    product.subtitle?.trim() ||
-    `${product.name} — Kentucky bourbon tasting notes, mash bill, proof, age and provenance. Ships from our Bardstown cellar.`;
-  const description = trimAtWord(rawDescription, 158);
+
+  // Researched copy where we have it, formula fallback otherwise.
+  const meta = buildProductMeta({
+    slug,
+    name: product.name,
+    subtitle: product.subtitle,
+    proof: product.proof.toString(),
+    ageYears: product.ageYears,
+    category: product.category.name,
+  });
+
   const imageUrl = product.images[0]?.url;
   return {
-    title: `${product.name} | Bourbon & Oak`,
-    description,
+    title: meta.title,
+    description: meta.description,
+    keywords: meta.keywords,
     alternates: { canonical: `/products/${slug}` },
     openGraph: {
-      title: `${product.name} | Bourbon & Oak`,
-      description,
+      title: meta.title,
+      description: meta.description,
       url: `/products/${slug}`,
       type: "website",
       images: imageUrl ? [{ url: imageUrl, alt: product.name }] : undefined,
     },
     twitter: {
       card: "summary_large_image",
-      title: `${product.name} | Bourbon & Oak`,
-      description,
+      title: meta.title,
+      description: meta.description,
       images: imageUrl ? [imageUrl] : undefined,
     },
   };
@@ -184,18 +194,28 @@ export default async function ProductPage({ params }: PageProps) {
       ? "https://schema.org/LimitedAvailability"
       : "https://schema.org/InStock";
 
+  const productSeo = getProductSeo(product.slug);
+
   const productJsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.name,
+    // Where the bottle is searched under a different name than the label
+    // carries (e.g. Old Rip Van Winkle is searched as "Pappy Van Winkle
+    // 10 Year"), declare it rather than leaving Google to infer it.
+    ...(productSeo?.alternateName
+      ? { alternateName: productSeo.alternateName }
+      : {}),
     description: product.description,
     image: product.images.map((i) => i.url),
-    sku: product.id,
+    // The real stock-keeping unit, not the internal cuid.
+    sku: product.sku,
     brand: { "@type": "Brand", name: product.distillery },
     category: product.category.name,
     offers: {
       "@type": "Offer",
-      url: `/products/${product.slug}`,
+      // schema.org URLs must be absolute — a relative path here is ignored.
+      url: `${SITE_URL}/products/${product.slug}`,
       priceCurrency: "USD",
       price: product.bottlePrice.toString(),
       availability: availabilitySchema,
@@ -225,20 +245,21 @@ export default async function ProductPage({ params }: PageProps) {
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
+    // Absolute URLs throughout — relative `item` values are dropped by Google.
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "/" },
-      { "@type": "ListItem", position: 2, name: "Shop", item: "/shop" },
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
+      { "@type": "ListItem", position: 2, name: "Shop", item: `${SITE_URL}/shop` },
       {
         "@type": "ListItem",
         position: 3,
         name: product.category.name,
-        item: `/shop?category=${product.category.slug}`,
+        item: `${SITE_URL}/shop?category=${product.category.slug}`,
       },
       {
         "@type": "ListItem",
         position: 4,
         name: product.name,
-        item: `/products/${product.slug}`,
+        item: `${SITE_URL}/products/${product.slug}`,
       },
     ],
   };
