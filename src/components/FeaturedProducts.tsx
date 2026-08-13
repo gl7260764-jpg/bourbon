@@ -1,3 +1,4 @@
+import { ageLabel } from "@/lib/product-format";
 import { prisma } from "@/lib/prisma";
 import FeaturedProductsClient, {
   type FeaturedProductCard,
@@ -20,7 +21,7 @@ export default async function FeaturedProducts() {
     id: p.id,
     slug: p.slug,
     name: p.name,
-    ageLabel: p.ageYears ? `${p.ageYears} Year` : "NAS",
+    ageLabel: ageLabel(p.ageYears),
     price: p.bottlePrice.toNumber(),
     rating: p.rating ? p.rating.toNumber() : 0,
     reviews: p.reviewCount,

@@ -40,7 +40,384 @@ export interface ProductSeo {
   wordClusters: WordCluster[];
 }
 
+/**
+ * Builds the standard four-cluster shape every bottle shares — price/MSRP,
+ * spec, tasting, scarcity — from the handful of values that actually differ.
+ *
+ * The Pappy entries below are written out longhand because they carry real
+ * keyword-tool volumes. The rest use this: the term lists are researched, but
+ * the surrounding structure is identical for every bottle and there is no
+ * reason to repeat it twenty-two times.
+ */
+function bottleSeo(input: {
+  metaTitle: string;
+  metaDescription: string;
+  focusKeyword: string;
+  alternateName?: string;
+  /** Head terms, in rough demand order. Volumes unknown — see the note above. */
+  primary: string[];
+  longTail: string[];
+  /** e.g. "107 proof", "53.5% ABV", "wheated bourbon", "bottled in bond" */
+  spec: string[];
+  tasting: string[];
+  /** Anything bottle-specific: a collection, a vintage, a former name. */
+  extraClusters?: WordCluster[];
+}): ProductSeo {
+  const buyTerms = [
+    `${input.focusKeyword} price`,
+    `${input.focusKeyword} for sale`,
+    `buy ${input.focusKeyword} online`,
+    `${input.focusKeyword} msrp`,
+    "where to buy allocated bourbon",
+    "allocated bourbon",
+  ];
+
+  return {
+    metaTitle: input.metaTitle,
+    metaDescription: input.metaDescription,
+    focusKeyword: input.focusKeyword,
+    ...(input.alternateName ? { alternateName: input.alternateName } : {}),
+    primaryKeywords: input.primary.map((term) => ({ term })),
+    longTailKeywords: input.longTail,
+    wordClusters: [
+      { cluster: "Price & Availability", terms: buyTerms },
+      { cluster: "Spec & Production", terms: input.spec },
+      { cluster: "Tasting Profile", terms: input.tasting },
+      ...(input.extraClusters ?? []),
+    ],
+  };
+}
+
+// Shared cluster for the four Buffalo Trace Antique Collection bottles in the
+// catalogue. "BTAC" is its own annual search event every autumn.
+const BTAC_CLUSTER: WordCluster = {
+  cluster: "Buffalo Trace Antique Collection",
+  terms: [
+    "BTAC",
+    "Buffalo Trace Antique Collection",
+    "BTAC 2025",
+    "BTAC lineup",
+    "antique collection bourbon",
+    "Buffalo Trace allocated",
+  ],
+};
+
 export const PRODUCT_SEO: Record<string, ProductSeo> = {
+  // --- Eagle Rare ---------------------------------------------------------
+  // Names match search language closely here, so the work is intent modifiers
+  // (price / buy / msrp) rather than fixing a naming mismatch.
+  "eagle-rare-10-year": bottleSeo({
+    metaTitle: "Eagle Rare 10 Year Price & MSRP | 90 Proof Bourbon",
+    metaDescription:
+      "Eagle Rare 10 Year Kentucky straight bourbon, 90 proof. Current price, MSRP and availability. Toffee, orange peel, oak and a long dry finish.",
+    focusKeyword: "eagle rare 10 year",
+    primary: ["eagle rare 10 year", "eagle rare", "eagle rare bourbon", "eagle rare 10", "eagle rare 10 year price", "eagle rare msrp", "eagle rare single barrel", "eagle rare 10 year bourbon"],
+    longTail: ["where to buy eagle rare 10 year", "how much is eagle rare 10 year", "eagle rare 10 year msrp", "is eagle rare hard to find", "eagle rare vs buffalo trace", "eagle rare 10 year review", "what does eagle rare taste like", "eagle rare 10 year for sale"],
+    spec: ["90 proof", "45% ABV", "10 year bourbon", "Kentucky straight bourbon", "single barrel", "Buffalo Trace", "750ml"],
+    tasting: ["toffee", "candied almond", "orange peel", "oak", "leather", "dry finish", "smooth sipping bourbon"],
+  }),
+
+  "eagle-rare-12-year": bottleSeo({
+    metaTitle: "Eagle Rare 12 Year Price | 101 Proof Kentucky Bourbon",
+    metaDescription:
+      "Eagle Rare 12 Year, 101-proof Kentucky straight bourbon. Current price and availability. Deeper oak and spice than the 10 Year — an allocated release.",
+    focusKeyword: "eagle rare 12 year",
+    primary: ["eagle rare 12 year", "eagle rare 12", "eagle rare 12 year price", "eagle rare 101 proof", "eagle rare 12 year bourbon", "new eagle rare 12"],
+    longTail: ["eagle rare 12 year vs 10 year", "where to buy eagle rare 12 year", "eagle rare 12 year msrp", "is eagle rare 12 worth it", "eagle rare 12 year release date", "eagle rare 12 year review"],
+    spec: ["101 proof", "50.5% ABV", "12 year bourbon", "Kentucky straight bourbon", "Buffalo Trace", "750ml"],
+    tasting: ["dark caramel", "toasted oak", "baking spice", "dried fruit", "long finish"],
+  }),
+
+  "eagle-rare-17-year": bottleSeo({
+    metaTitle: "Eagle Rare 17 Year (BTAC) Price | 101 Proof Bourbon",
+    metaDescription:
+      "Eagle Rare 17 Year — Buffalo Trace Antique Collection, 101 proof. Current price and allocation status. Deep oak, leather, tobacco and dark caramel.",
+    focusKeyword: "eagle rare 17 year",
+    alternateName: "Eagle Rare 17",
+    primary: ["eagle rare 17 year", "eagle rare 17", "eagle rare 17 year price", "eagle rare 17 btac", "eagle rare antique collection", "eagle rare 17 year 2025"],
+    longTail: ["where to buy eagle rare 17 year", "eagle rare 17 year msrp", "how much is eagle rare 17", "eagle rare 17 vs george t stagg", "btac 2025 lineup", "eagle rare 17 year review", "is eagle rare 17 worth the price"],
+    spec: ["101 proof", "50.5% ABV", "17 year bourbon", "Kentucky straight bourbon", "Buffalo Trace Antique Collection", "750ml"],
+    tasting: ["deep oak", "leather", "tobacco", "dark caramel", "dried cherry", "long dry finish"],
+    extraClusters: [BTAC_CLUSTER],
+  }),
+
+  "double-eagle-very-rare": bottleSeo({
+    metaTitle: "Double Eagle Very Rare 20 Year Price | 90 Proof Bourbon",
+    metaDescription:
+      "Double Eagle Very Rare 20 Year in its crystal decanter, 90 proof. Current price and allocation. One of the rarest bottles Buffalo Trace releases.",
+    focusKeyword: "double eagle very rare",
+    alternateName: "Double Eagle Very Rare 20 Year",
+    primary: ["double eagle very rare", "double eagle very rare 20 year", "double eagle very rare price", "devr bourbon", "double eagle very rare 2025", "eagle rare 20 year"],
+    longTail: ["how much is double eagle very rare", "where to buy double eagle very rare", "double eagle very rare msrp", "double eagle very rare decanter", "is double eagle very rare worth it", "double eagle very rare review"],
+    spec: ["90 proof", "45% ABV", "20 year bourbon", "crystal decanter", "Kentucky straight bourbon", "Buffalo Trace", "750ml"],
+    tasting: ["deep oak", "dark caramel", "leather", "tobacco", "dried fig", "espresso"],
+    extraClusters: [
+      { cluster: "Collectibility", terms: ["collectible bourbon", "rarest bourbon", "bourbon auction", "crystal decanter bourbon", "secondary market bourbon"] },
+    ],
+  }),
+
+  // --- Weller -------------------------------------------------------------
+  // "Weller" alone carries most of the demand; the W.L. prefix is optional in
+  // how people type it, so both forms appear in the term lists.
+  "weller-12-year": bottleSeo({
+    metaTitle: "Weller 12 Year Price & MSRP | 90 Proof Wheated Bourbon",
+    metaDescription:
+      "W.L. Weller 12 Year wheated Kentucky bourbon, 90 proof. Current price, MSRP and availability. Honey, vanilla, soft oak — the wheated benchmark.",
+    focusKeyword: "weller 12 year",
+    alternateName: "W.L. Weller 12 Year",
+    primary: ["weller 12 year", "weller 12", "w.l. weller 12 year", "weller 12 year price", "weller 12 msrp", "weller 12 year bourbon", "wl weller 12"],
+    longTail: ["where to buy weller 12 year", "how much is weller 12", "weller 12 year msrp", "weller 12 vs pappy 12", "is weller 12 hard to find", "weller 12 year review", "weller 12 year for sale"],
+    spec: ["90 proof", "45% ABV", "12 year bourbon", "wheated bourbon", "wheated mash bill", "Kentucky straight bourbon", "Buffalo Trace", "750ml"],
+    tasting: ["honey", "vanilla", "caramel", "soft oak", "baking spice", "smooth wheated bourbon"],
+    extraClusters: [
+      { cluster: "Weller Lineup", terms: ["Weller Special Reserve", "Weller Antique 107", "Weller Full Proof", "Weller Single Barrel", "Weller CYPB", "William Larue Weller", "poor man's pappy"] },
+    ],
+  }),
+
+  "weller-full-proof": bottleSeo({
+    metaTitle: "Weller Full Proof Price | 114 Proof Wheated Bourbon",
+    metaDescription:
+      "W.L. Weller Full Proof, 114-proof non-chill-filtered wheated bourbon at original barrel-entry proof. Current price and availability.",
+    focusKeyword: "weller full proof",
+    alternateName: "W.L. Weller Full Proof",
+    primary: ["weller full proof", "w.l. weller full proof", "weller full proof price", "weller 114 proof", "weller full proof bourbon", "wl weller full proof"],
+    longTail: ["where to buy weller full proof", "weller full proof msrp", "weller full proof vs antique 107", "is weller full proof worth it", "weller full proof review", "weller full proof for sale"],
+    spec: ["114 proof", "57% ABV", "barrel entry proof", "non-chill filtered", "wheated bourbon", "Kentucky straight bourbon", "Buffalo Trace", "750ml"],
+    tasting: ["caramel", "vanilla", "cherry", "toasted oak", "brown sugar", "bold wheated bourbon"],
+  }),
+
+  "weller-single-barrel": bottleSeo({
+    metaTitle: "Weller Single Barrel Price | 97 Proof Wheated Bourbon",
+    metaDescription:
+      "W.L. Weller Single Barrel wheated Kentucky bourbon, 97 proof. Current price and allocation status. Single-barrel character from the Weller mash bill.",
+    focusKeyword: "weller single barrel",
+    alternateName: "W.L. Weller Single Barrel",
+    primary: ["weller single barrel", "w.l. weller single barrel", "weller single barrel price", "weller single barrel bourbon", "weller 97 proof", "wl weller single barrel"],
+    longTail: ["where to buy weller single barrel", "weller single barrel msrp", "weller single barrel vs weller 12", "is weller single barrel worth it", "weller single barrel review"],
+    spec: ["97 proof", "48.5% ABV", "single barrel", "wheated bourbon", "Kentucky straight bourbon", "Buffalo Trace", "750ml"],
+    tasting: ["honey", "vanilla", "caramel", "oak", "soft spice"],
+  }),
+
+  "weller-cypb": bottleSeo({
+    metaTitle: "Weller CYPB Price | Craft Your Perfect Bourbon 95 Proof",
+    metaDescription:
+      "Weller CYPB — Craft Your Perfect Bourbon, 95 proof, 8 years, wheated. Current price and allocation status. The spec the public voted for.",
+    focusKeyword: "weller cypb",
+    alternateName: "Weller Craft Your Perfect Bourbon",
+    primary: ["weller cypb", "weller craft your perfect bourbon", "cypb bourbon", "weller cypb price", "w.l. weller cypb", "weller cypb 2025"],
+    longTail: ["what does cypb stand for", "where to buy weller cypb", "weller cypb msrp", "weller cypb vs weller 12", "is weller cypb worth it", "weller cypb review"],
+    spec: ["95 proof", "47.5% ABV", "8 year bourbon", "wheated bourbon", "non-chill filtered", "Kentucky straight bourbon", "750ml"],
+    tasting: ["vanilla", "caramel", "citrus", "light oak", "gentle spice"],
+  }),
+
+  "william-larue-weller": bottleSeo({
+    metaTitle: "William Larue Weller Price | BTAC Barrel Proof Wheated",
+    metaDescription:
+      "William Larue Weller — Buffalo Trace Antique Collection, uncut barrel-proof wheated bourbon at 133.6 proof. Current price and allocation status.",
+    focusKeyword: "william larue weller",
+    alternateName: "WLW",
+    primary: ["william larue weller", "wlw bourbon", "william larue weller price", "william larue weller 2025", "wlw btac", "william larue weller barrel proof"],
+    longTail: ["where to buy william larue weller", "william larue weller msrp", "how much is william larue weller", "william larue weller vs pappy 15", "btac 2025 lineup", "william larue weller review"],
+    spec: ["133.6 proof", "66.8% ABV", "barrel proof", "uncut", "unfiltered", "wheated bourbon", "Buffalo Trace Antique Collection", "750ml"],
+    tasting: ["dark caramel", "cherry", "leather", "dark chocolate", "toasted oak", "long hot finish"],
+    extraClusters: [BTAC_CLUSTER],
+  }),
+
+  // --- E.H. Taylor --------------------------------------------------------
+  // Same phrase-splitting problem as Pappy 15: the label says "Colonel E.H.
+  // Taylor, Jr. Small Batch", but retailers that rank title it "Colonel E.H.
+  // Taylor Small Batch" and searchers type "eh taylor" without the periods.
+  // Both punctuation forms are covered.
+  "eh-taylor-small-batch": bottleSeo({
+    metaTitle: "E.H. Taylor Small Batch Price | Bottled in Bond 100 Proof",
+    metaDescription:
+      "Colonel E.H. Taylor Small Batch, bottled-in-bond Kentucky bourbon at 100 proof. Current price, MSRP and availability. Caramel, butterscotch, dried fruit.",
+    focusKeyword: "eh taylor small batch",
+    alternateName: "E.H. Taylor Small Batch",
+    primary: ["eh taylor small batch", "e.h. taylor small batch", "colonel eh taylor small batch", "eh taylor small batch price", "eh taylor bourbon", "colonel e.h. taylor", "eh taylor bottled in bond"],
+    longTail: ["where to buy eh taylor small batch", "eh taylor small batch msrp", "how much is eh taylor small batch", "eh taylor small batch vs single barrel", "what does bottled in bond mean", "eh taylor small batch review", "is eh taylor small batch worth it"],
+    spec: ["100 proof", "50% ABV", "bottled in bond", "small batch", "Kentucky straight bourbon", "Buffalo Trace", "750ml"],
+    tasting: ["caramel", "butterscotch", "dried fruit", "salted caramel", "orange", "oak"],
+    extraClusters: [
+      { cluster: "E.H. Taylor Lineup", terms: ["E.H. Taylor Single Barrel", "E.H. Taylor Barrel Proof", "E.H. Taylor Small Batch", "Colonel E.H. Taylor Jr", "bottled in bond bourbon"] },
+    ],
+  }),
+
+  "eh-taylor-single-barrel": bottleSeo({
+    metaTitle: "E.H. Taylor Single Barrel Price | Bottled in Bond 100 Proof",
+    metaDescription:
+      "Colonel E.H. Taylor Single Barrel, bottled-in-bond Kentucky bourbon at 100 proof. Current price and allocation status. Single-barrel depth and oak spice.",
+    focusKeyword: "eh taylor single barrel",
+    alternateName: "E.H. Taylor Single Barrel",
+    primary: ["eh taylor single barrel", "e.h. taylor single barrel", "colonel eh taylor single barrel", "eh taylor single barrel price", "eh taylor single barrel bourbon"],
+    longTail: ["where to buy eh taylor single barrel", "eh taylor single barrel msrp", "eh taylor single barrel vs small batch", "is eh taylor single barrel worth it", "eh taylor single barrel review"],
+    spec: ["100 proof", "50% ABV", "bottled in bond", "single barrel", "10 year bourbon", "Kentucky straight bourbon", "Buffalo Trace", "750ml"],
+    tasting: ["caramel", "vanilla", "oak spice", "dark fruit", "tobacco", "long finish"],
+    extraClusters: [
+      { cluster: "E.H. Taylor Lineup", terms: ["E.H. Taylor Small Batch", "E.H. Taylor Barrel Proof", "Colonel E.H. Taylor Jr", "bottled in bond bourbon"] },
+    ],
+  }),
+
+  "eh-taylor-barrel-proof": bottleSeo({
+    metaTitle: "E.H. Taylor Barrel Proof Price | Uncut 131 Proof Bourbon",
+    metaDescription:
+      "Colonel E.H. Taylor Barrel Proof — uncut, unfiltered Kentucky bourbon at ~131 proof. Current price and allocation status. Intense caramel, oak and spice.",
+    focusKeyword: "eh taylor barrel proof",
+    alternateName: "E.H. Taylor Barrel Proof",
+    primary: ["eh taylor barrel proof", "e.h. taylor barrel proof", "colonel eh taylor barrel proof", "eh taylor barrel proof price", "eh taylor uncut unfiltered"],
+    longTail: ["where to buy eh taylor barrel proof", "eh taylor barrel proof msrp", "eh taylor barrel proof vs stagg", "what proof is eh taylor barrel proof", "eh taylor barrel proof review"],
+    spec: ["131 proof", "65.5% ABV", "barrel proof", "uncut", "unfiltered", "Kentucky straight bourbon", "Buffalo Trace", "750ml"],
+    tasting: ["intense caramel", "oak", "baking spice", "dark cherry", "leather", "hot finish"],
+    extraClusters: [
+      { cluster: "E.H. Taylor Lineup", terms: ["E.H. Taylor Small Batch", "E.H. Taylor Single Barrel", "Colonel E.H. Taylor Jr", "barrel proof bourbon"] },
+    ],
+  }),
+
+  // --- Blanton's ----------------------------------------------------------
+  // The apostrophe is the whole story: people type "blantons" far more often
+  // than "blanton's", so both spellings are targeted.
+  "blantons-original-single-barrel": bottleSeo({
+    metaTitle: "Blanton's Original Single Barrel Price | 93 Proof Bourbon",
+    metaDescription:
+      "Blanton's Original Single Barrel — the original single barrel bourbon, 93 proof, with the collectible horse stopper. Current price and availability.",
+    focusKeyword: "blantons original single barrel",
+    alternateName: "Blanton's Single Barrel Bourbon",
+    primary: ["blantons original single barrel", "blanton's single barrel", "blantons bourbon", "blantons original", "blantons price", "blanton's original single barrel", "blantons single barrel bourbon"],
+    longTail: ["where to buy blantons bourbon", "how much is blantons", "blantons msrp", "blantons horse stopper letters", "why is blantons so hard to find", "blantons vs eagle rare", "blantons bourbon review", "blantons for sale"],
+    spec: ["93 proof", "46.5% ABV", "single barrel", "8 year bourbon", "Kentucky straight bourbon", "Buffalo Trace", "750ml"],
+    tasting: ["caramel", "vanilla", "citrus", "honey", "light oak", "creamy finish"],
+    extraClusters: [
+      { cluster: "Collectibility", terms: ["horse stopper", "Blanton's stopper letters", "complete the word Blantons", "collectible bourbon", "Blanton's Gold", "Blanton's Straight From The Barrel"] },
+    ],
+  }),
+
+  "blantons-gold-edition": bottleSeo({
+    metaTitle: "Blanton's Gold Edition Price | 103 Proof Single Barrel",
+    metaDescription:
+      "Blanton's Gold Edition single barrel bourbon at 103 proof — richer and higher proof than the Original. Current price and allocation status.",
+    focusKeyword: "blantons gold",
+    alternateName: "Blanton's Gold Edition",
+    primary: ["blantons gold", "blanton's gold edition", "blantons gold edition", "blantons gold price", "blantons gold bourbon", "blanton's gold"],
+    longTail: ["where to buy blantons gold", "blantons gold msrp", "blantons gold vs original", "how much is blantons gold", "is blantons gold worth it", "blantons gold edition review"],
+    spec: ["103 proof", "51.5% ABV", "single barrel", "8 year bourbon", "Kentucky straight bourbon", "Buffalo Trace", "750ml"],
+    tasting: ["caramel", "vanilla", "orange", "toasted oak", "baking spice", "long warm finish"],
+    extraClusters: [
+      { cluster: "Blanton's Lineup", terms: ["Blanton's Original", "Blanton's Gold", "Blanton's Straight From The Barrel", "horse stopper", "collectible bourbon"] },
+    ],
+  }),
+
+  // --- Stagg --------------------------------------------------------------
+  // Buffalo Trace dropped the "Jr." at Batch 18, but the search demand did
+  // not follow: "stagg jr" is still how most people look for this bottle, so
+  // the title carries the former name explicitly.
+  "stagg-bourbon": bottleSeo({
+    metaTitle: "Stagg (Stagg Jr) Price | Barrel Proof 130 Proof Bourbon",
+    metaDescription:
+      "Stagg — formerly Stagg Jr — barrel-proof Kentucky bourbon at ~130 proof. Current price, batch and availability. Dark chocolate, cherry, brown sugar.",
+    focusKeyword: "stagg jr",
+    alternateName: "Stagg Jr",
+    primary: ["stagg jr", "stagg bourbon", "stagg jr bourbon", "stagg jr price", "stagg batch", "buffalo trace stagg", "stagg jr for sale"],
+    longTail: ["why did stagg jr change its name", "stagg jr vs george t stagg", "where to buy stagg jr", "stagg jr msrp", "what batch is stagg jr", "stagg jr review", "is stagg jr worth it", "stagg batch list"],
+    spec: ["130 proof", "65% ABV", "barrel proof", "unfiltered", "9 year bourbon", "Kentucky straight bourbon", "Buffalo Trace", "750ml"],
+    tasting: ["dark chocolate", "cherry", "brown sugar", "toasted oak", "baking spice", "big hot finish"],
+    extraClusters: [
+      { cluster: "Naming & Batches", terms: ["Stagg Jr", "formerly Stagg Jr", "Stagg Batch 18", "Stagg batch list", "George T. Stagg", "Stagg Sr"] },
+    ],
+  }),
+
+  "george-t-stagg": bottleSeo({
+    metaTitle: "George T. Stagg Price | BTAC Uncut 136.1 Proof Bourbon",
+    metaDescription:
+      "George T. Stagg — Buffalo Trace Antique Collection, uncut and unfiltered at 136.1 proof. Current price and allocation status. The benchmark barrel proof.",
+    focusKeyword: "george t stagg",
+    alternateName: "GTS",
+    primary: ["george t stagg", "gts bourbon", "george t stagg price", "george t stagg 2025", "george t stagg btac", "stagg sr", "george t stagg barrel proof"],
+    longTail: ["where to buy george t stagg", "george t stagg msrp", "george t stagg vs stagg jr", "how much is george t stagg", "btac 2025 lineup", "george t stagg review", "what proof is george t stagg"],
+    spec: ["136.1 proof", "68% ABV", "barrel proof", "uncut", "unfiltered", "15 year bourbon", "Buffalo Trace Antique Collection", "750ml"],
+    tasting: ["dark chocolate", "espresso", "leather", "dark cherry", "toasted oak", "enormous finish"],
+    extraClusters: [BTAC_CLUSTER, { cluster: "Naming", terms: ["GTS", "Stagg Sr", "Papa Stagg", "Stagg Jr", "Stagg"] }],
+  }),
+
+  // --- Other allocated Buffalo Trace + limited releases --------------------
+  "elmer-t-lee-single-barrel": bottleSeo({
+    metaTitle: "Elmer T. Lee Single Barrel Price | 90 Proof Bourbon",
+    metaDescription:
+      "Elmer T. Lee Single Barrel Kentucky bourbon, 90 proof, named for the master distiller who created Blanton's. Current price and allocation status.",
+    focusKeyword: "elmer t lee",
+    alternateName: "Elmer T. Lee Single Barrel",
+    primary: ["elmer t lee", "elmer t lee single barrel", "elmer t lee bourbon", "elmer t lee price", "elmer t lee msrp", "elmer t. lee"],
+    longTail: ["where to buy elmer t lee", "how much is elmer t lee", "elmer t lee msrp", "elmer t lee vs blantons", "why is elmer t lee hard to find", "elmer t lee review", "elmer t lee commemorative"],
+    spec: ["90 proof", "45% ABV", "single barrel", "9 year bourbon", "Kentucky straight bourbon", "Buffalo Trace", "750ml"],
+    tasting: ["honey", "vanilla", "caramel", "soft spice", "light oak", "smooth finish"],
+  }),
+
+  "rock-hill-farms-single-barrel": bottleSeo({
+    metaTitle: "Rock Hill Farms Price | Single Barrel 100 Proof Bourbon",
+    metaDescription:
+      "Rock Hill Farms Single Barrel Kentucky bourbon at 100 proof. Current price and allocation status. Rich caramel, oak and baking spice from the same mash bill as Blanton's.",
+    focusKeyword: "rock hill farms",
+    alternateName: "Rock Hill Farms Single Barrel",
+    primary: ["rock hill farms", "rock hill farms bourbon", "rock hill farms single barrel", "rock hill farms price", "rock hill farms msrp"],
+    longTail: ["where to buy rock hill farms", "how much is rock hill farms", "rock hill farms vs blantons", "is rock hill farms worth it", "rock hill farms review", "rock hill farms decanter"],
+    spec: ["100 proof", "50% ABV", "single barrel", "8 year bourbon", "Kentucky straight bourbon", "Buffalo Trace", "750ml"],
+    tasting: ["rich caramel", "oak", "baking spice", "dark fruit", "vanilla", "long finish"],
+  }),
+
+  "russells-reserve-13-year": bottleSeo({
+    metaTitle: "Russell's Reserve 13 Year Price | 114.8 Proof Bourbon",
+    metaDescription:
+      "Russell's Reserve 13 Year, non-chill-filtered Kentucky bourbon at 114.8 proof from Wild Turkey. Current price and allocation status.",
+    focusKeyword: "russells reserve 13",
+    alternateName: "Russell's Reserve 13 Year",
+    primary: ["russells reserve 13", "russell's reserve 13 year", "russells reserve 13 year", "russells reserve 13 price", "russell's reserve 13", "wild turkey russells reserve 13"],
+    longTail: ["where to buy russells reserve 13", "russells reserve 13 msrp", "how much is russells reserve 13", "russells reserve 13 vs 15", "is russells reserve 13 worth it", "russells reserve 13 review"],
+    spec: ["114.8 proof", "57.4% ABV", "13 year bourbon", "non-chill filtered", "Kentucky straight bourbon", "Wild Turkey", "750ml"],
+    tasting: ["caramel", "vanilla", "toasted oak", "dark fruit", "baking spice", "rich finish"],
+  }),
+
+  "king-of-kentucky": bottleSeo({
+    metaTitle: "King of Kentucky Price | 14 Year Barrel Proof Bourbon",
+    metaDescription:
+      "King of Kentucky single barrel, barrel-proof Kentucky bourbon — 14 years, 127.8 proof. Current price and allocation status. One of the hardest releases to find.",
+    focusKeyword: "king of kentucky",
+    alternateName: "King of Kentucky Bourbon",
+    primary: ["king of kentucky", "king of kentucky bourbon", "king of kentucky price", "king of kentucky 2025", "king of kentucky release"],
+    longTail: ["where to buy king of kentucky", "king of kentucky msrp", "how much is king of kentucky", "king of kentucky release date", "is king of kentucky worth it", "king of kentucky review"],
+    spec: ["127.8 proof", "63.9% ABV", "14 year bourbon", "single barrel", "barrel proof", "Kentucky straight bourbon", "Brown-Forman", "750ml"],
+    tasting: ["dark caramel", "leather", "dark chocolate", "dried fruit", "toasted oak", "long powerful finish"],
+    extraClusters: [
+      { cluster: "Scarcity", terms: ["annual release", "limited release bourbon", "collectible bourbon", "allocated bourbon", "bourbon lottery"] },
+    ],
+  }),
+
+  "blood-oath": bottleSeo({
+    metaTitle: "Blood Oath Bourbon Price | Annual Limited Release Pact",
+    metaDescription:
+      "Blood Oath — the annual limited-release pact of three Kentucky bourbons, 98.6 proof. Current price and allocation status for the latest Pact.",
+    focusKeyword: "blood oath bourbon",
+    alternateName: "Blood Oath Pact",
+    primary: ["blood oath bourbon", "blood oath", "blood oath pact", "blood oath price", "blood oath bourbon price", "blood oath pact 11"],
+    longTail: ["where to buy blood oath bourbon", "blood oath msrp", "which blood oath pact is best", "how much is blood oath", "blood oath pact list", "blood oath bourbon review"],
+    spec: ["98.6 proof", "49.3% ABV", "12 year bourbon", "small batch", "Kentucky straight bourbon", "Lux Row", "750ml"],
+    tasting: ["caramel", "vanilla", "dark fruit", "toasted oak", "baking spice", "smooth finish"],
+    extraClusters: [
+      { cluster: "Pact Releases", terms: ["Blood Oath Pact", "annual release", "pact of three bourbons", "limited release bourbon", "collectible bourbon"] },
+    ],
+  }),
+
+  "thomas-h-handy-sazerac": bottleSeo({
+    metaTitle: "Thomas H. Handy Sazerac Price | BTAC 130.9 Proof Rye",
+    metaDescription:
+      "Thomas H. Handy Sazerac — Buffalo Trace Antique Collection straight rye, uncut and unfiltered at 130.9 proof. Current price and allocation status.",
+    focusKeyword: "thomas h handy",
+    alternateName: "Thomas H. Handy Sazerac Rye",
+    primary: ["thomas h handy", "thomas h handy sazerac", "thomas handy rye", "thomas h handy price", "thomas h handy 2025", "handy rye btac"],
+    longTail: ["where to buy thomas h handy", "thomas h handy msrp", "thomas h handy vs sazerac 18", "how much is thomas h handy", "btac 2025 lineup", "thomas h handy review"],
+    spec: ["130.9 proof", "65.45% ABV", "barrel proof", "uncut", "unfiltered", "straight rye whiskey", "6 year rye", "Buffalo Trace Antique Collection", "750ml"],
+    tasting: ["rye spice", "mint", "dark caramel", "cracked pepper", "toasted oak", "hot lingering finish"],
+    extraClusters: [BTAC_CLUSTER, { cluster: "Rye Whiskey", terms: ["straight rye whiskey", "barrel proof rye", "best rye whiskey", "Sazerac 18", "rye for cocktails"] }],
+  }),
+
   // Old Rip Van Winkle 10 Year.
   //
   // The whole strategy here rests on one finding: essentially all the search

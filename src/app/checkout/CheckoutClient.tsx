@@ -16,90 +16,40 @@ import {
   ApplePayLogo,
   BitcoinLogo,
   ChimeLogo,
-  DhlLogo,
   EthereumLogo,
-  FedexLogo,
   // MastercardLogo, // unused while credit card payment is disabled
-  UpsLogo,
-  UspsLogo,
   // VisaLogo, // unused while credit card payment is disabled
 } from "./Logos";
 
-type ShippingId = "standard" | "express" | "overnight" | "white-glove";
-type PaymentId = "card" | "paypal" | "chime" | "apple-pay" | "crypto";
-
-interface ShippingOption {
-  id: ShippingId;
-  label: string;
-  detail: string;
-  carrier: React.ReactNode;
-  cost: number;
-  freeOver?: number;
-}
-
-const SHIPPING_OPTIONS: ShippingOption[] = [
-  {
-    id: "standard",
-    label: "Standard Ground",
-    detail: "5–7 business days",
-    carrier: (
-      <span className="inline-flex items-center gap-1.5">
-        <UspsLogo />
-        <span className="text-bourbon-stone text-xs">USPS</span>
-      </span>
-    ),
-    cost: 9.0,
-    freeOver: 200,
-  },
-  {
-    id: "express",
-    label: "Express",
-    detail: "2–3 business days",
-    carrier: (
-      <span className="inline-flex items-center gap-1.5">
-        <UpsLogo />
-        <span className="text-bourbon-stone text-xs">UPS</span>
-      </span>
-    ),
-    cost: 19.0,
-  },
-  {
-    id: "overnight",
-    label: "Overnight",
-    detail: "Next business day",
-    carrier: (
-      <span className="inline-flex items-center gap-1.5">
-        <FedexLogo />
-        <span className="text-bourbon-stone text-xs">FedEx</span>
-      </span>
-    ),
-    cost: 39.0,
-  },
-  {
-    id: "white-glove",
-    label: "White Glove International",
-    detail: "Signature, climate-controlled · 7–14 days",
-    carrier: (
-      <span className="inline-flex items-center gap-1.5">
-        <DhlLogo />
-        <span className="text-bourbon-stone text-xs">DHL Express</span>
-      </span>
-    ),
-    cost: 79.0,
-  },
-];
-
 interface PaymentOption {
-  id: PaymentId;
+  id: string;
   label: string;
   detail: string;
   logos: React.ReactNode;
   discount?: number;
 }
 
+// Brand marks for the rails we ship artwork for, keyed by payment key.
+// A method the operator adds from the admin panel simply renders without a
+// logo rather than breaking the layout.
+const PAYMENT_LOGOS: Record<string, React.ReactNode> = {
+  chime: <ChimeLogo />,
+  "apple-pay": <ApplePayLogo />,
+  crypto: (
+    <div className="flex items-center gap-2">
+      <BitcoinLogo />
+      <EthereumLogo />
+    </div>
+  ),
+};
+
+// Display-only default for the fallback list and the marketing copy. The rate
+// actually applied to an order comes from the PaymentOption row, server-side.
 const CRYPTO_DISCOUNT_RATE = 0.1;
 
-const PAYMENT_OPTIONS: PaymentOption[] = [
+// Fallback used only if /api/payment-options is unreachable, so checkout can
+// still take an order rather than showing an empty payment step.
+const FALLBACK_PAYMENT_OPTIONS: PaymentOption[] = [
   // Credit/Debit card payment temporarily disabled.
   // {
   //   id: "card",
@@ -186,13 +136,45 @@ export default function CheckoutClient() {
     postal: "",
     country: "US",
   });
-  const [shippingId, setShippingId] = useState<ShippingId>("standard");
-  const [paymentId, setPaymentId] = useState<PaymentId>("chime");
+  const [paymentId, setPaymentId] = useState<string>("chime");
+  // Payment rails come from the database so the operator can change account
+  // details or add a method without a deploy.
+  const [paymentOptions, setPaymentOptions] = useState<PaymentOption[]>(
+    FALLBACK_PAYMENT_OPTIONS,
+  );
   const [placing, setPlacing] = useState(false);
   const [placeError, setPlaceError] = useState<string | null>(null);
 
   const [savedProfile, setSavedProfile] = useState<SavedProfile | null>(null);
   const [saveForLater, setSaveForLater] = useState(true);
+
+  // Load the operator-configured payment rails.
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/payment-options")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data: { key: string; label: string; detail: string | null; discountRate: number }[] | null) => {
+        if (cancelled || !Array.isArray(data) || data.length === 0) return;
+        const mapped: PaymentOption[] = data.map((o) => ({
+          id: o.key,
+          label: o.label,
+          detail: o.detail ?? "",
+          logos: PAYMENT_LOGOS[o.key] ?? null,
+          discount: o.discountRate > 0 ? o.discountRate : undefined,
+        }));
+        setPaymentOptions(mapped);
+        // Keep the selection valid if the configured rails changed.
+        setPaymentId((current) =>
+          mapped.some((m) => m.id === current) ? current : mapped[0].id,
+        );
+      })
+      .catch(() => {
+        // Keep the fallback list — an order is better than a dead checkout.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // On mount: prefill from saved profile (localStorage)
   useEffect(() => {
@@ -219,23 +201,21 @@ export default function CheckoutClient() {
     });
   };
 
-  const shippingOption = SHIPPING_OPTIONS.find((s) => s.id === shippingId)!;
-  const paymentOption = PAYMENT_OPTIONS.find((p) => p.id === paymentId)!;
-
-  const shippingCost = useMemo(() => {
-    if (shippingOption.freeOver && subtotal >= shippingOption.freeOver) return 0;
-    return shippingOption.cost;
-  }, [shippingOption, subtotal]);
+  const paymentOption =
+    paymentOptions.find((p) => p.id === paymentId) ?? paymentOptions[0];
 
   const discount = useMemo(() => {
-    if (!paymentOption.discount) return 0;
+    if (!paymentOption?.discount) return 0;
     return subtotal * paymentOption.discount;
   }, [paymentOption, subtotal]);
 
-  const taxRate = 0.085;
-  const taxableBase = Math.max(0, subtotal - discount);
-  const tax = taxableBase * taxRate;
-  const total = taxableBase + shippingCost + tax;
+  // Shipping is free and no longer chosen at checkout; tax is no longer
+  // charged. Both are still sent as 0 so the order API and the email
+  // templates keep a stable shape, and so historical orders that DO carry a
+  // shipping charge still render their real figures.
+  const shippingCost = 0;
+  const tax = 0;
+  const total = Math.max(0, subtotal - discount);
 
   const canPlace =
     items.length > 0 &&
@@ -258,12 +238,10 @@ export default function CheckoutClient() {
       placedAt: new Date().toISOString(),
       contact: { ...contact },
       address: { ...address },
-      shipping: {
-        id: shippingId,
-        label: shippingOption.label,
-        detail: shippingOption.detail,
-        cost: shippingCost,
-      },
+      // Shipping is no longer chosen by the customer. The server forces the
+      // method and a zero cost regardless of what's sent here — this only
+      // keeps the payload shape stable.
+      shipping: { id: "standard", label: "Shipping", detail: "", cost: 0 },
       payment: {
         id: paymentId,
         label: paymentOption.label,
@@ -558,61 +536,11 @@ export default function CheckoutClient() {
               </label>
             </section>
 
-            {/* Shipping */}
-            <section className="bg-white border border-bourbon-deep/10 p-5 sm:p-7">
-              <StepHeading n={3} title="Shipping method" />
-              <div className="space-y-3">
-                {SHIPPING_OPTIONS.map((opt) => {
-                  const selected = shippingId === opt.id;
-                  const isFree = opt.freeOver !== undefined && subtotal >= opt.freeOver;
-                  return (
-                    <button
-                      key={opt.id}
-                      type="button"
-                      onClick={() => setShippingId(opt.id)}
-                      className={`w-full text-left flex items-start gap-4 p-4 border-2 transition-all cursor-pointer ${
-                        selected
-                          ? "border-bourbon-gold bg-bourbon-gold/5"
-                          : "border-bourbon-deep/10 hover:border-bourbon-deep/30"
-                      }`}
-                    >
-                      <span
-                        className={`mt-0.5 flex items-center justify-center w-5 h-5 rounded-full border-2 shrink-0 ${
-                          selected ? "border-bourbon-gold" : "border-bourbon-deep/30"
-                        }`}
-                      >
-                        {selected && <span className="w-2.5 h-2.5 rounded-full bg-bourbon-gold" />}
-                      </span>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex flex-wrap items-center gap-2 mb-1">
-                          <span className="text-bourbon-deep font-semibold text-sm">{opt.label}</span>
-                          {opt.carrier}
-                        </div>
-                        <p className="text-bourbon-stone text-xs">{opt.detail}</p>
-                        {opt.freeOver && !isFree && (
-                          <p className="text-bourbon-stone/70 text-[11px] mt-1">
-                            Free on orders over ${opt.freeOver}
-                          </p>
-                        )}
-                      </div>
-                      <span className="font-[family-name:var(--font-playfair)] text-bourbon-deep font-bold whitespace-nowrap">
-                        {isFree ? (
-                          <span className="text-bourbon-gold">Free</span>
-                        ) : (
-                          `$${opt.cost.toFixed(2)}`
-                        )}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </section>
-
             {/* Payment */}
             <section className="bg-white border border-bourbon-deep/10 p-5 sm:p-7">
-              <StepHeading n={4} title="Payment method" />
+              <StepHeading n={3} title="Payment method" />
               <div className="space-y-3">
-                {PAYMENT_OPTIONS.map((opt) => {
+                {paymentOptions.map((opt) => {
                   const selected = paymentId === opt.id;
                   return (
                     <button
@@ -726,22 +654,12 @@ export default function CheckoutClient() {
                   <span>Subtotal</span>
                   <span className="text-bourbon-deep">${subtotal.toFixed(2)}</span>
                 </div>
-                <div className="flex items-center justify-between text-bourbon-stone">
-                  <span>Shipping</span>
-                  <span className="text-bourbon-deep">
-                    {shippingCost === 0 ? "Free" : `$${shippingCost.toFixed(2)}`}
-                  </span>
-                </div>
                 {discount > 0 && (
                   <div className="flex items-center justify-between text-bourbon-gold font-semibold">
                     <span>Crypto discount ({Math.round(CRYPTO_DISCOUNT_RATE * 100)}%)</span>
                     <span>−${discount.toFixed(2)}</span>
                   </div>
                 )}
-                <div className="flex items-center justify-between text-bourbon-stone">
-                  <span>Estimated tax</span>
-                  <span className="text-bourbon-deep">${tax.toFixed(2)}</span>
-                </div>
               </div>
 
               <div className="mt-5 pt-5 border-t border-bourbon-deep/10 flex items-baseline justify-between">

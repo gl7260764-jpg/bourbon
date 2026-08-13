@@ -96,11 +96,18 @@ export default function Navbar() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </button>
-            <button className="text-bourbon-cream/70 hover:text-bourbon-gold transition-colors cursor-pointer hidden sm:block">
+            {/* This icon was previously a dead button. It now goes to the
+                account; /account redirects to sign-in when there's no session,
+                so one link serves both states. */}
+            <Link
+              href="/account"
+              aria-label="Your account"
+              className="text-bourbon-cream/70 hover:text-bourbon-gold transition-colors cursor-pointer hidden sm:block"
+            >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
-            </button>
+            </Link>
             <button
               onClick={toggleCart}
               className="relative text-bourbon-cream/70 hover:text-bourbon-gold transition-colors cursor-pointer"

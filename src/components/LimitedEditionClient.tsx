@@ -4,7 +4,8 @@ import Link from "next/link";
 export interface LimitedEditionCard {
   id: string;
   name: string;
-  ageLabel: string;
+  /** Null when the bottle carries no age statement — render nothing. */
+  ageLabel: string | null;
   price: number;
   compareAtPrice: number | null;
   proof: number;
@@ -69,7 +70,7 @@ export default function LimitedEditionClient({
               <div className="w-px h-12 bg-bourbon-gold/30 hidden sm:block" />
               <div>
                 <span className="block text-bourbon-cream text-sm font-semibold">
-                  {product.ageLabel} Aged
+                  {product.ageLabel ? `${product.ageLabel} Aged` : "No Age Statement"}
                 </span>
                 <span className="text-bourbon-cream/50 text-xs">
                   {product.proof.toFixed(1)} Proof · Wheated

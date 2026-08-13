@@ -1,3 +1,4 @@
+import { ageLabel } from "@/lib/product-format";
 import { prisma } from "@/lib/prisma";
 import LimitedEditionClient, {
   type LimitedEditionCard,
@@ -20,7 +21,7 @@ export default async function LimitedEdition() {
   const card: LimitedEditionCard = {
     id: product.id,
     name: product.name,
-    ageLabel: product.ageYears ? `${product.ageYears} Year` : "NAS",
+    ageLabel: ageLabel(product.ageYears),
     price: product.bottlePrice.toNumber(),
     compareAtPrice: product.compareAtPrice?.toNumber() ?? null,
     proof: product.proof.toNumber(),

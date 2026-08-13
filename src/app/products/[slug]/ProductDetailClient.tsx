@@ -19,7 +19,8 @@ export interface ProductDetailData {
   bottlesPerCase: number | null;
   compareAtPrice: number | null;
 
-  ageLabel: string;
+  /** Null when the bottle carries no age statement — render nothing. */
+  ageLabel: string | null;
   proof: number;
   abv: number;
   bottleSizeMl: number;
@@ -156,7 +157,7 @@ export default function ProductDetailClient({ product }: { product: ProductDetai
             : product.name,
         price: unitPrice,
         image: activeImage.url,
-        age: product.ageLabel,
+        age: product.ageLabel ?? undefined,
       },
       qty
     );
@@ -288,13 +289,17 @@ export default function ProductDetailClient({ product }: { product: ProductDetai
             )}
 
             {/* Quick stats */}
-            <div className="grid grid-cols-3 gap-3 sm:gap-4 py-4 sm:py-5 border-y border-bourbon-deep/10 mb-5 sm:mb-6">
-              <div>
-                <p className="text-bourbon-stone text-[10px] tracking-widest uppercase">Age</p>
-                <p className="font-[family-name:var(--font-playfair)] text-bourbon-deep text-xl sm:text-2xl font-bold">
-                  {product.ageLabel}
-                </p>
-              </div>
+            <div
+              className={`grid ${product.ageLabel ? "grid-cols-3" : "grid-cols-2"} gap-3 sm:gap-4 py-4 sm:py-5 border-y border-bourbon-deep/10 mb-5 sm:mb-6`}
+            >
+              {product.ageLabel && (
+                <div>
+                  <p className="text-bourbon-stone text-[10px] tracking-widest uppercase">Age</p>
+                  <p className="font-[family-name:var(--font-playfair)] text-bourbon-deep text-xl sm:text-2xl font-bold">
+                    {product.ageLabel}
+                  </p>
+                </div>
+              )}
               <div>
                 <p className="text-bourbon-stone text-[10px] tracking-widest uppercase">Proof</p>
                 <p className="font-[family-name:var(--font-playfair)] text-bourbon-deep text-xl sm:text-2xl font-bold">
@@ -352,7 +357,7 @@ export default function ProductDetailClient({ product }: { product: ProductDetai
                       )}
                     </div>
                     <p className="relative text-bourbon-cream/70 text-xs sm:text-sm mt-3">
-                      {product.proof.toFixed(1)} proof · {product.ageLabel} · shipped in a single signature carton
+                      {product.proof.toFixed(1)} proof{product.ageLabel ? ` · ${product.ageLabel}` : ""} · shipped in a single signature carton
                     </p>
                   </div>
                 </>

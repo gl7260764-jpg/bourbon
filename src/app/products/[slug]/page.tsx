@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { buildProductMeta, getProductSeo } from "@/lib/product-seo";
 import ProductDetailClient, { type ProductDetailData } from "./ProductDetailClient";
 import RelatedProducts, { type RelatedProductCard } from "./RelatedProducts";
+import { ageLabel } from "@/lib/product-format";
 
 const PRODUCTION_STYLE_LABELS: Record<ProductionStyle, string> = {
   SINGLE_BARREL: "Single Barrel",
@@ -123,7 +124,7 @@ export default async function ProductPage({ params }: PageProps) {
     bottlesPerCase: product.bottlesPerCase,
     compareAtPrice: product.compareAtPrice?.toNumber() ?? null,
 
-    ageLabel: product.ageYears ? `${product.ageYears} Year` : "NAS",
+    ageLabel: ageLabel(product.ageYears),
     proof: product.proof.toNumber(),
     abv: product.abv.toNumber(),
     bottleSizeMl: product.bottleSizeMl,
@@ -178,7 +179,7 @@ export default async function ProductPage({ params }: PageProps) {
     id: p.id,
     slug: p.slug,
     name: p.name,
-    ageLabel: p.ageYears ? `${p.ageYears} Year` : "NAS",
+    ageLabel: ageLabel(p.ageYears),
     price: p.bottlePrice.toNumber(),
     image: p.images[0]?.url ?? "",
   }));

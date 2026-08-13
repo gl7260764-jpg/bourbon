@@ -3,18 +3,17 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { OrderStatus, PaymentMethod, ShippingMethod } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
+import { signedProofUrl } from "@/lib/cloudinary";
 import { updateOrderNotes, updateOrderStatus } from "./actions";
+import SettlementPanel, { type SettlementData } from "./SettlementPanel";
+import {
+  actionsFor,
+  ORDER_STATUS_BADGE,
+  settlementIsActionable,
+  type StatusAction,
+} from "@/lib/order-status";
 
 export const metadata = { title: "Order | Admin" };
-
-const STATUS_BADGE: Record<OrderStatus, string> = {
-  PENDING: "bg-amber-100 text-amber-800",
-  PAID: "bg-emerald-100 text-emerald-800",
-  SHIPPED: "bg-sky-100 text-sky-800",
-  DELIVERED: "bg-bourbon-gold/20 text-bourbon-deep",
-  CANCELLED: "bg-red-100 text-red-700",
-  REFUNDED: "bg-bourbon-deep/10 text-bourbon-deep/70",
-};
 
 const PAYMENT_LABEL: Record<PaymentMethod, string> = {
   CARD: "Credit or Debit Card",
@@ -22,6 +21,7 @@ const PAYMENT_LABEL: Record<PaymentMethod, string> = {
   CHIME: "Chime",
   APPLE_PAY: "Apple Pay",
   CRYPTO: "Cryptocurrency",
+  OTHER: "Other",
 };
 
 const SHIPPING_LABEL: Record<ShippingMethod, { label: string; detail: string }> = {
@@ -33,38 +33,6 @@ const SHIPPING_LABEL: Record<ShippingMethod, { label: string; detail: string }> 
     detail: "Signature, climate-controlled · 7–14 days · DHL Express",
   },
 };
-
-interface StatusAction {
-  label: string;
-  next: OrderStatus;
-  variant: "primary" | "secondary" | "danger";
-}
-
-function actionsFor(status: OrderStatus): StatusAction[] {
-  switch (status) {
-    case "PENDING":
-      return [
-        { label: "Mark paid", next: "PAID", variant: "primary" },
-        { label: "Cancel order", next: "CANCELLED", variant: "danger" },
-      ];
-    case "PAID":
-      return [
-        { label: "Mark shipped", next: "SHIPPED", variant: "primary" },
-        { label: "Refund", next: "REFUNDED", variant: "secondary" },
-        { label: "Cancel order", next: "CANCELLED", variant: "danger" },
-      ];
-    case "SHIPPED":
-      return [
-        { label: "Mark delivered", next: "DELIVERED", variant: "primary" },
-        { label: "Refund", next: "REFUNDED", variant: "secondary" },
-      ];
-    case "DELIVERED":
-      return [{ label: "Refund", next: "REFUNDED", variant: "secondary" }];
-    case "CANCELLED":
-    case "REFUNDED":
-      return [];
-  }
-}
 
 function buttonClass(variant: StatusAction["variant"]) {
   switch (variant) {
@@ -91,6 +59,21 @@ export default async function AdminOrderDetailPage({
 
   if (!order) notFound();
 
+  // Customer context. Lifetime counts only money actually confirmed — orders
+  // sitting in PENDING are not revenue yet, and showing them as such would
+  // flatter every first-time buyer who never paid.
+  const [customerOrderCount, lifetimeAgg] = await Promise.all([
+    prisma.order.count({ where: { email: order.email } }),
+    prisma.order.aggregate({
+      where: {
+        email: order.email,
+        status: { in: ["PAID", "SHIPPED", "DELIVERED"] },
+      },
+      _sum: { total: true },
+    }),
+  ]);
+  const customerLifetime = Number(lifetimeAgg._sum.total ?? 0);
+
   const updateStatus = async (formData: FormData) => {
     "use server";
     const next = formData.get("next");
@@ -109,6 +92,29 @@ export default async function AdminOrderDetailPage({
   const discountRate = Number(order.discountRate);
 
   const actions = actionsFor(order.status);
+
+  const settlement: SettlementData = {
+    orderId: order.id,
+    orderNumber: order.orderNumber,
+    state: order.settlementState,
+    // Prefer the snapshot taken at order time; fall back to the enum label for
+    // orders placed before payment rails became configurable.
+    paymentLabel: order.paymentLabel ?? PAYMENT_LABEL[order.paymentMethod],
+    paymentInstructions: order.paymentInstructions,
+    paymentReference: order.paymentReference,
+    amountReceived:
+      order.amountReceived !== null ? Number(order.amountReceived) : null,
+    settlementNote: order.settlementNote,
+    updatedAt: order.settlementUpdatedAt?.toISOString() ?? null,
+    updatedBy: order.settlementUpdatedBy,
+    // Signed at render time; the stored asset has no public URL.
+    proofUrl: order.paymentProofPublicId
+      ? signedProofUrl(order.paymentProofPublicId)
+      : null,
+    proofUploadedAt: order.paymentProofUploadedAt?.toISOString() ?? null,
+    total,
+    actionable: settlementIsActionable(order.status),
+  };
 
   return (
     <>
@@ -143,7 +149,7 @@ export default async function AdminOrderDetailPage({
             </p>
           </div>
           <span
-            className={`px-3 py-1.5 text-xs font-bold tracking-widest uppercase ${STATUS_BADGE[order.status]}`}
+            className={`px-3 py-1.5 text-xs font-bold tracking-widest uppercase ${ORDER_STATUS_BADGE[order.status]}`}
           >
             {order.status}
           </span>
@@ -175,12 +181,42 @@ export default async function AdminOrderDetailPage({
                 Customer
               </h2>
               <p className="text-bourbon-deep font-semibold">{order.fullName}</p>
-              <p className="text-bourbon-stone text-sm mt-1 break-words">
+              {/* Clickable so the operator can reply about a payment without
+                  retyping anything. */}
+              <a
+                href={`mailto:${order.email}?subject=${encodeURIComponent(`Your Bourbon & Oak order ${order.orderNumber}`)}`}
+                className="block text-bourbon-stone hover:text-bourbon-gold text-sm mt-1 break-words underline decoration-bourbon-deep/20 transition-colors"
+              >
                 {order.email}
-              </p>
+              </a>
               {order.phone && (
-                <p className="text-bourbon-stone text-sm">{order.phone}</p>
+                <a
+                  href={`tel:${order.phone.replace(/[^\d+]/g, "")}`}
+                  className="block text-bourbon-stone hover:text-bourbon-gold text-sm underline decoration-bourbon-deep/20 transition-colors"
+                >
+                  {order.phone}
+                </a>
               )}
+
+              {/* Customer history — is this a repeat buyer or a first-timer?
+                  Relevant when deciding how hard to chase a payment. */}
+              <div className="mt-3 pt-3 border-t border-bourbon-deep/10">
+                {customerOrderCount > 1 ? (
+                  <Link
+                    href={`/admin/orders?q=${encodeURIComponent(order.email)}`}
+                    className="text-bourbon-deep hover:text-bourbon-gold text-sm font-semibold transition-colors"
+                  >
+                    {customerOrderCount} orders from this customer →
+                  </Link>
+                ) : (
+                  <p className="text-bourbon-stone text-sm">First order</p>
+                )}
+                {customerLifetime > 0 && (
+                  <p className="text-bourbon-stone text-xs mt-1">
+                    ${customerLifetime.toFixed(2)} confirmed lifetime
+                  </p>
+                )}
+              </div>
             </section>
 
             <section className="bg-white border border-bourbon-deep/10 p-5">
@@ -203,36 +239,42 @@ export default async function AdminOrderDetailPage({
               </p>
             </section>
 
-            <section className="bg-white border border-bourbon-deep/10 p-5">
-              <h2 className="text-bourbon-stone text-[10px] tracking-widest uppercase mb-3">
-                Shipping method
-              </h2>
-              <p className="text-bourbon-deep font-semibold">{ship.label}</p>
-              <p className="text-bourbon-stone text-sm mt-1">{ship.detail}</p>
-              <p className="text-bourbon-stone text-sm mt-3">
-                Cost:{" "}
-                <span className="text-bourbon-deep font-semibold">
-                  {shippingCost === 0 ? "Free" : `$${shippingCost.toFixed(2)}`}
-                </span>
-              </p>
-            </section>
+            {/* Shipping stopped being customer-selectable and is now always
+                free, so this only shows for orders that actually carried a
+                method and a charge. */}
+            {shippingCost > 0 && (
+              <section className="bg-white border border-bourbon-deep/10 p-5">
+                <h2 className="text-bourbon-stone text-[10px] tracking-widest uppercase mb-3">
+                  Shipping method
+                </h2>
+                <p className="text-bourbon-deep font-semibold">{ship.label}</p>
+                <p className="text-bourbon-stone text-sm mt-1">{ship.detail}</p>
+                <p className="text-bourbon-stone text-sm mt-3">
+                  Cost:{" "}
+                  <span className="text-bourbon-deep font-semibold">
+                    ${shippingCost.toFixed(2)}
+                  </span>
+                </p>
+              </section>
+            )}
 
-            <section className="bg-white border border-bourbon-deep/10 p-5">
-              <h2 className="text-bourbon-stone text-[10px] tracking-widest uppercase mb-3">
-                Payment
-              </h2>
-              <p className="text-bourbon-deep font-semibold">
-                {PAYMENT_LABEL[order.paymentMethod]}
-              </p>
-              {discountRate > 0 && (
-                <p className="text-bourbon-stone text-sm mt-2">
-                  Discount applied:{" "}
+            {/* Settlement replaces the old read-only payment card: same
+                information, plus the controls to actually confirm the money. */}
+            <SettlementPanel data={settlement} />
+
+            {discountRate > 0 && (
+              <section className="bg-white border border-bourbon-deep/10 p-5">
+                <h2 className="text-bourbon-stone text-[10px] tracking-widest uppercase mb-3">
+                  Discount
+                </h2>
+                <p className="text-bourbon-stone text-sm">
+                  Applied:{" "}
                   <span className="text-bourbon-gold font-semibold">
                     {Math.round(discountRate * 100)}%
                   </span>
                 </p>
-              )}
-            </section>
+              </section>
+            )}
           </div>
 
           {/* Items */}
@@ -339,12 +381,14 @@ export default async function AdminOrderDetailPage({
                   <span>−${discount.toFixed(2)}</span>
                 </div>
               )}
-              <div className="flex items-center justify-between text-bourbon-stone">
-                <span>Shipping</span>
-                <span className="text-bourbon-deep">
-                  {shippingCost === 0 ? "Free" : `$${shippingCost.toFixed(2)}`}
-                </span>
-              </div>
+              {shippingCost > 0 && (
+                <div className="flex items-center justify-between text-bourbon-stone">
+                  <span>Shipping</span>
+                  <span className="text-bourbon-deep">
+                    ${shippingCost.toFixed(2)}
+                  </span>
+                </div>
+              )}
               <div className="flex items-center justify-between text-bourbon-stone">
                 <span>Tax</span>
                 <span className="text-bourbon-deep">${tax.toFixed(2)}</span>

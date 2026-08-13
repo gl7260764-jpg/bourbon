@@ -9,6 +9,7 @@ import {
   type ContentBlock,
 } from "@/lib/blog";
 import { prisma } from "@/lib/prisma";
+import { ageLabel } from "@/lib/product-format";
 
 // Parse [[product:slug|anchor text]] markers in a prose string and return a
 // node array with internal Next.js Links interleaved with the surrounding
@@ -378,7 +379,7 @@ export default async function BlogPostPage({ params }: PageProps) {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
             {orderedFeatured.map((p) => {
               const img = p.images[0]?.url;
-              const ageLabel = p.ageYears ? `${p.ageYears} Year` : "NAS";
+              const label = ageLabel(p.ageYears);
               return (
                 <Link
                   key={p.id}
@@ -403,7 +404,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                   </div>
                   <div className="p-3 sm:p-5 flex-1 flex flex-col">
                     <p className="text-bourbon-gold text-[10px] sm:text-xs tracking-widest uppercase mb-1">
-                      {ageLabel} Aged
+                      {label} Aged
                     </p>
                     <h3 className="font-[family-name:var(--font-playfair)] text-sm sm:text-lg font-semibold text-bourbon-deep mb-2 group-hover:text-bourbon-gold transition-colors line-clamp-2">
                       {p.name}

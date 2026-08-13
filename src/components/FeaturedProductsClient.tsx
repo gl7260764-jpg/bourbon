@@ -9,7 +9,8 @@ export interface FeaturedProductCard {
   id: string;
   slug: string;
   name: string;
-  ageLabel: string;
+  /** Null when the bottle carries no age statement — render nothing. */
+  ageLabel: string | null;
   price: number;
   rating: number;
   reviews: number;
@@ -48,7 +49,7 @@ export default function FeaturedProductsClient({
       name: product.name,
       price: product.price,
       image: product.image,
-      age: product.ageLabel,
+      age: product.ageLabel ?? undefined,
     });
     showToast(product.name, product.image, product.price);
   };
@@ -117,9 +118,11 @@ export default function FeaturedProductsClient({
               </Link>
 
               <div className="p-3 sm:p-5">
-                <p className="text-bourbon-gold text-[10px] sm:text-xs tracking-widest uppercase mb-1">
-                  {product.ageLabel} Aged
-                </p>
+                {product.ageLabel && (
+                  <p className="text-bourbon-gold text-[10px] sm:text-xs tracking-widest uppercase mb-1">
+                    {product.ageLabel} Aged
+                  </p>
+                )}
                 <Link href={`/products/${product.slug}`}>
                   <h3 className="font-[family-name:var(--font-playfair)] text-base sm:text-lg font-semibold text-bourbon-deep mb-2 group-hover:text-bourbon-gold transition-colors">
                     {product.name}

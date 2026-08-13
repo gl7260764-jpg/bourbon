@@ -4,79 +4,22 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
+import type { OrderSnapshot } from "@/lib/order-snapshot";
+import PaymentProofUpload from "./PaymentProofUpload";
 import {
   AmexLogo,
   ApplePayLogo,
   BitcoinLogo,
   ChimeLogo,
-  DhlLogo,
   EthereumLogo,
-  FedexLogo,
   MastercardLogo,
   PaypalLogo,
-  UpsLogo,
-  UspsLogo,
   VisaLogo,
 } from "../Logos";
 
-type ShippingId = "standard" | "express" | "overnight" | "white-glove";
-type PaymentId = "card" | "paypal" | "chime" | "apple-pay" | "crypto";
-
-interface OrderSnapshot {
-  orderNumber: string;
-  placedAt: string;
-  contact: { email: string; phone: string };
-  address: {
-    fullName: string;
-    line1: string;
-    line2: string;
-    city: string;
-    region: string;
-    postal: string;
-    country: string;
-  };
-  shipping: {
-    id: ShippingId;
-    label: string;
-    detail: string;
-    cost: number;
-  };
-  payment: {
-    id: PaymentId;
-    label: string;
-    discountRate: number;
-  };
-  items: {
-    id: string;
-    name: string;
-    image: string;
-    age: string | null;
-    price: number;
-    quantity: number;
-  }[];
-  totals: {
-    subtotal: number;
-    discount: number;
-    shippingCost: number;
-    tax: number;
-    total: number;
-  };
-}
-
-function shippingCarrier(id: ShippingId) {
-  switch (id) {
-    case "standard":
-      return { logo: <UspsLogo />, name: "USPS" };
-    case "express":
-      return { logo: <UpsLogo />, name: "UPS" };
-    case "overnight":
-      return { logo: <FedexLogo />, name: "FedEx" };
-    case "white-glove":
-      return { logo: <DhlLogo />, name: "DHL Express" };
-  }
-}
-
-function paymentLogos(id: PaymentId) {
+// Accepts any key: operator-added rails fall through to the default and
+// simply render no logo.
+function paymentLogos(id: string) {
   switch (id) {
     case "card":
       return (
@@ -102,25 +45,6 @@ function paymentLogos(id: PaymentId) {
   }
 }
 
-function estimatedDelivery(shippingId: ShippingId, placedAt: string) {
-  const days: Record<ShippingId, [number, number]> = {
-    standard: [5, 7],
-    express: [2, 3],
-    overnight: [1, 1],
-    "white-glove": [7, 14],
-  };
-  const [min, max] = days[shippingId];
-  const start = new Date(placedAt);
-  const fmt = (d: Date) =>
-    d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
-  const minDate = new Date(start);
-  minDate.setDate(minDate.getDate() + min);
-  const maxDate = new Date(start);
-  maxDate.setDate(maxDate.getDate() + max);
-  if (min === max) return fmt(minDate);
-  return `${fmt(minDate)} – ${fmt(maxDate)}`;
-}
-
 function readSessionSnapshot(): OrderSnapshot | null {
   try {
     const raw = sessionStorage.getItem("bourbon:last-order");
@@ -130,11 +54,21 @@ function readSessionSnapshot(): OrderSnapshot | null {
   }
 }
 
-export default function ConfirmationClient() {
+export default function ConfirmationClient({
+  initialOrder = null,
+}: {
+  /**
+   * Server-rendered order. When present the page paints complete on the first
+   * frame — no mount, no fetch, no blank gap between navbar and footer.
+   */
+  initialOrder?: OrderSnapshot | null;
+}) {
   const searchParams = useSearchParams();
   const orderParam = searchParams.get("order");
-  const [order, setOrder] = useState<OrderSnapshot | null>(null);
-  const [loaded, setLoaded] = useState(false);
+  const [order, setOrder] = useState<OrderSnapshot | null>(initialOrder);
+  // Already resolved when the server found the order; only the fallback path
+  // (order number in sessionStorage but not the URL) has anything to wait for.
+  const [loaded, setLoaded] = useState(initialOrder !== null);
 
   // Always start the confirmation page at the top, even when the previous
   // page (checkout) had been scrolled down to the place-order button.
@@ -143,6 +77,9 @@ export default function ConfirmationClient() {
   }, []);
 
   useEffect(() => {
+    // Server already supplied the order — nothing to fetch.
+    if (initialOrder) return;
+
     let cancelled = false;
 
     const sessionSnapshot = readSessionSnapshot();
@@ -179,9 +116,22 @@ export default function ConfirmationClient() {
     return () => {
       cancelled = true;
     };
-  }, [orderParam]);
+  }, [orderParam, initialOrder]);
 
-  if (!loaded) return null;
+  // Only reachable on the fallback path, and only for one tick.
+  if (!loaded) {
+    return (
+      <main className="bg-bourbon-cream min-h-screen pt-24 sm:pt-32 pb-20 px-4">
+        <div className="max-w-4xl mx-auto animate-pulse">
+          <div className="h-16 w-16 rounded-full bg-bourbon-deep/10 mx-auto mb-5" />
+          <div className="h-4 w-40 bg-bourbon-deep/10 mx-auto mb-4" />
+          <div className="h-10 w-2/3 bg-bourbon-deep/10 mx-auto mb-10" />
+          <div className="h-28 bg-bourbon-deep/10 mb-6" />
+          <div className="h-64 bg-bourbon-deep/10" />
+        </div>
+      </main>
+    );
+  }
 
   if (!order) {
     return (
@@ -204,9 +154,7 @@ export default function ConfirmationClient() {
     );
   }
 
-  const carrier = shippingCarrier(order.shipping.id);
   const placedAtDate = new Date(order.placedAt);
-  const delivery = estimatedDelivery(order.shipping.id, order.placedAt);
 
   return (
     <main className="bg-bourbon-cream min-h-screen pt-24 sm:pt-32 pb-16 sm:pb-20">
@@ -251,12 +199,6 @@ export default function ConfirmationClient() {
                 minute: "2-digit",
               })}
             </p>
-          </div>
-          <div className="col-span-2 sm:col-span-1">
-            <p className="text-bourbon-gold text-[10px] tracking-widest uppercase mb-1">
-              Estimated arrival
-            </p>
-            <p className="text-sm font-semibold">{delivery}</p>
           </div>
         </div>
 
@@ -311,18 +253,6 @@ export default function ConfirmationClient() {
                 </p>
               </section>
 
-              <section className="bg-white border border-bourbon-deep/10 p-5">
-                <h3 className="text-bourbon-stone text-[10px] tracking-widest uppercase mb-3">
-                  Shipping method
-                </h3>
-                <div className="flex items-center gap-2 mb-2">{carrier.logo}<span className="text-bourbon-stone text-xs">{carrier.name}</span></div>
-                <p className="text-bourbon-deep font-semibold">{order.shipping.label}</p>
-                <p className="text-bourbon-stone text-sm mt-1">{order.shipping.detail}</p>
-                <p className="text-bourbon-stone text-sm mt-3">
-                  Estimated arrival: <span className="text-bourbon-deep font-semibold">{delivery}</span>
-                </p>
-              </section>
-
               <section className="bg-white border border-bourbon-deep/10 p-5 sm:col-span-2">
                 <h3 className="text-bourbon-stone text-[10px] tracking-widest uppercase mb-3">
                   Payment
@@ -337,21 +267,44 @@ export default function ConfirmationClient() {
                         </span>
                       )}
                     </div>
-                    {order.payment.id === "crypto" && (
-                      <p className="text-bourbon-stone text-sm">
-                        Settles when the network confirms (~10 min for BTC).
-                      </p>
-                    )}
-                    {order.payment.id === "chime" && (
-                      <p className="text-bourbon-stone text-sm">
-                        Open Chime → Pay Anyone → send to{" "}
-                        <span className="text-bourbon-deep font-semibold">$BourbonOak</span>{" "}
-                        with your order # in the memo.
-                      </p>
-                    )}
                   </div>
                   <div>{paymentLogos(order.payment.id)}</div>
                 </div>
+
+                {/* Account details, straight from the order snapshot. These
+                    used to be hardcoded per method here — now the operator
+                    edits them in Admin → Payment methods. */}
+                {order.payment.instructions && (
+                  <div className="mt-5 pt-5 border-t-2 border-bourbon-gold/40">
+                    <p className="text-bourbon-gold text-[10px] tracking-[0.3em] uppercase mb-3">
+                      How to pay — {order.payment.label}
+                    </p>
+                    <pre className="text-bourbon-deep text-sm whitespace-pre-wrap font-[family-name:var(--font-inter)] bg-bourbon-cream/60 p-4 border border-bourbon-deep/10">
+                      {order.payment.instructions}
+                    </pre>
+                    <p className="text-bourbon-stone text-sm mt-3">
+                      Amount due{" "}
+                      <span className="text-bourbon-deep font-semibold">
+                        ${order.totals.total.toFixed(2)}
+                      </span>
+                      . Reference order{" "}
+                      <span className="text-bourbon-deep font-semibold">
+                        {order.orderNumber}
+                      </span>{" "}
+                      so we can match your payment. We&apos;ve emailed these
+                      details to you as well.
+                    </p>
+                  </div>
+                )}
+
+                {/* Proof of payment. Only offered while the order is still
+                    awaiting money — the API refuses uploads after that. */}
+                {(order.status ?? "PENDING") === "PENDING" && (
+                  <PaymentProofUpload
+                    orderNumber={order.orderNumber}
+                    alreadyUploaded={order.hasPaymentProof ?? false}
+                  />
+                )}
               </section>
             </div>
           </div>
@@ -368,22 +321,28 @@ export default function ConfirmationClient() {
                   <span>Subtotal</span>
                   <span className="text-bourbon-deep">${order.totals.subtotal.toFixed(2)}</span>
                 </div>
-                <div className="flex items-center justify-between text-bourbon-stone">
-                  <span>Shipping</span>
-                  <span className="text-bourbon-deep">
-                    {order.totals.shippingCost === 0 ? "Free" : `$${order.totals.shippingCost.toFixed(2)}`}
-                  </span>
-                </div>
+                {/* Shipping is free now; older orders keep their real charge. */}
+                {order.totals.shippingCost > 0 && (
+                  <div className="flex items-center justify-between text-bourbon-stone">
+                    <span>Shipping</span>
+                    <span className="text-bourbon-deep">
+                      ${order.totals.shippingCost.toFixed(2)}
+                    </span>
+                  </div>
+                )}
                 {order.totals.discount > 0 && (
                   <div className="flex items-center justify-between text-bourbon-gold font-semibold">
                     <span>Discount ({Math.round(order.payment.discountRate * 100)}%)</span>
                     <span>−${order.totals.discount.toFixed(2)}</span>
                   </div>
                 )}
-                <div className="flex items-center justify-between text-bourbon-stone">
-                  <span>Tax</span>
-                  <span className="text-bourbon-deep">${order.totals.tax.toFixed(2)}</span>
-                </div>
+                {/* Tax is no longer charged; older orders still show theirs. */}
+                {order.totals.tax > 0 && (
+                  <div className="flex items-center justify-between text-bourbon-stone">
+                    <span>Tax</span>
+                    <span className="text-bourbon-deep">${order.totals.tax.toFixed(2)}</span>
+                  </div>
+                )}
               </div>
 
               <div className="mt-5 pt-5 border-t border-bourbon-deep/10 flex items-baseline justify-between">

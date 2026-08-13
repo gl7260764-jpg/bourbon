@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
+import { ageLabel } from "@/lib/product-format";
 
 export const dynamic = "force-dynamic";
 
@@ -46,7 +47,7 @@ export async function GET(request: Request) {
     slug: p.slug,
     name: p.name,
     subtitle: p.subtitle,
-    ageLabel: p.ageYears ? `${p.ageYears} Year` : "NAS",
+    ageLabel: ageLabel(p.ageYears),
     price: p.bottlePrice.toNumber(),
     image: p.images[0]?.url ?? "",
     categoryName: p.category.name,

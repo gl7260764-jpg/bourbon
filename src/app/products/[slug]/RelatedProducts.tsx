@@ -5,7 +5,8 @@ export interface RelatedProductCard {
   id: string;
   slug: string;
   name: string;
-  ageLabel: string;
+  /** Null when the bottle carries no age statement — render nothing. */
+  ageLabel: string | null;
   price: number;
   image: string;
 }
@@ -45,9 +46,11 @@ export default function RelatedProducts({
               />
             </div>
             <div className="p-5">
-              <p className="text-bourbon-gold text-xs tracking-widest uppercase mb-1">
-                {p.ageLabel} Aged
-              </p>
+              {p.ageLabel && (
+                <p className="text-bourbon-gold text-xs tracking-widest uppercase mb-1">
+                  {p.ageLabel} Aged
+                </p>
+              )}
               <h3 className="font-[family-name:var(--font-playfair)] text-lg font-semibold text-bourbon-deep group-hover:text-bourbon-gold transition-colors mb-2">
                 {p.name}
               </h3>

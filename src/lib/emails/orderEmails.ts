@@ -51,8 +51,16 @@ export interface OrderEmailData {
     postal: string;
     country: string;
   };
-  shippingMethodLabel: string;
+  /** Omitted since shipping stopped being customer-selectable. Retained
+   *  optional so an older order can still be re-sent with its real method. */
+  shippingMethodLabel?: string;
   paymentMethodLabel: string;
+  /**
+   * Account details for the chosen rail, snapshotted at order time. When
+   * present the customer can pay immediately instead of waiting for a
+   * follow-up. Null means the operator hasn't configured that method yet.
+   */
+  paymentInstructions?: string | null;
   items: OrderEmailItem[];
   totals: {
     subtotal: number;
@@ -186,8 +194,10 @@ function totalsBlock(totals: OrderEmailData["totals"]): string {
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:6px;">
       ${row("Subtotal", currency(totals.subtotal))}
       ${totals.discount > 0 ? row("Discount", `&minus; ${currency(totals.discount)}`, { muted: true }) : ""}
-      ${row("Shipping", currency(totals.shippingCost))}
-      ${row("Tax", currency(totals.tax))}
+      ${totals.shippingCost > 0 ? row("Shipping", currency(totals.shippingCost)) : ""}
+      ${/* Tax is no longer charged. Kept conditional so orders placed before
+            it was removed still render their real figures. */ ""}
+      ${totals.tax > 0 ? row("Tax", currency(totals.tax)) : ""}
       <tr><td colspan="2" style="border-top:1px solid ${COLORS.border};padding:0;line-height:0;font-size:0;">&nbsp;</td></tr>
       <tr>
         <td style="padding:12px 0 0;font-family:Georgia,'Times New Roman',serif;font-size:16px;font-weight:700;color:${COLORS.deep};letter-spacing:1px;text-transform:uppercase;">Total</td>
@@ -214,6 +224,33 @@ function sectionLabel(text: string): string {
   return `<div style="font-family:Helvetica,Arial,sans-serif;font-size:11px;letter-spacing:3px;color:${COLORS.gold};text-transform:uppercase;margin:0 0 10px;font-weight:700;">${text}</div>`;
 }
 
+/**
+ * How-to-pay panel. Rendered high in the customer email because it is the one
+ * thing that has to happen next — everything else is confirmation. Returns an
+ * empty string when the rail has no details configured, so the email quietly
+ * falls back to "we'll be in touch" rather than showing an empty box.
+ */
+function paymentPanel(data: OrderEmailData): string {
+  if (!data.paymentInstructions) return "";
+  return `
+    <tr>
+      <td style="padding:8px 32px 20px;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background:${COLORS.cream};border:2px solid ${COLORS.gold};">
+          <tr>
+            <td style="padding:20px 22px;">
+              ${sectionLabel(`How to pay — ${escapeHtml(data.paymentMethodLabel)}`)}
+              <div style="font-family:'Courier New',Courier,monospace;font-size:14px;line-height:1.8;color:${COLORS.deep};white-space:pre-wrap;">${escapeHtml(data.paymentInstructions)}</div>
+              <div style="font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.6;color:${COLORS.stone};margin-top:14px;padding-top:14px;border-top:1px solid ${COLORS.gold}33;">
+                Amount due: <strong style="color:${COLORS.deep};">${currency(data.totals.total)}</strong><br/>
+                Reference your order number <strong style="color:${COLORS.deep};">${escapeHtml(data.orderNumber)}</strong> so we can match your payment.
+              </div>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>`;
+}
+
 export function buildCustomerOrderEmail(data: OrderEmailData): { subject: string; html: string; text: string } {
   const firstName = data.customer.fullName.split(/\s+/)[0] ?? "there";
   const placedAt = data.placedAt.toLocaleString("en-US", {
@@ -227,13 +264,19 @@ export function buildCustomerOrderEmail(data: OrderEmailData): { subject: string
         <div style="font-family:Helvetica,Arial,sans-serif;font-size:11px;letter-spacing:3px;color:${COLORS.gold};text-transform:uppercase;font-weight:700;">Order Received</div>
         <h1 style="font-family:Georgia,'Times New Roman',serif;font-size:26px;color:${COLORS.deep};margin:10px 0 14px;line-height:1.2;">Thank you, ${escapeHtml(firstName)}.</h1>
         <p style="font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.7;color:${COLORS.stone};margin:0 0 8px;">
-          We have received your order and a member of our team will be in touch shortly to confirm payment and arrange shipping.
+          ${
+            data.paymentInstructions
+              ? `We have received your order. To complete it, send payment using the ${escapeHtml(data.paymentMethodLabel)} details below — we ship as soon as it clears.`
+              : "We have received your order and a member of our team will be in touch shortly to confirm payment and arrange shipping."
+          }
         </p>
         <p style="font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.7;color:${COLORS.stone};margin:0;">
           Below is a summary of what you ordered. If anything looks wrong, just reply to this email.
         </p>
       </td>
     </tr>
+
+    ${paymentPanel(data)}
 
     <tr>
       <td style="padding:24px 32px 8px;">
@@ -278,9 +321,8 @@ export function buildCustomerOrderEmail(data: OrderEmailData): { subject: string
               ${addressBlock(data)}
             </td>
             <td width="50%" valign="top" style="padding-left:12px;">
-              ${sectionLabel("Delivery & Payment")}
+              ${sectionLabel("Payment")}
               <div style="font-family:Helvetica,Arial,sans-serif;font-size:13px;color:${COLORS.dark};line-height:1.6;">
-                <div>${escapeHtml(data.shippingMethodLabel)}</div>
                 <div>${escapeHtml(data.paymentMethodLabel)}</div>
               </div>
             </td>
@@ -311,13 +353,22 @@ export function buildCustomerOrderEmail(data: OrderEmailData): { subject: string
     "",
     `Subtotal: ${currency(data.totals.subtotal)}`,
     data.totals.discount > 0 ? `Discount: -${currency(data.totals.discount)}` : "",
-    `Shipping: ${currency(data.totals.shippingCost)}`,
-    `Tax: ${currency(data.totals.tax)}`,
+    data.totals.shippingCost > 0 ? `Shipping: ${currency(data.totals.shippingCost)}` : "",
+    data.totals.tax > 0 ? `Tax: ${currency(data.totals.tax)}` : "",
     `Total: ${currency(data.totals.total)}`,
     "",
     `Shipping to: ${data.customer.fullName}, ${data.shippingAddress.line1}, ${data.shippingAddress.city}, ${data.shippingAddress.region} ${data.shippingAddress.postal}, ${data.shippingAddress.country}`,
-    `Delivery: ${data.shippingMethodLabel}`,
     `Payment: ${data.paymentMethodLabel}`,
+    ...(data.paymentInstructions
+      ? [
+          "",
+          `HOW TO PAY — ${data.paymentMethodLabel}`,
+          data.paymentInstructions,
+          "",
+          `Amount due: ${currency(data.totals.total)}`,
+          `Reference your order number ${data.orderNumber} so we can match your payment.`,
+        ]
+      : []),
     "",
     `— The ${BRAND_NAME} Team`,
   ]
@@ -385,9 +436,9 @@ export function buildSalesOrderEmail(data: OrderEmailData): { subject: string; h
               ${addressBlock(data)}
             </td>
             <td width="50%" valign="top" style="padding-left:12px;">
-              ${sectionLabel("Delivery & Payment")}
+              ${sectionLabel("Payment")}
               <div style="font-family:Helvetica,Arial,sans-serif;font-size:13px;color:${COLORS.dark};line-height:1.6;">
-                <div><strong>Shipping:</strong> ${escapeHtml(data.shippingMethodLabel)}</div>
+                ${data.shippingMethodLabel ? `<div><strong>Shipping:</strong> ${escapeHtml(data.shippingMethodLabel)}</div>` : ""}
                 <div><strong>Payment:</strong> ${escapeHtml(data.paymentMethodLabel)}</div>
               </div>
             </td>
@@ -418,8 +469,8 @@ export function buildSalesOrderEmail(data: OrderEmailData): { subject: string; h
     "",
     `Subtotal: ${currency(data.totals.subtotal)}`,
     data.totals.discount > 0 ? `Discount: -${currency(data.totals.discount)}` : "",
-    `Shipping: ${currency(data.totals.shippingCost)}`,
-    `Tax: ${currency(data.totals.tax)}`,
+    data.totals.shippingCost > 0 ? `Shipping: ${currency(data.totals.shippingCost)}` : "",
+    data.totals.tax > 0 ? `Tax: ${currency(data.totals.tax)}` : "",
     `Total: ${currency(data.totals.total)}`,
     "",
     "Ship to:",

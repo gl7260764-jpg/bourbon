@@ -155,12 +155,67 @@ enum OrderStatus {
   REFUNDED
 }
 
+// Sub-state of PENDING, tracking the manual payment handshake.
+//
+// The reference machine is AWAITING_DETAILS → DETAILS_SENT → PROOF_SUBMITTED →
+// PAID. The first two collapse here: since payment methods carry their own
+// instructions (see PaymentOption), details are emailed automatically the
+// moment the order is placed, so an order is never sitting in
+// "awaiting details" waiting for a human to send them.
+//
+// This exists alongside OrderStatus rather than inside it because PENDING
+// conflates two very different operator situations: "no word from the buyer"
+// and "buyer says they paid, go verify it". Those need different queues.
+// mark-paid writes both this and OrderStatus in one transaction.
+enum SettlementState {
+  AWAITING_PAYMENT
+  PROOF_SUBMITTED
+  PAID
+  REJECTED
+}
+
 enum PaymentMethod {
   CARD
   PAYPAL
   CHIME
   APPLE_PAY
   CRYPTO
+  // Anything the operator adds from the admin panel that isn't one of the
+  // built-ins above. The real identity lives in Order.paymentOptionKey /
+  // paymentLabel — this enum only exists for the pre-existing orders and
+  // the status filters built on top of it.
+  OTHER
+}
+
+// Operator-managed payment rails. Replaces the hardcoded PAYMENT_OPTIONS array
+// that used to live in the checkout client bundle, so account details can be
+// changed (or a whole new method added) without a deploy.
+//
+// `instructions` is the part that actually gets a business paid: the Chime
+// handle, the wallet address, the bank details. It is sent to the customer in
+// the order email and rendered on the confirmation page.
+model PaymentOption {
+  id    String @id @default(cuid())
+  // Stable slug used by the checkout form and stored on the order.
+  key   String @unique
+  label String
+  // Short line under the label at checkout, e.g. "Pay from your Chime account".
+  detail String?
+  // The account details / how-to-pay text handed to the customer.
+  instructions String? @db.Text
+  // Fractional discount for choosing this rail (0.1 = 10% off). Resolved
+  // server-side at order time — never trusted from the client.
+  discountRate Decimal @default(0) @db.Decimal(4, 3)
+  // Maps to the legacy enum so existing reporting keeps working. Null for
+  // operator-created rails, which record OTHER on the order.
+  legacyMethod PaymentMethod?
+  isActive     Boolean        @default(true)
+  sortOrder    Int            @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive, sortOrder])
 }
 
 enum ShippingMethod {
@@ -175,9 +230,15 @@ model Order {
   orderNumber String      @unique
   status      OrderStatus @default(PENDING)
 
-  // Contact
+  // Contact. `email` stays denormalised on the order so historical orders keep
+  // the address they were placed with even if the customer later changes it.
   email String
   phone String
+
+  // Set when the order is placed; links guest checkout to the auto-created
+  // account. Nullable for orders that predate customer accounts.
+  customerId String?
+  customer   Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
 
   // Shipping address
   fullName     String
@@ -194,6 +255,35 @@ model Order {
   paymentMethod  PaymentMethod
   discountRate   Decimal        @db.Decimal(4, 3) @default(0)
 
+  // Snapshot of the payment rail as it was when the order was placed. Kept
+  // separate from PaymentOption so that editing a wallet address later can
+  // never rewrite what an earlier customer was actually told to pay.
+  paymentOptionKey    String?
+  paymentLabel        String?
+  paymentInstructions String? @db.Text
+
+  // --- Manual settlement (P12) -------------------------------------------
+  settlementState SettlementState @default(AWAITING_PAYMENT)
+  // What the buyer sent us: txid, Chime confirmation, Zelle reference.
+  // Without this, "PAID" is an assertion with nothing behind it.
+  paymentReference String?
+  // What actually landed, which is not always what was owed.
+  amountReceived   Decimal? @db.Decimal(10, 2)
+  // Rejection reason, or any operator note about the payment.
+  settlementNote   String?  @db.Text
+  // Who confirmed and when. Until admin accounts exist (P01) this records a
+  // constant, but the columns are here so history is not lost in the meantime.
+  settlementUpdatedAt DateTime?
+  settlementUpdatedBy String?
+
+  // Buyer-uploaded proof of payment. Only the Cloudinary public id is stored:
+  // the asset is uploaded as `authenticated`, so it has no public URL and the
+  // admin view signs a short-lived one at render time. A screenshot of a bank
+  // transfer routinely shows a balance or an account number, so it must not
+  // sit on a permanent public link.
+  paymentProofPublicId   String?
+  paymentProofUploadedAt DateTime?
+
   // Totals snapshot
   subtotal Decimal @db.Decimal(10, 2)
   discount Decimal @db.Decimal(10, 2) @default(0)
@@ -209,6 +299,8 @@ model Order {
 
   @@index([status])
   @@index([createdAt])
+  @@index([settlementState])
+  @@index([customerId])
 }
 
 model OrderItem {
@@ -340,6 +432,56 @@ model Setting {
   key       String   @id
   value     String   @db.Text
   updatedAt DateTime @updatedAt
+}
+
+// Storefront customer. Created automatically the first time an email places an
+// order — there is no sign-up flow.
+//
+// NOTE ON AUTH: sign-in currently accepts an email address with no
+// verification, by explicit product decision. That means possession of an
+// email string grants access to that person's address, phone and order
+// history. The session mechanism below (random DB-backed token) is deliberately
+// independent of how the session is *granted*, so adding a verification step
+// later — magic link, OTP — only changes the login route, not this model, the
+// session table, or any page that reads it.
+model Customer {
+  id    String @id @default(cuid())
+  // Always stored lowercase; the login and order paths both normalise.
+  email String @unique
+
+  // Prefill details, refreshed from each order the customer places.
+  fullName     String?
+  phone        String?
+  addressLine1 String?
+  addressLine2 String?
+  city         String?
+  region       String?
+  postal       String?
+  country      String?
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  lastLoginAt DateTime?
+
+  orders   Order[]
+  sessions CustomerSession[]
+
+  @@index([createdAt])
+}
+
+// Opaque server-side sessions. The cookie carries only a random token, so a
+// session can be revoked and nothing about the customer is derivable from it.
+model CustomerSession {
+  id         String   @id @default(cuid())
+  token      String   @unique
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  expiresAt  DateTime
+  lastUsedAt DateTime @default(now())
+
+  @@index([customerId])
+  @@index([expiresAt])
 }
 
 model Visitor {

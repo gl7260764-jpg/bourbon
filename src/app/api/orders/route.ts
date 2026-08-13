@@ -1,23 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Prisma, PaymentMethod, ShippingMethod } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
+import { findOrCreateCustomer } from "@/lib/customer-auth";
 import { sendEmail } from "@/lib/mailer";
+import { ageLabel } from "@/lib/product-format";
 import {
   buildCustomerOrderEmail,
   buildSalesOrderEmail,
-  shippingLabel,
-  paymentLabel,
 } from "@/lib/emails/orderEmails";
 
 type ShippingId = "standard" | "express" | "overnight" | "white-glove";
 type PaymentId = "card" | "paypal" | "chime" | "apple-pay" | "crypto";
-
-const SHIPPING_MAP: Record<ShippingId, ShippingMethod> = {
-  standard: "STANDARD",
-  express: "EXPRESS",
-  overnight: "OVERNIGHT",
-  "white-glove": "WHITE_GLOVE",
-};
 
 const PAYMENT_MAP: Record<PaymentId, PaymentMethod> = {
   card: "CARD",
@@ -76,7 +69,6 @@ export async function POST(req: NextRequest) {
   const email = body.contact?.email?.trim();
   const phone = body.contact?.phone?.trim() ?? "";
   const address = body.address;
-  const shipping = body.shipping;
   const payment = body.payment;
   const items = body.items ?? [];
   const totals = body.totals;
@@ -94,19 +86,147 @@ export async function POST(req: NextRequest) {
   ) {
     return badRequest("Complete shipping address is required.");
   }
-  if (!shipping?.id || !(shipping.id in SHIPPING_MAP)) {
-    return badRequest("Invalid shipping method.");
-  }
-  if (!payment?.id || !(payment.id in PAYMENT_MAP)) {
+  // Shipping is no longer selectable and is always free, so nothing about it
+  // is validated against the request any more — see below where it's forced.
+  if (!payment?.id) {
     return badRequest("Invalid payment method.");
   }
   if (!Array.isArray(items) || items.length === 0) {
     return badRequest("Order must contain at least one item.");
   }
-  if (!totals) return badRequest("Missing totals.");
 
-  const shippingMethod = SHIPPING_MAP[shipping.id];
-  const paymentMethod = PAYMENT_MAP[payment.id];
+  // Forced, not read from the request: every order ships free under the one
+  // remaining method. The column stays so historical orders keep their real
+  // carrier and charge.
+  const shippingMethod: ShippingMethod = "STANDARD";
+
+  // Resolve the payment rail from the database, not from the request. This is
+  // what makes the discount trustworthy: the client tells us WHICH method was
+  // chosen, never what it's worth.
+  const option = await prisma.paymentOption.findFirst({
+    where: { key: payment.id, isActive: true },
+  });
+  if (!option) {
+    return badRequest("That payment method is no longer available.");
+  }
+  const paymentMethod: PaymentMethod =
+    option.legacyMethod ?? PAYMENT_MAP[payment.id as PaymentId] ?? "OTHER";
+  const resolvedDiscountRate = Number(option.discountRate);
+
+  // --- Price every line from the catalogue, never from the request ---------
+  //
+  // Until now `unitPrice`, `subtotal` and `total` were written straight from
+  // the request body, so a crafted POST could buy a $750 bottle for $1. The
+  // client now only says WHICH product and HOW MANY; every figure below is
+  // derived here.
+  //
+  // Cart ids carry a "::case" suffix for case purchases (see
+  // ProductDetailClient), so the suffix decides which price applies and is
+  // stripped before the product lookup.
+  const parsedLines = items.map((it) => {
+    const rawId = String(it.id ?? "");
+    const isCase = rawId.endsWith("::case");
+    return {
+      productId: isCase ? rawId.slice(0, -"::case".length) : rawId,
+      isCase,
+      quantity: Math.max(1, Math.floor(Number(it.quantity ?? 1))),
+      image: String(it.image ?? ""),
+    };
+  });
+
+  if (parsedLines.some((l) => !l.productId)) {
+    return badRequest("Every item must reference a product.");
+  }
+
+  const products = await prisma.product.findMany({
+    where: { id: { in: [...new Set(parsedLines.map((l) => l.productId))] } },
+    include: {
+      images: { orderBy: { sortOrder: "asc" }, take: 1 },
+    },
+  });
+  const productById = new Map(products.map((p) => [p.id, p]));
+
+  const missing = parsedLines.filter((l) => !productById.has(l.productId));
+  if (missing.length > 0) {
+    return badRequest(
+      "One or more items are no longer available. Please refresh your cart and try again.",
+    );
+  }
+
+  const resolvedLines = [];
+  for (const line of parsedLines) {
+    const product = productById.get(line.productId)!;
+
+    // A case price is only honoured when the product actually sells by the
+    // case; otherwise fall back to the bottle price rather than inventing one.
+    const sellsCases = product.casePrice !== null && product.bottlesPerCase !== null;
+    if (line.isCase && !sellsCases) {
+      return badRequest(
+        `${product.name} is not sold by the case. Please refresh your cart and try again.`,
+      );
+    }
+
+    const unitPrice = line.isCase
+      ? Number(product.casePrice)
+      : Number(product.bottlePrice);
+
+    resolvedLines.push({
+      productId: product.id,
+      productName:
+        line.isCase && product.bottlesPerCase
+          ? `${product.name} — Case of ${product.bottlesPerCase}`
+          : product.name,
+      productImage: line.image || product.images[0]?.url || "",
+      ageLabel: ageLabel(product.ageYears),
+      unitPrice,
+      quantity: line.quantity,
+      isCase: line.isCase,
+    });
+  }
+
+  // Round to cents at each step so the stored figures add up exactly.
+  const round2 = (n: number) => Math.round(n * 100) / 100;
+  const computedSubtotal = round2(
+    resolvedLines.reduce((sum, l) => sum + l.unitPrice * l.quantity, 0),
+  );
+  const computedDiscount = round2(computedSubtotal * resolvedDiscountRate);
+  // Shipping and tax are both zero now; kept explicit so the arithmetic below
+  // stays obvious if either ever comes back.
+  const computedShipping = 0;
+  const computedTax = 0;
+  const computedTotal = round2(
+    Math.max(0, computedSubtotal - computedDiscount) +
+      computedShipping +
+      computedTax,
+  );
+
+  // The client's own figures are ignored, but a mismatch means the buyer was
+  // shown a different price than they're being charged — worth knowing about.
+  const clientTotal = Number(totals?.total ?? NaN);
+  if (Number.isFinite(clientTotal) && Math.abs(clientTotal - computedTotal) >= 0.01) {
+    console.warn(
+      `[orders] total mismatch on ${orderNumber}: client sent ${clientTotal}, server computed ${computedTotal}`,
+    );
+  }
+
+  // First order for an email address creates the account. Later orders refresh
+  // the prefill details. Never fatal: an account problem must not cost an order.
+  let customerId: string | null = null;
+  try {
+    const customer = await findOrCreateCustomer(email, {
+      fullName: address.fullName?.trim(),
+      phone: phone || null,
+      addressLine1: address.line1?.trim(),
+      addressLine2: address.line2?.trim() || null,
+      city: address.city?.trim(),
+      region: address.region?.trim(),
+      postal: address.postal?.trim(),
+      country: address.country?.trim(),
+    });
+    customerId = customer.id;
+  } catch (err) {
+    console.error("[orders] could not attach customer account:", err);
+  }
 
   try {
     const createdOrder = await prisma.order.create({
@@ -114,6 +234,7 @@ export async function POST(req: NextRequest) {
         orderNumber,
         status: "PENDING",
         email,
+        customerId,
         phone,
         fullName: address.fullName!.trim(),
         addressLine1: address.line1!.trim(),
@@ -123,22 +244,33 @@ export async function POST(req: NextRequest) {
         postal: address.postal!.trim(),
         country: address.country!.trim(),
         shippingMethod,
-        shippingCost: new Prisma.Decimal(Number(shipping.cost ?? 0)),
+        // Always free — never taken from the client.
+        shippingCost: new Prisma.Decimal(0),
         paymentMethod,
-        discountRate: new Prisma.Decimal(Number(payment.discountRate ?? 0)),
-        subtotal: new Prisma.Decimal(Number(totals.subtotal ?? 0)),
-        discount: new Prisma.Decimal(Number(totals.discount ?? 0)),
-        tax: new Prisma.Decimal(Number(totals.tax ?? 0)),
-        total: new Prisma.Decimal(Number(totals.total ?? 0)),
+        // Rate comes from the PaymentOption row, never from the request body.
+        discountRate: new Prisma.Decimal(resolvedDiscountRate),
+        // Snapshot the rail as the customer saw it. Editing a wallet address
+        // later must never rewrite what an earlier buyer was told to pay.
+        paymentOptionKey: option.key,
+        paymentLabel: option.label,
+        paymentInstructions: option.instructions,
+        // Every figure below is computed from the catalogue above.
+        subtotal: new Prisma.Decimal(computedSubtotal),
+        discount: new Prisma.Decimal(computedDiscount),
+        // Tax removed from the storefront — the column stays so historical
+        // orders keep their figures, but new orders are always 0.
+        tax: new Prisma.Decimal(computedTax),
+        total: new Prisma.Decimal(computedTotal),
         items: {
-          create: items.map((it) => ({
-            productId: it.id ?? null,
-            productName: String(it.name ?? "Unnamed item"),
-            productImage: String(it.image ?? ""),
-            ageLabel: it.age ?? null,
-            unitPrice: new Prisma.Decimal(Number(it.price ?? 0)),
-            quantity: Math.max(1, Math.floor(Number(it.quantity ?? 1))),
-            isCase: false,
+          create: resolvedLines.map((l) => ({
+            productId: l.productId,
+            productName: l.productName,
+            productImage: l.productImage,
+            ageLabel: l.ageLabel,
+            unitPrice: new Prisma.Decimal(l.unitPrice),
+            quantity: l.quantity,
+            // Was hardcoded false, so case orders were recorded as bottles.
+            isCase: l.isCase,
           })),
         },
       },
@@ -161,21 +293,27 @@ export async function POST(req: NextRequest) {
           postal: address.postal!.trim(),
           country: address.country!.trim(),
         },
-        shippingMethodLabel: shippingLabel(shipping.id),
-        paymentMethodLabel: paymentLabel(payment.id),
-        items: items.map((it) => ({
-          name: String(it.name ?? "Unnamed item"),
-          ageLabel: it.age ?? null,
-          quantity: Math.max(1, Math.floor(Number(it.quantity ?? 1))),
-          unitPrice: Number(it.price ?? 0),
-          image: it.image,
+        // No shippingMethodLabel: shipping is free and no longer shown to the
+        // customer, so the email omits the delivery block entirely.
+        // Label and details come from the resolved rail, so a newly added
+        // method works in email without a code change.
+        paymentMethodLabel: option.label,
+        paymentInstructions: option.instructions,
+        // Same resolved lines the order was written from, so the email can
+        // never quote a different price than the database holds.
+        items: resolvedLines.map((l) => ({
+          name: l.productName,
+          ageLabel: l.ageLabel,
+          quantity: l.quantity,
+          unitPrice: l.unitPrice,
+          image: l.productImage,
         })),
         totals: {
-          subtotal: Number(totals.subtotal ?? 0),
-          discount: Number(totals.discount ?? 0),
-          shippingCost: Number(totals.shippingCost ?? shipping.cost ?? 0),
-          tax: Number(totals.tax ?? 0),
-          total: Number(totals.total ?? 0),
+          subtotal: computedSubtotal,
+          discount: computedDiscount,
+          shippingCost: computedShipping,
+          tax: computedTax,
+          total: computedTotal,
         },
       };
 

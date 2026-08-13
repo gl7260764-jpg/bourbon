@@ -5,6 +5,7 @@ import { Availability } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import ShopFilters from "./ShopFilters";
 import ShopGrid, { type ShopProductCard } from "./ShopGrid";
+import { ageLabel } from "@/lib/product-format";
 
 export async function generateMetadata({
   searchParams,
@@ -92,7 +93,7 @@ export default async function ShopPage({ searchParams }: PageProps) {
     id: p.id,
     slug: p.slug,
     name: p.name,
-    ageLabel: p.ageYears ? `${p.ageYears} Year` : "NAS",
+    ageLabel: ageLabel(p.ageYears),
     price: p.bottlePrice.toNumber(),
     compareAtPrice: p.compareAtPrice?.toNumber() ?? null,
     rating: p.rating ? p.rating.toNumber() : 0,

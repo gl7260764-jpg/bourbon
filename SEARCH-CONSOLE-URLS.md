@@ -108,9 +108,16 @@ Low priority. They're in the sitemap and will be crawled; no need to submit manu
 
 ## Keyword-research status
 
-Researched so far: **5 of 27 products** — the whole Pappy/Van Winkle family.
-Everything else uses the fallback title formula (`<name> | <proof> Proof | Buy Online`),
-which is already a large improvement on the old `<name> | Bourbon & Oak`.
+Researched so far: **27 of 27 products** — the entire catalogue.
+No product is left on the fallback title formula.
+
+**Two tiers of evidence — worth knowing which is which:**
+- 3 bottles (Pappy 10, Lot B 12, Pappy 15) carry **real keyword-tool volumes and KD**
+  from the Semrush exports, stored in `src/lib/product-seo.ts`.
+- The other 24 carry **researched term lists but no measured volumes** — derived from
+  live SERP titles, retailer naming and brand-variant research. Volume fields are
+  deliberately left empty rather than guessed. Export those families and the numbers
+  can be filled in.
 - `pappy-10` — focus: "pappy van winkle 10 year" · ~6,950/mo across 10 primary terms (avg KD 12%)
 - `van-winkle-lot-b-12-year` — focus: "pappy 12 year" · ~2,910/mo across 10 primary terms (avg KD 7% — softest)
 - `pappy-van-winkle-15-year` — focus: "pappy 15 year" · ~5,270/mo across 10 primary terms (avg KD 16%)

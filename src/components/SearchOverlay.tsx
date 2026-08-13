@@ -195,7 +195,7 @@ export default function SearchOverlay({ open, onClose }: SearchOverlayProps) {
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-bourbon-gold text-[10px] tracking-widest uppercase">
-                            {hit.categoryName} · {hit.ageLabel}
+                            {hit.categoryName}{hit.ageLabel ? ` · ${hit.ageLabel}` : ""}
                           </p>
                           <p className="text-bourbon-deep font-semibold leading-tight truncate group-hover:text-bourbon-gold transition-colors">
                             {hit.name}

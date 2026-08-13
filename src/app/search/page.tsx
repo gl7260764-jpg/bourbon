@@ -3,6 +3,7 @@ import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import ShopGrid, { type ShopProductCard } from "../shop/ShopGrid";
 import SearchInline from "./SearchInline";
+import { ageLabel } from "@/lib/product-format";
 
 export const metadata = {
   title: "Search | Bourbon & Oak",
@@ -27,7 +28,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
     id: p.id,
     slug: p.slug,
     name: p.name,
-    ageLabel: p.ageYears ? `${p.ageYears} Year` : "NAS",
+    ageLabel: ageLabel(p.ageYears),
     price: p.bottlePrice.toNumber(),
     compareAtPrice: p.compareAtPrice?.toNumber() ?? null,
     rating: p.rating ? p.rating.toNumber() : 0,
