@@ -16,7 +16,12 @@ import { ageLabel } from "@/lib/product-format";
 // text. This is the SEO-load-bearing part of the renderer: real anchor text
 // inside the article body sends link equity to product pages.
 function renderInline(text: string): React.ReactNode[] {
-  const re = /\[\[product:([a-z0-9-]+)\|([^\]]+)\]\]/g;
+  // Two marker forms:
+  //   [[product:slug|anchor]]  → /products/slug
+  //   [[link:/path|anchor]]    → any internal route (/shop, /tours, /blog/…)
+  // The second exists so posts can pass equity to commercial and category
+  // pages, and cross-link each other into a topic cluster, not only to PDPs.
+  const re = /\[\[(product|link):([^|\]]+)\|([^\]]+)\]\]/g;
   const nodes: React.ReactNode[] = [];
   let lastIndex = 0;
   let match: RegExpExecArray | null;
@@ -25,11 +30,18 @@ function renderInline(text: string): React.ReactNode[] {
     if (match.index > lastIndex) {
       nodes.push(text.slice(lastIndex, match.index));
     }
-    const [, slug, anchor] = match;
+    const [, kind, target, anchor] = match;
+    // Never emit an off-site or protocol-relative href from a content marker.
+    const href =
+      kind === "product"
+        ? `/products/${target}`
+        : target.startsWith("/") && !target.startsWith("//")
+          ? target
+          : "/";
     nodes.push(
       <Link
         key={`pl-${key++}`}
-        href={`/products/${slug}`}
+        href={href}
         className="text-bourbon-gold underline decoration-bourbon-gold/30 underline-offset-4 hover:decoration-bourbon-gold transition-colors"
       >
         {anchor}

@@ -1324,6 +1324,734 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
   },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 5. Bourbon vs Whiskey — Fundamentals
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "bourbon-vs-whiskey-explained",
+    title: "Bourbon vs Whiskey: What Actually Makes a Bourbon",
+    subtitle:
+      "All bourbon is whiskey. Almost none of what people believe about the difference is written into the law.",
+    excerpt:
+      "It does not have to come from Kentucky. It does not have to be aged a minimum number of years. Here is what the federal standard actually requires, what it forbids, and why those six rules produce the flavour you recognise.",
+    category: "Fundamentals",
+    author: "Eleanor Hayes",
+    authorTitle: "Master Distiller, Bourbon & Oak",
+    publishedAt: "2026-08-14",
+    readTimeMinutes: 9,
+    heroImage: "/image1.webp",
+    heroAlt:
+      "Charred American white oak barrel head stamped with a bourbon mash bill and fill date",
+    tags: [
+      "bourbon vs whiskey",
+      "what is bourbon",
+      "straight bourbon",
+      "bottled in bond",
+      "mash bill",
+      "charred oak",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "The most common question we get asked across the counter is what separates bourbon from whiskey, and the honest answer surprises people: nothing separates them, because bourbon is whiskey. It is a subcategory, in the same way that a Cabernet is a wine. The useful question is narrower - what does a whiskey have to do to earn the word bourbon on its label - and unlike most drinks marketing, that has a precise legal answer.",
+      },
+      {
+        type: "paragraph",
+        text: "In the United States, the Standards of Identity for Distilled Spirits set out exactly six requirements. Meet all six and you may call it bourbon. Miss any one and you may not, however good the whiskey is.",
+      },
+      { type: "heading", level: 2, text: "The Six Rules" },
+      {
+        type: "list",
+        ordered: true,
+        items: [
+          "Made in the United States. Not Kentucky - anywhere in the US. Kentucky makes roughly 95 percent of it by long tradition and good limestone water, but a bourbon distilled in Texas or New York is no less a bourbon.",
+          "Mash bill of at least 51 percent corn. The remaining 49 percent is the distiller's signature, and it is where wheated and high-rye styles diverge.",
+          "Distilled to no more than 160 proof. Distil higher and you strip out the congeners that carry flavour, which is the difference between whiskey and vodka.",
+          "Entered into the barrel at no more than 125 proof. Lower entry proof means more water in the barrel and a different extraction of sugars from the wood.",
+          "Aged in new, charred oak containers. New is the expensive word here. Scotch may reuse barrels for decades; every drop of bourbon requires a fresh charred cask, which is why the used barrels end up filled with scotch, rum and tequila.",
+          "Bottled at 80 proof or higher, with nothing added but water. No colouring, no flavouring, no sweetening. The colour in your glass came out of the wood.",
+        ],
+      },
+      {
+        type: "callout",
+        title: "Note what is not on that list",
+        text: "There is no minimum age. A bourbon aged for one day in a new charred barrel is legally bourbon. The age requirements people assume exist belong to the tighter categories below - which is exactly why those categories are worth knowing.",
+      },
+      { type: "heading", level: 2, text: "Straight, Bonded, and the Categories That Actually Mean Something" },
+      {
+        type: "paragraph",
+        text: "Straight bourbon adds a minimum of two years in the barrel, and forbids added colouring or flavouring outright. If a straight bourbon is under four years old, the label must state its age. That single rule is why so many bottles carry no age statement at all: once past four years, the producer may stay silent.",
+      },
+      {
+        type: "paragraph",
+        text: "Bottled in Bond goes further, and it is the most demanding label in American whiskey. It comes from the Bottled-in-Bond Act of 1897, passed as consumer protection legislation decades before the Food and Drug Administration existed, at a time when adulterated whiskey was a genuine public health problem. A bonded bourbon must be the product of one distillation season, from one distillery, aged at least four years in a federally supervised warehouse, and bottled at exactly 100 proof. The [[product:eh-taylor-small-batch|Colonel E.H. Taylor, Jr. Small Batch]] is built on precisely that standard, and the whole Taylor range is named for the man who campaigned for the Act.",
+      },
+      { type: "heading", level: 2, text: "Bourbon, Rye, Tennessee, Scotch" },
+      {
+        type: "paragraph",
+        text: "Rye whiskey flips the grain requirement: at least 51 percent rye instead of corn. Everything else - new charred oak, the proof ceilings - stays the same. The result is drier, peppery and more herbal where bourbon is sweet and round. Pour a [[product:thomas-h-handy-sazerac|Thomas H. Handy Sazerac]] next to any bourbon on your shelf and the difference is immediate and instructive; it is the single fastest way to learn what corn is contributing.",
+      },
+      {
+        type: "paragraph",
+        text: "Tennessee whiskey meets every bourbon requirement and then adds one: the Lincoln County Process, filtering the new spirit through sugar maple charcoal before barrelling. Scotch is a different animal entirely - malted barley rather than corn, aged at least three years, and typically in used casks, which is why it tastes of the wood far less aggressively than bourbon does.",
+      },
+      { type: "heading", level: 2, text: "Why the Rules Produce the Flavour" },
+      {
+        type: "paragraph",
+        text: "Two of the six rules do most of the sensory work. The corn minimum supplies sweetness and body. The new charred oak supplies everything else. Charring the inside of a fresh cask caramelises the wood sugars into a layer that gives up vanillin, lactones and tannins to the spirit over years of Kentucky temperature swings - vanilla, caramel, baking spice, toasted nut. A used barrel has already surrendered most of that. A new one has all of it to give, which is why bourbon develops so much character in a decade while scotch often needs longer.",
+      },
+      {
+        type: "paragraph",
+        text: "That is also why bourbon rewards patience rather than requiring it. Something like [[product:eagle-rare-10-year|Eagle Rare 10 Year]] shows what a decade in new oak does at an accessible price, while the older expressions in the [[link:/collection|allocated collection]] show where the same process ends up after fifteen or twenty years.",
+      },
+      { type: "heading", level: 2, text: "Where to Take This Next" },
+      {
+        type: "paragraph",
+        text: "Once the definitions are clear, the interesting question becomes what that other 49 percent of the mash bill is doing - which is the difference between a soft, honeyed wheated bourbon and a spicy high-rye one. We cover that in [[link:/blog/wheated-vs-high-rye-bourbon|the mash bill guide]]. If you would rather start with a glass in your hand, our [[link:/blog/how-to-taste-bourbon|tasting guide]] is the practical companion, and the full range sits in the [[link:/shop|shop]].",
+      },
+    ],
+    seo: {
+      metaTitle: "Bourbon vs Whiskey: What Actually Makes a Bourbon",
+      metaDescription:
+        "All bourbon is whiskey, but only whiskey meeting six federal rules is bourbon. The corn minimum, new charred oak, straight vs bottled in bond, and how bourbon differs from rye and scotch.",
+      focusKeyword: "bourbon vs whiskey",
+      primaryKeywords: [
+        "bourbon vs whiskey",
+        "what is bourbon",
+        "difference between bourbon and whiskey",
+        "straight bourbon",
+        "bottled in bond",
+        "bourbon rules",
+        "bourbon mash bill",
+        "rye vs bourbon",
+      ],
+      longTailKeywords: [
+        "what makes a bourbon a bourbon",
+        "does bourbon have to be made in Kentucky",
+        "what is the difference between bourbon and rye whiskey",
+        "what does straight bourbon mean",
+        "what does bottled in bond mean",
+        "how much corn does bourbon need",
+        "why is bourbon aged in new charred oak",
+        "is Tennessee whiskey bourbon",
+        "does bourbon have a minimum age",
+        "bourbon vs scotch difference",
+      ],
+      wordClusters: [
+        {
+          cluster: "Legal Definition",
+          terms: [
+            "Standards of Identity",
+            "51 percent corn",
+            "160 proof distillation",
+            "125 proof barrel entry",
+            "new charred oak",
+            "no additives",
+            "Bottled-in-Bond Act 1897",
+          ],
+        },
+        {
+          cluster: "Whiskey Categories",
+          terms: [
+            "straight bourbon",
+            "rye whiskey",
+            "Tennessee whiskey",
+            "Lincoln County Process",
+            "single malt scotch",
+            "American whiskey",
+          ],
+        },
+        {
+          cluster: "Flavour Chemistry",
+          terms: [
+            "congeners",
+            "vanillin",
+            "oak lactones",
+            "tannins",
+            "caramelised wood sugars",
+            "char level",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "eh-taylor-small-batch",
+      "thomas-h-handy-sazerac",
+      "eagle-rare-10-year",
+      "weller-12-year",
+    ],
+    faq: [
+      {
+        question: "Is bourbon a whiskey?",
+        answer:
+          "Yes. Bourbon is a category of whiskey, the way Cabernet is a category of wine. All bourbon is whiskey; only whiskey meeting six specific federal requirements may be called bourbon.",
+      },
+      {
+        question: "Does bourbon have to be made in Kentucky?",
+        answer:
+          "No. It must be made in the United States. Kentucky produces the overwhelming majority by tradition and because of its limestone water, but bourbon distilled anywhere in the US is legally bourbon.",
+      },
+      {
+        question: "What is the difference between bourbon and rye whiskey?",
+        answer:
+          "The grain. Bourbon must be at least 51 percent corn, rye must be at least 51 percent rye. Both use new charred oak. Bourbon is sweeter and rounder; rye is drier, peppery and more herbal.",
+      },
+      {
+        question: "What does bottled in bond mean?",
+        answer:
+          "One distillery, one distillation season, at least four years in a federally supervised warehouse, and bottled at exactly 100 proof. It comes from the Bottled-in-Bond Act of 1897 and is the strictest label in American whiskey.",
+      },
+      {
+        question: "Does bourbon have a minimum age?",
+        answer:
+          "Plain bourbon has none. Straight bourbon requires two years, and must state its age if under four. Bottled in bond requires four.",
+      },
+    ],
+  },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 6. Wheated vs High-Rye — Mash Bill
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "wheated-vs-high-rye-bourbon",
+    title: "Wheated vs High-Rye Bourbon: How the Mash Bill Changes the Glass",
+    subtitle:
+      "Corn is the law. The second grain is the decision - and it is the one that determines whether you will actually like the bottle.",
+    excerpt:
+      "Every bourbon is at least 51 percent corn. What fills the rest decides almost everything you taste. Here is what wheat and rye each do, how to tell which you prefer, and which bottle to buy once you know.",
+    category: "Fundamentals",
+    author: "Eleanor Hayes",
+    authorTitle: "Master Distiller, Bourbon & Oak",
+    publishedAt: "2026-08-14",
+    readTimeMinutes: 8,
+    heroImage: "/image2.webp",
+    heroAlt:
+      "Grain samples of corn, winter wheat and rye laid out beside a glass of bourbon",
+    tags: [
+      "wheated bourbon",
+      "high rye bourbon",
+      "mash bill",
+      "Weller",
+      "Pappy Van Winkle",
+      "flavour profile",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "If you remember one thing about buying bourbon, make it this: find out whether you prefer wheat or rye as the second grain, and you will stop wasting money. Price, age and rarity tell you very little about whether a bottle suits your palate. The mash bill tells you almost everything.",
+      },
+      {
+        type: "paragraph",
+        text: "The law fixes only the corn: at least 51 percent, which supplies sweetness and body. Distillers then choose what fills the remainder, alongside a small amount of malted barley that provides the enzymes for fermentation. Two schools have emerged, and the gap between them is far wider than the gap between a good bourbon and a great one.",
+      },
+      { type: "heading", level: 2, text: "Wheated Bourbon: Soft, Round, Bakery" },
+      {
+        type: "paragraph",
+        text: "Replace the rye with winter wheat and you remove the spice rather than adding a flavour. Wheat is a quiet grain. It contributes very little of its own character, which lets the corn sweetness and the oak come forward unopposed. The result is a bourbon that reads as soft, honeyed and gently bready - vanilla, caramel, baked apple, sometimes a note like warm shortbread.",
+      },
+      {
+        type: "paragraph",
+        text: "Wheated bourbon also tends to reward long ageing unusually well. Without rye spice to balance it, a young wheater can taste thin; give it twelve to fifteen years and the oak fills that space with leather, dark caramel and dried fruit. That is the entire logic of the Van Winkle range, and why [[product:pappy-van-winkle-15-year|Pappy Van Winkle 15 Year]] is built the way it is.",
+      },
+      {
+        type: "paragraph",
+        text: "If you want to learn the profile without the allocated price, [[product:weller-12-year|Weller 12 Year]] shares the mash bill and the warehouses at 90 proof. Move up to [[product:weller-full-proof|W.L. Weller Full Proof]] at 114 proof to see what the same recipe does undiluted, and [[product:william-larue-weller|William Larue Weller]] is where the style reaches its ceiling.",
+      },
+      { type: "heading", level: 2, text: "High-Rye Bourbon: Spice, Structure, Bite" },
+      {
+        type: "paragraph",
+        text: "Rye is the opposite of a quiet grain. Even at fifteen or twenty percent of the mash it asserts itself - black pepper, mint, clove, a dry herbal edge that cuts across the corn sweetness. Where a wheater is a round shape in the mouth, a high-rye bourbon has corners.",
+      },
+      {
+        type: "paragraph",
+        text: "That structure is why high-rye bourbons make better cocktails. In an Old Fashioned or a Manhattan, the spice survives dilution and sugar where a delicate wheater simply disappears. [[product:blantons-original-single-barrel|Blanton's Original Single Barrel]] is the classic reference point, and at barrel strength [[product:george-t-stagg|George T. Stagg]] shows what the style becomes when nothing is held back. Outside the Buffalo Trace orbit, [[product:russells-reserve-13-year|Russell's Reserve 13 Year]] is the clearest expression of the Wild Turkey take on spice.",
+      },
+      {
+        type: "callout",
+        title: "The traditional middle",
+        text: "Most bourbon is neither. A traditional mash bill runs roughly 70 to 75 percent corn with 10 to 15 percent rye - enough spice to give shape, not enough to lead. The Eagle Rare and E.H. Taylor lines sit in this territory, which is why they are such reliable first bottles: they show you what bourbon tastes like before you start choosing sides.",
+      },
+      { type: "heading", level: 2, text: "How to Find Out Which You Prefer" },
+      {
+        type: "paragraph",
+        text: "Do not read about it. Buy two bottles at similar proof and taste them side by side on the same evening, in the same glass shape, with water available. Proof matters enormously here - comparing a 90 proof wheater against a 130 proof high-rye tells you about alcohol, not about grain.",
+      },
+      {
+        type: "list",
+        items: [
+          "A fair wheated-versus-rye pairing at similar strength: [[product:weller-12-year|Weller 12 Year]] at 90 proof against [[product:blantons-original-single-barrel|Blanton's Original]] at 93 proof.",
+          "The same comparison at full strength: [[product:weller-full-proof|Weller Full Proof]] at 114 proof against [[product:eh-taylor-barrel-proof|E.H. Taylor Barrel Proof]] at 131 proof, both with water to hand.",
+          "A middle-of-the-road control to calibrate against: [[product:eagle-rare-10-year|Eagle Rare 10 Year]] at 90 proof.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "Whichever way you land, it will change what you buy for years. If the answer is wheat, the [[link:/collection|allocated collection]] is where the deep end of that style lives. If it is rye, the barrel proof bottles are where it gets interesting. Either way, [[link:/blog/how-to-taste-bourbon|our tasting guide]] explains how to run the comparison properly, and the [[link:/blog/best-bourbon-bottles-ranked|ranked buying guide]] tells you what each profile costs.",
+      },
+    ],
+    seo: {
+      metaTitle: "Wheated vs High-Rye Bourbon: Mash Bill Guide",
+      metaDescription:
+        "What wheat and rye each do to bourbon, why wheaters age so well, which style suits cocktails, and how to run a fair side-by-side to find out which you prefer.",
+      focusKeyword: "wheated bourbon",
+      primaryKeywords: [
+        "wheated bourbon",
+        "high rye bourbon",
+        "bourbon mash bill",
+        "wheated vs rye bourbon",
+        "best wheated bourbon",
+        "Weller mash bill",
+        "bourbon flavour profile",
+      ],
+      longTailKeywords: [
+        "what is a wheated bourbon",
+        "wheated vs high rye bourbon difference",
+        "why does Pappy Van Winkle use wheat",
+        "which bourbon is best for old fashioned",
+        "what does rye add to bourbon",
+        "is Weller the same mash bill as Pappy",
+        "best bourbon mash bill for beginners",
+        "how to choose bourbon by flavour",
+      ],
+      wordClusters: [
+        {
+          cluster: "Grain & Recipe",
+          terms: [
+            "mash bill",
+            "winter wheat",
+            "rye grain",
+            "malted barley",
+            "corn percentage",
+            "secondary grain",
+            "traditional mash bill",
+          ],
+        },
+        {
+          cluster: "Flavour Vocabulary",
+          terms: [
+            "honeyed",
+            "black pepper",
+            "clove",
+            "baked apple",
+            "caramel",
+            "herbal",
+            "dry finish",
+            "mouthfeel",
+          ],
+        },
+        {
+          cluster: "Style Comparison",
+          terms: [
+            "wheated bourbon brands",
+            "high rye bourbon brands",
+            "barrel proof",
+            "cocktail bourbon",
+            "sipping bourbon",
+            "side by side tasting",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "weller-12-year",
+      "weller-full-proof",
+      "blantons-original-single-barrel",
+      "george-t-stagg",
+      "russells-reserve-13-year",
+      "eagle-rare-10-year",
+    ],
+    faq: [
+      {
+        question: "What is a wheated bourbon?",
+        answer:
+          "A bourbon whose secondary grain is winter wheat rather than rye. Wheat contributes little flavour of its own, which lets corn sweetness and oak come forward - producing a softer, honeyed, bready profile. Weller and Van Winkle are the best known examples.",
+      },
+      {
+        question: "Is Weller the same mash bill as Pappy Van Winkle?",
+        answer:
+          "Both are wheated bourbons produced at Buffalo Trace from the same wheated recipe and aged in the same warehouses. The differences come down to age, barrel selection and proof, which is why Weller 12 Year is often called poor mans Pappy.",
+      },
+      {
+        question: "Which bourbon is better for an Old Fashioned?",
+        answer:
+          "A high-rye bourbon. Rye spice survives dilution and sugar, so the drink keeps its structure. A delicate wheated bourbon tends to disappear behind the bitters and sugar.",
+      },
+      {
+        question: "Why do wheated bourbons age so well?",
+        answer:
+          "Without rye spice occupying the mid-palate, a young wheater can taste thin. Extended time in new charred oak fills that space with leather, dark caramel and dried fruit, which is why the wheated style dominates the very old age statements.",
+      },
+    ],
+  },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 7. How to Taste Bourbon — Practical
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "how-to-taste-bourbon",
+    title: "How to Taste Bourbon Properly",
+    subtitle:
+      "Glass, water, temperature and the Kentucky chew - the practical mechanics that get more out of a bottle you already own.",
+    excerpt:
+      "Most people taste bourbon in a way that guarantees they miss most of it. Nosing technique, the right glass, how much water to add and when, and how to build a flight that does not exhaust your palate by the third pour.",
+    category: "Fundamentals",
+    author: "Wyatt Brennan",
+    authorTitle: "Head Bartender, The Cellar at Bourbon & Oak",
+    publishedAt: "2026-08-14",
+    readTimeMinutes: 8,
+    heroImage: "/image3.webp",
+    heroAlt:
+      "Glencairn nosing glass of bourbon on a bar top beside a small pitcher of water",
+    tags: [
+      "how to taste bourbon",
+      "bourbon tasting",
+      "Glencairn",
+      "adding water to bourbon",
+      "Kentucky chew",
+      "tasting notes",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "There is a version of whiskey tasting that is entirely theatre, and it puts sensible people off the whole business. This is not that. Everything below changes what you actually perceive in the glass, and most of it costs nothing.",
+      },
+      { type: "heading", level: 2, text: "1. The Glass Matters More Than the Bottle" },
+      {
+        type: "paragraph",
+        text: "A rocks tumbler has a wide mouth, which lets aromatics escape before they reach you. A tulip-shaped nosing glass - a Glencairn or a small copita - narrows toward the rim and concentrates them. Swapping glassware is the single largest improvement most drinkers can make, and it is more consequential than moving up a price tier in bottles. Serve the same whiskey in both, side by side, and the difference is not subtle.",
+      },
+      { type: "heading", level: 2, text: "2. Nose With Your Mouth Open" },
+      {
+        type: "paragraph",
+        text: "Bourbon at 90 to 130 proof carries enough ethanol to numb the olfactory receptors if you inhale sharply through the nose. Instead, hold the glass a little below your chin, part your lips, and breathe in gently through both nose and mouth at once. The alcohol vapour vents through the mouth while the aromatic compounds reach the nose. Take short breaks - your nose fatigues within seconds on high-proof spirits.",
+      },
+      { type: "heading", level: 2, text: "3. The Kentucky Chew" },
+      {
+        type: "paragraph",
+        text: "Named for Booker Noe, who tasted this way for decades. Take a small sip, then work it around the whole mouth as though chewing, coating the tongue, gums and palate before swallowing. It sounds affected and it is enormously effective, because it defeats the alcohol burn that otherwise dominates the first sip and lets the actual flavours register. Expect the first pour of any session to be mostly heat - that is normal. The second tells the truth.",
+      },
+      { type: "heading", level: 2, text: "4. Water Is Not Cheating" },
+      {
+        type: "paragraph",
+        text: "Adding a few drops of water lowers the alcohol concentration and breaks the surface tension, releasing aromatic compounds that were previously bound up. On a barrel proof bourbon this is not optional - it is how the whiskey was designed to be assessed. Add water a drop at a time, taste after each, and stop the moment the whiskey opens rather than thinning.",
+      },
+      {
+        type: "paragraph",
+        text: "The demonstration worth doing at home: pour [[product:eh-taylor-barrel-proof|E.H. Taylor Barrel Proof]] at 131 proof, taste it neat, then add three drops and taste again. Very little else teaches the lesson so quickly. Ice is a different matter - it dilutes as it melts, so you never taste the same drink twice, and the cold suppresses aromatics. Excellent on a hot afternoon, useless for evaluation.",
+      },
+      { type: "heading", level: 2, text: "5. Build the Flight in the Right Order" },
+      {
+        type: "paragraph",
+        text: "Palate fatigue is real and it arrives faster than people expect. Three whiskeys is a good session; five is the practical maximum. Always run from lowest proof to highest - a 130 proof barrel strength bourbon will flatten your palate for anything gentler that follows.",
+      },
+      {
+        type: "list",
+        ordered: true,
+        items: [
+          "Start gentle: [[product:eagle-rare-10-year|Eagle Rare 10 Year]] at 90 proof, to set a baseline.",
+          "Change the grain, hold the strength: [[product:weller-12-year|Weller 12 Year]] at 90 proof, wheated, so the only variable is the mash bill.",
+          "Step up the proof: [[product:blantons-original-single-barrel|Blanton's Original]] at 93 proof, then finish with something at barrel strength.",
+        ],
+      },
+      {
+        type: "callout",
+        title: "Two practical rules",
+        text: "Plain water between pours, not sparkling - carbonation irritates the palate. And write one honest line per whiskey before you discuss it with anyone else. Tasting notes are extraordinarily suggestible; once somebody says cherry, everyone tastes cherry.",
+      },
+      { type: "heading", level: 2, text: "6. Vocabulary Is a Tool, Not a Test" },
+      {
+        type: "paragraph",
+        text: "Nobody is scoring you. The purpose of naming what you taste is to make the memory retrievable, so that next time you can buy deliberately rather than hopefully. Four questions are enough: is it sweet or dry, is it spicy or soft, is the finish short or long, and would you buy it again. Anyone able to answer those consistently is tasting better than most people who can recite a wheel of descriptors.",
+      },
+      {
+        type: "paragraph",
+        text: "If you would like to do this with someone talking you through it, our [[link:/tours|distillery tour and tasting]] runs a guided flight in the rickhouse. To understand what you are comparing before you pour, start with [[link:/blog/wheated-vs-high-rye-bourbon|the mash bill guide]], and [[link:/blog/best-bourbon-bottles-ranked|the ranked buying guide]] covers what to stock once you know your preference. The full range is in the [[link:/shop|shop]].",
+      },
+    ],
+    seo: {
+      metaTitle: "How to Taste Bourbon Properly: Glass, Water and Technique",
+      metaDescription:
+        "Nosing with your mouth open, the Kentucky chew, how much water to add to barrel proof bourbon, the right glass, and how to order a tasting flight without palate fatigue.",
+      focusKeyword: "how to taste bourbon",
+      primaryKeywords: [
+        "how to taste bourbon",
+        "how to drink bourbon",
+        "bourbon tasting guide",
+        "adding water to bourbon",
+        "Glencairn glass",
+        "Kentucky chew",
+        "bourbon tasting flight",
+      ],
+      longTailKeywords: [
+        "how do you properly taste bourbon",
+        "should you add water to bourbon",
+        "how much water to add to barrel proof bourbon",
+        "what glass is best for bourbon",
+        "what is the Kentucky chew",
+        "how to drink bourbon neat",
+        "is it bad to put ice in bourbon",
+        "how many whiskeys in a tasting flight",
+        "how to write bourbon tasting notes",
+      ],
+      wordClusters: [
+        {
+          cluster: "Technique",
+          terms: [
+            "nosing",
+            "Kentucky chew",
+            "retro-nasal",
+            "palate fatigue",
+            "neat pour",
+            "dilution",
+            "surface tension",
+          ],
+        },
+        {
+          cluster: "Glassware & Service",
+          terms: [
+            "Glencairn",
+            "copita",
+            "rocks glass",
+            "tulip glass",
+            "serving temperature",
+            "large ice cube",
+          ],
+        },
+        {
+          cluster: "Assessment",
+          terms: [
+            "nose",
+            "palate",
+            "finish",
+            "mouthfeel",
+            "tasting notes",
+            "flight order",
+            "blind tasting",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "eagle-rare-10-year",
+      "weller-12-year",
+      "blantons-original-single-barrel",
+      "eh-taylor-barrel-proof",
+    ],
+    faq: [
+      {
+        question: "Should you add water to bourbon?",
+        answer:
+          "Yes, particularly above about 100 proof. A few drops lower the alcohol concentration and break surface tension, releasing aromatic compounds. Add one drop at a time and stop when the whiskey opens rather than thins.",
+      },
+      {
+        question: "What is the best glass for tasting bourbon?",
+        answer:
+          "A tulip-shaped nosing glass such as a Glencairn or copita. The narrowing rim concentrates aromatics, where a wide rocks tumbler lets them escape. It is a bigger improvement than spending more on the bottle.",
+      },
+      {
+        question: "What is the Kentucky chew?",
+        answer:
+          "A technique associated with Booker Noe: take a small sip and work it around the entire mouth as though chewing before swallowing. It coats the palate and defeats the initial alcohol burn so the flavours register.",
+      },
+      {
+        question: "Is it wrong to drink bourbon with ice?",
+        answer:
+          "Not at all, but it is poor for evaluation. Ice dilutes continuously so the drink never stays the same, and cold suppresses aromatics. Taste neat or with a few drops of water first, then add ice if you prefer it.",
+      },
+      {
+        question: "How many bourbons should be in a tasting flight?",
+        answer:
+          "Three is ideal and five is the practical maximum before palate fatigue. Always work from the lowest proof upward, with plain still water between pours.",
+      },
+    ],
+  },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 8. Storage & Collecting — Practical
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "how-to-store-bourbon",
+    title: "How to Store Bourbon (And Whether It Actually Goes Bad)",
+    subtitle:
+      "Upright, out of the light, and away from the radiator. What genuinely damages a bottle, and what is superstition.",
+    excerpt:
+      "An unopened bottle of bourbon will not improve in the glass and does not age like wine - but it can absolutely be ruined. Cork failure, light, heat cycling and the half-empty bottle problem, explained.",
+    category: "Collecting",
+    author: "Eleanor Hayes",
+    authorTitle: "Master Distiller, Bourbon & Oak",
+    publishedAt: "2026-08-14",
+    readTimeMinutes: 7,
+    heroImage: "/image4.webp",
+    heroAlt:
+      "Bourbon bottles stored upright on a dark wooden shelf away from direct sunlight",
+    tags: [
+      "how to store bourbon",
+      "does bourbon go bad",
+      "bourbon collecting",
+      "cork failure",
+      "oxidation",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "Bourbon stops ageing the moment it leaves the barrel. A twelve year old bourbon bought today will still be a twelve year old bourbon in 2046 - the glass contributes nothing, unlike the wood. That is the good news. The less good news is that while a bottle cannot improve, it can certainly deteriorate, and the three things that damage it are all avoidable.",
+      },
+      { type: "heading", level: 2, text: "Store It Upright. Always." },
+      {
+        type: "paragraph",
+        text: "This is the one rule that people carry over from wine and get exactly backwards. Wine is stored on its side to keep the cork wet, because wine is only about 13 percent alcohol. Bourbon is 40 to 70 percent, and sustained contact at that strength degrades cork - it softens, crumbles, and eventually taints the whiskey or fails entirely when you try to open it. A ruined cork on an allocated bottle is a genuinely expensive mistake.",
+      },
+      {
+        type: "paragraph",
+        text: "Store every bottle standing up. If you want to keep the cork from drying out completely over many years, tip the bottle briefly once or twice a year to wet it, then stand it back up. That is the whole technique.",
+      },
+      { type: "heading", level: 2, text: "Light and Heat Do the Real Damage" },
+      {
+        type: "paragraph",
+        text: "Ultraviolet light breaks down the compounds that give bourbon its colour and much of its aroma. A bottle left in direct sun will visibly fade over months, and the whiskey flattens along with the colour. A display shelf by a window is the worst place in most homes.",
+      },
+      {
+        type: "paragraph",
+        text: "Heat cycling is the quieter problem. Repeated warming and cooling expands and contracts the liquid and the air above it, pushing vapour past the closure and drawing air back in. Over years this evaporates volume and dulls the spirit. A cupboard on an interior wall, somewhere between 15 and 21 degrees Celsius and reasonably stable, beats any decorative bar cart in a conservatory.",
+      },
+      {
+        type: "callout",
+        title: "On decanters",
+        text: "A cut crystal decanter looks wonderful and is a poor storage vessel. Ground glass stoppers rarely seal well, so the contents oxidise faster, and antique lead crystal can leach lead into a spirit over long contact. Decant for the evening if you like the ritual; keep the whiskey in its bottle.",
+      },
+      { type: "heading", level: 2, text: "The Half-Empty Bottle Problem" },
+      {
+        type: "paragraph",
+        text: "Once opened, the enemy is oxygen, and what matters is not how long the bottle has been open but how much air is in it. A bottle with an inch of whiskey left has an enormous headspace of air relative to liquid, and will noticeably flatten within a few months. The same bottle three-quarters full is stable for years.",
+      },
+      {
+        type: "list",
+        items: [
+          "Above about two thirds full: essentially stable, drink at your leisure.",
+          "Between a third and two thirds: still good, but aim to finish within a year or so.",
+          "Below a third: oxidation accelerates sharply. Finish it, or decant into a smaller bottle so the liquid fills it.",
+          "For a bottle you want to preserve, wrap the closure with parafilm to slow vapour loss, and keep it upright and dark like the rest.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "Decanting the last third into a clean 200ml bottle is the single most effective trick here, and it costs nothing. It is worth the trouble on anything from the [[link:/collection|allocated collection]] - watching the last of a [[product:pappy-van-winkle-15-year|Pappy Van Winkle 15 Year]] go dull in a nearly empty bottle is a needless loss.",
+      },
+      { type: "heading", level: 2, text: "Does Unopened Bourbon Go Bad?" },
+      {
+        type: "paragraph",
+        text: "Practically, no. Stored upright, dark and cool, a sealed bottle of bourbon will be indistinguishable in thirty years. There is no expiry date and no drink-by window. What can fail is the closure, not the whiskey - which is why an old bottle with a low fill level should be treated with suspicion, whether it has simply lost volume through a tired cork or been tampered with.",
+      },
+      {
+        type: "paragraph",
+        text: "That last point matters if you are buying rare bottles rather than only drinking them. Fill level is one of the standard authenticity checks, and we cover the rest of them in [[link:/blog/best-bourbon-bottles-ranked|the ranked buying guide]]. If you are building a collection deliberately, the bottles most worth storing properly are the ones in the [[link:/collection|limited and allocated range]] - things like [[product:double-eagle-very-rare|Double Eagle Very Rare 20 Year]] or [[product:george-t-stagg|George T. Stagg]], where a failed cork costs real money.",
+      },
+      { type: "heading", level: 2, text: "The Short Version" },
+      {
+        type: "list",
+        items: [
+          "Upright, never on its side.",
+          "Out of direct light - a closed cupboard beats a display shelf.",
+          "Stable temperature, ideally 15 to 21 degrees Celsius, away from radiators, ovens and windows.",
+          "Keep it in its own bottle, not a decanter.",
+          "Once a bottle drops below a third, finish it or move it into something smaller.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "Get those five right and every bottle you own will taste the way the distiller intended for as long as you care to keep it. Browse what is worth keeping in the [[link:/shop|shop]], or read [[link:/blog/how-to-taste-bourbon|how to taste it]] once it is open.",
+      },
+    ],
+    seo: {
+      metaTitle: "How to Store Bourbon (And Does Bourbon Go Bad?)",
+      metaDescription:
+        "Why bourbon must be stored upright, what light and heat cycling do to it, how fast an opened bottle oxidises, and whether unopened bourbon ever goes bad.",
+      focusKeyword: "how to store bourbon",
+      primaryKeywords: [
+        "how to store bourbon",
+        "does bourbon go bad",
+        "storing whiskey upright",
+        "bourbon shelf life",
+        "opened bourbon oxidation",
+        "bourbon collecting storage",
+      ],
+      longTailKeywords: [
+        "should bourbon be stored upright or on its side",
+        "does unopened bourbon go bad",
+        "how long does an open bottle of bourbon last",
+        "what temperature should bourbon be stored at",
+        "does sunlight ruin bourbon",
+        "is it bad to keep bourbon in a decanter",
+        "how to stop bourbon oxidising",
+        "does bourbon age in the bottle",
+      ],
+      wordClusters: [
+        {
+          cluster: "Storage Conditions",
+          terms: [
+            "upright storage",
+            "UV light",
+            "heat cycling",
+            "stable temperature",
+            "humidity",
+            "dark cupboard",
+          ],
+        },
+        {
+          cluster: "Bottle Chemistry",
+          terms: [
+            "oxidation",
+            "headspace",
+            "evaporation",
+            "cork degradation",
+            "parafilm",
+            "fill level",
+          ],
+        },
+        {
+          cluster: "Collecting",
+          terms: [
+            "allocated bourbon",
+            "bottle preservation",
+            "decanting",
+            "collection storage",
+            "authenticity",
+            "secondary market",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "pappy-van-winkle-15-year",
+      "double-eagle-very-rare",
+      "george-t-stagg",
+      "weller-12-year",
+    ],
+    faq: [
+      {
+        question: "Should bourbon be stored upright or on its side?",
+        answer:
+          "Always upright. Bourbon is 40 to 70 percent alcohol, and sustained contact at that strength degrades cork, eventually tainting the whiskey or causing the cork to fail. Storing on the side is a wine convention that does not transfer.",
+      },
+      {
+        question: "Does unopened bourbon go bad?",
+        answer:
+          "No. Bourbon stops ageing when it leaves the barrel, so a sealed bottle kept upright, dark and cool will be effectively unchanged decades later. There is no expiry date. What can fail over time is the cork, not the whiskey.",
+      },
+      {
+        question: "How long does an opened bottle of bourbon last?",
+        answer:
+          "It depends on how full it is rather than how long it has been open. Above two thirds full it is stable for years. Below a third, oxidation accelerates noticeably within months - finish it or decant into a smaller bottle.",
+      },
+      {
+        question: "Is it bad to keep bourbon in a decanter?",
+        answer:
+          "For long-term storage, yes. Ground glass stoppers seldom seal well so the contents oxidise faster, and antique lead crystal can leach lead over prolonged contact. Decant for an evening if you enjoy it, but store the whiskey in its original bottle.",
+      },
+      {
+        question: "Does bourbon age in the bottle?",
+        answer:
+          "No. All maturation happens in the charred oak barrel. Once bottled, a twelve year old bourbon remains a twelve year old bourbon no matter how long you keep it.",
+      },
+    ],
+  },
 ];
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
