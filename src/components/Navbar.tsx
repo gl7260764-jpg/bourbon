@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCart } from "./CartContext";
 import SearchOverlay from "./SearchOverlay";
+import InstallButton from "./InstallButton";
 
 const navLinks = [
   { name: "Home", href: "/" },
@@ -87,6 +88,8 @@ export default function Navbar() {
 
           {/* Right icons */}
           <div className="flex items-center gap-4">
+            {/* Renders only while an install is genuinely available. */}
+            <InstallButton />
             <button
               onClick={() => setSearchOpen(true)}
               aria-label="Open search"

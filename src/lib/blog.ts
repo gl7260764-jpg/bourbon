@@ -38,6 +38,14 @@ export type ContentBlock =
       notes?: string;
     };
 
+/* Optional Q&A block. Rendered at the foot of the post and emitted as
+   FAQPage structured data, which is what makes the questions eligible for
+   the expandable FAQ rich result in search. Posts without it are unaffected. */
+export type FaqItem = {
+  question: string;
+  answer: string;
+};
+
 export type BlogPost = {
   slug: string;
   title: string;
@@ -59,6 +67,7 @@ export type BlogPost = {
   // price and primary image. Inline anchor links go directly into the
   // content via the [[product:slug|anchor text]] marker.
   relatedProducts: string[];
+  faq?: FaqItem[];
 };
 
 export const BLOG_POSTS: BlogPost[] = [
@@ -880,6 +889,439 @@ export const BLOG_POSTS: BlogPost[] = [
       "eh-taylor-barrel-proof",
       "stagg-bourbon",
       "blantons-original-single-barrel",
+    ],
+  },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 4. Best Bourbon Bottles — Buying Guide
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "best-bourbon-bottles-ranked",
+    title: "The 10 Best Bourbon Bottles - And How to Actually Buy Them",
+    subtitle:
+      "Ranked on what is in the glass, with the proof, age and allocation reality every other list leaves out.",
+    excerpt:
+      "Most best-bourbon lists rank bottles you have no realistic way of buying, then stop at the tasting notes. This one gives you the full spec on all ten, explains how allocation actually works, and tells you exactly what to pour instead when the bottle you want is gone.",
+    category: "Buying Guide",
+    author: "Eleanor Hayes",
+    authorTitle: "Master Distiller, Bourbon & Oak",
+    publishedAt: "2026-08-14",
+    readTimeMinutes: 14,
+    heroImage: "/hero-poster.webp",
+    heroAlt:
+      "Backlit shelves of allocated Kentucky bourbon bottles including Pappy Van Winkle, Weller and Eagle Rare",
+    tags: [
+      "best bourbon",
+      "allocated bourbon",
+      "Pappy Van Winkle",
+      "Buffalo Trace Antique Collection",
+      "wheated bourbon",
+      "barrel proof",
+      "buying guide",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "Every year the same list gets published. Ten bottles, ten sets of tasting notes, ten photographs of glassware on a walnut table. And every year it leaves out the two things a buyer actually needs: what is physically in the bottle, and how on earth you are supposed to get one. We read the major 2026 rankings before writing this. Not one of them printed proof and age for every entry. Not one explained what allocation means. Not one told you what to buy when the bottle they just spent 250 words praising has been unavailable at retail since 2019.",
+      },
+      {
+        type: "paragraph",
+        text: "So this list does those things. Every entry carries its age, its proof, its price and its current status in our inventory. After the ranking there are three sections you will not find on the other lists: how allocation genuinely works from the distillery to your glass, a substitution ladder that tells you precisely what to drink instead when a bottle is gone, and a checklist for spotting a counterfeit before you hand over money.",
+      },
+      {
+        type: "callout",
+        title: "How we ranked these",
+        text: "Purely on the whiskey. Not on secondary market value, not on how hard a bottle is to find, and not on what we would most like to sell you. Scarcity is a fact about a supply chain, not a quality of a spirit. Where two bottles drink close to equal, the cheaper and more available one ranks higher, because a bourbon you can actually pour beats one you are saving for a birthday that never quite arrives.",
+      },
+      {
+        type: "callout",
+        title: "In the interest of transparency",
+        text: "We sell all ten of these. That is precisely why we can print real stock status instead of a vague note about narrow distribution - and why we will tell you plainly, below, which of these we think are not worth their current asking price.",
+      },
+      { type: "heading", level: 2, text: "The 10 Best Bourbon Bottles, Ranked" },
+
+      { type: "heading", level: 3, text: "1. Pappy Van Winkle Family Reserve 15 Year" },
+      {
+        type: "paragraph",
+        text: "There is a reasonable argument that [[product:pappy-van-winkle-15-year|Pappy Van Winkle 15 Year]] is over-discussed, and no serious argument that it is overrated. Fifteen years in a wheated mash bill is the sweet spot of the entire Van Winkle range: old enough that the oak has turned to leather, dark caramel and pipe tobacco, young enough that the wheat still carries a soft bakery sweetness underneath. The 20 and 23 year expressions are more impressive; this one is more drinkable, and drinkability is what we are ranking.",
+      },
+      {
+        type: "paragraph",
+        text: "At 107 proof it arrives hot and then broadens rather than sharpening. A few drops of water opens brown sugar and cherry. If you only ever drink one bottle from this list, the honest recommendation is that it should be this one rather than the older Pappys, which trade a great deal of money for a little more wood.",
+      },
+      {
+        type: "list",
+        items: [
+          "Age: 15 years - Proof: 107 (53.5% ABV) - Mash bill: wheated",
+          "Our price: $500 - Rating: 4.9 from 145 reviews",
+          "Status: in stock at the time of writing",
+        ],
+      },
+
+      { type: "heading", level: 3, text: "2. William Larue Weller" },
+      {
+        type: "paragraph",
+        text: "The barrel proof wheater from the Buffalo Trace Antique Collection, and the bottle that most often beats Pappy in a blind tasting. [[product:william-larue-weller|William Larue Weller]] is uncut and unfiltered, which at 133.6 proof means a whiskey that genuinely needs water and rewards it enormously. Undiluted it is dense - dark fruit, creme brulee, a long finish of oak and cocoa. Add a teaspoon of water and it unfolds into one of the most complete American whiskeys made.",
+      },
+      {
+        type: "paragraph",
+        text: "It is released once a year in autumn as part of the BTAC set. Proof varies release to release, which is part of the appeal for collectors and part of the frustration for everyone else.",
+      },
+      {
+        type: "list",
+        items: [
+          "Age: 12 years - Proof: 133.6 (66.8% ABV) - Mash bill: wheated, barrel proof",
+          "Our price: $250 - Rating: 4.9 from 146 reviews",
+          "Status: allocated - annual autumn release",
+        ],
+      },
+
+      { type: "heading", level: 3, text: "3. George T. Stagg" },
+      {
+        type: "paragraph",
+        text: "The hazmat bottle. [[product:george-t-stagg|George T. Stagg]] regularly exceeds 130 proof - this release lands at 136.1, high enough that it cannot legally be carried on a commercial aircraft. It is not a novelty. Fifteen years in Kentucky oak on a high-rye recipe produces something extraordinarily concentrated: dark chocolate, char, leather, black cherry, and a finish that outlasts anything else in this ranking by a comfortable margin.",
+      },
+      {
+        type: "paragraph",
+        text: "This is the least beginner-friendly bottle on the list and the one experienced drinkers reach for first. Treat it like cask strength scotch: small pour, patient water, no ice.",
+      },
+      {
+        type: "list",
+        items: [
+          "Age: 15 years - Proof: 136.1 (68.05% ABV) - Mash bill: high rye, barrel proof",
+          "Our price: $250 - Rating: 4.8",
+          "Status: allocated - annual autumn release",
+        ],
+      },
+
+      { type: "heading", level: 3, text: "4. Eagle Rare 17 Year" },
+      {
+        type: "paragraph",
+        text: "Where Stagg is force, [[product:eagle-rare-17-year|Eagle Rare 17 Year]] is restraint. Seventeen years is long enough to destroy most bourbon; the barrels chosen for this release carry it with unusual grace at a modest 101 proof. Expect polished oak, dried orange peel, honey and old leather, with a delicacy that no barrel proof bottling can reach.",
+      },
+      {
+        type: "paragraph",
+        text: "The candid caveat: at current market prices this is a collector bottle more than a drinker bottle. If you want the Eagle Rare profile to actually pour on a Thursday, the 10 and 12 year expressions deliver a large fraction of the character for a small fraction of the money.",
+      },
+      {
+        type: "list",
+        items: [
+          "Age: 17 years - Proof: 101 (50.5% ABV) - Mash bill: low rye",
+          "Our price: $250 - Rating: 4.9 from 198 reviews",
+          "Status: allocated - BTAC annual release",
+        ],
+      },
+
+      { type: "heading", level: 3, text: "5. Weller 12 Year" },
+      {
+        type: "paragraph",
+        text: "The value champion of American whiskey, and the reason the phrase poor man's Pappy exists. [[product:weller-12-year|Weller 12 Year]] shares the wheated recipe and the Buffalo Trace warehouses with the Van Winkle line, carries a genuine 12 year age statement, and costs a fifth of what Pappy 15 does. At 90 proof it is soft, honeyed and gentle - vanilla, baked apple, a little cinnamon.",
+      },
+      {
+        type: "paragraph",
+        text: "It is not as deep or as long as the Van Winkles and anyone claiming otherwise is being romantic. It is, however, the single best ratio of quality to price on this entire list, and it is one of the few here we can usually keep in stock.",
+      },
+      {
+        type: "list",
+        items: [
+          "Age: 12 years - Proof: 90 (45% ABV) - Mash bill: wheated",
+          "Our price: $100 - Rating: 4.8 from 214 reviews",
+          "Status: in stock at the time of writing",
+        ],
+      },
+
+      { type: "heading", level: 3, text: "6. Blanton's Original Single Barrel" },
+      {
+        type: "paragraph",
+        text: "The bottle that invented the category. [[product:blantons-original-single-barrel|Blanton's Original Single Barrel]] was the first commercially marketed single barrel bourbon in the world, and the horse and jockey stopper - eight of them spelling B-L-A-N-T-O-N-S across a collection - has done more for bourbon merchandising than any advertising campaign. Fortunately the whiskey earns it: creamy vanilla, citrus, a light nutmeg spice, and remarkable consistency for something drawn from a single cask.",
+      },
+      {
+        type: "paragraph",
+        text: "Because every bottle comes from one barrel, the dump date and warehouse are printed on the label and no two are quite identical. That is the point of buying it.",
+      },
+      {
+        type: "list",
+        items: [
+          "Age: 8 years - Proof: 93 (46.5% ABV) - Mash bill: high rye, single barrel",
+          "Our price: $150 - Rating: 4.8",
+          "Status: allocated",
+        ],
+      },
+
+      { type: "heading", level: 3, text: "7. Colonel E.H. Taylor, Jr. Barrel Proof" },
+      {
+        type: "paragraph",
+        text: "The E.H. Taylor range is built on the Bottled-in-Bond Act of 1897, a piece of consumer protection legislation that predates the FDA and still guarantees a single distillery, a single season, at least four years in a federally supervised warehouse, and exactly 100 proof. [[product:eh-taylor-barrel-proof|E.H. Taylor Barrel Proof]] breaks the 100 proof rule deliberately, arriving uncut at 131 proof.",
+      },
+      {
+        type: "paragraph",
+        text: "The result is the most structured whiskey in the Taylor line - toasted grain, dark honey, pepper and a dry oak finish. At $100 it is meaningfully cheaper than the BTAC barrel proof bottles while delivering a similar intensity, which makes it the smart substitution when Stagg is nowhere to be found.",
+      },
+      {
+        type: "list",
+        items: [
+          "Age: no age statement - Proof: 131 (65.5% ABV) - Bottled in bond lineage, barrel proof",
+          "Our price: $100 - Rating: 4.8 from 132 reviews",
+          "Status: allocated",
+        ],
+      },
+
+      { type: "heading", level: 3, text: "8. Russell's Reserve 13 Year" },
+      {
+        type: "paragraph",
+        text: "The best bottle on this list that has nothing to do with Buffalo Trace. [[product:russells-reserve-13-year|Russell's Reserve 13 Year]] comes from Wild Turkey and the Russell family, and it is the bottle that convinced a lot of collectors to look beyond the allocated Frankfort names. Thirteen years at 114.8 proof, non-chill filtered, with the deep caramelised sweetness and baking spice that is the Wild Turkey signature.",
+      },
+      {
+        type: "paragraph",
+        text: "Including it matters for a practical reason: a bourbon shelf composed entirely of one distillery is a narrower shelf. This is the most straightforward way to broaden yours without dropping any quality.",
+      },
+      {
+        type: "list",
+        items: [
+          "Age: 13 years - Proof: 114.8 (57.4% ABV) - Non-chill filtered",
+          "Our price: $200 - Rating: 4.8",
+          "Status: allocated - limited annual release",
+        ],
+      },
+
+      { type: "heading", level: 3, text: "9. Old Rip Van Winkle 10 Year" },
+      {
+        type: "paragraph",
+        text: "The way into the Van Winkle family without a $500 decision. [[product:pappy-10|Old Rip Van Winkle 10 Year]] is bottled at 107 proof, the same strength as Pappy 15, but with ten years of wood instead of fifteen. What you lose in depth you gain in brightness - this is the fruitiest and most immediately charming whiskey in the range, all cherry, caramel and soft wheat.",
+      },
+      {
+        type: "paragraph",
+        text: "For anyone who wants to understand what the fuss over wheated bourbon is about, start here rather than at the top of the range. It teaches you the profile at a price where the lesson is affordable.",
+      },
+      {
+        type: "list",
+        items: [
+          "Age: 10 years - Proof: 107 (53.5% ABV) - Mash bill: wheated",
+          "Our price: $250 - Rating: 4.9 from 84 reviews",
+          "Status: in stock at the time of writing",
+        ],
+      },
+
+      { type: "heading", level: 3, text: "10. Elmer T. Lee Single Barrel" },
+      {
+        type: "paragraph",
+        text: "Named for the master distiller who created Blanton's and effectively invented the single barrel category, [[product:elmer-t-lee-single-barrel|Elmer T. Lee Single Barrel]] is a tribute bottling drawn from barrels Elmer himself would have selected. Nine years, 90 proof, and a gentle, elegant profile - honey, light oak, orange oil, a clean finish.",
+      },
+      {
+        type: "paragraph",
+        text: "At $80 it closes this list where it should close: with the reminder that the best bourbon bottle is very often not the most expensive one on the shelf.",
+      },
+      {
+        type: "list",
+        items: [
+          "Age: 9 years - Proof: 90 (45% ABV) - Single barrel",
+          "Our price: $80 - Rating: 4.8",
+          "Status: allocated",
+        ],
+      },
+
+      { type: "heading", level: 2, text: "What Allocated Actually Means" },
+      {
+        type: "paragraph",
+        text: "Every list calls these bottles allocated and none of them explain it, so here is the mechanism in plain terms. The volume of a 15 year old bourbon available in 2026 was fixed in 2011, when someone filled a finite number of barrels and had to guess at demand a decade and a half ahead. Nothing can increase that number now. Distilleries therefore assign fixed quantities to each state distributor, and distributors assign fixed quantities to individual retailers.",
+      },
+      {
+        type: "paragraph",
+        text: "The consequence is the part people find hardest to accept: a retailer cannot order more. When we receive six bottles of a BTAC release for the entire year, no amount of ordering produces a seventh. Retailers then distribute their allocation by lottery, by waitlist, by loyalty history, or by bundling - and every one of those methods leaves most customers disappointed, because the arithmetic guarantees it.",
+      },
+      {
+        type: "callout",
+        title: "The practical upshot",
+        text: "Chasing one specific bottle is the most expensive and least satisfying way to build a bourbon shelf. Learning which profile you like - wheated or high rye, 90 proof or barrel strength - and then buying the best available bottle in that profile will get you a better shelf, faster, for less money. That is what the next section is for.",
+      },
+
+      { type: "heading", level: 2, text: "If You Cannot Find It, Drink This Instead" },
+      {
+        type: "paragraph",
+        text: "This is the section every other guide omits, and it is the most useful thing on this page. Each line below pairs a bottle from the ranking with the closest thing we can realistically supply, chosen on flavour profile rather than on prestige.",
+      },
+      {
+        type: "list",
+        items: [
+          "Instead of Pappy 15, try [[product:van-winkle-lot-b-12-year|Van Winkle Special Reserve Lot B 12 Year]] at $300 - the same wheated house style at 90.4 proof, and usually obtainable.",
+          "Instead of William Larue Weller, try [[product:weller-full-proof|W.L. Weller Full Proof]] at $150 - 114 proof, uncut, the closest barrel strength wheater we can keep on a shelf.",
+          "Instead of George T. Stagg, try [[product:stagg-bourbon|Stagg]] at $150 or [[product:eh-taylor-barrel-proof|E.H. Taylor Barrel Proof]] at $100 - both above 130 proof with the same concentrated character.",
+          "Instead of Eagle Rare 17 Year, try [[product:eagle-rare-12-year|Eagle Rare 12 Year]] at $70 or [[product:eagle-rare-10-year|Eagle Rare 10 Year]] at $40 - the same restrained, oak-led profile for a fraction of the outlay.",
+          "Instead of Blanton's Original, try [[product:blantons-gold-edition|Blanton's Gold Edition]] at $100 or [[product:rock-hill-farms-single-barrel|Rock Hill Farms Single Barrel]] at $100 - both higher proof, both from the same mash bill.",
+          "Instead of Elmer T. Lee, try [[product:eh-taylor-small-batch|E.H. Taylor Small Batch]] at $80 - bottled in bond at 100 proof, similarly elegant and similarly priced.",
+          "Instead of Weller 12 Year, try [[product:weller-cypb|Weller CYPB]] at $200 - the fan-designed wheater, if you want to trade value for something more unusual.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "If you want the whole range in front of you rather than a curated ten, the full [[product:weller-single-barrel|hand-selected single barrel]] and antique collection bottlings sit alongside these in our catalogue.",
+      },
+
+      { type: "heading", level: 2, text: "How to Spot a Fake Before You Pay" },
+      {
+        type: "paragraph",
+        text: "Once a bottle trades for several times its retail price, counterfeiting becomes profitable, and Van Winkle bottles in particular are refilled and resold constantly. Buffalo Trace has published guidance on this and the checks are ones you can perform in a few seconds with the bottle in your hand.",
+      },
+      {
+        type: "list",
+        ordered: true,
+        items: [
+          "Check the capsule colour against the expression. Each Van Winkle age has a specific capsule and label pairing; a mismatch between the face label and the colour of the top is the single most common tell.",
+          "Inspect the tax and security strip across the cap. It should be intact, aligned and unbroken, and on many bottles it carries a serial number. Resealed, reprinted or misaligned strips mean the bottle has been opened.",
+          "Look at the cap itself. A wrinkled, crooked or slightly melted foil is the signature of a bottle refilled and resealed with a heat gun.",
+          "Read the fill level. A genuine 750ml bottle fills to between the shoulder and the neck, typically within 5 to 8mm of the base of the neck. A low fill on a supposedly unopened bottle is a refill.",
+          "Measure the label placement by eye. Authentic labels are applied to tight tolerances; variation of even 2 to 3mm from known-good photographs is a warning sign.",
+          "Match the bottle number and release year against published records. Every Van Winkle bottle is numbered and tied to a specific year.",
+        ],
+      },
+      {
+        type: "callout",
+        title: "The simplest protection",
+        text: "Buy from a retailer who accepts returns and can tell you which distributor the case came from. A private sale at a car park with cash and no recourse is where almost every counterfeit story begins.",
+      },
+
+      { type: "heading", level: 2, text: "What These Bottles Should Actually Cost" },
+      {
+        type: "paragraph",
+        text: "Two things have moved at once over the past few years. Retail prices on allocated bourbon have risen, and secondary market prices have softened from their peak. The gap between what a bottle is meant to cost and what it trades for is narrower than it was in 2021, which is good news for drinkers and irritating news for anyone who bought purely as an investment.",
+      },
+      {
+        type: "paragraph",
+        text: "At genuine retail, almost every bottle on this list is worth buying. At two or three times retail, only a few are - and Eagle Rare 17 Year is the clearest example of a bottle whose current price reflects collector demand rather than what is in the glass. A final piece of received wisdom worth repeating: do not buy a brand new release on the secondary market in its first two to four weeks. Early prices are set by scarcity panic and almost always fall.",
+      },
+
+      { type: "heading", level: 2, text: "Where to Start" },
+      {
+        type: "paragraph",
+        text: "If you are buying your first serious bottle, buy [[product:weller-12-year|Weller 12 Year]]. If you already know you like wheated bourbon and want to understand the ceiling, buy [[product:pappy-van-winkle-15-year|Pappy Van Winkle 15 Year]]. If you like your whiskey loud, buy [[product:eh-taylor-barrel-proof|E.H. Taylor Barrel Proof]] and add water slowly. Everything else on this list is a variation on those three decisions.",
+      },
+    ],
+    seo: {
+      metaTitle: "The 10 Best Bourbon Bottles (2026) - Ranked Buying Guide",
+      metaDescription:
+        "The 10 best bourbon bottles ranked on taste, with full proof and age specs, how allocation really works, what to buy when they are sold out, and how to spot a fake.",
+      focusKeyword: "best bourbon bottles",
+      primaryKeywords: [
+        "best bourbon bottles",
+        "best bourbon",
+        "allocated bourbon",
+        "best bourbon to buy",
+        "top bourbon brands",
+        "Pappy Van Winkle",
+        "Buffalo Trace Antique Collection",
+        "wheated bourbon",
+        "barrel proof bourbon",
+        "best bourbon under 100",
+      ],
+      longTailKeywords: [
+        "what are the best bourbon bottles to buy",
+        "best bourbon bottles ranked 2026",
+        "what does allocated bourbon mean",
+        "why is Pappy Van Winkle so hard to find",
+        "what to buy instead of Pappy Van Winkle",
+        "is Weller 12 year worth it",
+        "how to spot a fake Pappy Van Winkle bottle",
+        "difference between wheated and high rye bourbon",
+        "is Eagle Rare 17 worth the price",
+        "best barrel proof bourbon to buy",
+        "poor mans pappy weller 12",
+        "how does bourbon allocation work",
+      ],
+      wordClusters: [
+        {
+          cluster: "Allocated & Rare Bourbon",
+          terms: [
+            "allocated bourbon",
+            "BTAC",
+            "Buffalo Trace Antique Collection",
+            "limited release",
+            "bourbon lottery",
+            "secondary market",
+            "MSRP",
+            "bottle allocation",
+          ],
+        },
+        {
+          cluster: "Mash Bill & Style",
+          terms: [
+            "wheated bourbon",
+            "high rye bourbon",
+            "single barrel",
+            "small batch",
+            "barrel proof",
+            "cask strength",
+            "bottled in bond",
+            "non-chill filtered",
+          ],
+        },
+        {
+          cluster: "Tasting & Proof",
+          terms: [
+            "proof",
+            "ABV",
+            "age statement",
+            "tasting notes",
+            "adding water to bourbon",
+            "hazmat proof",
+            "finish",
+          ],
+        },
+        {
+          cluster: "Authenticity & Buying",
+          terms: [
+            "counterfeit bourbon",
+            "fake Pappy Van Winkle",
+            "tax strip",
+            "capsule colour",
+            "fill level",
+            "bottle number",
+            "buying allocated bourbon",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "pappy-van-winkle-15-year",
+      "william-larue-weller",
+      "george-t-stagg",
+      "eagle-rare-17-year",
+      "weller-12-year",
+      "blantons-original-single-barrel",
+      "eh-taylor-barrel-proof",
+      "russells-reserve-13-year",
+      "pappy-10",
+      "elmer-t-lee-single-barrel",
+    ],
+    faq: [
+      {
+        question: "What is the best bourbon bottle you can buy right now?",
+        answer:
+          "On flavour alone, Pappy Van Winkle Family Reserve 15 Year. On value, Weller 12 Year at $100 delivers the same wheated house style from the same distillery for a fifth of the price, and is far easier to obtain.",
+      },
+      {
+        question: "What does allocated bourbon mean?",
+        answer:
+          "It means the quantity available was fixed years ago when the barrels were filled, so distilleries assign fixed amounts to distributors and distributors assign fixed amounts to retailers. A shop cannot order more, which is why allocated bottles are sold by lottery, waitlist or loyalty rather than simply stocked.",
+      },
+      {
+        question: "What should I buy instead of Pappy Van Winkle?",
+        answer:
+          "Van Winkle Special Reserve Lot B 12 Year is the same wheated house style at 90.4 proof. For a barrel strength version of that profile, W.L. Weller Full Proof at 114 proof is the closest substitute we can keep in stock. Weller 12 Year is the value option.",
+      },
+      {
+        question: "Is Weller 12 Year really poor mans Pappy?",
+        answer:
+          "It shares the wheated mash bill and the same Buffalo Trace warehouses as the Van Winkle line, and carries a genuine 12 year age statement at 90 proof. It is not as deep or as long as Pappy 15, but it is the best quality-to-price ratio in allocated bourbon.",
+      },
+      {
+        question: "How can I tell if a Pappy Van Winkle bottle is fake?",
+        answer:
+          "Check that the capsule colour matches the expression, that the tax strip across the cap is intact and aligned, that the foil is not wrinkled or crooked, and that the fill sits within 5 to 8mm of the base of the neck. Then match the bottle number against the published release year.",
+      },
+      {
+        question: "Is Eagle Rare 17 Year worth the price?",
+        answer:
+          "As whiskey, it is superb - seventeen years carried at only 101 proof with unusual elegance. As a purchase, its current price reflects collector demand more than drinking value. Eagle Rare 12 Year at $70 gives you much of the same character for far less.",
+      },
     ],
   },
 ];

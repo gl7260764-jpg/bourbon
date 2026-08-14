@@ -1,59 +1,22 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import {
+  type BeforeInstallPromptEvent,
+  INSTALLED_EVENT,
+  OPEN_INSTALL_EVENT,
+  READY_EVENT,
+  type Platform,
+  alreadyInstalled,
+  canOfferInstall,
+  detectPlatform,
+  isStandalone,
+  markDismissed,
+  markInstalled,
+  wasRecentlyDismissed,
+} from "@/lib/pwa";
 
-interface BeforeInstallPromptEvent extends Event {
-  readonly platforms: string[];
-  readonly userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
-  prompt(): Promise<void>;
-}
-
-const DISMISS_KEY = "bol_install_dismissed_at";
-const COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 const DELAY_MS = 10_000;
-
-type Platform = "android-chrome" | "ios-safari" | "desktop-chromium" | "desktop-bookmark";
-
-function detectPlatform(): Platform {
-  if (typeof window === "undefined") return "desktop-bookmark";
-  const ua = window.navigator.userAgent;
-  const isIOS = /iPad|iPhone|iPod/i.test(ua) && !("MSStream" in window);
-  const isAndroid = /android/i.test(ua);
-  const isMobile = isIOS || isAndroid || /Mobi/i.test(ua);
-  const isChromium = /Chrome|Chromium|Edg|CriOS/i.test(ua) && !/Firefox|FxiOS/i.test(ua);
-
-  if (isIOS) return "ios-safari";
-  if (isAndroid && isChromium) return "android-chrome";
-  if (!isMobile && isChromium) return "desktop-chromium";
-  return "desktop-bookmark";
-}
-
-function isStandalone(): boolean {
-  if (typeof window === "undefined") return false;
-  if (window.matchMedia("(display-mode: standalone)").matches) return true;
-  const navAny = window.navigator as Navigator & { standalone?: boolean };
-  return navAny.standalone === true;
-}
-
-function wasRecentlyDismissed(): boolean {
-  try {
-    const raw = window.localStorage.getItem(DISMISS_KEY);
-    if (!raw) return false;
-    const ts = Number(raw);
-    if (!Number.isFinite(ts)) return false;
-    return Date.now() - ts < COOLDOWN_MS;
-  } catch {
-    return false;
-  }
-}
-
-function markDismissed() {
-  try {
-    window.localStorage.setItem(DISMISS_KEY, String(Date.now()));
-  } catch {
-    /* ignore */
-  }
-}
 
 export default function InstallPrompt() {
   const [visible, setVisible] = useState(false);
@@ -64,32 +27,49 @@ export default function InstallPrompt() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (isStandalone()) return;
-    if (wasRecentlyDismissed()) return;
 
-    const handleBeforeInstall = (e: Event) => {
-      e.preventDefault();
-      setDeferredEvent(e as BeforeInstallPromptEvent);
+    /* The head script may have captured the event well before this mounted, so
+       it is read when the timer fires rather than subscribed to from here;
+       anything arriving later comes through `bip-ready`. */
+    const handleReady = () => {
+      if (window.__bipDeferred) setDeferredEvent(window.__bipDeferred);
     };
 
     const handleInstalled = () => {
+      markInstalled();
       setVisible(false);
-      markDismissed();
     };
 
-    window.addEventListener("beforeinstallprompt", handleBeforeInstall);
+    /* Opened from the navbar button. That is an explicit request, so it
+       ignores the cooldown, and when there is no native prompt to fire it goes
+       straight to the manual steps rather than making the user click twice. */
+    const handleOpen = () => {
+      if (isStandalone() || alreadyInstalled()) return;
+      const evt = window.__bipDeferred ?? null;
+      setDeferredEvent(evt);
+      setPlatform(detectPlatform());
+      setExpanded(!evt);
+      setVisible(true);
+    };
+
+    window.addEventListener(READY_EVENT, handleReady);
+    window.addEventListener(INSTALLED_EVENT, handleInstalled);
     window.addEventListener("appinstalled", handleInstalled);
+    window.addEventListener(OPEN_INSTALL_EVENT, handleOpen);
 
     const timer = window.setTimeout(() => {
-      if (!isStandalone() && !wasRecentlyDismissed()) {
+      if (!isStandalone() && !alreadyInstalled() && !wasRecentlyDismissed()) {
+        setDeferredEvent(window.__bipDeferred ?? null);
         setPlatform(detectPlatform());
         setVisible(true);
       }
     }, DELAY_MS);
 
     return () => {
-      window.removeEventListener("beforeinstallprompt", handleBeforeInstall);
+      window.removeEventListener(READY_EVENT, handleReady);
+      window.removeEventListener(INSTALLED_EVENT, handleInstalled);
       window.removeEventListener("appinstalled", handleInstalled);
+      window.removeEventListener(OPEN_INSTALL_EVENT, handleOpen);
       window.clearTimeout(timer);
     };
   }, []);
@@ -100,24 +80,29 @@ export default function InstallPrompt() {
   };
 
   const handleInstall = async () => {
-    if (deferredEvent) {
+    /* Prefer the browser's own install flow whenever it is available; the
+       written steps are a fallback for platforms that genuinely have no
+       install API (iOS Safari) or where the event never arrived. */
+    const evt = deferredEvent ?? window.__bipDeferred ?? null;
+    if (evt) {
       try {
-        await deferredEvent.prompt();
-        const choice = await deferredEvent.userChoice;
+        await evt.prompt();
+        const choice = await evt.userChoice;
         if (choice.outcome === "accepted") {
-          setVisible(false);
+          markInstalled();
         } else {
           markDismissed();
-          setVisible(false);
         }
+        setVisible(false);
       } catch {
         setExpanded(true);
       }
+      /* A prompt event is single-use once shown. */
+      window.__bipDeferred = null;
       setDeferredEvent(null);
       return;
     }
 
-    // No native prompt — show instructions
     setExpanded(true);
   };
 
@@ -140,12 +125,19 @@ export default function InstallPrompt() {
         ? "Bookmark us so you never miss a new release."
         : "Add Bourbon Oak Lover to your home screen for instant access.";
 
-  const primaryLabel =
-    platform === "ios-safari"
+  /* Label from what the button will actually do, not from the platform guess:
+     if a real install prompt is in hand it says Install and installs. */
+  const canInstallNow = deferredEvent !== null;
+  const primaryLabel = canInstallNow
+    ? "Install"
+    : platform === "ios-safari"
       ? "Show me how"
       : platform === "desktop-bookmark"
         ? "How to bookmark"
         : "Install";
+
+  /* Only where an install can genuinely happen — never for a bookmark. */
+  const showOffer = canOfferInstall(platform);
 
   return (
     <div
@@ -194,6 +186,19 @@ export default function InstallPrompt() {
             <p className="text-bourbon-cream/65 text-sm sm:text-base mt-3 leading-relaxed max-w-sm mx-auto">
               {subhead}
             </p>
+
+            {/* Marketing copy only — nothing is issued or redeemable here,
+                matching how the newsletter popup states its 10%. */}
+            {showOffer && (
+              <p className="mt-5 inline-flex items-center gap-2.5 border border-bourbon-gold/35 bg-bourbon-gold/10 px-4 py-2.5">
+                <span className="font-[family-name:var(--font-playfair)] text-bourbon-gold text-lg font-bold leading-none">
+                  5%
+                </span>
+                <span className="text-bourbon-cream/80 text-xs sm:text-sm leading-snug">
+                  off your next bottle when you install
+                </span>
+              </p>
+            )}
 
             <div className="mt-7 flex flex-col gap-3">
               <button

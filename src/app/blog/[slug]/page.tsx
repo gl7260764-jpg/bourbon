@@ -278,6 +278,25 @@ export default async function BlogPostPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      {/* Separate FAQPage node rather than nesting it in the BlogPosting —
+          Google reads them independently, and this is what makes the answers
+          eligible for the expandable FAQ result. */}
+      {post.faq && post.faq.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: post.faq.map((f) => ({
+                "@type": "Question",
+                name: f.question,
+                acceptedAnswer: { "@type": "Answer", text: f.answer },
+              })),
+            }),
+          }}
+        />
+      )}
 
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
@@ -354,6 +373,32 @@ export default async function BlogPostPage({ params }: PageProps) {
               ))}
             </div>
           </div>
+        )}
+
+        {post.faq && post.faq.length > 0 && (
+          <section className="mt-12 sm:mt-16 border-t border-bourbon-stone/15 pt-8 sm:pt-10">
+            <p className="text-bourbon-gold text-[10px] sm:text-xs tracking-[0.3em] uppercase mb-3">
+              Common Questions
+            </p>
+            <h2 className="font-[family-name:var(--font-playfair)] text-2xl sm:text-3xl font-bold text-bourbon-deep mb-6 sm:mb-8 leading-tight">
+              Frequently Asked
+            </h2>
+            <dl className="space-y-5 sm:space-y-6">
+              {post.faq.map((f) => (
+                <div
+                  key={f.question}
+                  className="border-b border-bourbon-stone/10 pb-5 last:border-0 last:pb-0"
+                >
+                  <dt className="font-[family-name:var(--font-playfair)] text-lg sm:text-xl font-bold text-bourbon-deep mb-1.5">
+                    {f.question}
+                  </dt>
+                  <dd className="text-bourbon-stone text-base sm:text-lg leading-relaxed">
+                    {renderInline(f.answer)}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </section>
         )}
       </article>
 

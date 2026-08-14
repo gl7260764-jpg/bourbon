@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import HeroCarousel from "@/components/HeroCarousel";
+import Hero from "@/components/Hero";
 import BrandStrip from "@/components/BrandStrip";
 import FeaturedProducts from "@/components/FeaturedProducts";
 import LimitedEdition from "@/components/LimitedEdition";
@@ -20,11 +20,9 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <main>
-      <h1 className="sr-only">
-        Bourbon &amp; Oak — Premium Kentucky Bourbon Whiskey, Single Barrel and
-        Small Batch from Bardstown
-      </h1>
-      <HeroCarousel />
+      {/* The h1 lives in <Hero> as the visible headline. A hidden one here
+          would duplicate it and split the signal. */}
+      <Hero />
       <BrandStrip />
       <HappyHour />
       <FeaturedProducts />

@@ -116,6 +116,31 @@ export default function RootLayout({
       className={`${playfair.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-[#FAFAF9] text-[#0C0A09] font-[family-name:var(--font-inter)]">
+        {/* `beforeinstallprompt` fires as soon as the browser decides the PWA
+            is installable, which is routinely before React hydrates. Capturing
+            it from inside a component's effect loses the race, and a lost event
+            cannot be recovered — the Install button then falls back to manual
+            instructions on platforms that could have installed directly. This
+            stashes it the moment it fires, and the prompt component picks it up
+            via the `bip-ready` event. `appinstalled` is recorded here for the
+            same reason: it can fire while no prompt is mounted. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){
+  window.__bipDeferred = null;
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault();
+    window.__bipDeferred = e;
+    window.dispatchEvent(new Event('bip-ready'));
+  });
+  window.addEventListener('appinstalled', function () {
+    window.__bipDeferred = null;
+    try { localStorage.setItem('bol_app_installed', '1'); } catch (_) {}
+    window.dispatchEvent(new Event('bip-installed'));
+  });
+})();`,
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
