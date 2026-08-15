@@ -2052,6 +2052,688 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
   },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 9. How Bourbon Is Made — Fundamentals
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "how-bourbon-is-made",
+    title: "How Bourbon Is Made, Step by Step",
+    subtitle:
+      "From a truckload of corn to a bottle on your shelf - the seven stages, and the two that decide almost everything you taste.",
+    excerpt:
+      "Grain to glass, explained properly: mashing, the sour mash trick, fermentation, double distillation, the charred barrel, and the years in a rickhouse where Kentucky weather does the actual work.",
+    category: "Fundamentals",
+    author: "Eleanor Hayes",
+    authorTitle: "Master Distiller, Bourbon & Oak",
+    publishedAt: "2026-08-15",
+    readTimeMinutes: 11,
+    heroImage: "/blog-process.webp",
+    heroAlt:
+      "Backlit shelves of finished Kentucky bourbon in a distillery tasting room",
+    tags: [
+      "how bourbon is made",
+      "bourbon production",
+      "sour mash",
+      "column still",
+      "rickhouse",
+      "angels share",
+      "charred oak",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "Bourbon is made from three ingredients - grain, water and yeast - and one enormously expensive piece of equipment that most people never think about: a brand new charred oak barrel that can only be used once. Everything below happens in service of getting spirit into that barrel in the right condition, and then leaving it alone for long enough.",
+      },
+      {
+        type: "paragraph",
+        text: "There are seven stages. Two of them account for the overwhelming majority of what you eventually taste, and they are not the ones people expect.",
+      },
+      { type: "heading", level: 2, text: "1. The Mash Bill" },
+      {
+        type: "paragraph",
+        text: "The recipe. Federal law requires at least 51 percent corn; the rest is the distiller's decision. Corn brings sweetness and body. The secondary grain - winter wheat or rye - sets the character, and a small proportion of malted barley, usually around 5 percent, supplies the enzymes that will convert starch into fermentable sugar.",
+      },
+      {
+        type: "paragraph",
+        text: "This single choice separates a soft, honeyed wheated bourbon from a peppery high-rye one, and it matters more to whether you will enjoy a bottle than age or price does. We go deeper on that in [[link:/blog/wheated-vs-high-rye-bourbon|the mash bill guide]].",
+      },
+      { type: "heading", level: 2, text: "2. Milling and Cooking" },
+      {
+        type: "paragraph",
+        text: "The grain is milled to a coarse flour and cooked with water in stages, because the three grains gelatinise at different temperatures. Corn goes in hottest, at around 100 degrees Celsius, to burst the starch granules. The mash is cooled, rye or wheat is added in the middle range, and the malted barley goes in last and coolest - above roughly 65 degrees the barley enzymes denature and the whole batch is ruined.",
+      },
+      {
+        type: "paragraph",
+        text: "The water matters here, and it is the reason Kentucky became the centre of the industry. The state sits on a limestone shelf that filters out iron - which would turn whiskey black and taste metallic - while leaving calcium and magnesium behind, both of which yeast are happy to work in.",
+      },
+      { type: "heading", level: 2, text: "3. Fermentation, and the Sour Mash Trick" },
+      {
+        type: "paragraph",
+        text: "The cooled mash goes into a fermenter, yeast is pitched, and over three to five days it converts the sugar into alcohol and a great deal of flavour. What comes out is called distiller's beer, sitting somewhere around 8 to 10 percent alcohol - and it genuinely does taste like a sour, grainy beer.",
+      },
+      {
+        type: "paragraph",
+        text: "Almost every Kentucky distillery uses the sour mash process, which is far less exotic than it sounds. A portion of the acidic spent mash from the previous distillation, known as setback or backset, is added to the new batch. Lowering the pH does two things: it suppresses bacteria that would otherwise spoil the ferment, and it keeps conditions consistent batch after batch. Sour mash is a consistency technique, not a flavour claim - which is why it appears on so many labels and tells you almost nothing.",
+      },
+      {
+        type: "callout",
+        title: "The yeast is the secret",
+        text: "Distilleries guard their proprietary yeast strains obsessively, and several have kept the same family strain alive for generations. Yeast produces the esters behind fruit notes - banana, cherry, apple - which is why two distilleries using an identical mash bill and identical barrels still produce recognisably different whiskey.",
+      },
+      { type: "heading", level: 2, text: "4. Distillation, Twice" },
+      {
+        type: "paragraph",
+        text: "The beer runs into a tall column still, where steam strips the alcohol upward through a series of plates. What emerges is low wine, typically around 125 proof. It then passes through a doubler or a thumper - a second, smaller pot-style still that cleans it up and concentrates it further.",
+      },
+      {
+        type: "paragraph",
+        text: "Bourbon may not be distilled above 160 proof, and that ceiling is deliberate. The higher you distil, the more congeners you strip out, and congeners are flavour. Distil to 190 and you have neutral spirit; vodka is defined by its absence of character. The finished clear spirit is called white dog or new make, and tasting it neat is worth doing once - it is sweet, hot and unmistakably corn, with none of the colour, vanilla or spice you associate with the finished product. All of that is still to come from the wood.",
+      },
+      { type: "heading", level: 2, text: "5. The Barrel - Where Most of the Flavour Comes From" },
+      {
+        type: "paragraph",
+        text: "This is the first of the two stages that really matter. The white dog is cut with water to no more than 125 proof and filled into a new barrel of charred American white oak. New is the costly word: scotch, rum and tequila producers may reuse casks for decades, but every drop of bourbon requires a fresh one. Those used bourbon barrels are then sold on, which is why so much of the world's whisky ages in ex-bourbon wood.",
+      },
+      {
+        type: "paragraph",
+        text: "Before filling, the barrel interior is toasted and then charred with open flame, graded from level one to level four. A level four - alligator char, so named because the carbonised surface cracks into a scaled pattern - caramelises the wood sugars most aggressively and pushes the whiskey darker and sweeter. Lower char levels leave more delicate, fruit-forward spirit. Neither is better; both are choices.",
+      },
+      {
+        type: "paragraph",
+        text: "The char layer is what supplies vanillin, oak lactones and tannins - vanilla, caramel, coconut, baking spice, toasted nut - and it also acts as a filter, stripping sulphur compounds out of the young spirit over time.",
+      },
+      { type: "heading", level: 2, text: "6. The Rickhouse - Where Time Does the Work" },
+      {
+        type: "paragraph",
+        text: "The second stage that decides everything. Barrels are stacked on wooden ricks in warehouses that are deliberately not climate controlled, because the whole process depends on Kentucky's violent temperature swings. When the weather warms, the liquid expands into the char layer and extracts colour and flavour. When it cools, the wood contracts and pushes it back out. Bourbon breathes in and out of the wood, thousands of times, for years.",
+      },
+      {
+        type: "paragraph",
+        text: "Position in the rickhouse therefore matters as much as duration. Upper floors run hot and cycle hard, producing bolder, more oak-driven whiskey faster. Lower floors are cooler and steadier, giving gentler, more delicate spirit over a longer stretch. Two barrels filled on the same day from the same batch, one on the top floor and one on the ground, will taste like different whiskeys after a decade - which is the entire premise behind [[link:/blog/master-distiller-barrel-selection-guide|single barrel selection]].",
+      },
+      {
+        type: "paragraph",
+        text: "Some of it simply leaves. Evaporation through the porous oak claims roughly 2 to 4 percent of each barrel per year - the angels share. Over fifteen years that can be half the barrel gone, and it is the honest reason very old bourbon costs what it does. There is a great deal less of it than there was.",
+      },
+      { type: "heading", level: 2, text: "7. Dumping, Proofing and Bottling" },
+      {
+        type: "paragraph",
+        text: "When the whiskey is ready, barrels are emptied - dumped - and either bottled individually as a single barrel, like [[product:blantons-original-single-barrel|Blanton's Original]], or married together in a small batch to hit a consistent house profile, as with [[product:eh-taylor-small-batch|E.H. Taylor Small Batch]]. It is then usually cut with water to bottling strength, unless it is going out at full barrel proof as [[product:eh-taylor-barrel-proof|E.H. Taylor Barrel Proof]] does.",
+      },
+      {
+        type: "paragraph",
+        text: "Most bourbon is chill filtered, chilled to near freezing so fatty acids precipitate out and are strained away, which stops the whiskey turning cloudy over ice. It also removes a little texture and flavour, which is why bottles like [[product:russells-reserve-13-year|Russell's Reserve 13 Year]] make a point of being non-chill filtered.",
+      },
+      {
+        type: "callout",
+        title: "What you can add",
+        text: "Water. That is the entire list. No colouring, no flavouring, no sweetening - the rules that make bourbon bourbon forbid all of it. Every shade of amber in your glass came out of a charred barrel, which is not true of every brown spirit on the shelf.",
+      },
+      { type: "heading", level: 2, text: "Seeing It For Yourself" },
+      {
+        type: "paragraph",
+        text: "Reading about temperature cycling is one thing; standing on the fifth floor of a rickhouse in August, where the air is thick with evaporating whiskey and the barrels are audibly working, explains it in about four seconds. Our [[link:/tours|distillery tour]] walks the mash floor, the still house and Rickhouse No. 7, and finishes with a tasting of the same spirit at different ages.",
+      },
+      {
+        type: "paragraph",
+        text: "If you would rather start with the legal definitions, [[link:/blog/bourbon-vs-whiskey-explained|what actually makes a bourbon]] covers the six rules. To put the process to work in a glass, read [[link:/blog/how-to-taste-bourbon|how to taste bourbon]], or start with something like [[product:eagle-rare-10-year|Eagle Rare 10 Year]] from the [[link:/shop|shop]] and taste a decade of rickhouse weather for yourself.",
+      },
+    ],
+    seo: {
+      metaTitle: "How Bourbon Is Made, Step by Step",
+      metaDescription:
+        "The seven stages of bourbon production - mash bill, cooking, sour mash fermentation, double distillation, the charred new oak barrel, rickhouse maturation and bottling - explained clearly.",
+      focusKeyword: "how is bourbon made",
+      primaryKeywords: [
+        "how is bourbon made",
+        "bourbon production process",
+        "how bourbon is distilled",
+        "sour mash process",
+        "bourbon fermentation",
+        "charred oak barrel",
+        "rickhouse aging",
+        "angels share",
+      ],
+      longTailKeywords: [
+        "how is bourbon made step by step",
+        "what is the sour mash process",
+        "why is bourbon aged in new charred oak barrels",
+        "what is white dog whiskey",
+        "how long is bourbon fermented",
+        "what is the angels share in bourbon",
+        "why is Kentucky water good for bourbon",
+        "what does chill filtered mean",
+        "difference between single barrel and small batch",
+        "what is a doubler in distilling",
+      ],
+      wordClusters: [
+        {
+          cluster: "Production Stages",
+          terms: [
+            "mash bill",
+            "milling",
+            "cooking",
+            "fermentation",
+            "distillers beer",
+            "column still",
+            "doubler",
+            "thumper",
+            "white dog",
+          ],
+        },
+        {
+          cluster: "Barrel & Warehouse",
+          terms: [
+            "American white oak",
+            "char level",
+            "alligator char",
+            "rickhouse",
+            "temperature cycling",
+            "angels share",
+            "rick position",
+            "barrel entry proof",
+          ],
+        },
+        {
+          cluster: "Finishing",
+          terms: [
+            "dumping",
+            "single barrel",
+            "small batch",
+            "chill filtration",
+            "non-chill filtered",
+            "proofing",
+            "bottling strength",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "eagle-rare-10-year",
+      "blantons-original-single-barrel",
+      "eh-taylor-small-batch",
+      "eh-taylor-barrel-proof",
+      "russells-reserve-13-year",
+    ],
+    faq: [
+      {
+        question: "How is bourbon made?",
+        answer:
+          "Grain is milled and cooked to convert starch to sugar, fermented with yeast for three to five days, distilled twice to no more than 160 proof, filled into a new charred oak barrel at no more than 125 proof, matured for years in an uncontrolled warehouse, then dumped, proofed with water and bottled.",
+      },
+      {
+        question: "What is the sour mash process?",
+        answer:
+          "Adding a portion of acidic spent mash from the previous distillation into the new batch. Lowering the pH suppresses spoilage bacteria and keeps fermentation consistent. It is a consistency technique rather than a flavour claim.",
+      },
+      {
+        question: "Why must bourbon use new charred oak barrels?",
+        answer:
+          "It is written into the legal definition. The char layer supplies vanillin, oak lactones and tannins, and filters sulphur compounds from the young spirit. A used barrel has already given up most of that, which is why bourbon develops so much character in a decade.",
+      },
+      {
+        question: "What is the angels share?",
+        answer:
+          "The whiskey lost to evaporation through the porous oak, roughly 2 to 4 percent of each barrel per year. Over fifteen years it can claim close to half the barrel, which is the real reason very old bourbon is expensive.",
+      },
+      {
+        question: "What is white dog?",
+        answer:
+          "The clear, unaged spirit as it comes off the still, also called new make. It is sweet, hot and distinctly corn-forward. All of bourbon's colour, vanilla and spice comes later, from the barrel.",
+      },
+    ],
+  },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 10. Age Statements — Buying Guide
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "does-older-bourbon-mean-better",
+    title: "Does Older Bourbon Mean Better? What Age Statements Really Tell You",
+    subtitle:
+      "A number on the label is the least reliable predictor of quality in American whiskey. Here is what it does and does not promise.",
+    excerpt:
+      "Bourbon ages faster than scotch, peaks earlier than people assume, and can be ruined by too long in the wood. What an age statement legally means, why no age statement is not a warning, and when paying for years is genuinely worth it.",
+    category: "Buying Guide",
+    author: "Eleanor Hayes",
+    authorTitle: "Master Distiller, Bourbon & Oak",
+    publishedAt: "2026-08-15",
+    readTimeMinutes: 10,
+    heroImage: "/blog-age.webp",
+    heroAlt:
+      "Rows of aged bourbon bottles on backlit shelves at different ages and proofs",
+    tags: [
+      "bourbon age statement",
+      "does older bourbon taste better",
+      "NAS whiskey",
+      "over-oaked",
+      "rickhouse position",
+      "buying guide",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "Ask a room of drinkers whether a 17 year old bourbon is better than a 10 year old and most will say yes without hesitating. It is the most persistent assumption in whiskey, it drives an enormous amount of spending, and it is wrong often enough to be worth taking apart properly.",
+      },
+      { type: "heading", level: 2, text: "What the Number Legally Means" },
+      {
+        type: "paragraph",
+        text: "An age statement refers to the youngest whiskey in the bottle, not the average. If a small batch marries barrels of eight, eleven and fourteen years, the label must say eight. This is a consumer protection rule and it works in your favour - the number is a floor, never an optimistic estimate.",
+      },
+      {
+        type: "paragraph",
+        text: "Plain bourbon has no minimum age at all. Straight bourbon requires two years, and must state its age if it is under four. Past four years a producer may say nothing, which is why so many excellent bottles carry no number. We cover the full set of definitions in [[link:/blog/bourbon-vs-whiskey-explained|bourbon vs whiskey]].",
+      },
+      { type: "heading", level: 2, text: "Bourbon Ages Faster Than You Think" },
+      {
+        type: "paragraph",
+        text: "Comparing bourbon years to scotch years is the root of most confusion. An 18 year old scotch is a mature but unremarkable age statement; an 18 year old bourbon is close to the outer limit of what the category can carry. Two things account for the difference.",
+      },
+      {
+        type: "list",
+        items: [
+          "New charred oak. Scotch generally matures in used casks that have already surrendered most of their extractable compounds. Bourbon must use a fresh, heavily charred barrel, so extraction is far more aggressive from the first year.",
+          "Kentucky weather. Rickhouses are deliberately uncontrolled, and summers above 35 degrees Celsius followed by freezing winters drive the whiskey in and out of the wood constantly. Scotland's mild, stable climate does the same work far more slowly.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "The practical consequence is that most bourbon reaches its best somewhere between eight and fifteen years. Below that it can taste hot and grain-forward; well beyond it, the wood starts winning.",
+      },
+      { type: "heading", level: 2, text: "What Over-Oaked Actually Tastes Like" },
+      {
+        type: "paragraph",
+        text: "Too long in the barrel is a real and unpleasant outcome, not a theoretical one. Tannins accumulate until the whiskey turns drying and astringent, like over-steeped tea. Sweetness and fruit disappear behind bitter wood, sawdust and a sharp pencil-shavings note. The finish shortens rather than lengthens, because there is nothing left underneath the oak to carry it.",
+      },
+      {
+        type: "paragraph",
+        text: "This is why distilleries dump barrels that are ready rather than barrels that have hit a round number, and why a genuinely great 20 or 23 year old bourbon is rare enough to command what it does. Reaching that age intact is the exception. Most barrels do not.",
+      },
+      { type: "heading", level: 2, text: "Position Beats Duration" },
+      {
+        type: "paragraph",
+        text: "Here is the fact that undoes the simple age-equals-quality model. Two barrels filled on the same day from the same batch will taste like different whiskeys after a decade, depending on where they sat. Upper floors of a rickhouse run hot and cycle hard, ageing spirit faster and bolder. Lower floors stay cool and steady, producing gentler whiskey more slowly.",
+      },
+      {
+        type: "paragraph",
+        text: "A well-placed eight year old barrel can outclass a poorly placed fifteen. That is the entire logic of a barrel pick, which we walk through in [[link:/blog/master-distiller-barrel-selection-guide|the barrel selection guide]] - and it is why single barrel bottlings print the warehouse and rick position on the label.",
+      },
+      {
+        type: "callout",
+        title: "Proof interacts with age",
+        text: "A 90 proof ten year old and a 130 proof ten year old are not the same experience. Barrel entry proof, evaporation and dilution all shift the balance. Comparing ages across very different strengths tells you about alcohol, not about time - which is why a fair tasting holds proof roughly constant.",
+      },
+      { type: "heading", level: 2, text: "No Age Statement Is Not a Red Flag" },
+      {
+        type: "paragraph",
+        text: "NAS has a poor reputation, largely earned during the whiskey shortage years when producers quietly dropped age statements while raising prices. But the absence of a number is not evidence of young whiskey. Barrel proof releases are frequently NAS because they are assembled from a spread of barrels selected on taste rather than to protect a number on the label.",
+      },
+      {
+        type: "paragraph",
+        text: "[[product:eh-taylor-barrel-proof|E.H. Taylor Barrel Proof]] carries no age statement and is one of the most structured bourbons at its price. Judge it in the glass, not on the label.",
+      },
+      { type: "heading", level: 2, text: "What Extra Years Actually Cost You" },
+      {
+        type: "paragraph",
+        text: "Set against real bottles on our shelves, the curve is easy to see:",
+      },
+      {
+        type: "list",
+        items: [
+          "[[product:eagle-rare-10-year|Eagle Rare 10 Year]] at $40 - a decade of Kentucky weather, and for most drinkers the point at which bourbon is simply good.",
+          "[[product:elmer-t-lee-single-barrel|Elmer T. Lee Single Barrel]] at $80, nine years - one year younger than the above, and better, because the barrels were selected rather than merely aged.",
+          "[[product:weller-12-year|Weller 12 Year]] at $100 - two more years and a wheated recipe that uses them well.",
+          "[[product:russells-reserve-13-year|Russell's Reserve 13 Year]] at $200 - thirteen years at 114.8 proof, non-chill filtered, where age and strength genuinely compound.",
+          "[[product:eagle-rare-17-year|Eagle Rare 17 Year]] at $250 - superb, and priced on scarcity as much as on the extra seven years over the 10 year.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "The step from 10 to 12 years is worth paying for. The step from 13 to 17 buys elegance, rarity and diminishing returns. Anyone telling you the 17 is roughly twice as good as the 12 is selling something.",
+      },
+      { type: "heading", level: 2, text: "When Old Genuinely Is Better" },
+      {
+        type: "paragraph",
+        text: "There is one clear exception, and it is a matter of recipe. Wheated bourbons carry extended ageing unusually well. Without rye spice occupying the mid-palate, a young wheater can taste thin - but give it fifteen years and the oak fills that space with leather, dark caramel and dried fruit rather than bitterness.",
+      },
+      {
+        type: "paragraph",
+        text: "That is the whole design of the Van Winkle range, and why [[product:pappy-van-winkle-15-year|Pappy Van Winkle 15 Year]] works at an age that would flatten many high-rye bourbons. Even there, most people find fifteen the sweet spot rather than [[product:pappy-van-winkle-23-year|the 23 year]], which trades a great deal of money for a little more wood.",
+      },
+      { type: "heading", level: 2, text: "How to Buy Without Chasing Numbers" },
+      {
+        type: "list",
+        ordered: true,
+        items: [
+          "Decide your grain preference first - wheated or high-rye matters more than any age statement.",
+          "Buy in the eight to thirteen year band, where the ratio of quality to price is best.",
+          "Treat NAS barrel proof releases as opportunities, not compromises.",
+          "Taste before you upgrade. A side-by-side at similar proof teaches more than any label.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "If you want to run that comparison properly, [[link:/blog/how-to-taste-bourbon|the tasting guide]] explains how, and [[link:/blog/best-bourbon-bottles-ranked|the ranked buying guide]] shows what each tier costs. The older releases live in the [[link:/collection|allocated collection]]; everything else is in the [[link:/shop|shop]].",
+      },
+    ],
+    seo: {
+      metaTitle: "Does Older Bourbon Mean Better? Age Statements Explained",
+      metaDescription:
+        "What a bourbon age statement legally means, why bourbon ages faster than scotch, what over-oaked tastes like, why rickhouse position beats years, and when paying for age is worth it.",
+      focusKeyword: "bourbon age statement",
+      primaryKeywords: [
+        "bourbon age statement",
+        "does older bourbon taste better",
+        "NAS bourbon",
+        "over-oaked bourbon",
+        "best age for bourbon",
+        "bourbon aging",
+        "how long is bourbon aged",
+      ],
+      longTailKeywords: [
+        "does older bourbon mean better quality",
+        "what does an age statement on bourbon mean",
+        "why does bourbon age faster than scotch",
+        "what does over-oaked bourbon taste like",
+        "is no age statement bourbon bad",
+        "what is the best age for bourbon",
+        "is 17 year bourbon worth the money",
+        "why do wheated bourbons age well",
+        "does rickhouse position affect bourbon",
+      ],
+      wordClusters: [
+        {
+          cluster: "Age & Regulation",
+          terms: [
+            "age statement",
+            "youngest whiskey in the bottle",
+            "straight bourbon two years",
+            "no age statement",
+            "NAS",
+            "bottled in bond four years",
+          ],
+        },
+        {
+          cluster: "Maturation Science",
+          terms: [
+            "tannins",
+            "extraction",
+            "temperature cycling",
+            "new charred oak",
+            "used cask",
+            "angels share",
+            "rick position",
+          ],
+        },
+        {
+          cluster: "Value Judgement",
+          terms: [
+            "diminishing returns",
+            "price per year",
+            "scarcity pricing",
+            "barrel selection",
+            "quality to price ratio",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "eagle-rare-10-year",
+      "elmer-t-lee-single-barrel",
+      "weller-12-year",
+      "russells-reserve-13-year",
+      "eagle-rare-17-year",
+      "pappy-van-winkle-15-year",
+    ],
+    faq: [
+      {
+        question: "Does older bourbon always taste better?",
+        answer:
+          "No. Most bourbon peaks between eight and fifteen years. Beyond that the wood can dominate, producing drying, astringent, bitter whiskey. A well-placed eight year old barrel can easily beat a poorly placed fifteen.",
+      },
+      {
+        question: "What does an age statement on bourbon mean?",
+        answer:
+          "It refers to the youngest whiskey in the bottle, not the average. If barrels of eight, eleven and fourteen years are married together, the label must state eight.",
+      },
+      {
+        question: "Why does bourbon age faster than scotch?",
+        answer:
+          "Bourbon must use new heavily charred oak, so extraction is aggressive from the start, and Kentucky rickhouses are uncontrolled, driving the whiskey in and out of the wood through large temperature swings. Scotland's mild climate and used casks work far more slowly.",
+      },
+      {
+        question: "Is a bourbon with no age statement worse?",
+        answer:
+          "Not necessarily. Barrel proof releases are often NAS because barrels are chosen on taste rather than to protect a number. E.H. Taylor Barrel Proof carries no age statement and is among the most structured bourbons at its price.",
+      },
+      {
+        question: "What does over-oaked bourbon taste like?",
+        answer:
+          "Drying and astringent, like over-steeped tea, with bitter wood, sawdust and pencil-shaving notes replacing sweetness and fruit. The finish gets shorter rather than longer.",
+      },
+    ],
+  },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 11. Buffalo Trace Antique Collection — Collecting
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "buffalo-trace-antique-collection-explained",
+    title: "The Buffalo Trace Antique Collection, Explained",
+    subtitle:
+      "Five bottles, one release each autumn, and specifications that change every single year. What BTAC is and how to approach it.",
+    excerpt:
+      "The most chased annual release in American whiskey. What each of the five bottles is, why the proof and age change from year to year, how allocation works, and which one to start with.",
+    category: "Collecting",
+    author: "Eleanor Hayes",
+    authorTitle: "Master Distiller, Bourbon & Oak",
+    publishedAt: "2026-08-15",
+    readTimeMinutes: 11,
+    heroImage: "/blog-btac.webp",
+    heroAlt:
+      "Bourbon bottle and cut crystal glass on a bar with backlit whiskey shelves behind",
+    tags: [
+      "Buffalo Trace Antique Collection",
+      "BTAC",
+      "George T. Stagg",
+      "William Larue Weller",
+      "Eagle Rare 17",
+      "allocated bourbon",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "Once a year, usually in autumn, Buffalo Trace releases a set of five whiskeys known collectively as the Antique Collection. It is the most anticipated annual event in American whiskey, and the reason is straightforward: these are barrels the distillery has held back and selected specifically, bottled with minimal intervention, in quantities that come nowhere close to demand.",
+      },
+      {
+        type: "paragraph",
+        text: "In 2025, for the collection's 25th anniversary, the line-up expanded to six with the first ever E.H. Taylor Bottled-in-Bond in the set. The core five, however, have been constant for years, and they are what most people mean by BTAC.",
+      },
+      { type: "heading", level: 2, text: "The Five Bottles" },
+      { type: "heading", level: 3, text: "George T. Stagg" },
+      {
+        type: "paragraph",
+        text: "The uncut, unfiltered high-rye bourbon, and the most famous of the set. [[product:george-t-stagg|George T. Stagg]] regularly clears 130 proof and has crossed 140 in some years - above that threshold it is classed as hazardous material and cannot legally travel as commercial air cargo, which is where the hazmat nickname comes from.",
+      },
+      {
+        type: "paragraph",
+        text: "Our current release is fifteen years old at 136.1 proof: dark chocolate, char, leather and black cherry, with a finish that outlasts anything else in the collection. It is the least forgiving bottle here and the one experienced drinkers reach for first. Water is not optional.",
+      },
+      { type: "heading", level: 3, text: "William Larue Weller" },
+      {
+        type: "paragraph",
+        text: "The barrel proof wheated bourbon, and the bottle that most often beats Pappy Van Winkle in a blind tasting. [[product:william-larue-weller|William Larue Weller]] takes the same wheated recipe that underpins the Van Winkle line and bottles it uncut - ours at 133.6 proof, twelve years old.",
+      },
+      {
+        type: "paragraph",
+        text: "Undiluted it is dense and almost syrupy: dark fruit, creme brulee, cocoa. A teaspoon of water opens it into one of the most complete American whiskeys made. If you only chase one bottle from the collection, most people should chase this one.",
+      },
+      { type: "heading", level: 3, text: "Eagle Rare 17 Year" },
+      {
+        type: "paragraph",
+        text: "The elegant one. Where Stagg is force, [[product:eagle-rare-17-year|Eagle Rare 17 Year]] is restraint - seventeen years carried at a modest 101 proof, with polished oak, dried orange peel, honey and old leather. Seventeen years destroys most bourbon; the barrels chosen for this survive it with unusual grace.",
+      },
+      {
+        type: "paragraph",
+        text: "It is also the bottle whose price most reflects collector demand rather than drinking value, which is worth saying plainly. If you want the profile rather than the label, [[product:eagle-rare-12-year|Eagle Rare 12 Year]] at $70 delivers a great deal of it.",
+      },
+      { type: "heading", level: 3, text: "Thomas H. Handy Sazerac" },
+      {
+        type: "paragraph",
+        text: "The rye, and the one people overlook. [[product:thomas-h-handy-sazerac|Thomas H. Handy Sazerac]] is uncut straight rye whiskey, typically six years old and around 130 proof. Younger than everything else in the set, and none the worse for it - rye carries high proof and youth better than bourbon does, arriving peppery, herbal and intensely aromatic.",
+      },
+      {
+        type: "paragraph",
+        text: "If your shelf is entirely bourbon, this is the most educational bottle in the collection. Pour it beside any of the others and the difference between corn and rye becomes obvious in one sip.",
+      },
+      { type: "heading", level: 3, text: "Sazerac 18 Year Rye" },
+      {
+        type: "paragraph",
+        text: "The fifth member, and the one we do not currently stock. Eighteen year old straight rye at 90 proof - the opposite approach to the Handy, trading intensity for depth and a soft, dry, herbal complexity that only long-aged rye achieves. Worth knowing about so you can recognise a complete set, and worth trying if you ever get the chance at a bar.",
+      },
+      { type: "heading", level: 2, text: "Why the Specifications Change Every Year" },
+      {
+        type: "paragraph",
+        text: "This is the part that catches people out, and it is the single most useful thing to understand about BTAC. There is no fixed recipe for a given bottle. Each year the distillery selects barrels on merit, and whatever those barrels give is what goes in - so age and proof shift, sometimes dramatically, from release to release.",
+      },
+      {
+        type: "paragraph",
+        text: "George T. Stagg has been bottled anywhere from the low 120s to above 142 proof. William Larue Weller has ranged across several years of age and more than ten points of proof. This means a review of a 2019 bottle tells you very little about a 2024 one, and that the year on the label matters as much as the name.",
+      },
+      {
+        type: "callout",
+        title: "Always check the specific release",
+        text: "Before buying at secondary prices, confirm the age and proof of that exact year rather than relying on the reputation of the name. Two bottles of the same expression from different years can be meaningfully different whiskeys - and priced as though they are identical.",
+      },
+      { type: "heading", level: 2, text: "How Allocation Works" },
+      {
+        type: "paragraph",
+        text: "BTAC quantities were fixed years ago when the barrels were filled. Buffalo Trace assigns fixed amounts to state distributors, distributors assign fixed amounts to individual retailers, and no one anywhere in that chain can order more. When a shop receives six bottles for the entire year, there is no mechanism that produces a seventh.",
+      },
+      {
+        type: "paragraph",
+        text: "Retailers therefore distribute by lottery, waitlist, loyalty history or bundling, and every method leaves most customers disappointed because the arithmetic guarantees it. Anyone offering you guaranteed BTAC at retail, in quantity, on demand, is worth a second look - and the authenticity checks in [[link:/blog/best-bourbon-bottles-ranked|the ranked buying guide]] are worth running before money changes hands.",
+      },
+      { type: "heading", level: 2, text: "Where to Start, and What to Drink Meanwhile" },
+      {
+        type: "paragraph",
+        text: "If you are new to the collection, start with William Larue Weller if you like sweetness and body, or Thomas H. Handy if you want something that will teach you the most. Leave Eagle Rare 17 until you specifically want elegance rather than intensity, and treat Stagg as a bottle to grow into.",
+      },
+      {
+        type: "paragraph",
+        text: "For the eleven months of the year when BTAC is not available, these are the closest things we can reliably keep on a shelf:",
+      },
+      {
+        type: "list",
+        items: [
+          "Instead of George T. Stagg: [[product:stagg-bourbon|Stagg]] at $150, or [[product:eh-taylor-barrel-proof|E.H. Taylor Barrel Proof]] at $100 - both above 130 proof with the same concentrated character.",
+          "Instead of William Larue Weller: [[product:weller-full-proof|W.L. Weller Full Proof]] at $150, the closest barrel strength wheater we can stock, or [[product:weller-12-year|Weller 12 Year]] at $100 for the profile at gentler strength.",
+          "Instead of Eagle Rare 17: [[product:eagle-rare-12-year|Eagle Rare 12 Year]] at $70, the same restrained oak-led style.",
+          "Instead of the ryes: there is no true substitute, which is a large part of why the Handy is worth chasing.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "Everything currently allocated sits in the [[link:/collection|limited and allocated collection]]. If you do land a bottle, [[link:/blog/how-to-store-bourbon|store it properly]] - upright, dark and stable - because a failed cork on a bottle you waited a year for is a genuinely expensive mistake.",
+      },
+    ],
+    seo: {
+      metaTitle: "The Buffalo Trace Antique Collection (BTAC), Explained",
+      metaDescription:
+        "What the five BTAC bottles are, why George T. Stagg and William Larue Weller change proof and age every year, how allocation works, and what to drink when they are gone.",
+      focusKeyword: "Buffalo Trace Antique Collection",
+      primaryKeywords: [
+        "Buffalo Trace Antique Collection",
+        "BTAC",
+        "George T. Stagg",
+        "William Larue Weller",
+        "Eagle Rare 17 Year",
+        "Thomas H. Handy Sazerac",
+        "Sazerac 18 Year",
+        "allocated bourbon",
+      ],
+      longTailKeywords: [
+        "what is the Buffalo Trace Antique Collection",
+        "what bottles are in BTAC",
+        "why does George T. Stagg proof change every year",
+        "when is BTAC released each year",
+        "how do you get a BTAC bottle",
+        "is William Larue Weller better than Pappy",
+        "what is hazmat proof whiskey",
+        "what to buy instead of George T. Stagg",
+        "BTAC 2025 six bottles",
+      ],
+      wordClusters: [
+        {
+          cluster: "The Collection",
+          terms: [
+            "BTAC",
+            "annual release",
+            "autumn release",
+            "25th anniversary",
+            "barrel selection",
+            "uncut unfiltered",
+          ],
+        },
+        {
+          cluster: "The Bottles",
+          terms: [
+            "George T. Stagg",
+            "William Larue Weller",
+            "Eagle Rare 17",
+            "Thomas H. Handy",
+            "Sazerac 18",
+            "E.H. Taylor bottled in bond",
+          ],
+        },
+        {
+          cluster: "Acquisition",
+          terms: [
+            "allocation",
+            "lottery",
+            "waitlist",
+            "distributor quota",
+            "secondary market",
+            "MSRP",
+            "authenticity",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "george-t-stagg",
+      "william-larue-weller",
+      "eagle-rare-17-year",
+      "thomas-h-handy-sazerac",
+      "weller-full-proof",
+      "stagg-bourbon",
+    ],
+    faq: [
+      {
+        question: "What is the Buffalo Trace Antique Collection?",
+        answer:
+          "An annual autumn release of five specially selected, minimally processed whiskeys from Buffalo Trace: George T. Stagg, William Larue Weller, Eagle Rare 17 Year, Thomas H. Handy Sazerac and Sazerac 18 Year Rye. In 2025 it expanded to six for its 25th anniversary with an E.H. Taylor Bottled-in-Bond.",
+      },
+      {
+        question: "Why does George T. Stagg change proof every year?",
+        answer:
+          "There is no fixed recipe. Barrels are chosen on merit each year and bottled uncut, so whatever those barrels give is what goes in. Stagg has ranged from the low 120s to above 142 proof, which is why the release year matters as much as the name.",
+      },
+      {
+        question: "What does hazmat proof mean?",
+        answer:
+          "Any spirit above 140 proof is classed as hazardous material and cannot be carried as commercial air cargo. George T. Stagg has crossed that line in several years, which is where the hazmat nickname comes from.",
+      },
+      {
+        question: "Is William Larue Weller better than Pappy Van Winkle?",
+        answer:
+          "It frequently wins blind tastings against it. Both are wheated bourbons from the same distillery, but William Larue Weller is bottled uncut at barrel proof while the Van Winkle range is proofed down, which gives it more concentration and depth.",
+      },
+      {
+        question: "How do you actually get a BTAC bottle?",
+        answer:
+          "Quantities were fixed when the barrels were filled, so retailers receive a small allocation they cannot increase. Most distribute by lottery, waitlist or loyalty history. Anyone offering guaranteed BTAC in quantity at retail deserves scrutiny.",
+      },
+    ],
+  },
 ];
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
