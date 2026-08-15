@@ -61,6 +61,14 @@ function newest(dates: Date[], fallback: Date): Date {
 // nothing. A single unescaped "&" — e.g. an Unsplash URL ending in
 // "?w=1600&q=85" — makes the whole document malformed, and crawlers abort at
 // the first one and discover zero pages. Escape every URL we emit.
+// Hero images are a mix of remote (https://images.unsplash.com/…) and local
+// (/blog-age.webp). The sitemap image extension requires an absolute <image:loc>,
+// so a relative path is silently invalid and the image is never discovered —
+// prefix anything that is not already absolute.
+function absoluteUrl(url: string): string {
+  return /^https?:\/\//.test(url) ? url : `${BASE_URL}${url}`;
+}
+
 function xmlSafe(url: string): string {
   return url
     .replace(/&/g, "&amp;")
@@ -162,7 +170,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: new Date(post.publishedAt),
     changeFrequency: "monthly",
     priority: 0.7,
-    images: post.heroImage ? [xmlSafe(post.heroImage)] : undefined,
+    images: post.heroImage
+      ? [xmlSafe(absoluteUrl(post.heroImage))]
+      : undefined,
   }));
 
   return [

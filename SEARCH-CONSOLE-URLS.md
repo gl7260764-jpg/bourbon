@@ -1,6 +1,6 @@
 # Google Search Console — URL submission list
 
-**51 indexable URLs.** Generated from the live sitemap, so this is exactly what Google is told to crawl.
+**59 indexable URLs.** Generated from the live sitemap, so this is exactly what Google is told to crawl.
 
 Sitemap: `https://bourbonoaklover.com/sitemap.xml` · Property: `https://bourbonoaklover.com/` (non-www)
 
@@ -70,11 +70,22 @@ Each is self-canonical and targets a brand-level search (e.g. "buy pappy van win
 
 ## Tier 4 — blog posts
 
-These already carry full keyword research in `src/lib/blog.ts`.
+These already carry full keyword research in `src/lib/blog.ts` — focus keyword,
+primary and long-tail sets, semantic clusters, and FAQ schema on the newer ones.
+Newest first; submit these before the older three.
 
-- [ ] [https://bourbonoaklover.com/blog/master-distiller-barrel-selection-guide](https://bourbonoaklover.com/blog/master-distiller-barrel-selection-guide)  — updated 2026-05-10
-- [ ] [https://bourbonoaklover.com/blog/summer-bourbon-cocktail-recipes](https://bourbonoaklover.com/blog/summer-bourbon-cocktail-recipes)  — updated 2026-05-05
-- [ ] [https://bourbonoaklover.com/blog/rickhouse-no-7-opening](https://bourbonoaklover.com/blog/rickhouse-no-7-opening)  — updated 2026-04-28
+- [ ] [https://bourbonoaklover.com/blog/buffalo-trace-antique-collection-explained](https://bourbonoaklover.com/blog/buffalo-trace-antique-collection-explained)  — The Buffalo Trace Antique Collection, Explained (updated 2026-08-15)
+- [ ] [https://bourbonoaklover.com/blog/does-older-bourbon-mean-better](https://bourbonoaklover.com/blog/does-older-bourbon-mean-better)  — Does Older Bourbon Mean Better? What Age Statements Really Tell You (updated 2026-08-15)
+- [ ] [https://bourbonoaklover.com/blog/how-bourbon-is-made](https://bourbonoaklover.com/blog/how-bourbon-is-made)  — How Bourbon Is Made, Step by Step (updated 2026-08-15)
+- [ ] [https://bourbonoaklover.com/blog/how-to-store-bourbon](https://bourbonoaklover.com/blog/how-to-store-bourbon)  — How to Store Bourbon (And Whether It Actually Goes Bad) (updated 2026-08-14)
+- [ ] [https://bourbonoaklover.com/blog/how-to-taste-bourbon](https://bourbonoaklover.com/blog/how-to-taste-bourbon)  — How to Taste Bourbon Properly (updated 2026-08-14)
+- [ ] [https://bourbonoaklover.com/blog/wheated-vs-high-rye-bourbon](https://bourbonoaklover.com/blog/wheated-vs-high-rye-bourbon)  — Wheated vs High-Rye Bourbon: How the Mash Bill Changes the Glass (updated 2026-08-14)
+- [ ] [https://bourbonoaklover.com/blog/bourbon-vs-whiskey-explained](https://bourbonoaklover.com/blog/bourbon-vs-whiskey-explained)  — Bourbon vs Whiskey: What Actually Makes a Bourbon (updated 2026-08-14)
+- [ ] [https://bourbonoaklover.com/blog/best-bourbon-bottles-ranked](https://bourbonoaklover.com/blog/best-bourbon-bottles-ranked)  — The 10 Best Bourbon Bottles - And How to Actually Buy Them (updated 2026-08-14)
+- [ ] [https://bourbonoaklover.com/blog/master-distiller-barrel-selection-guide](https://bourbonoaklover.com/blog/master-distiller-barrel-selection-guide)  — The Art of Barrel Selection: A Master Distiller's Guide (updated 2026-05-10)
+- [ ] [https://bourbonoaklover.com/blog/summer-bourbon-cocktail-recipes](https://bourbonoaklover.com/blog/summer-bourbon-cocktail-recipes)  — Summer Cocktails: 5 Bourbon Recipes to Beat the Heat (updated 2026-05-05)
+- [ ] [https://bourbonoaklover.com/blog/rickhouse-no-7-opening](https://bourbonoaklover.com/blog/rickhouse-no-7-opening)  — New Rickhouse Opening: Expanding Our Aging Capacity (updated 2026-04-28)
+
 
 ## Tier 5 — supporting & legal pages
 
