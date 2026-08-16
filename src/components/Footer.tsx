@@ -15,6 +15,11 @@ const footerLinks = {
   Company: [
     { name: "Our Story", href: "/about" },
     { name: "Distillery Tours", href: "/tours" },
+    // The /visit pages are local-search landing pages. They live in the footer
+    // so every page — the homepage included — links to them; otherwise they are
+    // orphans reachable only from the sitemap and a single blog post.
+    { name: "Visit Bardstown", href: "/visit/bardstown" },
+    { name: "Visiting From Louisville", href: "/visit/louisville" },
     { name: "Stories", href: "/blog" },
     { name: "Press", href: "/press" },
     { name: "Careers", href: "/careers" },

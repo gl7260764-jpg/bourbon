@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { Availability } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { BLOG_POSTS } from "@/lib/blog";
+import { LOCATIONS } from "@/lib/locations";
 
 // Regenerate hourly so newly published products/categories get picked up
 // without a redeploy, and so a cold DB at build time can't freeze the file.
@@ -165,6 +166,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     images: p.images[0]?.url ? [xmlSafe(p.images[0].url)] : undefined,
   }));
 
+  // Visitor / location landing pages. High local-search value, so they carry a
+  // priority just under the commercial index pages.
+  const locationUrls: MetadataRoute.Sitemap = LOCATIONS.map((loc) => ({
+    url: `${BASE_URL}/visit/${loc.slug}`,
+    lastModified: new Date(loc.updatedAt),
+    changeFrequency: "monthly",
+    priority: 0.8,
+    images: [xmlSafe(absoluteUrl(loc.heroImage))],
+  }));
+
   const blogUrls: MetadataRoute.Sitemap = posts.map((post) => ({
     url: xmlSafe(`${BASE_URL}/blog/${encodeURIComponent(post.slug)}`),
     lastModified: new Date(post.publishedAt),
@@ -178,6 +189,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     ...staticUrls,
     ...indexUrls,
+    ...locationUrls,
     ...categoryUrls,
     ...productUrls,
     ...blogUrls,

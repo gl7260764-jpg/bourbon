@@ -2734,6 +2734,430 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
   },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 12. Kentucky Bourbon Trail — Travel
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "kentucky-bourbon-trail-guide",
+    title: "The Kentucky Bourbon Trail: How to Actually Plan It",
+    subtitle:
+      "Most first-timers book too many distilleries, drive too far between them, and remember none of it. Here is the version that works.",
+    excerpt:
+      "How many stops to book in a day, where to base yourself, how the passport works, what it costs, and the designated-driver problem nobody warns you about until you are standing in a rickhouse at 11am.",
+    category: "Travel",
+    author: "Wyatt Brennan",
+    authorTitle: "Head Bartender, The Cellar at Bourbon & Oak",
+    publishedAt: "2026-08-16",
+    readTimeMinutes: 10,
+    heroImage: "/blog-process.webp",
+    heroAlt:
+      "Backlit shelves of Kentucky bourbon in a distillery tasting room on the Kentucky Bourbon Trail",
+    tags: [
+      "Kentucky Bourbon Trail",
+      "Bardstown",
+      "Louisville",
+      "distillery tour",
+      "bourbon travel",
+      "trail passport",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "The Kentucky Bourbon Trail is not a road. There is no single route, no numbered highway, and nothing to follow but a list of participating distilleries scattered across a large chunk of central Kentucky. That surprises people, and it is the root of almost every trip that goes wrong: visitors treat it as a linear thing to be completed rather than a region to be sampled.",
+      },
+      {
+        type: "paragraph",
+        text: "Having watched a great many people arrive at our gate either delighted or defeated, the difference is almost always planning. Here is what actually works.",
+      },
+      { type: "heading", level: 2, text: "Book Two Distilleries a Day. Three at Most." },
+      {
+        type: "paragraph",
+        text: "This is the single most useful thing on this page. Tours run 60 to 90 minutes. Add driving, parking, waiting for your slot and a tasting flight at the end, and each stop realistically consumes two and a half hours. Four stops is a ten hour day in which you will taste roughly twenty whiskeys and remember approximately four.",
+      },
+      {
+        type: "paragraph",
+        text: "Palate fatigue is not a figure of speech either. By the third flight your ability to distinguish anything meaningful has collapsed, which is a shame when the bottles in front of you are often the interesting ones. Two stops, properly, beats four in a blur.",
+      },
+      { type: "heading", level: 2, text: "Pick a Base and Stay There" },
+      {
+        type: "paragraph",
+        text: "The distilleries are spread across roughly a hundred miles between Louisville, Bardstown, Frankfort, Lawrenceburg and Loretto. Trying to see all of it from one hotel means spending the trip in a car.",
+      },
+      {
+        type: "list",
+        items: [
+          "Bardstown is the highest-density option. More working distilleries sit within a short drive of the town square than anywhere else on the trail, and you can build a day without ever exceeding fifteen minutes between stops. Our own distillery is here — details on the [[link:/visit/bardstown|Bardstown visit page]].",
+          "Louisville suits people flying in, wanting restaurants and hotels, and happy to drive out each morning. The city has its own Whiskey Row experiences, and Bardstown is about 45 minutes south. There is a full breakdown on the [[link:/visit/louisville|Louisville day-trip page]].",
+          "Lexington works if you are combining bourbon with horse country, but it is the furthest from the densest cluster.",
+        ],
+      },
+      { type: "heading", level: 2, text: "The Passport, and Whether to Care" },
+      {
+        type: "paragraph",
+        text: "The official Kentucky Bourbon Trail passport is a small booklet you get stamped at participating distilleries, and collecting enough stamps earns a commemorative item. It is a genuinely fun structure for a trip and a genuinely bad reason to choose where to go.",
+      },
+      {
+        type: "paragraph",
+        text: "The trap is obvious once you see it: chasing stamps pushes you toward whichever distilleries are on the list rather than whichever ones you would actually enjoy, and adds mileage to a day that is already too long. Collect stamps at places you were going anyway. Do not build the itinerary around the booklet.",
+      },
+      { type: "heading", level: 2, text: "The Designated Driver Problem" },
+      {
+        type: "paragraph",
+        text: "Nobody plans for this properly and it is the thing most likely to sour a trip. A tasting flight at a Kentucky distillery is typically four to six pours. Two distilleries is eight to twelve. Kentucky's legal limit is not generous, the roads between distilleries are rural, frequently unlit, and busier with farm traffic than visitors expect.",
+      },
+      {
+        type: "list",
+        ordered: true,
+        items: [
+          "Nominate a driver before the first pour, not after the second distillery, and rotate them across a multi-day trip.",
+          "Ask for pour-outs. Every distillery on the trail provides a dump bucket and nobody thinks less of you — tasting is not drinking.",
+          "Take the samples home. Many distilleries will give a driver their flight in sealed sample vials to drink later. Ask when you book.",
+          "Book a tour coach for at least one day. It costs less than the fine and considerably less than the alternative.",
+        ],
+      },
+      {
+        type: "callout",
+        title: "Budget honestly",
+        text: "Tours run roughly $20 to $35 a head for a standard tasting, and specialist experiences — barrel picks, extended tastings, single-barrel flights — run well beyond that. Two stops a day plus lunch is a realistic $100 to $150 per person before anyone buys a bottle. The bottles are where the real money goes.",
+      },
+      { type: "heading", level: 2, text: "When to Go" },
+      {
+        type: "paragraph",
+        text: "Spring and autumn are the comfortable answer — mild weather, and rickhouses that are pleasant to walk through. Autumn has the additional draw of being when the annual allocated releases appear.",
+      },
+      {
+        type: "paragraph",
+        text: "But if you can only come in high summer, do not treat it as second best. A rickhouse in August is genuinely instructive: the upper floors run brutally hot, the air is thick with evaporating whiskey, and you can hear the barrels working. Standing in that heat teaches you more about why Kentucky makes bourbon this way than any tour narration. If you want the theory first, [[link:/blog/how-bourbon-is-made|how bourbon is made]] covers what that temperature cycling is doing.",
+      },
+      { type: "heading", level: 2, text: "What to Buy While You Are Here" },
+      {
+        type: "paragraph",
+        text: "Distillery gift shops sometimes carry bottles that are difficult to find elsewhere, and occasionally a store pick bottled exclusively for that site. What they will not have is a guaranteed shelf of allocated releases — those arrive in fixed quantities and go quickly, wherever you are standing.",
+      },
+      {
+        type: "paragraph",
+        text: "If you are early in your bourbon education, buy by profile rather than by rarity: something wheated like [[product:weller-12-year|Weller 12 Year]] alongside something high-rye like [[product:blantons-original-single-barrel|Blanton's Original]] will teach you more than one expensive bottle. [[link:/blog/wheated-vs-high-rye-bourbon|The mash bill guide]] explains why. And check the shipping rules for your state before filling a suitcase — the [[link:/shipping|shipping page]] lists where direct-to-consumer delivery is permitted.",
+      },
+      { type: "heading", level: 2, text: "A Two-Day Itinerary That Works" },
+      {
+        type: "list",
+        ordered: true,
+        items: [
+          "Day one, morning: one Bardstown distillery, booked for around 10am while your palate is fresh.",
+          "Day one, afternoon: lunch on the Bardstown square, then a second distillery within fifteen minutes. Finish by four.",
+          "Day one, evening: stay in Bardstown. Walk. Do not drive anywhere.",
+          "Day two, morning: a third distillery, ideally one with a rickhouse walk rather than another tasting room.",
+          "Day two, afternoon: drive back toward Louisville, stopping at Whiskey Row if you have the appetite for it.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "Three distilleries across two days sounds modest. It is also the version people describe accurately afterwards. If you want to build us into that plan, tour options and booking are on the [[link:/tours|tours page]], and the [[link:/visit/bardstown|Bardstown page]] covers directions and parking.",
+      },
+    ],
+    seo: {
+      metaTitle: "Kentucky Bourbon Trail: How to Actually Plan It",
+      metaDescription:
+        "How many distilleries to book a day, where to base yourself, how the passport works, what it costs, and how to handle the designated-driver problem on the Kentucky Bourbon Trail.",
+      focusKeyword: "Kentucky Bourbon Trail",
+      primaryKeywords: [
+        "Kentucky Bourbon Trail",
+        "bourbon trail itinerary",
+        "Kentucky Bourbon Trail passport",
+        "Bardstown bourbon trail",
+        "bourbon trail from Louisville",
+        "distillery tours Kentucky",
+        "bourbon trail planning",
+      ],
+      longTailKeywords: [
+        "how many distilleries can you visit in a day",
+        "how to plan the Kentucky Bourbon Trail",
+        "where to stay on the Kentucky Bourbon Trail",
+        "is the bourbon trail passport worth it",
+        "best time of year for the bourbon trail",
+        "how much does the Kentucky Bourbon Trail cost",
+        "bourbon trail designated driver",
+        "Bardstown or Louisville for bourbon trail",
+      ],
+      wordClusters: [
+        {
+          cluster: "Planning",
+          terms: [
+            "itinerary",
+            "passport",
+            "booking ahead",
+            "tour length",
+            "base town",
+            "driving distance",
+            "two day trip",
+          ],
+        },
+        {
+          cluster: "Places",
+          terms: [
+            "Bardstown",
+            "Louisville",
+            "Whiskey Row",
+            "Frankfort",
+            "Lexington",
+            "Loretto",
+            "bourbon capital of the world",
+          ],
+        },
+        {
+          cluster: "On the Day",
+          terms: [
+            "tasting flight",
+            "palate fatigue",
+            "pour out bucket",
+            "sample vials",
+            "designated driver",
+            "rickhouse walk",
+            "gift shop pick",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "weller-12-year",
+      "blantons-original-single-barrel",
+      "eagle-rare-10-year",
+      "eh-taylor-small-batch",
+    ],
+    faq: [
+      {
+        question: "How many distilleries can you visit in one day on the Bourbon Trail?",
+        answer:
+          "Two comfortably, three at a push. Each stop consumes about two and a half hours once you include driving, parking and a tasting flight, and palate fatigue makes anything past the third largely wasted.",
+      },
+      {
+        question: "Where should I stay on the Kentucky Bourbon Trail?",
+        answer:
+          "Bardstown has the highest density of distilleries, so you can build a day without long drives. Louisville suits visitors flying in who want hotels and restaurants, with Bardstown about 45 minutes south.",
+      },
+      {
+        question: "Is the Kentucky Bourbon Trail passport worth it?",
+        answer:
+          "It is a fun structure but a poor planning tool. Chasing stamps pushes you toward distilleries because they are on the list rather than because you would enjoy them. Collect stamps where you were going anyway.",
+      },
+      {
+        question: "How much does the Kentucky Bourbon Trail cost?",
+        answer:
+          "Standard tours run roughly $20 to $35 per person, with specialist tastings and barrel picks well above that. Two stops plus lunch is realistically $100 to $150 a head before you buy any bottles.",
+      },
+      {
+        question: "What is the best time of year to do the Bourbon Trail?",
+        answer:
+          "Spring and autumn are most comfortable, and autumn coincides with the annual allocated releases. Summer is hot but a rickhouse in August teaches you more about bourbon maturation than any tour narration.",
+      },
+    ],
+  },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 13. Starting a Collection — Collecting
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "how-to-start-a-bourbon-collection",
+    title: "How to Start a Bourbon Collection Without Wasting Money",
+    subtitle:
+      "The first ten bottles decide whether you end up with a collection or a shelf of expensive mistakes.",
+    excerpt:
+      "Buy for profile before rarity, avoid the secondary market early, ignore the hype cycle, and build a shelf you actually drink from. A practical framework for the first year of collecting.",
+    category: "Collecting",
+    author: "Eleanor Hayes",
+    authorTitle: "Master Distiller, Bourbon & Oak",
+    publishedAt: "2026-08-16",
+    readTimeMinutes: 10,
+    heroImage: "/blog-collecting.webp",
+    heroAlt:
+      "Shelves of collectible Kentucky bourbon bottles lit from below in a specialist bourbon shop",
+    tags: [
+      "bourbon collecting",
+      "bourbon collection",
+      "allocated bourbon",
+      "secondary market",
+      "beginner bourbon",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "Almost every bourbon collection that goes wrong goes wrong in the same way. Someone reads a list of the most sought-after bottles, spends heavily chasing two or three of them on the secondary market, and ends up with a shelf that is expensive, narrow, and slightly disappointing to drink from. The bottles are fine. The shape of the collection is wrong.",
+      },
+      {
+        type: "paragraph",
+        text: "A good collection is not a list of trophies. It is a set of bottles that covers a range of styles well enough that you can pour something appropriate for any mood, any guest and any occasion. That is a far cheaper goal, and considerably more fun.",
+      },
+      { type: "heading", level: 2, text: "Rule One: Profile Before Rarity" },
+      {
+        type: "paragraph",
+        text: "Before spending real money, work out whether you prefer wheated or high-rye bourbon. It is the largest single variable in how a bourbon tastes, larger than age, proof or price, and knowing your answer changes every subsequent purchase.",
+      },
+      {
+        type: "paragraph",
+        text: "Buy [[product:weller-12-year|Weller 12 Year]] and [[product:blantons-original-single-barrel|Blanton's Original Single Barrel]] and taste them side by side at similar proof. One is soft, honeyed and bready; the other is peppery and structured. Whichever you reach for again tells you where to spend for the next two years. [[link:/blog/wheated-vs-high-rye-bourbon|The mash bill guide]] explains the mechanics.",
+      },
+      { type: "heading", level: 2, text: "Rule Two: Cover the Range, Not the Top" },
+      {
+        type: "paragraph",
+        text: "A shelf of five bottles all costing $250 is a worse collection than five bottles spanning $40 to $250, because the expensive shelf cannot answer most of the questions a collection exists to answer. You need something for a Tuesday, something for a cocktail, something for a guest who does not drink much bourbon, and something for the evening you want to concentrate.",
+      },
+      {
+        type: "list",
+        items: [
+          "An everyday pour you never feel bad about opening: [[product:eagle-rare-10-year|Eagle Rare 10 Year]] at $40.",
+          "A cocktail workhorse with enough spine to survive sugar and bitters: a high-rye bourbon rather than a delicate wheater.",
+          "A value benchmark that punches far above its price: [[product:weller-12-year|Weller 12 Year]] at $100.",
+          "Something at barrel strength, to learn what water does: [[product:eh-taylor-barrel-proof|E.H. Taylor Barrel Proof]] at $100.",
+          "One bottle outside the Buffalo Trace orbit so your shelf is not monotone: [[product:russells-reserve-13-year|Russell's Reserve 13 Year]].",
+          "One genuine special-occasion bottle — and only one, at first.",
+        ],
+      },
+      { type: "heading", level: 2, text: "Rule Three: Stay Off the Secondary Market Early" },
+      {
+        type: "paragraph",
+        text: "The secondary market is where new collectors lose the most money fastest, for three reasons. Prices are set by scarcity rather than quality, so you frequently pay a large premium for a whiskey you would not have chosen blind. Counterfeits are common at the top end, and refilled Van Winkle bottles circulate constantly. And new releases are at their most expensive in the first weeks after launch, when demand is loudest.",
+      },
+      {
+        type: "paragraph",
+        text: "If you do buy at secondary prices, run the authenticity checks first — capsule and label pairing, an intact tax strip, an unwrinkled cap, fill level within 5 to 8mm of the neck base. The full checklist is in [[link:/blog/best-bourbon-bottles-ranked|the ranked buying guide]].",
+      },
+      {
+        type: "callout",
+        title: "The patience discount",
+        text: "Waiting is the cheapest tool a collector has. Retail prices on allocated bourbon have risen while secondary prices have softened from their peak, and a bottle that is impossible to find in October is often merely difficult by March. Very little in bourbon rewards urgency.",
+      },
+      { type: "heading", level: 2, text: "Rule Four: Get On Lists, Not Waiting Lists" },
+      {
+        type: "paragraph",
+        text: "Allocated bottles are distributed by retailers, not by distilleries, and the quantities are fixed years before release. Retailers hand them out by lottery, loyalty history or bundling. The practical consequence is that a relationship with two or three shops you buy from regularly is worth far more than being on twenty anonymous email lists.",
+      },
+      {
+        type: "paragraph",
+        text: "How allocation actually works, from barrel fill to your glass, is covered in [[link:/blog/best-bourbon-bottles-ranked|the buying guide]] — it is worth understanding before you spend a year frustrated by it.",
+      },
+      { type: "heading", level: 2, text: "Rule Five: Open the Bottles" },
+      {
+        type: "paragraph",
+        text: "This is the one people resist and the one that matters most. A collection of sealed bottles is an inventory, not a collection, and it carries a quiet cost: you never learn anything. The collectors with genuinely good palates are the ones who open things.",
+      },
+      {
+        type: "paragraph",
+        text: "There is a practical argument too. Corks fail. A bottle stored badly for a decade can be ruined by a degraded closure long before you get round to drinking it, which is why storing them upright, dark and stable is not optional — see [[link:/blog/how-to-store-bourbon|how to store bourbon]]. A bottle you never open is a bottle you are gambling on.",
+      },
+      { type: "heading", level: 2, text: "Rule Six: Keep Notes" },
+      {
+        type: "paragraph",
+        text: "One line per bottle is enough: sweet or dry, spicy or soft, short or long finish, and whether you would buy it again. Within a year that record is worth more than any published review, because it is calibrated to your palate rather than someone else's.",
+      },
+      {
+        type: "paragraph",
+        text: "It also stops the most common and most expensive collecting error — buying the same style repeatedly under different labels because you never noticed the pattern. [[link:/blog/how-to-taste-bourbon|The tasting guide]] covers how to run a comparison that produces useful notes.",
+      },
+      { type: "heading", level: 2, text: "A First-Year Shelf" },
+      {
+        type: "paragraph",
+        text: "If you built nothing but this over twelve months, you would have a better collection than most people assemble in five years, for well under a thousand dollars: an everyday bourbon, a wheated benchmark, a high-rye single barrel, one barrel-proof bottle, one non-Buffalo-Trace bottle for range, and one bottle you genuinely stretched for.",
+      },
+      {
+        type: "paragraph",
+        text: "Then stop, drink them, and let what you actually reach for decide the next six. Everything currently allocated is listed in the [[link:/collection|allocated collection]], and the rest of the range is in the [[link:/shop|shop]].",
+      },
+    ],
+    seo: {
+      metaTitle: "How to Start a Bourbon Collection Without Wasting Money",
+      metaDescription:
+        "A practical framework for your first year collecting bourbon — buy for profile before rarity, cover the price range, avoid the secondary market early, and open the bottles.",
+      focusKeyword: "bourbon collecting",
+      primaryKeywords: [
+        "bourbon collecting",
+        "how to start a bourbon collection",
+        "bourbon collection for beginners",
+        "best bourbons to collect",
+        "bourbon secondary market",
+        "allocated bourbon lottery",
+        "building a bourbon shelf",
+      ],
+      longTailKeywords: [
+        "how do I start collecting bourbon",
+        "what bourbon should I buy first",
+        "is bourbon a good investment",
+        "should I open my collectible bourbon",
+        "how to get allocated bourbon bottles",
+        "how many bottles should a bourbon collection have",
+        "is the bourbon secondary market worth it",
+        "how to avoid fake bourbon bottles",
+      ],
+      wordClusters: [
+        {
+          cluster: "Collection Strategy",
+          terms: [
+            "profile before rarity",
+            "price range coverage",
+            "everyday pour",
+            "special occasion bottle",
+            "shelf balance",
+            "tasting notes",
+          ],
+        },
+        {
+          cluster: "Acquisition",
+          terms: [
+            "allocation",
+            "retailer lottery",
+            "loyalty list",
+            "secondary market",
+            "MSRP",
+            "hype cycle",
+            "patience",
+          ],
+        },
+        {
+          cluster: "Care & Risk",
+          terms: [
+            "cork failure",
+            "upright storage",
+            "counterfeit bottles",
+            "fill level",
+            "tax strip",
+            "oxidation",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "eagle-rare-10-year",
+      "weller-12-year",
+      "blantons-original-single-barrel",
+      "eh-taylor-barrel-proof",
+      "russells-reserve-13-year",
+    ],
+    faq: [
+      {
+        question: "What bourbon should I buy first?",
+        answer:
+          "Something that teaches you your own preference. Buy a wheated bourbon and a high-rye bourbon at similar proof — Weller 12 Year and Blanton's Original, for example — and taste them side by side. Whichever you reach for again should guide everything after.",
+      },
+      {
+        question: "How many bottles should a bourbon collection have?",
+        answer:
+          "Range matters more than count. Six bottles spanning $40 to $250 and covering wheated, high-rye and barrel proof is a better collection than five bottles all costing $250.",
+      },
+      {
+        question: "Is bourbon a good investment?",
+        answer:
+          "Treat it as a hobby that occasionally holds value rather than an asset. Retail prices have risen while secondary prices have softened from their peak, and bottles bought purely to flip are the ones most exposed when the hype moves on.",
+      },
+      {
+        question: "Should I open my collectible bourbon?",
+        answer:
+          "Yes. Sealed bottles teach you nothing, and corks fail over time — a badly stored bottle can be ruined by a degraded closure long before you drink it. Store upright, dark and stable, and open things.",
+      },
+      {
+        question: "How do I get allocated bourbon at retail price?",
+        answer:
+          "Build a relationship with two or three shops you buy from regularly. Retailers receive fixed allocations they cannot increase and distribute them by lottery or loyalty history, so being a known regular beats being on twenty anonymous mailing lists.",
+      },
+    ],
+  },
 ];
 
 // ─── Helpers ────────────────────────────────────────────────────────────────

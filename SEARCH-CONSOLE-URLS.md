@@ -1,6 +1,6 @@
 # Google Search Console — URL submission list
 
-**59 indexable URLs.** Generated from the live sitemap, so this is exactly what Google is told to crawl.
+**63 indexable URLs.** Generated from the live sitemap, so this is exactly what Google is told to crawl.
 
 Sitemap: `https://bourbonoaklover.com/sitemap.xml` · Property: `https://bourbonoaklover.com/` (non-www)
 
@@ -68,12 +68,23 @@ Each is self-canonical and targets a brand-level search (e.g. "buy pappy van win
 - [ ] [https://bourbonoaklover.com/products/weller-full-proof](https://bourbonoaklover.com/products/weller-full-proof)  — W.L. Weller Full Proof
 - [ ] [https://bourbonoaklover.com/products/weller-12-year](https://bourbonoaklover.com/products/weller-12-year)  — Weller 12 Year
 
+## Tier 3.5 — location & visitor pages
+
+Local-search landing pages. New, so nothing is indexed yet — submit these
+manually rather than waiting, and confirm the Bardstown NAP matches your
+Google Business Profile exactly (name, address, phone) or the signals split.
+
+- [ ] [https://bourbonoaklover.com/visit/bardstown](https://bourbonoaklover.com/visit/bardstown)  — Visit the Distillery in Bardstown
+- [ ] [https://bourbonoaklover.com/visit/louisville](https://bourbonoaklover.com/visit/louisville)  — Bourbon Distillery Near Louisville
+
 ## Tier 4 — blog posts
 
 These already carry full keyword research in `src/lib/blog.ts` — focus keyword,
 primary and long-tail sets, semantic clusters, and FAQ schema on the newer ones.
 Newest first; submit these before the older three.
 
+- [ ] [https://bourbonoaklover.com/blog/how-to-start-a-bourbon-collection](https://bourbonoaklover.com/blog/how-to-start-a-bourbon-collection)  — How to Start a Bourbon Collection Without Wasting Money (updated 2026-08-16)
+- [ ] [https://bourbonoaklover.com/blog/kentucky-bourbon-trail-guide](https://bourbonoaklover.com/blog/kentucky-bourbon-trail-guide)  — The Kentucky Bourbon Trail: How to Actually Plan It (updated 2026-08-16)
 - [ ] [https://bourbonoaklover.com/blog/buffalo-trace-antique-collection-explained](https://bourbonoaklover.com/blog/buffalo-trace-antique-collection-explained)  — The Buffalo Trace Antique Collection, Explained (updated 2026-08-15)
 - [ ] [https://bourbonoaklover.com/blog/does-older-bourbon-mean-better](https://bourbonoaklover.com/blog/does-older-bourbon-mean-better)  — Does Older Bourbon Mean Better? What Age Statements Really Tell You (updated 2026-08-15)
 - [ ] [https://bourbonoaklover.com/blog/how-bourbon-is-made](https://bourbonoaklover.com/blog/how-bourbon-is-made)  — How Bourbon Is Made, Step by Step (updated 2026-08-15)

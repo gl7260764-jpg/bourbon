@@ -230,6 +230,23 @@ export default function ToursPage() {
             </Link>{" "}
             to request a tour date.
           </p>
+          <p className="text-bourbon-stone text-base sm:text-lg leading-relaxed mb-4">
+            Directions, parking and what else is worth seeing in town are on the{" "}
+            <Link
+              href="/visit/bardstown"
+              className="text-bourbon-gold underline decoration-bourbon-gold/30 underline-offset-4 hover:decoration-bourbon-gold transition-colors"
+            >
+              Bardstown visitor page
+            </Link>
+            . Driving down for the day?{" "}
+            <Link
+              href="/visit/louisville"
+              className="text-bourbon-gold underline decoration-bourbon-gold/30 underline-offset-4 hover:decoration-bourbon-gold transition-colors"
+            >
+              Getting here from Louisville
+            </Link>{" "}
+            covers the route and how to plan the trip.
+          </p>
           <ul className="text-bourbon-stone text-base sm:text-lg leading-relaxed list-disc pl-6 marker:text-bourbon-gold space-y-2">
             <li>Guests must be 21 or older. Bring photo ID; we check every guest.</li>
             <li>Closed-toe shoes required for the rickhouse portion.</li>
