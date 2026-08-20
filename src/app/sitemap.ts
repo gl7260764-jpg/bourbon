@@ -88,6 +88,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     STATIC_CONTENT_UPDATED,
   );
 
+  // The /visit index ages with the newest location page it lists, for the same
+  // reason /blog ages with the newest post — an index whose <lastmod> never
+  // moves stops being a useful discovery signal.
+  const locationsUpdated = newest(
+    LOCATIONS.map((loc) => new Date(loc.updatedAt)),
+    STATIC_CONTENT_UPDATED,
+  );
+
   let products: { slug: string; updatedAt: Date; images: { url: string }[] }[] =
     [];
   let categories: { slug: string; updatedAt: Date }[] = [];
@@ -145,6 +153,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${BASE_URL}/blog`,
       lastModified: blogUpdated,
       changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/visit`,
+      lastModified: locationsUpdated,
+      changeFrequency: "monthly",
       priority: 0.8,
     },
   ];

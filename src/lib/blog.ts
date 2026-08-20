@@ -3158,6 +3158,847 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
   },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // 14. Old Fashioned Bottle Selection — Recipes
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "best-bourbon-for-an-old-fashioned",
+    title: "The Best Bourbon for an Old Fashioned, Tested Behind the Bar",
+    subtitle:
+      "Dilution decides this drink, not tasting notes. Here is the proof window that survives ice and sugar, and the bottles that are wasted in it.",
+    excerpt:
+      "Most guides hand you ten bottles and back-label tasting notes. The variable that actually decides an Old Fashioned is what happens to proof after a 30 second stir. Here is the arithmetic, the 100 to 115 proof window, our house pour, and the expensive bottles you should never put in this drink.",
+    category: "Recipes",
+    author: "Wyatt Brennan",
+    authorTitle: "Head Bartender, The Cellar at Bourbon & Oak",
+    publishedAt: "2026-08-20",
+    readTimeMinutes: 9,
+    heroImage: "/blog-collecting.webp",
+    heroAlt:
+      "Backlit wooden bar shelves lined with bourbon bottles including the full Weller range, Blanton's and Russell's Reserve 13",
+    tags: [
+      "old fashioned",
+      "bourbon cocktails",
+      "dilution",
+      "bottled in bond",
+      "barrel proof",
+      "bar technique",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "An Old Fashioned is sugar, bitters, water and bourbon, and three of those four are almost impossible to get wrong. The bourbon is the drink. That is why the question of which bottle to use gets asked constantly, and why most answers are useless: they hand you ten bottles with tasting notes lifted off the back label and never mention the one variable that actually decides the outcome, which is what happens to proof once ice and sugar arrive.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Start With the Dilution Arithmetic",
+      },
+      {
+        type: "paragraph",
+        text: "Stir a drink correctly and you are adding water on purpose. Thirty to forty seconds over cubed ice, until the mixing glass is genuinely uncomfortable to hold, adds somewhere between 20 and 25 percent dilution by volume. Then the finished drink goes over a large rock that keeps working while it sits in front of somebody.",
+      },
+      {
+        type: "paragraph",
+        text: "Run the numbers on a 90 proof bourbon. Two ounces at 90 proof, stirred to 22 percent dilution, arrives in the glass at roughly 70 proof before the ice in the serving glass has melted at all. Ten minutes later it is closer to 60. Now add a barspoon of sugar and two dashes of bitters. A whiskey that tasted lively and structured neat is suddenly a soft, sweet, vaguely woody drink with no spine down the middle of it.",
+      },
+      {
+        type: "paragraph",
+        text: "This is the entire reason so many expensive bourbons make disappointing Old Fashioneds. They are not bad whiskeys. They were assembled to be drunk at bottling strength and they have nothing held in reserve for the water you are about to add.",
+      },
+      {
+        type: "callout",
+        title: "The 22 percent rule",
+        text: "Whatever proof is on the label, assume the drink lands about 22 percent lower after the stir and keeps falling. Pick the bottle for where it ends up, not where it starts. If you want to understand what water does to bourbon before it reaches a mixing glass, the [[link:/blog/how-to-taste-bourbon|tasting guide]] covers the same chemistry at the neat-pour scale.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "The Proof Window That Works: 100 to 115",
+      },
+      {
+        type: "paragraph",
+        text: "Between 100 and 115 proof. That is the band, and it is not a matter of taste. Below 100 the drink flattens for the reason described above. Above roughly 120, ethanol stops carrying the aromatics and starts covering them, the sugar has to fight instead of balance, and you end up rebuilding the whole spec to compensate. Inside the window, the bourbon still tastes like itself when it reaches the drinker.",
+      },
+      {
+        type: "list",
+        items: [
+          "[[product:eh-taylor-small-batch|E.H. Taylor Small Batch]] at $80, 100 proof. Bottled in bond, which by law means exactly 100 proof, at least four years old, one distillery, one distilling season. The bond rules were written for a market full of adulterated whiskey, but they accidentally produced the best cocktail category in American spirits.",
+          "[[product:eagle-rare-12-year|Eagle Rare 12 Year]] at $70, 101 proof. The best pure value in the window. Twelve years of oak give it a caramel backbone that reads clearly through two dashes of Angostura.",
+          "[[product:blantons-gold-edition|Blanton's Gold Edition]] at $100, 103 proof. Makes a superb drink. It is also a single barrel, and we would rather you drank it neat.",
+          "[[product:weller-full-proof|Weller Full Proof]] at $150, 114 proof. Wheated, non-chill filtered, and the softest high-proof option here.",
+          "[[product:russells-reserve-13-year|Russell's Reserve 13 Year]] at $200, 114.8 proof. Thirteen years and 13 percent rye. The top of the window and the most structured Old Fashioned on this list.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "Note what is not on that list: nothing at 90 proof, and nothing above 115. The bottled in bond designation is doing a lot of quiet work here. Any bottle carrying it is guaranteed to sit at the bottom edge of the window, which is why bartenders reach for bond labels without thinking about it.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "High Rye or Wheated: Pick a Direction",
+      },
+      {
+        type: "paragraph",
+        text: "Sugar occupies the mid-palate. Rye also occupies the mid-palate. That collision is the whole argument for a high-rye bourbon in this drink: the pepper and baking spice push back against the syrup instead of dissolving into it. Russell's Reserve 13 at 13 percent rye is the clearest demonstration on our shelf, and it is why the classic Angostura build tastes complete with it and slightly hollow without.",
+      },
+      {
+        type: "paragraph",
+        text: "Wheated bourbon does the opposite. [[product:weller-full-proof|Weller Full Proof]] carries 16 percent wheat and no rye at all, so there is nothing spicy for the sugar to argue with. The result is rounder, sweeter and much easier to over-sweeten. Cut the syrup by a third and switch to orange bitters and it becomes a genuinely different, very good drink. We keep both builds on the menu. The full case for each grain is in [[link:/blog/wheated-vs-high-rye-bourbon|the wheated versus high-rye comparison]].",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "What We Actually Pour at The Cellar",
+      },
+      {
+        type: "paragraph",
+        text: "The house Old Fashioned is built on E.H. Taylor Small Batch. It costs $80, it is 100 proof, it is consistent from bottle to bottle in a way single barrels are not, and it has enough oak to survive the stir. If somebody orders an Old Fashioned without specifying, that is what they get.",
+      },
+      {
+        type: "paragraph",
+        text: "The value answer is [[product:eagle-rare-10-year|Eagle Rare 10 Year]] at $40. It is 90 proof, so it sits below the window, but ten years of age gives it more to lose than most bottles at that strength. Build it short: stir 20 seconds instead of 35, use one large rock rather than several small ones, and pull the syrup back to a scant barspoon. That is the cheapest good Old Fashioned we know how to make.",
+      },
+      {
+        type: "paragraph",
+        text: "If you want the version we serve on the tour terrace, it is Russell's Reserve 13 with demerara and a heavy orange twist. It is a $200 bottle and it makes about seventeen drinks, so the pour cost is less alarming than the shelf price suggests.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Bottles That Are Wasted in This Drink",
+      },
+      {
+        type: "paragraph",
+        text: "This part matters more than the recommendations, because the mistakes are expensive. Every bottle below is excellent. None of them belongs in an Old Fashioned.",
+      },
+      {
+        type: "list",
+        items: [
+          "[[product:double-eagle-very-rare|Double Eagle Very Rare]] at $700 and 90 proof. Twenty years of age in a crystal decanter, and at 90 proof it vanishes completely under two dashes of Angostura. You would be paying roughly $47 an ounce to taste bitters.",
+          "[[product:pappy-van-winkle-15-year|Pappy Van Winkle 15 Year]] at $500. The proof is right at 107. Nothing else about this is right. The wheat and the fifteen years produce a layered neat pour, and sugar erases the layers.",
+          "[[product:van-winkle-lot-b-12-year|Van Winkle Lot B 12 Year]] at $300 and 90.4 proof. Soft, elegant, and below the window. It is the single most reliable way to spend $300 on a drink nobody can tell from a $40 one.",
+          "[[product:eagle-rare-17-year|Eagle Rare 17 Year]] at $250 and 101 proof. Technically in the window, and a genuine waste. Seventeen years of oak integration is exactly the sort of detail that dilution flattens first.",
+          "[[product:george-t-stagg|George T. Stagg]] at 136.1 proof. Not a mistake so much as a different project. It will make a drink, but you will need to rebuild the spec around it, and the results are inconsistent between annual releases.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "The one barrel proof exception we make is [[product:stagg-bourbon|Stagg]] at $150 and 130 proof. Cut the bourbon to an ounce and a half, stir it longer, and it produces something closer to a bourbon Sazerac than an Old Fashioned. Worth doing once. Not worth doing weekly.",
+      },
+      {
+        type: "recipe",
+        name: "The Cellar Old Fashioned",
+        glass: "Double old-fashioned, chilled, with one 2 inch clear cube",
+        ingredients: [
+          "2 oz bourbon at 100 to 115 proof",
+          "1 barspoon (about 7.5 ml) rich demerara syrup, 2 parts sugar to 1 part water",
+          "2 dashes Angostura bitters",
+          "1 dash orange bitters",
+          "Wide orange peel",
+        ],
+        steps: [
+          "Combine bourbon, syrup and both bitters in a mixing glass with cubed ice filled to the top.",
+          "Stir 30 to 35 seconds. The outside of the glass should frost and be unpleasant to hold.",
+          "Strain over one large clear cube in a chilled double old-fashioned glass.",
+          "Express the orange peel skin-side down over the surface so the oils land on the drink, wipe the rim, and drop it in.",
+        ],
+        garnish: "Expressed orange peel. No cherry, no muddled fruit.",
+        notes:
+          "Reduce the syrup to a scant barspoon with wheated bourbon, and swap the Angostura for two dashes of orange bitters. With a 90 proof bottle, cut the stir to 20 seconds.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Sugar, Bitters and Ice",
+      },
+      {
+        type: "paragraph",
+        text: "Use syrup, not a cube. A sugar cube muddled in bitters never fully dissolves, which means the first sip is thin and the last one is candy. Rich demerara syrup at two parts sugar to one part water is consistent, dissolves instantly and adds a faint molasses note that flatters oak. It keeps three weeks in the fridge.",
+      },
+      {
+        type: "paragraph",
+        text: "Match bitters to grain. Angostura is a rye bourbon's partner: the clove and cinnamon in it run parallel to the spice already in the whiskey. With a wheated bourbon, Angostura tends to sit on top rather than blend, and orange bitters do a better job of lifting the honeyed character underneath.",
+      },
+      {
+        type: "paragraph",
+        text: "Ice is not a garnish. A single 2 inch cube has roughly a quarter of the surface area of the equivalent volume in small cubes, so it dilutes at about a quarter of the rate. That is the difference between a drink that holds for twenty minutes and one that is water by the bottom third. Freeze it slowly in an insulated mould if you want it clear, though cloudy ice tastes identical.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Buying for the Drink",
+      },
+      {
+        type: "paragraph",
+        text: "If you keep one bottle for Old Fashioneds, make it bottled in bond at 100 proof and spend between $40 and $80. If you keep two, add a high-rye bourbon in the low 110s for the nights you want structure. Everything above that is a neat pour that you happen to own, not a cocktail ingredient.",
+      },
+      {
+        type: "paragraph",
+        text: "The rest of the summer menu, including the julep and smash specs we run alongside this one, is in [[link:/blog/summer-bourbon-cocktail-recipes|the summer bourbon cocktails collection]]. Everything named above that is not on allocation is in the [[link:/shop|shop]], the harder-to-find releases sit in the [[link:/collection|allocated collection]], and if you want to taste the house build before you buy the bottle, it is poured on every [[link:/tours|distillery tour]].",
+      },
+    ],
+    seo: {
+      metaTitle: "Best Bourbon for an Old Fashioned: Proof, Mash Bill, Specs",
+      metaDescription:
+        "A bartender's guide to choosing bourbon for an Old Fashioned - why 100 to 115 proof survives dilution, high rye versus wheated, the full build, and the bottles never to mix.",
+      focusKeyword: "best bourbon for old fashioned",
+      primaryKeywords: [
+        "best bourbon for old fashioned",
+        "old fashioned bourbon",
+        "bourbon proof for cocktails",
+        "bottled in bond old fashioned",
+        "old fashioned recipe bourbon",
+        "high rye bourbon cocktail",
+        "cocktail dilution",
+      ],
+      longTailKeywords: [
+        "what bourbon is best for an old fashioned",
+        "what proof bourbon for an old fashioned",
+        "should you use expensive bourbon in an old fashioned",
+        "how much dilution does stirring add to a cocktail",
+        "is bottled in bond good for cocktails",
+        "wheated or high rye bourbon in an old fashioned",
+        "sugar cube or simple syrup in an old fashioned",
+        "how long should you stir an old fashioned",
+        "best cheap bourbon for old fashioned",
+        "does ice size matter in an old fashioned",
+      ],
+      wordClusters: [
+        {
+          cluster: "Drink Mechanics",
+          terms: [
+            "dilution rate",
+            "stir time",
+            "chilling",
+            "large format ice",
+            "surface area",
+            "rich demerara syrup",
+            "expressed peel",
+            "mixing glass",
+          ],
+        },
+        {
+          cluster: "Bottle Selection",
+          terms: [
+            "bottled in bond",
+            "100 proof",
+            "barrel proof",
+            "high rye mash",
+            "wheated mash",
+            "single barrel",
+            "small batch",
+            "pour cost",
+          ],
+        },
+        {
+          cluster: "Flavour Balance",
+          terms: [
+            "Angostura bitters",
+            "orange bitters",
+            "baking spice",
+            "caramel",
+            "oak",
+            "sweetness",
+            "mid-palate",
+            "finish length",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "eh-taylor-small-batch",
+      "eagle-rare-12-year",
+      "russells-reserve-13-year",
+      "weller-full-proof",
+      "blantons-gold-edition",
+      "eagle-rare-10-year",
+    ],
+    faq: [
+      {
+        question: "What proof bourbon is best for an Old Fashioned?",
+        answer:
+          "Between 100 and 115 proof. A correct 30 second stir adds 20 to 25 percent dilution, so a 90 proof bourbon reaches the drinker at around 70 proof and keeps falling. Bottled in bond bourbons are exactly 100 proof by law, which is why bartenders reach for them.",
+      },
+      {
+        question: "Should you use expensive bourbon in an Old Fashioned?",
+        answer:
+          "No. Sugar, bitters and water flatten precisely the detail you pay for in an aged bottle. Eagle Rare 17 Year at $250 and Van Winkle Lot B at $300 both make drinks indistinguishable from ones built on an $80 bottled in bond bourbon.",
+      },
+      {
+        question: "Is a high rye or wheated bourbon better in an Old Fashioned?",
+        answer:
+          "High rye for the classic build. Rye spice occupies the same mid-palate space as the sugar and pushes back against it. Wheated bourbon makes a rounder, sweeter drink that needs about a third less syrup and orange bitters rather than Angostura.",
+      },
+      {
+        question: "Sugar cube or simple syrup in an Old Fashioned?",
+        answer:
+          "Rich demerara syrup, two parts sugar to one part water. A muddled cube never fully dissolves, so the first sip is thin and the last is candied. Syrup is consistent and adds a molasses note that suits oak.",
+      },
+      {
+        question: "Does ice size actually matter?",
+        answer:
+          "Yes. A single 2 inch cube has roughly a quarter of the surface area of the same volume in small cubes and melts at about a quarter of the rate. That is the difference between a drink that holds twenty minutes and one that is water by the last third.",
+      },
+    ],
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // 15. Proof — Fundamentals
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "bourbon-proof-explained",
+    title: "Bourbon Proof, Explained: From 80 to 136 and What Actually Changes",
+    subtitle:
+      "Four legal numbers shape every bottle on the shelf. Here is what proof does to flavour, to price, and to the whiskey while it sits in the barrel.",
+    excerpt:
+      "Proof is the most visible number on a bourbon label and the most misread. The four legal limits that govern it, why barrel entry proof matters more than bottling proof, how strength climbs in a rickhouse, the arithmetic for cutting a barrel proof bottle at home, and where higher proof stops being better.",
+    category: "Fundamentals",
+    author: "Eleanor Hayes",
+    authorTitle: "Master Distiller, Bourbon & Oak",
+    publishedAt: "2026-08-20",
+    readTimeMinutes: 10,
+    heroImage: "/shop-shelves.webp",
+    heroAlt:
+      "Backlit shop shelves holding bourbon bottles across the full strength range, from 90 proof Weller to George T. Stagg and Thomas H. Handy",
+    tags: [
+      "bourbon proof",
+      "barrel proof",
+      "ABV",
+      "barrel entry proof",
+      "bottled in bond",
+      "chill filtration",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "In the United States, proof is twice the alcohol by volume. A bottle at 45 percent ABV is 90 proof, and a bottle at 68.05 percent is 136.1 proof. That conversion is the whole of the definition, and it is where most explanations stop. The interesting part is that strength is not a single decision made at bottling. It is a chain of four legally fixed numbers, plus a decade of weather, and the figure printed on the label is only the last link.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "The Four Numbers That Govern Every Bottle",
+      },
+      {
+        type: "list",
+        ordered: true,
+        items: [
+          "160 proof maximum off the still. Distil bourbon any higher and you strip out the congeners that carry grain character, at which point the law stops calling it bourbon. Most Kentucky houses come off well below the ceiling.",
+          "125 proof maximum entering the barrel. This is barrel entry proof, and it is the least discussed and most consequential number in American whiskey.",
+          "80 proof minimum at bottling. Below 40 percent ABV it cannot be sold as bourbon at all.",
+          "100 proof exactly for bottled in bond. Not a minimum, not a range. A bond label such as [[product:eh-taylor-small-batch|E.H. Taylor Small Batch]] is guaranteed to be 100 proof, at least four years old, and the product of one distilling season at one distillery.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "Everything between 80 and the barrel proof ceiling is a commercial choice. Proofing down before bottling stretches a barrel across more bottles, which is why the standard American shelf strength settled at 80 to 90 proof. Every point of strength a distiller gives back to the customer is volume they are not selling.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Why Barrel Entry Proof Matters More Than Bottling Proof",
+      },
+      {
+        type: "paragraph",
+        text: "New make spirit comes off the still strong and is cut with water before it goes into the barrel. How far it is cut changes what the wood gives back. Water is the solvent for the sugars, the vanillin and the colour compounds sitting in the toasted layer beneath the char. Ethanol is the better solvent for the wood lipids and the heavier tannins. A barrel filled at 107 proof extracts a sweeter, rounder profile than the same barrel filled at 125.",
+      },
+      {
+        type: "paragraph",
+        text: "Filling at the 125 proof ceiling means fewer barrels for the same volume of whiskey, so it is the economically obvious choice and the industry default drifted that way through the second half of the twentieth century. Houses that fill lower are choosing extraction over yield, and it shows up as sweetness rather than strength. None of this appears on a label. It is the clearest example of a decision that shapes a bourbon completely and is never disclosed. The rest of that production chain is laid out in [[link:/blog/how-bourbon-is-made|how bourbon is made]].",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Proof Moves While the Whiskey Sleeps",
+      },
+      {
+        type: "paragraph",
+        text: "A barrel is not a sealed vessel. Water and ethanol both leave through the staves, and which one leaves faster depends on where the barrel sits. On hot, dry upper floors of a rickhouse, water evaporates faster than alcohol, so the whiskey inside gains strength over the years. On cool, humid lower floors the balance can reverse and proof falls.",
+      },
+      {
+        type: "paragraph",
+        text: "You can read this straight off the shelf. [[product:george-t-stagg|George T. Stagg]] is bottled at 136.1 proof after fifteen years. It went into that barrel at no more than 125 by law, so it gained at least eleven points of strength purely from Kentucky weather. [[product:william-larue-weller|William Larue Weller]] at 133.6 proof and [[product:eh-taylor-barrel-proof|E.H. Taylor Barrel Proof]] at 131 tell the same story. Any uncut bottling above 125 proof is a document of where it aged, which is the same variable driving the [[link:/blog/master-distiller-barrel-selection-guide|barrel selection walk]].",
+      },
+      {
+        type: "callout",
+        title: "Barrel proof is not a strength, it is an absence",
+        text: "Barrel proof, cask strength and full proof all mean the same thing: no water was added before bottling. That is why the number changes between batches and why [[product:stagg-bourbon|Stagg]] lands near 130 one year and elsewhere the next. It is a statement about process, not a target.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "What Proof Does to Flavour",
+      },
+      {
+        type: "paragraph",
+        text: "Ethanol is the carrier. Aromatic compounds are far more volatile in alcohol than in water, so a higher proof bourbon delivers more aroma to the nose and more flavour compound per millilitre to the tongue. That is the honest case for strength, and it is real. A 90 proof pour and a 130 proof pour of the same distillate are not the same whiskey diluted differently. They are two different intensities of experience.",
+      },
+      {
+        type: "paragraph",
+        text: "The dishonest half of the case is that ethanol also triggers the trigeminal nerve, the same pathway that registers chilli heat. Above roughly 55 percent ABV, that burn starts competing with the flavour it is carrying. Many drinkers read the burn as intensity and conclude the whiskey is more complex when what they are actually tasting is anaesthesia. This is why a serious tasting flight holds proof roughly constant, a point covered in [[link:/blog/how-to-taste-bourbon|the tasting guide]].",
+      },
+      {
+        type: "list",
+        items: [
+          "80 to 90 proof. The commercial standard. [[product:eagle-rare-10-year|Eagle Rare 10 Year]] at 90 proof and [[product:weller-12-year|Weller 12 Year]] at 90 show how much can still be built at this strength when the age is there.",
+          "93 to 107 proof. The sweet spot for most palates. Enough carrier for aroma, not enough burn to numb anything. Blanton's Original sits at 93, E.H. Taylor Single Barrel at 100, Old Rip Van Winkle 10 at 107.",
+          "114 to 131 proof. Barrel proof territory. [[product:weller-full-proof|Weller Full Proof]] at 114 and [[product:russells-reserve-13-year|Russell's Reserve 13 Year]] at 114.8 are the approachable end. Water is optional here.",
+          "Above 130 proof. George T. Stagg at 136.1 and [[product:thomas-h-handy-sazerac|Thomas H. Handy]] at 130.9. Water is not optional. Neat, these flatten the palate for the rest of the evening.",
+        ],
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "The Arithmetic for Cutting at Home",
+      },
+      {
+        type: "paragraph",
+        text: "Diluting a barrel proof bourbon at the table is not vandalism, it is finishing a job the distiller deliberately left to you. The formula is simple: final volume equals starting volume multiplied by starting proof divided by target proof.",
+      },
+      {
+        type: "paragraph",
+        text: "Two ounces of Stagg at 130 proof, plus 0.6 ounces of water, gives 2.6 ounces at 100 proof. Two ounces of George T. Stagg at 136.1, plus roughly 1 ounce, lands just above 90. Use room temperature filtered or distilled water and add it by the drop rather than the splash, tasting as you go. The point at which a whiskey suddenly blooms is usually two or three drops before the point at which it thins out.",
+      },
+      {
+        type: "callout",
+        title: "The real value case for barrel proof",
+        text: "A 750 ml bottle of Stagg at 130 proof, cut to 90 proof, becomes 1,083 ml of finished whiskey. That is nearly a bottle and a half from one purchase, and it is the only argument for strength-as-value that survives contact with a calculator.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Proof, Tax and Price",
+      },
+      {
+        type: "paragraph",
+        text: "Federal excise duty on spirits is assessed per proof gallon rather than per bottle, so strength is taxed directly. It is worth knowing and it is not worth much: the duty difference between a 750 ml bottle at 90 proof and one at 130 proof works out to roughly a dollar. When a barrel proof release costs $50 more than its proofed-down sibling, the tax is not the reason. Scarcity, barrel selection and the yield the distillery gave up by not adding water are.",
+      },
+      {
+        type: "paragraph",
+        text: "Proof also decides whether a bourbon can skip chill filtration. Fatty acid esters left over from fermentation precipitate out and cloud the whiskey when it gets cold, but only below about 92 proof. Above that the whiskey stays clear on its own, which is why nearly every non-chill-filtered bottle is also a high proof one. [[product:weller-full-proof|Weller Full Proof]] and Stagg are both non-chill filtered; Eagle Rare 10 at 90 proof is filtered, because otherwise it would haze over ice and get returned.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Where Higher Proof Stops Being Better",
+      },
+      {
+        type: "paragraph",
+        text: "Two bottles on our own shelves make the argument better than any theory. [[product:van-winkle-lot-b-12-year|Van Winkle Lot B]] is 90.4 proof and $300. [[product:double-eagle-very-rare|Double Eagle Very Rare]] is 90 proof and $700. Neither is priced on strength, and Lot B in particular is one of the most complete wheated bourbons made at any proof. Meanwhile a mediocre barrel bottled uncut at 128 proof will still read as impressive to most drinkers for about ninety seconds.",
+      },
+      {
+        type: "paragraph",
+        text: "Proof tells you how concentrated a whiskey is. It tells you nothing about whether the thing being concentrated is worth concentrating. Treat it the way you treat an age statement, which is to say as one specification among several rather than a score. The parallel argument about years is in [[link:/blog/does-older-bourbon-mean-better|does older bourbon mean better]].",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "How to Buy on Proof",
+      },
+      {
+        type: "list",
+        ordered: true,
+        items: [
+          "For everyday drinking, buy between 93 and 107. It is the widest window of enjoyable whiskey per dollar.",
+          "For cocktails, buy bottled in bond at exactly 100 proof and stop thinking about it.",
+          "For value, buy barrel proof and cut it yourself. The arithmetic above is the reason.",
+          "Never buy on proof alone. A 90 proof bourbon with twelve years behind it beats a 120 proof bourbon with four, every time.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "The uncut releases discussed here mostly live in the [[link:/collection|allocated collection]], the everyday strengths are in the [[link:/shop|shop]], and the practical questions about how these bottles are released and shipped are answered in the [[link:/faq|frequently asked questions]].",
+      },
+    ],
+    seo: {
+      metaTitle: "Bourbon Proof Explained: Barrel Proof, ABV and What Changes",
+      metaDescription:
+        "What bourbon proof means, the four legal limits that govern it, why barrel entry proof matters more than the label, how strength rises in a rickhouse, and how to cut it at home.",
+      focusKeyword: "bourbon proof explained",
+      primaryKeywords: [
+        "bourbon proof explained",
+        "what does proof mean in bourbon",
+        "barrel proof bourbon",
+        "barrel entry proof",
+        "bourbon ABV",
+        "cask strength bourbon",
+        "bottled in bond 100 proof",
+      ],
+      longTailKeywords: [
+        "what does proof mean on a bourbon bottle",
+        "how do you convert bourbon proof to abv",
+        "what is barrel entry proof in bourbon",
+        "why is barrel proof bourbon higher than 125 proof",
+        "does bourbon proof increase while aging",
+        "how do you water down barrel proof bourbon",
+        "is higher proof bourbon better",
+        "why is some bourbon not chill filtered",
+        "what is the minimum proof for bourbon",
+        "why is bottled in bond always 100 proof",
+      ],
+      wordClusters: [
+        {
+          cluster: "Legal Limits",
+          terms: [
+            "160 proof distillation limit",
+            "125 proof barrel entry",
+            "80 proof minimum",
+            "bottled in bond",
+            "straight bourbon",
+            "proof gallon",
+            "federal excise duty",
+          ],
+        },
+        {
+          cluster: "Strength & Process",
+          terms: [
+            "barrel proof",
+            "cask strength",
+            "full proof",
+            "uncut",
+            "non-chill filtered",
+            "fatty acid esters",
+            "proofing down",
+            "evaporation",
+          ],
+        },
+        {
+          cluster: "Sensory Effect",
+          terms: [
+            "ethanol carrier",
+            "trigeminal burn",
+            "palate fatigue",
+            "aroma volatility",
+            "adding water",
+            "mouthfeel",
+            "finish length",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "eh-taylor-barrel-proof",
+      "stagg-bourbon",
+      "george-t-stagg",
+      "william-larue-weller",
+      "weller-full-proof",
+      "eagle-rare-10-year",
+    ],
+    faq: [
+      {
+        question: "What does proof mean on a bourbon bottle?",
+        answer:
+          "In the United States, proof is exactly twice the alcohol by volume. A bourbon at 50 percent ABV is 100 proof. The legal minimum for bourbon is 80 proof and there is no maximum, which is why uncut releases can reach 136.",
+      },
+      {
+        question: "What is barrel entry proof and why does it matter?",
+        answer:
+          "It is the strength at which new make spirit enters the barrel, capped by law at 125 proof. Water extracts wood sugars and vanillin while ethanol extracts tannins and lipids, so a barrel filled at 107 produces a sweeter whiskey than the same barrel filled at 125. It is never printed on the label.",
+      },
+      {
+        question: "Does bourbon proof go up while it ages?",
+        answer:
+          "Usually, yes. On hot dry upper rickhouse floors water evaporates faster than alcohol, so strength climbs. George T. Stagg enters the barrel at no more than 125 proof and is bottled at 136.1, having gained at least eleven points over fifteen years. Cool humid lower floors can push proof the other way.",
+      },
+      {
+        question: "Is higher proof bourbon better?",
+        answer:
+          "More concentrated, not better. Ethanol carries aroma, so strength delivers more flavour per millilitre, but above about 55 percent ABV it also triggers the same nerve pathway as chilli heat and starts masking what it carries. Van Winkle Lot B at 90.4 proof outclasses plenty of bourbon at 120.",
+      },
+      {
+        question: "How do you dilute barrel proof bourbon correctly?",
+        answer:
+          "Final volume equals starting volume times starting proof divided by target proof. Two ounces at 130 proof plus 0.6 ounces of water gives 2.6 ounces at 100 proof. Use room temperature filtered water, add it drop by drop, and stop the moment the aroma opens up.",
+      },
+    ],
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // 16. Gifting — Buying Guide
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "bourbon-gift-guide",
+    title: "Bourbon Gifts That Land: What to Give at $40, $100 and $250",
+    subtitle:
+      "Buying a bottle for somebody else is a different problem from buying one for yourself. Here is how to solve it, and what to leave on the shelf.",
+    excerpt:
+      "A gift bottle has to clear two hurdles most guides ignore: the recipient probably already owns the obvious ones, and you have no idea what their palate is. Real budget tiers with real prices, the accessories that are a waste of money, and the shipping rules that ruin more bourbon gifts than bad taste does.",
+    category: "Buying Guide",
+    author: "Eleanor Hayes",
+    authorTitle: "Master Distiller, Bourbon & Oak",
+    publishedAt: "2026-08-20",
+    readTimeMinutes: 10,
+    heroImage: "/bar-cabinet.webp",
+    heroAlt:
+      "Warmly backlit wooden bar cabinet holding ribbon-tied bottles, boxed spirits gift sets and glassware",
+    tags: [
+      "bourbon gifts",
+      "gift guide",
+      "whiskey accessories",
+      "allocated bourbon",
+      "glassware",
+      "distillery experiences",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "Buying bourbon for somebody else is a harder problem than buying it for yourself, and almost every gift guide pretends otherwise. You are working against two constraints at once. The person probably already owns the famous bottles in their price bracket, because those are the ones they buy for themselves. And unless you have sat down and drunk with them, you do not know whether they want spice, sweetness or strength. A list of ten bottles ranked by score solves neither problem.",
+      },
+      {
+        type: "paragraph",
+        text: "What follows is how we advise people at the counter, with actual prices from our own shelves and honest notes about where the money stops buying anything.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Rule One: Give What They Cannot Easily Buy",
+      },
+      {
+        type: "paragraph",
+        text: "The best gift bottle is not the most expensive one. It is the one that is annoying to obtain. Anybody who likes bourbon can walk into a shop and pick up a well-known $60 bottle any Tuesday. What they cannot do is reliably get an allocated release, because those arrive in fixed quantities and go out by lottery or to regulars.",
+      },
+      {
+        type: "paragraph",
+        text: "This flips the usual logic. [[product:eagle-rare-10-year|Eagle Rare 10 Year]] at $40 is, in gift terms, worth more than a $90 bottle that is on every shelf in the country, because the recipient has spent months failing to find it at that price. The same applies to [[product:elmer-t-lee-single-barrel|Elmer T. Lee Single Barrel]] at $80 and [[product:eh-taylor-small-batch|E.H. Taylor Small Batch]] at $80. Availability is the gift. The liquid is the bonus.",
+      },
+      {
+        type: "callout",
+        title: "The one question to ask first",
+        text: "Not what do they like, which nobody answers usefully. Ask what they have open right now. It tells you the price bracket they operate in, whether they lean wheated or spicy, and what not to duplicate.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Rule Two: When in Doubt, Give Wheated",
+      },
+      {
+        type: "paragraph",
+        text: "If you genuinely have no information about their palate, a wheated bourbon is the safest bet in the category. Substituting wheat for rye takes the pepper out of the mid-palate and leaves something softer and rounder, which is the profile that offends fewest people. [[product:weller-12-year|Weller 12 Year]] at $100 and 90 proof is the archetype and one of the most requested bottles we stock.",
+      },
+      {
+        type: "paragraph",
+        text: "What not to do is give barrel proof to somebody whose shelf is all 80 proof bottles. A 130 proof gift reads as a challenge rather than a kindness, and it will sit unopened. If you want the reasoning behind grain choice in full, [[link:/blog/wheated-vs-high-rye-bourbon|the wheated versus high-rye guide]] covers it properly.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Under $50: The Bracket Most People Underrate",
+      },
+      {
+        type: "paragraph",
+        text: "There is exactly one answer here and it is Eagle Rare 10 Year at $40. Ten years of age at 90 proof for that money is an anomaly that exists only because the price was set years ago and has been held. It is the bottle we give to colleagues, to hosts, and to anyone whose bourbon interest we are not yet sure about. Nobody has ever been disappointed to receive it.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "$70 to $100: The Bracket That Does the Most Work",
+      },
+      {
+        type: "paragraph",
+        text: "This is where gifting stops being polite and starts being memorable, and where the range genuinely opens up.",
+      },
+      {
+        type: "list",
+        items: [
+          "[[product:eagle-rare-12-year|Eagle Rare 12 Year]] at $70, 101 proof. Two more years and eleven more points of proof than the 10, and a noticeably deeper bottle. The best value gift on this list.",
+          "[[product:elmer-t-lee-single-barrel|Elmer T. Lee Single Barrel]] at $80, 90 proof. Named for the man who invented the single barrel category. The story alone makes it a better gift than a higher-scoring bottle without one.",
+          "[[product:eh-taylor-small-batch|E.H. Taylor Small Batch]] at $80, 100 proof, bottled in bond. Give this to somebody who makes cocktails. It is the single most useful bottle a home bar can own.",
+          "[[product:weller-12-year|Weller 12 Year]] at $100, 90 proof. The safe wheated choice, and the bottle most likely to be recognised on sight by somebody who follows bourbon.",
+          "[[product:blantons-gold-edition|Blanton's Gold Edition]] at $100, 103 proof. The horse-and-jockey stopper is a collectible in its own right, which matters more in a gift than it should.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "If you are buying for somebody early in the hobby, two bottles from this bracket beat one bottle from the next. A wheated bottle and a high-rye bottle at similar proof teach more in one evening than any single expensive purchase, which is the same argument we make in [[link:/blog/how-to-start-a-bourbon-collection|the guide to starting a collection]].",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "$150 to $250: Milestone Territory",
+      },
+      {
+        type: "paragraph",
+        text: "At this level you are marking an occasion, and the bottle should be visibly special rather than merely good. [[product:blantons-original-single-barrel|Blanton's Original Single Barrel]] at $150 is the recognisable choice, with the barrel and rick position printed on the label so the recipient can see exactly which cask it came from. [[product:russells-reserve-13-year|Russell's Reserve 13 Year]] at $200, 114.8 proof and non-chill filtered, is the connoisseur's choice and the one most likely to impress somebody who already owns everything below it.",
+      },
+      {
+        type: "paragraph",
+        text: "[[product:eagle-rare-17-year|Eagle Rare 17 Year]] at $250 is the ceiling of sensible gifting. Seventeen years, 101 proof, and part of an annual release that most people have never seen in person. Above this, you are no longer buying whiskey.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Above $500: Say Plainly What You Are Buying",
+      },
+      {
+        type: "paragraph",
+        text: "[[product:pappy-van-winkle-15-year|Pappy Van Winkle 15 Year]] at $500 is a superb bourbon and the most famous name in the category, which is precisely why it works as a gift and precisely why it is poor value. [[product:double-eagle-very-rare|Double Eagle Very Rare]] at $700 is the clearest case in our catalogue of paying for presentation: twenty years of age at 90 proof in a crystal decanter, where a meaningful share of the price is the glass and the box.",
+      },
+      {
+        type: "paragraph",
+        text: "There is nothing wrong with buying a status object as long as you know that is what you are doing. What is wrong is spending $700 believing the whiskey inside is seven times better than the $100 bottle. It is not, and anybody who has drunk both will tell you so. The full ranking across every tier is in [[link:/blog/best-bourbon-bottles-ranked|the ranked buying guide]].",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Accessories: What to Skip",
+      },
+      {
+        type: "paragraph",
+        text: "The accessory aisle is where bourbon gift budgets go to die. Four things in particular are not worth your money.",
+      },
+      {
+        type: "list",
+        items: [
+          "Whiskey stones. They chill without diluting, which sounds clever and is backwards. A few drops of water is what opens bourbon up. Cold alone mutes aroma and does nothing else.",
+          "Crystal decanters. Decanting increases the surface area exposed to air and accelerates oxidation, so the whiskey degrades faster than it would in its own bottle. Older lead crystal has the additional problem of leaching lead into spirits over months of contact.",
+          "Home barrel-aging kits. A one litre barrel has an enormous surface-to-volume ratio compared to a 53 gallon cask. You get tannin and colour in a fortnight, and none of the slow integration that makes aged whiskey taste aged.",
+          "Engraving on an allocated bottle. It is permanent, it usually looks cheaper than the bottle underneath, and it destroys any future value in a release that was hard to get in the first place.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "The one accessory genuinely worth giving is glassware, and specifically a pair of Glencairn glasses. The tulip shape concentrates aroma toward the nose, the short stem keeps hands off the bowl, and they cost a fraction of what a novelty gift set does. Give two, not one. Bourbon is better with company.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Give an Experience Instead",
+      },
+      {
+        type: "paragraph",
+        text: "For the person who already owns the bottles, the better gift is a day out. A [[link:/tours|distillery tour and tasting]] gives somebody the rickhouse, the fermenters and a flight they would not have poured for themselves, and it does not compete with anything already on their shelf. Our own visitor programme runs out of [[link:/visit/bardstown|Bardstown]] and [[link:/visit/louisville|Louisville]], both of which make an easy day trip.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "The Logistics That Ruin Gifts",
+      },
+      {
+        type: "paragraph",
+        text: "More bourbon gifts are wrecked by delivery than by bad taste. Spirits shipments require an adult signature on arrival, so a bottle sent to somebody who is at work all week will be attempted three times and returned. Never ship to an office unless you have asked first. Several states restrict direct spirits shipping entirely, and a handful of counties within otherwise permissive states are dry, so confirm the destination before you order rather than after.",
+      },
+      {
+        type: "paragraph",
+        text: "Timing matters in summer. A parcel left on a porch in August can sit at temperatures that push the cork and start seepage. Ship early in the week, request a hold at a collection point if the recipient travels, and tell them it is coming. If they intend to keep it sealed for a while, [[link:/blog/how-to-store-bourbon|the storage guide]] explains why upright and out of the light is not optional. Our own shipping rules and restricted destinations are listed in the [[link:/faq|frequently asked questions]].",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Presentation Without the Gift Box",
+      },
+      {
+        type: "paragraph",
+        text: "Most bottles worth giving do not come in a box, and a printed carton adds nothing. A ribbon tied at the neck and a handwritten card naming the bottle, the proof and one line about why you chose it beats any packaging. If the bottle is a single barrel, write down the barrel number from the label. That detail turns a purchase into something specific to the person receiving it.",
+      },
+      {
+        type: "paragraph",
+        text: "Everything named here that is not on allocation is in the [[link:/shop|shop]], and the harder releases are listed with their current status in the [[link:/collection|allocated collection]].",
+      },
+    ],
+    seo: {
+      metaTitle: "Bourbon Gifts: What to Give at $40, $100 and $250",
+      metaDescription:
+        "A distiller's guide to bourbon gifts - real budget tiers with real prices, why availability beats price, the accessories not worth buying, and the shipping rules that ruin gifts.",
+      focusKeyword: "bourbon gifts",
+      primaryKeywords: [
+        "bourbon gifts",
+        "gifts for bourbon lovers",
+        "bourbon gift guide",
+        "best bourbon to give as a gift",
+        "whiskey gift ideas",
+        "bourbon gift under $50",
+        "bourbon gift set alternatives",
+      ],
+      longTailKeywords: [
+        "what bourbon should I buy as a gift",
+        "best bourbon gift under 50 dollars",
+        "what to give someone who likes bourbon",
+        "are whiskey stones worth buying",
+        "should you put bourbon in a decanter",
+        "can you ship bourbon as a gift",
+        "do bourbon deliveries need a signature",
+        "best bourbon gift for a beginner",
+        "is engraving a bourbon bottle a good idea",
+        "what glassware should I give a whiskey drinker",
+      ],
+      wordClusters: [
+        {
+          cluster: "Gift Selection",
+          terms: [
+            "budget tier",
+            "availability",
+            "allocated release",
+            "wheated bourbon",
+            "single barrel",
+            "bottled in bond",
+            "milestone gift",
+            "beginner gift",
+          ],
+        },
+        {
+          cluster: "Accessories",
+          terms: [
+            "Glencairn glass",
+            "whiskey stones",
+            "crystal decanter",
+            "lead leaching",
+            "home barrel aging kit",
+            "engraving",
+            "gift set",
+          ],
+        },
+        {
+          cluster: "Delivery & Care",
+          terms: [
+            "adult signature",
+            "dry county",
+            "state shipping restrictions",
+            "heat damage",
+            "cork seepage",
+            "upright storage",
+            "collection point",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "eagle-rare-10-year",
+      "eagle-rare-12-year",
+      "elmer-t-lee-single-barrel",
+      "weller-12-year",
+      "blantons-original-single-barrel",
+      "russells-reserve-13-year",
+    ],
+    faq: [
+      {
+        question: "What is the best bourbon gift under $50?",
+        answer:
+          "Eagle Rare 10 Year at $40. Ten years of age at 90 proof for that price is an anomaly, and because it is allocated the recipient has probably been unable to find it themselves. Availability is what makes a gift bottle, not price.",
+      },
+      {
+        question: "What bourbon should I give if I do not know their taste?",
+        answer:
+          "A wheated bourbon. Replacing rye with wheat removes the pepper from the mid-palate and leaves a softer profile that suits the widest range of drinkers. Weller 12 Year at $100 and 90 proof is the standard answer. Avoid barrel proof unless you know they drink it.",
+      },
+      {
+        question: "Are whiskey stones and decanters worth giving?",
+        answer:
+          "No. Whiskey stones chill without diluting, and a few drops of water is what actually opens bourbon up. Decanters increase air contact and speed oxidation, and older lead crystal can leach lead into spirits over time. Give a pair of Glencairn glasses instead.",
+      },
+      {
+        question: "Can you ship bourbon as a gift?",
+        answer:
+          "In many places yes, but an adult signature is required on delivery, several states prohibit direct spirits shipping, and some counties are dry. Confirm the destination before ordering, never send to an office without asking, and avoid leaving a summer delivery sitting on a porch.",
+      },
+      {
+        question: "Is a $500 bourbon a better gift than a $100 one?",
+        answer:
+          "More impressive, not better to drink. Pappy Van Winkle 15 Year at $500 is excellent and famous, and Double Eagle Very Rare at $700 is 90 proof in a crystal decanter where a large share of the price is presentation. Buy at that level knowingly, or spend $100 twice.",
+      },
+    ],
+  },
 ];
 
 // ─── Helpers ────────────────────────────────────────────────────────────────

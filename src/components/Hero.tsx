@@ -4,24 +4,25 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-const VIDEO_SRC = "/3D_render_interior_design_scene_202608140820.mp4";
+const VIDEO_SRC = "/VIDEO-HP-DESKTOP-1.mp4";
 
-/* A 1280x720 render: a pan along a backlit shelf wall that resolves into a
-   pour. Being natively 16:9 it only upscales ~1.5x on a 1920 hero and loses
-   ~17% of frame height to `object-cover`, so we play the whole 8s rather than
-   hunting for a usable window. A phone viewport is the tight case — it keeps
-   only the centre ~26% of the width — which is where the composition was
-   checked. Both bottles in this render carry real third-party marks (Pappy Van
-   Winkle at 0-2s, Weller at 5-8s); no sub-window avoids them, so the window is
-   the full clip and the labels are a content decision, not a framing one. */
+/* A 1920x1080 distillery film: aerial over the complex, cooperage, a barrel
+   being charred in open flame, barrels rolled past a bonded rickhouse, and
+   glasses poured at the end. Native Full HD means no upscaling at all on a
+   1920 hero — `object-cover` only trims ~17% of frame height — and a phone
+   viewport keeps the centre ~26% of the width, which is where the composition
+   was checked. Nothing in it carries third-party branding: the only legible
+   sign reads BONDED STORAGE / BLDG M, a federal warehouse designation.
+   The whole clip is usable, so the window is the full 10s. */
 const LOOP_START = 0;
-const LOOP_END = 7.9;
-/* The clip's last frame and first frame are different compositions, so the
-   wrap is a hard cut. Dipping through dark across the seek turns it into a
-   dissolve — longer and deeper than a matched-frame seam would need. */
-const SEAM_LEAD = 0.35;
-const SEAM_MS = 560;
-const SEAM_OPACITY = 0.25;
+const LOOP_END = 9.85;
+/* The clip opens on a bright daylight aerial and ends on dark, warm bokeh, so
+   the wrap is both a cut and a large luminance jump. The dissolve is longer
+   and dips deeper than a matched-frame seam would need, otherwise the loop
+   reads as a flash. */
+const SEAM_LEAD = 0.45;
+const SEAM_MS = 700;
+const SEAM_OPACITY = 0.14;
 
 const bottles = [
   { name: "Single Barrel", line: "Reserve", age: "12 Years", price: "$89.99", image: "/image1.webp" },
@@ -58,7 +59,7 @@ export default function Hero() {
     const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
     /* Attach the source only once we know we will play it. Reduced-motion and
        Data Saver hold at the poster — itself a still pulled from LOOP_START, so
-       the framing matches — without fetching 2.2MB they will never watch. */
+       the framing matches — without fetching 3.9MB they will never watch. */
     if (reduced || conn?.saveData) return;
     v.src = VIDEO_SRC;
 

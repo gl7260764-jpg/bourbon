@@ -15,11 +15,12 @@ const footerLinks = {
   Company: [
     { name: "Our Story", href: "/about" },
     { name: "Distillery Tours", href: "/tours" },
-    // The /visit pages are local-search landing pages. They live in the footer
-    // so every page — the homepage included — links to them; otherwise they are
-    // orphans reachable only from the sitemap and a single blog post.
-    { name: "Visit Bardstown", href: "/visit/bardstown" },
-    { name: "Visiting From Louisville", href: "/visit/louisville" },
+    // The /visit pages are local-search landing pages. The index lives in the
+    // footer so every page — the homepage included — links into the section;
+    // otherwise those pages are orphans reachable only from the sitemap and a
+    // single blog post. One entry rather than one per city: /visit lists them
+    // all, and the footer does not grow every time a location is added.
+    { name: "Visit & Locations", href: "/visit" },
     { name: "Stories", href: "/blog" },
     { name: "Press", href: "/press" },
     { name: "Careers", href: "/careers" },

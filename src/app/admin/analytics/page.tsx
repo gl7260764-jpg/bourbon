@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { countryFlag, countryName } from "@/lib/geo";
-import { visitorLabel, deviceLabel } from "@/lib/visitor";
+import { visitorLabel, deviceLabel, formatDuration } from "@/lib/visitor";
 
 export const metadata = { title: "Analytics | Admin" };
 export const dynamic = "force-dynamic";
@@ -74,6 +74,10 @@ export default async function AnalyticsPage() {
     newVsReturningRaw,
     topPagesRaw,
     journeyRowsRaw,
+    sessionTimeRaw,
+    pageTimeRaw,
+    topPagesByTimeRaw,
+    sessionsWindow,
   ] = await Promise.all([
     prisma.order.count(),
     prisma.order.aggregate({ _sum: { total: true } }),
@@ -208,6 +212,53 @@ export default async function AnalyticsPage() {
       )
       ORDER BY pv."createdAt" ASC
     `,
+
+    // --- engagement time -------------------------------------------------
+    // Average visit length. Only visits that actually reported time are
+    // counted: a visit whose beacon never landed is *unmeasured*, not "zero
+    // seconds", and folding those in as zeros would understate the average by
+    // however many tabs the browser killed silently.
+    prisma.$queryRaw<{ avgms: number | null; sessions: bigint }[]>`
+      SELECT AVG("activeMs")::float8 AS avgms,
+             COUNT(*)::bigint        AS sessions
+      FROM "VisitSession"
+      WHERE "startedAt" >= ${since}
+        AND "activeMs" > 0
+    `,
+
+    // Same rule for per-page dwell: durationMs IS NULL means "never
+    // reported", so it is excluded rather than averaged as zero.
+    prisma.$queryRaw<{ avgms: number | null; views: bigint; totalms: bigint }[]>`
+      SELECT AVG("durationMs")::float8              AS avgms,
+             COUNT(*)::bigint                       AS views,
+             COALESCE(SUM("durationMs"), 0)::bigint AS totalms
+      FROM "PageView"
+      WHERE "createdAt" >= ${since}
+        AND "durationMs" IS NOT NULL
+        AND "durationMs" > 0
+    `,
+
+    // Attention, not traffic: ranked by total time spent, so a long-read page
+    // can outrank one that gets more clicks and loses them immediately.
+    prisma.$queryRaw<
+      { path: string; totalms: bigint; avgms: number; views: bigint }[]
+    >`
+      SELECT "path",
+             SUM("durationMs")::bigint AS totalms,
+             AVG("durationMs")::float8 AS avgms,
+             COUNT(*)::bigint          AS views
+      FROM "PageView"
+      WHERE "createdAt" >= ${since}
+        AND "durationMs" IS NOT NULL
+        AND "durationMs" > 0
+      GROUP BY "path"
+      ORDER BY totalms DESC
+      LIMIT 12
+    `,
+
+    // Every visit in the window, measured or not — the denominator that keeps
+    // the average honest about its own coverage.
+    prisma.visitSession.count({ where: { startedAt: { gte: since } } }),
   ]);
 
   const totalRevenue = Number(totalRevenueAgg._sum.total ?? 0);
@@ -302,6 +353,31 @@ export default async function AnalyticsPage() {
   }));
   const maxPageViews = topPages.reduce((m, p) => Math.max(m, p.views), 0);
 
+  // Engagement time. Every "avg" below is null when there is nothing measured
+  // yet, so the UI can render a real em-dash empty state instead of a "0m 0s"
+  // that reads as "nobody stayed" when it actually means "no data".
+  const measuredSessions = Number(sessionTimeRaw[0]?.sessions ?? 0);
+  const avgSessionMs =
+    measuredSessions > 0 ? Number(sessionTimeRaw[0]?.avgms ?? 0) : null;
+  const avgSessionLabel = formatDuration(avgSessionMs);
+
+  const timedPageViews = Number(pageTimeRaw[0]?.views ?? 0);
+  const avgPageMs =
+    timedPageViews > 0 ? Number(pageTimeRaw[0]?.avgms ?? 0) : null;
+  const avgPageLabel = formatDuration(avgPageMs);
+  const totalEngagedMs = Number(pageTimeRaw[0]?.totalms ?? 0);
+
+  const topPagesByTime = topPagesByTimeRaw.map((r) => ({
+    path: r.path,
+    totalMs: Number(r.totalms),
+    avgMs: Number(r.avgms),
+    views: Number(r.views),
+  }));
+  const maxEngagedMs = topPagesByTime.reduce(
+    (m, p) => Math.max(m, p.totalMs),
+    0,
+  );
+
   // Collapse the flat page-view rows into one ordered journey per visitor.
   const journeyMap = new Map<
     string,
@@ -351,7 +427,8 @@ export default async function AnalyticsPage() {
           Analytics
         </h1>
         <p className="text-bourbon-stone text-sm mt-2">
-          Orders, visitors, and product performance over the last {DAYS_WINDOW} days.
+          Orders, visitors, engagement time, and product performance over the
+          last {DAYS_WINDOW} days.
         </p>
       </div>
 
@@ -384,6 +461,26 @@ export default async function AnalyticsPage() {
           label="Page views"
           value={pageViewsWindow.toLocaleString()}
           sub={`${repeatVisitorsAllTime.toLocaleString()} repeat visitors all time`}
+        />
+        <Kpi
+          label="Avg. session"
+          value={avgSessionLabel ?? "—"}
+          sub={
+            avgSessionLabel
+              ? `measured on ${measuredSessions.toLocaleString()} of ${sessionsWindow.toLocaleString()} visits`
+              : sessionsWindow > 0
+                ? `${sessionsWindow.toLocaleString()} visits, none timed yet`
+                : "no visits recorded yet"
+          }
+        />
+        <Kpi
+          label="Avg. time on page"
+          value={avgPageLabel ?? "—"}
+          sub={
+            avgPageLabel
+              ? `${timedPageViews.toLocaleString()} timed view${timedPageViews === 1 ? "" : "s"} · ${formatDuration(totalEngagedMs) ?? "0s"} total`
+              : "no timed page views yet"
+          }
         />
         <Kpi
           label="Identified"
@@ -580,6 +677,62 @@ export default async function AnalyticsPage() {
                       {p.views === 1 ? "" : "s"} ·{" "}
                       {p.visitors.toLocaleString()} visitor
                       {p.visitors === 1 ? "" : "s"}
+                    </span>
+                  </div>
+                  <div className="h-1.5 bg-bourbon-deep/5 overflow-hidden">
+                    <div
+                      className="h-full bg-bourbon-gold"
+                      style={{ width: `${pct}%` }}
+                    />
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </section>
+
+      {/* Top pages by engagement time — the one that says where attention
+          actually goes, as opposed to where the clicks land. */}
+      <section className="bg-white border border-bourbon-deep/10 p-5 sm:p-6 mb-10">
+        <div className="flex items-baseline justify-between mb-4 pb-4 border-b border-bourbon-deep/10">
+          <h2 className="font-[family-name:var(--font-playfair)] text-xl font-bold text-bourbon-deep">
+            Pages by engagement time
+          </h2>
+          <span className="text-bourbon-stone text-[10px] tracking-widest uppercase">
+            Last {DAYS_WINDOW} days
+          </span>
+        </div>
+        <p className="text-bourbon-stone text-[11px] -mt-2 mb-4">
+          Visible time only — a backgrounded tab stops the clock, and a single
+          view is capped at 30 minutes so one parked tab can&apos;t skew the
+          ranking.
+        </p>
+        {topPagesByTime.length === 0 ? (
+          <p className="text-bourbon-stone text-sm py-6 text-center">
+            No engagement time recorded yet. It starts appearing once visitors
+            leave a page they spent time on.
+          </p>
+        ) : (
+          <ul className="space-y-3">
+            {topPagesByTime.map((p) => {
+              const pct =
+                maxEngagedMs > 0 ? (p.totalMs / maxEngagedMs) * 100 : 0;
+              return (
+                <li key={p.path}>
+                  <div className="flex items-center justify-between gap-3 mb-1.5">
+                    <Link
+                      href={p.path}
+                      target="_blank"
+                      className="text-bourbon-deep text-sm font-semibold hover:text-bourbon-gold transition-colors truncate"
+                    >
+                      {p.path}
+                    </Link>
+                    <span className="text-bourbon-stone text-xs whitespace-nowrap">
+                      {formatDuration(p.totalMs) ?? "—"} total ·{" "}
+                      {formatDuration(p.avgMs) ?? "—"} avg ·{" "}
+                      {p.views.toLocaleString()} view
+                      {p.views === 1 ? "" : "s"}
                     </span>
                   </div>
                   <div className="h-1.5 bg-bourbon-deep/5 overflow-hidden">

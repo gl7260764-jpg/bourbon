@@ -1,6 +1,6 @@
 # Google Search Console — URL submission list
 
-**63 indexable URLs.** Generated from the live sitemap, so this is exactly what Google is told to crawl.
+**70 indexable URLs.** Generated from the live sitemap, so this is exactly what Google is told to crawl.
 
 Sitemap: `https://bourbonoaklover.com/sitemap.xml` · Property: `https://bourbonoaklover.com/` (non-www)
 
@@ -70,12 +70,16 @@ Each is self-canonical and targets a brand-level search (e.g. "buy pappy van win
 
 ## Tier 3.5 — location & visitor pages
 
-Local-search landing pages. New, so nothing is indexed yet — submit these
-manually rather than waiting, and confirm the Bardstown NAP matches your
-Google Business Profile exactly (name, address, phone) or the signals split.
+Local-search landing pages. The index lists them all; the Bardstown page is the
+real distillery, the rest are catchment / trip-planning guides.
 
-- [ ] [https://bourbonoaklover.com/visit/bardstown](https://bourbonoaklover.com/visit/bardstown)  — Visit the Distillery in Bardstown
-- [ ] [https://bourbonoaklover.com/visit/louisville](https://bourbonoaklover.com/visit/louisville)  — Bourbon Distillery Near Louisville
+- [ ] [https://bourbonoaklover.com/visit](https://bourbonoaklover.com/visit)  — Visit & Locations index (updated 2026-08-20)
+- [ ] [https://bourbonoaklover.com/visit/lexington](https://bourbonoaklover.com/visit/lexington)  — Visiting From Lexington (updated 2026-08-20)
+- [ ] [https://bourbonoaklover.com/visit/cincinnati](https://bourbonoaklover.com/visit/cincinnati)  — Visiting From Cincinnati (updated 2026-08-20)
+- [ ] [https://bourbonoaklover.com/visit/nashville](https://bourbonoaklover.com/visit/nashville)  — Visiting From Nashville (updated 2026-08-20)
+- [ ] [https://bourbonoaklover.com/visit/bardstown](https://bourbonoaklover.com/visit/bardstown)  — Visit the Distillery in Bardstown (updated 2026-08-16)
+- [ ] [https://bourbonoaklover.com/visit/louisville](https://bourbonoaklover.com/visit/louisville)  — Bourbon Distillery Near Louisville (updated 2026-08-16)
+
 
 ## Tier 4 — blog posts
 
@@ -83,6 +87,9 @@ These already carry full keyword research in `src/lib/blog.ts` — focus keyword
 primary and long-tail sets, semantic clusters, and FAQ schema on the newer ones.
 Newest first; submit these before the older three.
 
+- [ ] [https://bourbonoaklover.com/blog/bourbon-gift-guide](https://bourbonoaklover.com/blog/bourbon-gift-guide)  — Bourbon Gifts That Land: What to Give at $40, $100 and $250 (updated 2026-08-20)
+- [ ] [https://bourbonoaklover.com/blog/bourbon-proof-explained](https://bourbonoaklover.com/blog/bourbon-proof-explained)  — Bourbon Proof, Explained: From 80 to 136 and What Actually Changes (updated 2026-08-20)
+- [ ] [https://bourbonoaklover.com/blog/best-bourbon-for-an-old-fashioned](https://bourbonoaklover.com/blog/best-bourbon-for-an-old-fashioned)  — The Best Bourbon for an Old Fashioned, Tested Behind the Bar (updated 2026-08-20)
 - [ ] [https://bourbonoaklover.com/blog/how-to-start-a-bourbon-collection](https://bourbonoaklover.com/blog/how-to-start-a-bourbon-collection)  — How to Start a Bourbon Collection Without Wasting Money (updated 2026-08-16)
 - [ ] [https://bourbonoaklover.com/blog/kentucky-bourbon-trail-guide](https://bourbonoaklover.com/blog/kentucky-bourbon-trail-guide)  — The Kentucky Bourbon Trail: How to Actually Plan It (updated 2026-08-16)
 - [ ] [https://bourbonoaklover.com/blog/buffalo-trace-antique-collection-explained](https://bourbonoaklover.com/blog/buffalo-trace-antique-collection-explained)  — The Buffalo Trace Antique Collection, Explained (updated 2026-08-15)

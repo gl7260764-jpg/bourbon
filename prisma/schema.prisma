@@ -504,6 +504,7 @@ model Visitor {
 
   visitDays   VisitDay[]
   pageViews   PageView[]
+  sessions    VisitSession[]
   subscribers Subscriber[]
 
   @@index([firstSeenAt])
@@ -536,8 +537,68 @@ model PageView {
   path      String
   createdAt DateTime @default(now())
 
+  // Client-generated id for this one page view. The dwell-time beacon arrives
+  // *after* the row exists (you only know how long someone stayed once they
+  // leave), so it needs to name exactly which view it belongs to —
+  // (visitorId, path) is ambiguous the moment somebody revisits a page.
+  // Nullable because rows written before this shipped have no id, and unique
+  // so a replayed beacon can't fan out across rows (Postgres allows many NULLs
+  // in a unique index, so the backfilled rows don't collide).
+  viewId String? @unique
+
+  // Visible dwell time in milliseconds. NULL means "never reported" — a real
+  // unknown, not zero. Averaging unflushed views as 0s would quietly halve
+  // every engagement number, so every rollup below filters on NOT NULL.
+  durationMs Int?
+
+  // Which visit this page view belonged to. Nullable: set on a best-effort
+  // basis, and analytics must never block a page load on it.
+  sessionId String?
+  session   VisitSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+
   // Rollups filter by time; journeys read one visitor in chronological order.
   @@index([createdAt])
   @@index([path])
   @@index([visitorId, createdAt])
+  // "Top pages by engagement time" groups by path inside a date window — this
+  // composite lets that rollup run off the index instead of a full scan.
+  @@index([path, createdAt])
+  @@index([sessionId])
+}
+
+// One visit — a single stretch of browsing, keyed by a token the client keeps
+// in sessionStorage (so it dies with the tab and is never shared across tabs).
+//
+// Why this exists alongside PageView.durationMs rather than just summing the
+// page durations: (1) summing only works if every page in the visit flushed,
+// and the *last* page of a visit is exactly the one most likely to lose its
+// beacon, so the sum systematically under-reports; (2) a visit needs a
+// boundary — without a session row there is nothing to say where one visit
+// ends and the next begins, so "average session length" has no denominator;
+// (3) the client already holds a running per-visit total in sessionStorage, so
+// it can be flushed monotonically and survive a hard reload mid-visit.
+// The two are complementary: durationMs answers "which pages hold attention",
+// activeMs answers "how long is a visit".
+model VisitSession {
+  id         String  @id @default(cuid())
+  visitorId  String
+  visitor    Visitor @relation(fields: [visitorId], references: [id], onDelete: Cascade)
+  // Random token minted by the client per tab-session. Unique so both the
+  // page-view route and the duration beacon can upsert the same visit.
+  sessionKey String  @unique
+
+  startedAt    DateTime @default(now())
+  lastActiveAt DateTime @default(now())
+
+  // Total *visible* milliseconds across the visit. Written monotonically
+  // (GREATEST of old and new) so a duplicated or out-of-order beacon can only
+  // ever be a no-op, never a double-count. Server-clamped — see
+  // MAX_SESSION_MS in src/lib/visitor.ts.
+  activeMs Int @default(0)
+
+  pageViews PageView[]
+
+  @@index([visitorId])
+  // Average-session-duration rollups filter on the window start.
+  @@index([startedAt])
 }
