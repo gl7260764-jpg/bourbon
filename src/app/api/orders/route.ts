@@ -1,4 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
+import {
+  MIN_ORDER_TOTAL,
+  meetsMinimum,
+  shippingFor,
+} from "@/lib/commerce";
 import { Prisma, PaymentMethod, ShippingMethod } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { findOrCreateCustomer } from "@/lib/customer-auth";
@@ -192,7 +197,19 @@ export async function POST(req: NextRequest) {
   const computedDiscount = round2(computedSubtotal * resolvedDiscountRate);
   // Shipping and tax are both zero now; kept explicit so the arithmetic below
   // stays obvious if either ever comes back.
-  const computedShipping = 0;
+  /* Shipping and the order minimum are both enforced here, from the
+     server-computed subtotal. The client sends figures for display only —
+     trusting them would let anyone post a $1 order with free shipping. */
+  if (!meetsMinimum(computedSubtotal)) {
+    return NextResponse.json(
+      {
+        error: `Minimum order is $${MIN_ORDER_TOTAL}. Your subtotal is $${computedSubtotal.toFixed(2)}.`,
+      },
+      { status: 400 },
+    );
+  }
+
+  const computedShipping = shippingFor(computedSubtotal);
   const computedTax = 0;
   const computedTotal = round2(
     Math.max(0, computedSubtotal - computedDiscount) +
@@ -244,8 +261,8 @@ export async function POST(req: NextRequest) {
         postal: address.postal!.trim(),
         country: address.country!.trim(),
         shippingMethod,
-        // Always free — never taken from the client.
-        shippingCost: new Prisma.Decimal(0),
+        // Computed from the server's own subtotal, never taken from the client.
+        shippingCost: new Prisma.Decimal(computedShipping),
         paymentMethod,
         // Rate comes from the PaymentOption row, never from the request body.
         discountRate: new Prisma.Decimal(resolvedDiscountRate),

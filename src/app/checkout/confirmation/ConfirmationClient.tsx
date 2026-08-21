@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import type { OrderSnapshot } from "@/lib/order-snapshot";
-import PaymentProofUpload from "./PaymentProofUpload";
+import OrderAlertsPrompt from "@/components/OrderAlertsPrompt";
 import {
   AmexLogo,
   ApplePayLogo,
@@ -271,39 +271,52 @@ export default function ConfirmationClient({
                   <div>{paymentLogos(order.payment.id)}</div>
                 </div>
 
-                {/* Account details, straight from the order snapshot. These
-                    used to be hardcoded per method here — now the operator
-                    edits them in Admin → Payment methods. */}
-                {order.payment.instructions && (
-                  <div className="mt-5 pt-5 border-t-2 border-bourbon-gold/40">
-                    <p className="text-bourbon-gold text-[10px] tracking-[0.3em] uppercase mb-3">
-                      How to pay — {order.payment.label}
+                {/* The checkout-time instructions block used to live here. It is
+                    gone deliberately: payment details are now issued per order
+                    by a human afterwards, so anything shown at this moment is
+                    either a placeholder or stale — and it directly contradicted
+                    the notice below by claiming the details had been emailed. */}
+
+                {/* No receipt upload here any more. Payment details are issued
+                    per order by a human, so at this moment the buyer has not
+                    been told where to send anything — an upload box would be
+                    asking for proof of a payment they cannot yet make. The
+                    handoff is to the dashboard, which is also the only place
+                    the details are ever shown. */}
+                {(order.status ?? "PENDING") === "PENDING" && (
+                  <div className="mt-6 border border-bourbon-gold/40 bg-bourbon-gold/5 p-5">
+                    <p className="text-bourbon-gold text-[10px] tracking-[0.25em] uppercase font-semibold mb-2">
+                      What happens next
                     </p>
-                    <pre className="text-bourbon-deep text-sm whitespace-pre-wrap font-[family-name:var(--font-inter)] bg-bourbon-cream/60 p-4 border border-bourbon-deep/10">
-                      {order.payment.instructions}
-                    </pre>
-                    <p className="text-bourbon-stone text-sm mt-3">
-                      Amount due{" "}
+                    <h3 className="font-[family-name:var(--font-playfair)] text-xl font-bold text-bourbon-deep mb-2">
+                      We&apos;re preparing your payment details
+                    </h3>
+                    <p className="text-bourbon-stone text-sm leading-relaxed mb-4">
+                      We&apos;ll email you the moment they&apos;re ready. Pay
+                      the{" "}
                       <span className="text-bourbon-deep font-semibold">
                         ${order.totals.total.toFixed(2)}
-                      </span>
-                      . Reference order{" "}
-                      <span className="text-bourbon-deep font-semibold">
-                        {order.orderNumber}
                       </span>{" "}
-                      so we can match your payment. We&apos;ve emailed these
-                      details to you as well.
+                      and upload your receipt from your dashboard.
+                    </p>
+
+                    {/* Carries the order's email to the sign-in step so the
+                        buyer never retypes the address they just entered at
+                        checkout. It only prefills — the emailed code is still
+                        what grants the session. */}
+                    <Link
+                      href={`/account/login?email=${encodeURIComponent(order.contact.email)}`}
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-bourbon-gold text-bourbon-deep text-xs font-semibold tracking-wider uppercase hover:bg-bourbon-amber transition-colors"
+                    >
+                      Open your dashboard →
+                    </Link>
+
+                    <OrderAlertsPrompt />
+
+                    <p className="text-bourbon-stone/70 text-[11px] mt-4">
+                      We never send payment details by email.
                     </p>
                   </div>
-                )}
-
-                {/* Proof of payment. Only offered while the order is still
-                    awaiting money — the API refuses uploads after that. */}
-                {(order.status ?? "PENDING") === "PENDING" && (
-                  <PaymentProofUpload
-                    orderNumber={order.orderNumber}
-                    alreadyUploaded={order.hasPaymentProof ?? false}
-                  />
                 )}
               </section>
             </div>

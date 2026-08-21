@@ -131,3 +131,126 @@ export async function uploadImageBuffer(
     bytes: result.bytes,
   };
 }
+
+/* ---- Chat attachments ---------------------------------------------------
+
+   Chat carries payment screenshots and spoken payment references, so the same
+   rule as payment proofs applies: `authenticated` assets with no permanent
+   public URL, signed at view time.
+
+   Voice notes go up as resource_type "video" — that is Cloudinary's bucket for
+   anything with a time axis, audio included. Using "raw" would store the bytes
+   but give no duration or transcoding. */
+
+export const CHAT_IMAGE_MIME_TYPES = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+  "image/avif",
+  "image/heic",
+]);
+
+/* MediaRecorder emits webm/opus on Chrome and Firefox and mp4/aac on Safari,
+   and both tack a codecs= parameter onto the type, so the check strips
+   parameters before comparing. */
+export const CHAT_AUDIO_MIME_TYPES = new Set([
+  "audio/webm",
+  "audio/ogg",
+  "audio/mp4",
+  "audio/mpeg",
+  "audio/aac",
+  "audio/wav",
+]);
+
+export const MAX_CHAT_IMAGE_BYTES = 8 * 1024 * 1024; // 8 MB
+/* A voice note is a message, not a podcast. Two minutes of opus is well under
+   this; the cap is here so a stuck recorder cannot post a 200MB blob. */
+export const MAX_CHAT_AUDIO_BYTES = 6 * 1024 * 1024; // 6 MB
+export const MAX_VOICE_NOTE_MS = 3 * 60 * 1000; // 3 minutes
+
+export function baseMimeType(raw: string): string {
+  return raw.split(";")[0]!.trim().toLowerCase();
+}
+
+export async function uploadChatImage(buffer: Buffer): Promise<UploadResult> {
+  if (!process.env.CLOUDINARY_URL) {
+    throw new Error("Cloudinary is not configured (missing CLOUDINARY_URL).");
+  }
+  const result = await new Promise<UploadApiResponse>((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder: "bourbon/chat",
+        resource_type: "image",
+        type: "authenticated",
+        transformation: [{ width: 2000, height: 2000, crop: "limit" }],
+        quality: "auto:good",
+      },
+      (error, uploaded) => {
+        if (error) return reject(error);
+        if (!uploaded) return reject(new Error("Cloudinary returned an empty response."));
+        resolve(uploaded);
+      },
+    );
+    stream.end(buffer);
+  });
+  return {
+    url: result.secure_url,
+    publicId: result.public_id,
+    width: result.width,
+    height: result.height,
+    format: result.format,
+    bytes: result.bytes,
+  };
+}
+
+export type AudioUploadResult = {
+  publicId: string;
+  bytes: number;
+  /** Cloudinary reports duration in seconds; callers store milliseconds. */
+  durationMs: number | null;
+};
+
+export async function uploadChatAudio(
+  buffer: Buffer,
+): Promise<AudioUploadResult> {
+  if (!process.env.CLOUDINARY_URL) {
+    throw new Error("Cloudinary is not configured (missing CLOUDINARY_URL).");
+  }
+  const result = await new Promise<UploadApiResponse>((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder: "bourbon/chat-voice",
+        resource_type: "video",
+        type: "authenticated",
+      },
+      (error, uploaded) => {
+        if (error) return reject(error);
+        if (!uploaded) return reject(new Error("Cloudinary returned an empty response."));
+        resolve(uploaded);
+      },
+    );
+    stream.end(buffer);
+  });
+  const seconds = (result as UploadApiResponse & { duration?: number }).duration;
+  return {
+    publicId: result.public_id,
+    bytes: result.bytes,
+    durationMs: typeof seconds === "number" ? Math.round(seconds * 1000) : null,
+  };
+}
+
+/** Signed URL for a chat attachment. `video` covers audio, as above. */
+export function signedChatMediaUrl(
+  publicId: string,
+  kind: "image" | "audio",
+  ttlSeconds = 900,
+): string {
+  return cloudinary.url(publicId, {
+    resource_type: kind === "audio" ? "video" : "image",
+    type: "authenticated",
+    sign_url: true,
+    secure: true,
+    expires_at: Math.floor(Date.now() / 1000) + ttlSeconds,
+  });
+}

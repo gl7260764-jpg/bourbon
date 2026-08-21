@@ -9,10 +9,32 @@ export const metadata = { title: "Analytics | Admin" };
 export const dynamic = "force-dynamic";
 
 const DAYS_WINDOW = 30;
-// How many recent visitors to reconstruct a click-path for, and how many
-// steps to show before collapsing the rest.
-const JOURNEY_VISITORS = 8;
-const JOURNEY_MAX_STEPS = 12;
+// Rows per page in the all-visitors table.
+const VISITORS_PAGE_SIZE = 25;
+
+/* Whitelisted sort orders. The column has to be interpolated raw (you cannot
+   parameterise ORDER BY), so it must never come from user input directly —
+   the key is looked up in this map and anything unrecognised falls back to
+   `recent`. */
+const VISITOR_SORTS = {
+  recent: Prisma.sql`v."lastSeenAt" DESC`,
+  time: Prisma.sql`total_ms DESC, v."lastSeenAt" DESC`,
+  pages: Prisma.sql`views DESC, v."lastSeenAt" DESC`,
+} as const;
+type VisitorSort = keyof typeof VISITOR_SORTS;
+
+type VisitorRow = {
+  id: string;
+  countryCode: string | null;
+  city: string | null;
+  userAgent: string | null;
+  email: string | null;
+  firstSeenAt: Date;
+  lastSeenAt: Date;
+  views: number;
+  sessions: number;
+  total_ms: number;
+};
 
 function formatMoney(v: number): string {
   return `$${v.toFixed(2)}`;
@@ -49,7 +71,15 @@ function buildDayRange(days: number): { key: string; label: string }[] {
   return out;
 }
 
-export default async function AnalyticsPage() {
+export default async function AnalyticsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string; sort?: string }>;
+}) {
+  const sp = await searchParams;
+  const sortKey: VisitorSort =
+    sp.sort === "time" || sp.sort === "pages" ? sp.sort : "recent";
+  const pageNum = Math.max(1, Number.parseInt(sp.page ?? "1", 10) || 1);
   const since = startOfUtcDay(DAYS_WINDOW - 1);
   const startOfToday = startOfUtcDay(0);
   const startOfLast7 = startOfUtcDay(6);
@@ -73,7 +103,8 @@ export default async function AnalyticsPage() {
     subscriberSources,
     newVsReturningRaw,
     topPagesRaw,
-    journeyRowsRaw,
+    visitorRows,
+    visitorTotal,
     sessionTimeRaw,
     pageTimeRaw,
     topPagesByTimeRaw,
@@ -187,31 +218,35 @@ export default async function AnalyticsPage() {
       LIMIT 12
     `,
 
-    // The most recently active visitors, with every step they took, oldest
-    // first so the sequence reads left to right.
-    prisma.$queryRaw<
-      {
-        visitorId: string;
-        path: string;
-        createdAt: Date;
-        countryCode: string | null;
-        firstSeenAt: Date;
-        email: string | null;
-        userAgent: string | null;
-      }[]
-    >`
-      SELECT pv."visitorId", pv."path", pv."createdAt",
-             v."countryCode", v."firstSeenAt", v."email", v."userAgent"
-      FROM "PageView" pv
-      JOIN "Visitor" v ON v."id" = pv."visitorId"
-      WHERE pv."visitorId" IN (
-        SELECT "visitorId" FROM "PageView"
-        GROUP BY "visitorId"
-        ORDER BY MAX("createdAt") DESC
-        LIMIT ${JOURNEY_VISITORS}
-      )
-      ORDER BY pv."createdAt" ASC
+    /* One page of the all-visitors table. Raw SQL because the page has to be
+       ordered by aggregates (total time, page count) *before* it is sliced —
+       doing that in JS would mean loading every visitor on every request.
+       `total_ms` takes the GREATEST of the session total and the summed page
+       dwell: sessions are the truth once they exist, but rows written before
+       session tracking shipped only have per-view durations. */
+    prisma.$queryRaw<VisitorRow[]>`
+      SELECT v."id", v."countryCode", v."city", v."userAgent", v."email",
+             v."firstSeenAt", v."lastSeenAt",
+             COALESCE(pv.views, 0)::int AS views,
+             COALESCE(s.sessions, 0)::int AS sessions,
+             GREATEST(COALESCE(s.total_ms, 0), COALESCE(pv.pv_ms, 0))::int AS total_ms
+      FROM "Visitor" v
+      LEFT JOIN (
+        SELECT "visitorId", COUNT(*)::int AS views,
+               SUM(COALESCE("durationMs", 0))::int AS pv_ms
+        FROM "PageView" GROUP BY "visitorId"
+      ) pv ON pv."visitorId" = v."id"
+      LEFT JOIN (
+        SELECT "visitorId", COUNT(*)::int AS sessions,
+               SUM("activeMs")::int AS total_ms
+        FROM "VisitSession" GROUP BY "visitorId"
+      ) s ON s."visitorId" = v."id"
+      ORDER BY ${VISITOR_SORTS[sortKey]}
+      LIMIT ${VISITORS_PAGE_SIZE} OFFSET ${(pageNum - 1) * VISITORS_PAGE_SIZE}
     `,
+
+    // Total row count, for the pager.
+    prisma.visitor.count(),
 
     // --- engagement time -------------------------------------------------
     // Average visit length. Only visits that actually reported time are
@@ -379,44 +414,6 @@ export default async function AnalyticsPage() {
   );
 
   // Collapse the flat page-view rows into one ordered journey per visitor.
-  const journeyMap = new Map<
-    string,
-    {
-      visitorId: string;
-      countryCode: string | null;
-      firstSeenAt: Date;
-      email: string | null;
-      userAgent: string | null;
-      steps: { path: string; at: Date }[];
-    }
-  >();
-  for (const row of journeyRowsRaw) {
-    let entry = journeyMap.get(row.visitorId);
-    if (!entry) {
-      entry = {
-        visitorId: row.visitorId,
-        countryCode: row.countryCode,
-        firstSeenAt: row.firstSeenAt,
-        email: row.email,
-        userAgent: row.userAgent,
-        steps: [],
-      };
-      journeyMap.set(row.visitorId, entry);
-    }
-    entry.steps.push({ path: row.path, at: row.createdAt });
-  }
-  const journeys = [...journeyMap.values()]
-    .map((j) => {
-      const last = j.steps[j.steps.length - 1];
-      return {
-        ...j,
-        lastAt: last?.at ?? j.firstSeenAt,
-        // A visitor counts as new when this session is also their first ever.
-        isNew: j.firstSeenAt >= since,
-      };
-    })
-    .sort((a, b) => b.lastAt.getTime() - a.lastAt.getTime());
-
   return (
     <>
       <div className="mb-8">
@@ -530,117 +527,191 @@ export default async function AnalyticsPage() {
         />
       </div>
 
-      {/* Page journeys */}
+      {/* ---- All visitors -------------------------------------------------
+          Sits directly under the charts: the KPIs say what happened in
+          aggregate, the charts say when, and this says who. Every visitor the
+          site has ever seen is reachable from here via the pager. */}
       <section className="bg-white border border-bourbon-deep/10 p-5 sm:p-6 mb-10">
-        <div className="flex items-baseline justify-between mb-4 pb-4 border-b border-bourbon-deep/10">
+        <div className="flex items-baseline justify-between gap-3 mb-4 pb-4 border-b border-bourbon-deep/10 flex-wrap">
           <h2 className="font-[family-name:var(--font-playfair)] text-xl font-bold text-bourbon-deep">
-            Visitor journeys
+            All visitors
           </h2>
-          <span className="text-bourbon-stone text-[10px] tracking-widest uppercase">
-            Last {JOURNEY_VISITORS} visitors
-          </span>
-        </div>
-        {journeys.length === 0 ? (
-          <p className="text-bourbon-stone text-sm py-6 text-center">
-            No page views recorded yet. They start appearing as soon as someone
-            browses the site.
-          </p>
-        ) : (
-          <ul className="space-y-5">
-            {journeys.map((j) => {
-              const shown = j.steps.slice(0, JOURNEY_MAX_STEPS);
-              const hidden = j.steps.length - shown.length;
-              return (
-                <li
-                  key={j.visitorId}
-                  className="pb-5 border-b border-bourbon-deep/5 last:border-0 last:pb-0"
+          <div className="flex items-center gap-3 flex-wrap">
+            <span className="text-bourbon-stone text-[10px] tracking-widest uppercase">
+              {visitorTotal.toLocaleString()} total
+            </span>
+            <div className="flex items-center gap-1">
+              {(
+                [
+                  ["recent", "Recent"],
+                  ["time", "Time spent"],
+                  ["pages", "Pages"],
+                ] as const
+              ).map(([key, label]) => (
+                <Link
+                  key={key}
+                  href={`/admin/analytics?sort=${key}`}
+                  className={`text-[10px] tracking-widest uppercase px-2 py-1 transition-colors ${
+                    sortKey === key
+                      ? "bg-bourbon-deep text-bourbon-cream"
+                      : "text-bourbon-stone hover:text-bourbon-deep"
+                  }`}
                 >
-                  <div className="flex items-center gap-2 mb-1 flex-wrap">
-                    <span className="text-lg leading-none">
-                      {j.countryCode ? countryFlag(j.countryCode) : "🌐"}
-                    </span>
-                    {/* Identified visitors lead with the address; everyone
-                        else gets a stable codename derived from their id. */}
-                    {j.email ? (
-                      <span className="text-bourbon-deep text-sm font-semibold">
-                        {j.email}
-                      </span>
-                    ) : (
-                      <span className="text-bourbon-deep text-sm font-semibold">
-                        {visitorLabel(j.visitorId)}
-                      </span>
-                    )}
-                    <span
-                      className={`text-[10px] tracking-widest uppercase px-1.5 py-0.5 ${
-                        j.isNew
-                          ? "bg-bourbon-gold/15 text-bourbon-gold"
-                          : "bg-bourbon-deep/10 text-bourbon-deep"
-                      }`}
+                  {label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {visitorRows.length === 0 ? (
+          /* An out-of-range page is not the same as an empty site — saying
+             "no visitors yet" when there are 266 of them would be a lie. */
+          visitorTotal > 0 ? (
+            <p className="text-bourbon-stone text-sm py-6 text-center">
+              Page {pageNum} is past the end of{" "}
+              {visitorTotal.toLocaleString()} visitors.{" "}
+              <Link
+                href={`/admin/analytics?sort=${sortKey}`}
+                className="text-bourbon-gold font-semibold hover:text-bourbon-amber transition-colors"
+              >
+                Back to the first page
+              </Link>
+            </p>
+          ) : (
+            <p className="text-bourbon-stone text-sm py-6 text-center">
+              No visitors recorded yet. Rows appear as soon as someone browses
+              the site.
+            </p>
+          )
+        ) : (
+          <>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="text-bourbon-stone text-[10px] tracking-widest uppercase">
+                    <th className="font-semibold pb-2 pr-4">Visitor</th>
+                    <th className="font-semibold pb-2 pr-4">Country</th>
+                    <th className="font-semibold pb-2 pr-4 hidden sm:table-cell">Device</th>
+                    <th className="font-semibold pb-2 pr-4 text-right">Pages</th>
+                    <th className="font-semibold pb-2 pr-4 text-right">Time on site</th>
+                    <th className="font-semibold pb-2 pr-4 hidden md:table-cell">Last seen</th>
+                    <th className="font-semibold pb-2 sr-only">Detail</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {visitorRows.map((v) => {
+                    const spent = formatDuration(v.total_ms);
+                    return (
+                      <tr
+                        key={v.id}
+                        className="border-t border-bourbon-deep/5 hover:bg-bourbon-cream/40 transition-colors"
+                      >
+                        <td className="py-3 pr-4">
+                          <Link
+                            href={`/admin/analytics/visitors/${v.id}`}
+                            className="text-bourbon-deep text-sm font-semibold hover:text-bourbon-gold transition-colors"
+                          >
+                            {v.email ?? visitorLabel(v.id)}
+                          </Link>
+                          {v.email && (
+                            <span className="block text-bourbon-stone text-[10px] font-mono">
+                              {visitorLabel(v.id)}
+                            </span>
+                          )}
+                        </td>
+                        <td className="py-3 pr-4 text-bourbon-stone text-sm whitespace-nowrap">
+                          <span className="mr-1.5">
+                            {v.countryCode ? countryFlag(v.countryCode) : "🌐"}
+                          </span>
+                          {v.countryCode
+                            ? countryName(v.countryCode) ?? v.countryCode
+                            : "Unknown"}
+                          {v.city && (
+                            <span className="block text-[10px] text-bourbon-stone/70">
+                              {v.city}
+                            </span>
+                          )}
+                        </td>
+                        <td className="py-3 pr-4 text-bourbon-stone text-xs hidden sm:table-cell">
+                          {deviceLabel(v.userAgent)}
+                        </td>
+                        <td className="py-3 pr-4 text-bourbon-deep text-sm text-right tabular-nums">
+                          {v.views.toLocaleString()}
+                        </td>
+                        {/* A dash, not "0s" — an unmeasured visit is unknown,
+                            not a visit of zero length. */}
+                        <td className="py-3 pr-4 text-sm text-right tabular-nums">
+                          {spent ? (
+                            <span className="text-bourbon-deep font-semibold">{spent}</span>
+                          ) : (
+                            <span className="text-bourbon-stone/50">—</span>
+                          )}
+                        </td>
+                        <td className="py-3 pr-4 text-bourbon-stone text-xs whitespace-nowrap hidden md:table-cell">
+                          {v.lastSeenAt.toLocaleString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            hour: "numeric",
+                            minute: "2-digit",
+                            timeZone: "UTC",
+                          })}
+                        </td>
+                        <td className="py-3 text-right">
+                          <Link
+                            href={`/admin/analytics/visitors/${v.id}`}
+                            className="text-bourbon-gold text-[10px] tracking-widest uppercase font-semibold hover:text-bourbon-amber transition-colors whitespace-nowrap"
+                          >
+                            View →
+                          </Link>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Pager */}
+            {visitorTotal > VISITORS_PAGE_SIZE && (
+              <div className="flex items-center justify-between gap-3 mt-5 pt-4 border-t border-bourbon-deep/10">
+                <span className="text-bourbon-stone text-xs">
+                  {(pageNum - 1) * VISITORS_PAGE_SIZE + 1}–
+                  {Math.min(pageNum * VISITORS_PAGE_SIZE, visitorTotal)} of{" "}
+                  {visitorTotal.toLocaleString()}
+                </span>
+                <div className="flex items-center gap-2">
+                  {pageNum > 1 ? (
+                    <Link
+                      href={`/admin/analytics?sort=${sortKey}&page=${pageNum - 1}`}
+                      className="text-bourbon-deep text-xs tracking-widest uppercase font-semibold px-3 py-1.5 border border-bourbon-deep/20 hover:border-bourbon-gold hover:text-bourbon-gold transition-colors"
                     >
-                      {j.isNew ? "New" : "Returning"}
+                      ← Prev
+                    </Link>
+                  ) : (
+                    <span className="text-bourbon-stone/40 text-xs tracking-widest uppercase px-3 py-1.5 border border-bourbon-deep/5">
+                      ← Prev
                     </span>
-                    {j.email && (
-                      <span className="text-[10px] tracking-widest uppercase px-1.5 py-0.5 bg-emerald-500/10 text-emerald-700">
-                        Identified
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-2 mb-2 flex-wrap text-bourbon-stone text-[11px]">
-                    <span>
-                      {j.countryCode
-                        ? countryName(j.countryCode) ?? j.countryCode
-                        : "Unknown location"}
+                  )}
+                  <span className="text-bourbon-stone text-xs tabular-nums">
+                    {pageNum} / {Math.ceil(visitorTotal / VISITORS_PAGE_SIZE)}
+                  </span>
+                  {pageNum * VISITORS_PAGE_SIZE < visitorTotal ? (
+                    <Link
+                      href={`/admin/analytics?sort=${sortKey}&page=${pageNum + 1}`}
+                      className="text-bourbon-deep text-xs tracking-widest uppercase font-semibold px-3 py-1.5 border border-bourbon-deep/20 hover:border-bourbon-gold hover:text-bourbon-gold transition-colors"
+                    >
+                      Next →
+                    </Link>
+                  ) : (
+                    <span className="text-bourbon-stone/40 text-xs tracking-widest uppercase px-3 py-1.5 border border-bourbon-deep/5">
+                      Next →
                     </span>
-                    <span className="text-bourbon-stone/40">·</span>
-                    <span>{deviceLabel(j.userAgent)}</span>
-                    <span className="text-bourbon-stone/40">·</span>
-                    <span>
-                      {j.steps.length} page{j.steps.length === 1 ? "" : "s"}
-                    </span>
-                    <span className="text-bourbon-stone/40">·</span>
-                    <span>
-                      {j.lastAt.toLocaleString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                        hour: "numeric",
-                        minute: "2-digit",
-                        timeZone: "UTC",
-                      })}{" "}
-                      UTC
-                    </span>
-                    {j.email && (
-                      <>
-                        <span className="text-bourbon-stone/40">·</span>
-                        <span className="font-mono">
-                          {visitorLabel(j.visitorId)}
-                        </span>
-                      </>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-1 flex-wrap">
-                    {shown.map((s, i) => (
-                      <span key={i} className="flex items-center gap-1">
-                        {i > 0 && (
-                          <span className="text-bourbon-stone/50 text-xs">→</span>
-                        )}
-                        <span
-                          className="bg-bourbon-cream text-bourbon-deep text-[11px] px-2 py-1 max-w-[220px] truncate"
-                          title={`${s.path} · ${s.at.toISOString()}`}
-                        >
-                          {s.path}
-                        </span>
-                      </span>
-                    ))}
-                    {hidden > 0 && (
-                      <span className="text-bourbon-stone text-[11px] ml-1">
-                        +{hidden} more
-                      </span>
-                    )}
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
+                  )}
+                </div>
+              </div>
+            )}
+          </>
         )}
       </section>
 

@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { Prisma, OrderStatus, SettlementState } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { canTransition, ORDER_STATUS_LABEL } from "@/lib/order-status";
+import { notifyPaymentDetailsIssued } from "@/lib/emails/paymentDetailsEmail";
+import { sendToCustomer } from "@/lib/push";
 
 // Reached only from /admin/orders/*, covered by the middleware guard
 // (src/middleware.ts matcher: /admin/:path*).
@@ -168,6 +170,106 @@ export async function updateSettlement(
       where: { id },
       data: { ...common, settlementState: SettlementState.REJECTED },
     });
+  }
+
+  revalidateOrder(id);
+  return { ok: true };
+}
+
+/**
+ * Issue the payment details for one order.
+ *
+ * This is the step the whole manual-settlement flow now hangs off: until an
+ * operator writes these, the buyer sees "details on the way" rather than a
+ * payment form, and cannot upload a receipt for money they were never told
+ * where to send. Kept separate from `paymentInstructions`, which is the
+ * immutable snapshot of the rail as it stood at checkout.
+ */
+export async function issuePaymentDetails(
+  id: string,
+  formData: FormData,
+): Promise<ActionResult> {
+  const body = String(formData.get("paymentDetailsBody") ?? "").trim();
+  if (body.length < 10) {
+    return {
+      ok: false,
+      error:
+        "Write the actual details the buyer should pay against — account or wallet, and the reference to quote.",
+    };
+  }
+  if (body.length > 4000) {
+    return { ok: false, error: "Payment details are too long (4000 characters max)." };
+  }
+
+  const order = await prisma.order.findUnique({
+    where: { id },
+    select: {
+      status: true,
+      settlementState: true,
+      email: true,
+      orderNumber: true,
+      total: true,
+      customerId: true,
+      paymentDetailsIssuedAt: true,
+    },
+  });
+  if (!order) return { ok: false, error: "Order not found." };
+  if (order.status !== "PENDING") {
+    return {
+      ok: false,
+      error: `This order is ${ORDER_STATUS_LABEL[order.status].toLowerCase()} — payment details are no longer relevant.`,
+    };
+  }
+
+  /* Re-issuing is allowed (a wrong account number has to be fixable) but it
+     must not drag a paid or rejected order backwards. Only an order still
+     waiting on the buyer moves state. */
+  const nextState =
+    order.settlementState === "AWAITING_DETAILS"
+      ? SettlementState.AWAITING_PAYMENT
+      : order.settlementState;
+
+  await prisma.order.update({
+    where: { id },
+    data: {
+      paymentDetailsBody: body,
+      paymentDetailsIssuedAt: new Date(),
+      paymentDetailsIssuedBy: OPERATOR,
+      settlementState: nextState,
+    },
+  });
+
+  /* Tell the buyer, two ways, neither of which is allowed to fail the write.
+     The details are issued regardless and the dashboard is the source of
+     truth — a buyer who never enabled notifications simply opens the
+     dashboard and sees them, which is why nothing here is awaited into the
+     result. */
+  try {
+    await notifyPaymentDetailsIssued({
+      email: order.email,
+      orderNumber: order.orderNumber,
+      total: Number(order.total),
+      reissued: order.paymentDetailsIssuedAt !== null,
+    });
+  } catch (err) {
+    console.error("[issuePaymentDetails] email failed:", err);
+  }
+
+  if (order.customerId) {
+    try {
+      await sendToCustomer(order.customerId, {
+        title: order.paymentDetailsIssuedAt
+          ? `Updated payment details — ${order.orderNumber}`
+          : `Payment details ready — ${order.orderNumber}`,
+        body: `Open your dashboard to see where to send $${Number(order.total).toFixed(2)}.`,
+        url: "/account",
+        // Same tag per order, so re-issuing replaces the old notification in
+        // the tray instead of stacking a second one.
+        tag: `order-${order.orderNumber}-payment`,
+      });
+    } catch (err) {
+      console.error("[issuePaymentDetails] push failed:", err);
+    }
   }
 
   revalidateOrder(id);

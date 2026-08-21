@@ -1,29 +1,38 @@
 import Image from "next/image";
 
+/* Images are stills from our own distillery film (public/VIDEO-HP-DESKTOP-1.mp4)
+   rather than stock. The four they replaced were badly mismatched — a plate of
+   food, a jar of honey, three bottles of Bacardi rum, and a cocktail — which is
+   worth remembering before anyone reaches for stock again. `alt` describes the
+   photograph, not the step label. */
 const steps = [
   {
     step: "01",
     title: "Grain Selection",
     description: "We source the finest non-GMO corn, rye, and malted barley from Kentucky farms within 50 miles of our distillery.",
-    image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80",
+    image: "/process-distillery.webp",
+    alt: "Aerial view of the Bourbon & Oak distillery, its grain silos and rickhouses",
   },
   {
     step: "02",
     title: "Mashing & Fermentation",
     description: "Our sour mash process uses limestone-filtered water and a proprietary yeast strain cultivated since 1876.",
-    image: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=600&q=80",
+    image: "/process-fermenter.webp",
+    alt: "Looking down into a working fermenter as the mash ferments",
   },
   {
     step: "03",
     title: "Copper Pot Distillation",
     description: "Double distilled in hand-hammered copper pot stills, capturing only the heart of the spirit.",
-    image: "https://images.unsplash.com/photo-1614313511387-1436a4480ebb?w=600&q=80",
+    image: "/process-cooperage.webp",
+    alt: "A barrel on the cooperage floor being worked into shape",
   },
   {
     step: "04",
     title: "Barrel Aging",
     description: "Aged in new charred American white oak barrels in our seven-story rickhouse, where Kentucky seasons work their magic.",
-    image: "https://images.unsplash.com/photo-1609951651556-5334e2706168?w=600&q=80",
+    image: "/process-rickhouse.webp",
+    alt: "Barrels rolled along the loading dock of a brick bonded rickhouse",
   },
 ];
 
@@ -60,7 +69,7 @@ export default function OurProcess() {
                 <div className="relative h-56 sm:h-80 lg:h-96 overflow-hidden group">
                   <Image
                     src={step.image}
-                    alt={step.title}
+                    alt={step.alt}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                   />

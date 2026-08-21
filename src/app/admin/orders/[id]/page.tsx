@@ -6,6 +6,8 @@ import { prisma } from "@/lib/prisma";
 import { signedProofUrl } from "@/lib/cloudinary";
 import { updateOrderNotes, updateOrderStatus } from "./actions";
 import SettlementPanel, { type SettlementData } from "./SettlementPanel";
+import PaymentDetailsPanel, { type PaymentDetailsData } from "./PaymentDetailsPanel";
+import OrderChatPanel from "./OrderChatPanel";
 import {
   actionsFor,
   ORDER_STATUS_BADGE,
@@ -92,6 +94,26 @@ export default async function AdminOrderDetailPage({
   const discountRate = Number(order.discountRate);
 
   const actions = actionsFor(order.status);
+
+  /* Unread badge for the chat panel. A separate cheap lookup rather than an
+     include on the order query, so orders that have never been messaged about
+     don't pay for a join. */
+  const conversationUnread =
+    (
+      await prisma.conversation.findUnique({
+        where: { orderId: order.id },
+        select: { adminUnread: true },
+      })
+    )?.adminUnread ?? 0;
+
+  const paymentDetails: PaymentDetailsData = {
+    orderId: order.id,
+    orderNumber: order.orderNumber,
+    body: order.paymentDetailsBody,
+    issuedAt: order.paymentDetailsIssuedAt?.toISOString() ?? null,
+    issuedBy: order.paymentDetailsIssuedBy,
+    actionable: order.status === "PENDING",
+  };
 
   const settlement: SettlementData = {
     orderId: order.id,
@@ -260,6 +282,13 @@ export default async function AdminOrderDetailPage({
 
             {/* Settlement replaces the old read-only payment card: same
                 information, plus the controls to actually confirm the money. */}
+            <PaymentDetailsPanel data={paymentDetails} />
+
+            <OrderChatPanel
+              orderNumber={order.orderNumber}
+              unread={conversationUnread}
+            />
+
             <SettlementPanel data={settlement} />
 
             {discountRate > 0 && (

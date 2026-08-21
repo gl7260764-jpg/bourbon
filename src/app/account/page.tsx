@@ -47,7 +47,13 @@ export default async function AccountPage() {
       quantity: i.quantity,
       unitPrice: Number(i.unitPrice),
     })),
-    canUploadProof: o.status === "PENDING",
+    paymentDetails: o.paymentDetailsBody,
+    paymentDetailsIssuedAt: o.paymentDetailsIssuedAt?.toISOString() ?? null,
+    /* A receipt can only be uploaded once the buyer has actually been told
+       where to send the money. Before that the upload box is not just useless,
+       it invites a payment to nowhere. */
+    canUploadProof:
+      o.status === "PENDING" && o.paymentDetailsIssuedAt !== null,
     hasProof: o.paymentProofPublicId !== null,
   }));
 

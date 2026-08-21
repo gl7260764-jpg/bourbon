@@ -4,25 +4,34 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-const VIDEO_SRC = "/VIDEO-HP-DESKTOP-1.mp4";
+type Clip = {
+  src: string;
+  /** Playback rate. Both clips are cut faster than a background bed wants —
+      slowing them makes the hero read as atmosphere rather than an advert. */
+  rate: number;
+  /** Media-time seconds at which to hand over to the next clip. */
+  end: number;
+};
 
-/* A 1920x1080 distillery film: aerial over the complex, cooperage, a barrel
-   being charred in open flame, barrels rolled past a bonded rickhouse, and
-   glasses poured at the end. Native Full HD means no upscaling at all on a
-   1920 hero — `object-cover` only trims ~17% of frame height — and a phone
-   viewport keeps the centre ~26% of the width, which is where the composition
-   was checked. Nothing in it carries third-party branding: the only legible
-   sign reads BONDED STORAGE / BLDG M, a federal warehouse designation.
-   The whole clip is usable, so the window is the full 10s. */
-const LOOP_START = 0;
-const LOOP_END = 9.85;
-/* The clip opens on a bright daylight aerial and ends on dark, warm bokeh, so
-   the wrap is both a cut and a large luminance jump. The dissolve is longer
-   and dips deeper than a matched-frame seam would need, otherwise the loop
-   reads as a flash. */
-const SEAM_LEAD = 0.45;
-const SEAM_MS = 700;
-const SEAM_OPACITY = 0.14;
+/* Two clips alternating, not one looping. The distillery film opens the reel
+   (aerial, cooperage, a barrel charred in open flame, a bonded rickhouse) and
+   the interior render follows it (a pan along the backlit shelf wall into a
+   pour), then it wraps back. Sequencing them removes the jarring same-clip
+   wrap entirely: every hand-over is now a cut between two different scenes,
+   which is what a cross-dissolve is actually for.
+
+   Clip 1 is 1920x1080, so it never upscales on a desktop hero. Clip 2 is
+   1280x720 and upscales ~1.5x, which is why it plays second and slower — the
+   slower pan hides the softness. Neither carries third-party branding. */
+const CLIPS: Clip[] = [
+  { src: "/VIDEO-HP-DESKTOP-1.mp4", rate: 0.6, end: 9.85 },
+  { src: "/3D_render_interior_design_scene_202608140820.mp4", rate: 0.7, end: 7.9 },
+];
+
+/* Wall-clock length of the cross-dissolve. Converted to media seconds per clip
+   (`FADE_MS/1000 * rate`) when deciding when to start it — at rate 0.6 a 900ms
+   fade only consumes 0.54s of the clip's own timeline. */
+const FADE_MS = 900;
 
 const bottles = [
   { name: "Single Barrel", line: "Reserve", age: "12 Years", price: "$89.99", image: "/image1.webp" },
@@ -32,65 +41,125 @@ const bottles = [
 ];
 
 export default function Hero() {
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const vaRef = useRef<HTMLVideoElement>(null);
+  const vbRef = useRef<HTMLVideoElement>(null);
   const rafRef = useRef<number | null>(null);
+  /* activeRef mirrors `active` so the rAF loop can read it without being
+     re-created every render; `switching` guards against a second hand-over
+     firing while the first is still dissolving. */
+  const activeRef = useRef(0);
+  const switchingRef = useRef(false);
+  const [active, setActive] = useState(0);
   const [videoOn, setVideoOn] = useState(false);
-  const [atSeam, setAtSeam] = useState(false);
 
-  /* Drive the wrap ourselves instead of the element's own `loop`, so the seam
-     dip can be timed against it. rAF handles the normal case; it is throttled
-     to a standstill in a hidden tab while the video keeps rolling, so
-     `timeupdate` and `visibilitychange` re-clamp as a backstop. */
-  const clamp = useCallback(() => {
-    const v = videoRef.current;
-    if (!v) return;
-    if (v.currentTime >= LOOP_END - SEAM_LEAD) setAtSeam(true);
-    if (v.currentTime >= LOOP_END || v.currentTime < LOOP_START - 0.1) {
-      v.currentTime = LOOP_START;
-      window.setTimeout(() => setAtSeam(false), SEAM_MS / 2);
-    }
+  const advance = useCallback(() => {
+    if (switchingRef.current) return;
+    const from = activeRef.current;
+    const to = from === 0 ? 1 : 0;
+    const next = to === 0 ? vaRef.current : vbRef.current;
+    const prev = from === 0 ? vaRef.current : vbRef.current;
+    if (!next || !next.src) return;
+    switchingRef.current = true;
+
+    /* Raise the incoming clip's opacity only once it is genuinely rendering —
+       `play()` resolving is that signal. Flipping earlier cross-fades to a
+       blank element and shows a black flash. */
+    const reveal = () => {
+      activeRef.current = to;
+      setActive(to);
+      window.setTimeout(() => {
+        // Pause the outgoing clip only after it has finished fading out,
+        // otherwise its last frame freezes mid-dissolve.
+        if (prev) {
+          prev.pause();
+          prev.currentTime = 0;
+        }
+        switchingRef.current = false;
+      }, FADE_MS);
+    };
+
+    next.currentTime = 0;
+    next.playbackRate = CLIPS[to].rate;
+    next.play().then(reveal).catch(reveal);
   }, []);
 
-  useEffect(() => {
-    const v = videoRef.current;
+  /* rAF drives the hand-over; it is throttled to a standstill in a hidden tab
+     while the video keeps rolling, so `timeupdate`, `ended` and
+     `visibilitychange` all re-check as backstops. */
+  const check = useCallback(() => {
+    if (switchingRef.current) return;
+    const i = activeRef.current;
+    const v = i === 0 ? vaRef.current : vbRef.current;
     if (!v) return;
+    const clip = CLIPS[i];
+    const leadMedia = (FADE_MS / 1000) * clip.rate;
+    if (v.currentTime >= clip.end - leadMedia) advance();
+  }, [advance]);
+
+  useEffect(() => {
+    const a = vaRef.current;
+    const b = vbRef.current;
+    if (!a || !b) return;
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
-    /* Attach the source only once we know we will play it. Reduced-motion and
-       Data Saver hold at the poster — itself a still pulled from LOOP_START, so
-       the framing matches — without fetching 3.9MB they will never watch. */
+    /* Attach sources only once we know we will play them. Reduced-motion and
+       Data Saver hold at the poster — itself a still from clip 1 frame 0, so
+       the framing matches — without fetching ~6MB they will never watch. */
     if (reduced || conn?.saveData) return;
-    v.src = VIDEO_SRC;
+
+    a.src = CLIPS[0].src;
+    a.playbackRate = CLIPS[0].rate;
 
     const tick = () => {
-      clamp();
+      check();
       rafRef.current = requestAnimationFrame(tick);
     };
 
+    // Some browsers reset playbackRate when a source loads.
+    const rateA = () => { a.playbackRate = CLIPS[0].rate; };
+    const rateB = () => { b.playbackRate = CLIPS[1].rate; };
+
     const start = () => {
-      v.currentTime = LOOP_START;
-      v.play()
+      a.playbackRate = CLIPS[0].rate;
+      a.play()
         .then(() => {
           setVideoOn(true);
           rafRef.current = requestAnimationFrame(tick);
+          /* Fetch clip 2 only once clip 1 is actually running, so first paint
+             costs one video rather than both. At 0.6x there is ~16s of clip 1
+             to buffer it in. */
+          if (!b.src) {
+            b.src = CLIPS[1].src;
+            b.playbackRate = CLIPS[1].rate;
+          }
         })
         .catch(() => setVideoOn(false));
     };
 
-    if (v.readyState >= 2) start();
-    else v.addEventListener("loadeddata", start, { once: true });
+    if (a.readyState >= 2) start();
+    else a.addEventListener("loadeddata", start, { once: true });
 
-    v.addEventListener("timeupdate", clamp);
-    document.addEventListener("visibilitychange", clamp);
+    a.addEventListener("loadedmetadata", rateA);
+    b.addEventListener("loadedmetadata", rateB);
+    a.addEventListener("timeupdate", check);
+    b.addEventListener("timeupdate", check);
+    a.addEventListener("ended", advance);
+    b.addEventListener("ended", advance);
+    document.addEventListener("visibilitychange", check);
 
     return () => {
-      v.removeEventListener("loadeddata", start);
-      v.removeEventListener("timeupdate", clamp);
-      document.removeEventListener("visibilitychange", clamp);
+      a.removeEventListener("loadeddata", start);
+      a.removeEventListener("loadedmetadata", rateA);
+      b.removeEventListener("loadedmetadata", rateB);
+      a.removeEventListener("timeupdate", check);
+      b.removeEventListener("timeupdate", check);
+      a.removeEventListener("ended", advance);
+      b.removeEventListener("ended", advance);
+      document.removeEventListener("visibilitychange", check);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [clamp]);
+  }, [check, advance]);
 
   return (
     <section className="relative min-h-[100svh] bg-bourbon-deep overflow-hidden">
@@ -104,8 +173,12 @@ export default function Hero() {
           sizes="100vw"
           className="object-cover"
         />
+        {/* Two stacked elements so one clip can dissolve into the next.
+            A single element cannot cross-fade with itself — swapping `src`
+            blanks the frame — which is why the previous single-clip version
+            had to dip through black at the wrap instead. */}
         <video
-          ref={videoRef}
+          ref={vaRef}
           muted
           loop={false}
           playsInline
@@ -114,8 +187,22 @@ export default function Hero() {
           tabIndex={-1}
           className="absolute inset-0 h-full w-full object-cover transition-opacity ease-out"
           style={{
-            opacity: videoOn ? (atSeam ? SEAM_OPACITY : 1) : 0,
-            transitionDuration: videoOn ? `${SEAM_MS}ms` : "1200ms",
+            opacity: videoOn && active === 0 ? 1 : 0,
+            transitionDuration: videoOn ? `${FADE_MS}ms` : "1200ms",
+          }}
+        />
+        <video
+          ref={vbRef}
+          muted
+          loop={false}
+          playsInline
+          preload="none"
+          aria-hidden="true"
+          tabIndex={-1}
+          className="absolute inset-0 h-full w-full object-cover transition-opacity ease-out"
+          style={{
+            opacity: videoOn && active === 1 ? 1 : 0,
+            transitionDuration: `${FADE_MS}ms`,
           }}
         />
 

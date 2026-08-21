@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCart } from "./CartContext";
 import SearchOverlay from "./SearchOverlay";
+import ShippingTermsBar from "./ShippingTermsBar";
 import InstallButton from "./InstallButton";
 
 const navLinks = [
@@ -166,6 +167,11 @@ export default function Navbar() {
           ))}
         </nav>
       </div>
+
+      {/* Terms strip. Open exactly when the header has a solid background —
+          the same condition that drives the header's own styling above, so the
+          two can never disagree. */}
+      <ShippingTermsBar show={!isHome || scrolled} />
     </header>
   );
 }

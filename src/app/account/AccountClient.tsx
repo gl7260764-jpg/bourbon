@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import OrderChat from "@/components/OrderChat";
 import PaymentProofUpload from "@/app/checkout/confirmation/PaymentProofUpload";
 import { updateAccountDetails } from "./actions";
 
@@ -16,7 +17,10 @@ export interface AccountOrder {
   total: number;
   itemCount: number;
   items: { name: string; quantity: number; unitPrice: number }[];
-  /** Only pending orders can still receive a receipt. */
+  /** Payment details the admin issued for this order, or null if not yet sent. */
+  paymentDetails: string | null;
+  paymentDetailsIssuedAt: string | null;
+  /** Pending AND details issued — see page.tsx for why both are required. */
   canUploadProof: boolean;
   hasProof: boolean;
 }
@@ -45,6 +49,7 @@ export default function AccountClient({
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [saved, setSaved] = useState<string | null>(null);
+  const [chatFor, setChatFor] = useState<string | null>(null);
   const [expanded, setExpanded] = useState<string | null>(
     // Open the first order that still needs a receipt — that's the one the
     // customer most likely came here to deal with.
@@ -126,6 +131,11 @@ export default function AccountClient({
                               Receipt needed
                             </span>
                           )}
+                          {o.status === "PENDING" && !o.paymentDetails && (
+                            <span className="text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 bg-sky-100 text-sky-800">
+                              Details coming
+                            </span>
+                          )}
                         </div>
                         <p className="text-bourbon-stone text-sm">
                           {new Date(o.placedAt).toLocaleDateString(undefined, {
@@ -168,11 +178,87 @@ export default function AccountClient({
                           ))}
                         </ul>
 
+                        {/* Payment details, once issued. Rendered here rather
+                            than emailed: account and wallet details sent by
+                            email are what payment-redirection fraud imitates. */}
+                        {o.paymentDetails && (
+                          <div className="mb-4 border border-bourbon-gold/40 bg-bourbon-gold/5 p-4">
+                            <div className="flex items-baseline justify-between gap-2 flex-wrap mb-2">
+                              <p className="text-bourbon-gold text-[10px] tracking-[0.25em] uppercase font-semibold">
+                                Where to send payment
+                              </p>
+                              {o.paymentDetailsIssuedAt && (
+                                <span className="text-bourbon-stone text-[10px]">
+                                  Sent{" "}
+                                  {new Date(o.paymentDetailsIssuedAt).toLocaleDateString(
+                                    undefined,
+                                    { month: "short", day: "numeric" },
+                                  )}
+                                </span>
+                              )}
+                            </div>
+                            <pre className="whitespace-pre-wrap font-sans text-bourbon-deep text-sm leading-relaxed">
+                              {o.paymentDetails}
+                            </pre>
+                            <p className="text-bourbon-stone text-[11px] mt-3">
+                              Pay the full {money(o.total)} and quote{" "}
+                              {o.orderNumber}. We will never email you these
+                              details or ask you to send payment anywhere else.
+                            </p>
+                          </div>
+                        )}
+
+                        {/* Chat with the admin about this specific order.
+                            Collapsed by default: most orders never need it,
+                            and an always-open thread would push the payment
+                            details and the receipt box below the fold. */}
+                        <div className="mb-4">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setChatFor(chatFor === o.orderNumber ? null : o.orderNumber)
+                            }
+                            className="inline-flex items-center gap-2 px-4 py-2.5 border border-bourbon-deep/15 text-bourbon-deep text-xs font-semibold tracking-wider uppercase hover:border-bourbon-gold hover:text-bourbon-gold transition-colors cursor-pointer"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
+                                d="M21 11.5a8.38 8.38 0 01-9 8.4 8.5 8.5 0 01-3.8-.9L3 21l1.9-5.2A8.38 8.38 0 014 11.5a8.5 8.5 0 018.5-8.5 8.38 8.38 0 018.5 8.5z" />
+                            </svg>
+                            {chatFor === o.orderNumber ? "Hide chat" : "Chat with us"}
+                          </button>
+
+                          {chatFor === o.orderNumber && (
+                            <div className="mt-3">
+                              <OrderChat
+                                endpoint={`/api/account/orders/${o.orderNumber}/chat`}
+                                me="VISITOR"
+                                orderNumber={o.orderNumber}
+                                emptyHint={`Ask us anything about ${o.orderNumber} — payment, delivery, or anything else. You can send photos and voice notes too.`}
+                              />
+                            </div>
+                          )}
+                        </div>
+
                         {o.canUploadProof ? (
                           <PaymentProofUpload
                             orderNumber={o.orderNumber}
                             alreadyUploaded={o.hasProof}
                           />
+                        ) : o.status === "PENDING" ? (
+                          /* Pending but no details yet — the order is waiting
+                             on us, not on the buyer. Say so plainly instead of
+                             showing a dead upload box. */
+                          <div className="border border-bourbon-deep/10 bg-bourbon-cream p-4">
+                            <p className="text-bourbon-deep text-sm font-semibold mb-1">
+                              Payment details are on the way
+                            </p>
+                            <p className="text-bourbon-stone text-sm">
+                              We are preparing the payment details for this
+                              order. You will get an email the moment they are
+                              ready, and they will appear here — there is
+                              nothing to do until then.
+                            </p>
+                          </div>
                         ) : (
                           <p className="text-bourbon-stone text-sm">
                             Nothing to do here — this order is {o.statusLabel.toLowerCase()}.

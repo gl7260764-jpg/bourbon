@@ -47,9 +47,24 @@ export async function sendToAdmins(payload: PushPayload): Promise<PushFanoutResu
   return fanout(payload, { isAdmin: true });
 }
 
+/**
+ * Send to one customer's devices only.
+ *
+ * A no-op when the customer has never enabled notifications, which is the
+ * normal case — the dashboard is always the source of truth and push is a
+ * convenience on top. Callers must never make an outcome depend on this
+ * having been delivered.
+ */
+export async function sendToCustomer(
+  customerId: string,
+  payload: PushPayload,
+): Promise<PushFanoutResult> {
+  return fanout(payload, { customerId });
+}
+
 async function fanout(
   payload: PushPayload,
-  where: { isAdmin?: boolean },
+  where: { isAdmin?: boolean; customerId?: string },
 ): Promise<PushFanoutResult> {
   const result: PushFanoutResult = { attempted: 0, sent: 0, removed: 0, failed: 0 };
   if (!ensureConfigured()) return result;

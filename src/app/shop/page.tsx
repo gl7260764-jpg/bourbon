@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FREE_SHIPPING_THRESHOLD, MIN_ORDER_TOTAL } from "@/lib/commerce";
 import type { Metadata } from "next";
 import type { Prisma } from "@prisma/client";
 import { Availability } from "@prisma/client";
@@ -74,7 +75,6 @@ export default async function ShopPage({ searchParams }: PageProps) {
   const [allCategories, products] = await Promise.all([
     prisma.category.findMany({
       orderBy: { sortOrder: "asc" },
-      include: { _count: { select: { products: true } } },
     }),
     prisma.product.findMany({
       where: category
@@ -86,8 +86,6 @@ export default async function ShopPage({ searchParams }: PageProps) {
       },
     }),
   ]);
-
-  const totalCount = await prisma.product.count();
 
   const cards: ShopProductCard[] = products.map((p) => ({
     id: p.id,
@@ -139,7 +137,6 @@ export default async function ShopPage({ searchParams }: PageProps) {
                 }`}
               >
                 <span>All</span>
-                <span className="text-[10px] opacity-60">{totalCount}</span>
               </Link>
             </li>
             {allCategories.map((cat) => (
@@ -153,7 +150,6 @@ export default async function ShopPage({ searchParams }: PageProps) {
                   }`}
                 >
                   <span>{cat.name}</span>
-                  <span className="text-[10px] opacity-60">{cat._count.products}</span>
                 </Link>
               </li>
             ))}
@@ -172,30 +168,26 @@ export default async function ShopPage({ searchParams }: PageProps) {
               <li>
                 <Link
                   href="/shop"
-                  className={`flex items-center justify-between py-2 text-sm transition-colors ${
+                  className={`flex items-center py-2 text-sm transition-colors ${
                     !category
                       ? "text-bourbon-gold font-semibold"
                       : "text-bourbon-stone hover:text-bourbon-deep"
                   }`}
                 >
                   <span>All</span>
-                  <span className="text-xs text-bourbon-stone/60">{totalCount}</span>
                 </Link>
               </li>
               {allCategories.map((cat) => (
                 <li key={cat.id}>
                   <Link
                     href={`/shop?category=${cat.slug}`}
-                    className={`flex items-center justify-between py-2 text-sm transition-colors ${
+                    className={`flex items-center py-2 text-sm transition-colors ${
                       category === cat.slug
                         ? "text-bourbon-gold font-semibold"
                         : "text-bourbon-stone hover:text-bourbon-deep"
                     }`}
                   >
                     <span>{cat.name}</span>
-                    <span className="text-xs text-bourbon-stone/60">
-                      {cat._count.products}
-                    </span>
                   </Link>
                 </li>
               ))}
@@ -205,9 +197,19 @@ export default async function ShopPage({ searchParams }: PageProps) {
 
         {/* Grid */}
         <section>
+          {/* Terms sit in the slot the bottle count used to occupy, so the
+              row keeps its balance and the rule is stated where someone is
+              actively choosing bottles. */}
           <div className="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-bourbon-deep/10">
-            <p className="text-bourbon-stone text-sm">
-              {cards.length} {cards.length === 1 ? "bottle" : "bottles"}
+            <p className="text-bourbon-stone text-xs">
+              <span className="text-bourbon-deep font-semibold">
+                ${MIN_ORDER_TOTAL} minimum
+              </span>
+              <span className="mx-1.5 opacity-40">·</span>
+              Free shipping over{" "}
+              <span className="text-bourbon-deep font-semibold">
+                ${FREE_SHIPPING_THRESHOLD}
+              </span>
             </p>
             <ShopFilters currentSort={sort} />
           </div>

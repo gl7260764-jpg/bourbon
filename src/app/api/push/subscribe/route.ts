@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getCurrentCustomer } from "@/lib/customer-auth";
 
 interface SubscribeBody {
   endpoint?: string;
@@ -27,10 +28,23 @@ export async function POST(req: NextRequest) {
 
   const userAgent = body.userAgent?.slice(0, 500) ?? req.headers.get("user-agent")?.slice(0, 500) ?? null;
 
+  /* Attach the device to the signed-in customer, if any. This is what makes
+     "notify this one buyer their payment details are ready" possible at all.
+     Done on every upsert, not just create, so a device that subscribed while
+     logged out gets linked the moment its owner signs in and re-subscribes. */
+  const customer = await getCurrentCustomer().catch(() => null);
+  const customerId = customer?.id ?? null;
+
   await prisma.pushSubscription.upsert({
     where: { endpoint },
-    update: { p256dh, auth, userAgent: userAgent ?? undefined },
-    create: { endpoint, p256dh, auth, userAgent: userAgent ?? undefined },
+    update: {
+      p256dh,
+      auth,
+      userAgent: userAgent ?? undefined,
+      // Never unset an existing link just because this request was anonymous.
+      ...(customerId ? { customerId } : {}),
+    },
+    create: { endpoint, p256dh, auth, userAgent: userAgent ?? undefined, customerId },
   });
 
   return NextResponse.json({ ok: true }, { status: 201 });

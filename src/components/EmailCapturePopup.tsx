@@ -2,6 +2,7 @@
 
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 import {
   DEFAULT_POPUP_SETTINGS,
   normalizePopupSettings,
@@ -189,90 +190,122 @@ export default function EmailCapturePopup() {
     // wheel and touch so nothing behind it scrolls. The body scroll lock above
     // covers the rest (keyboard scrolling, and iOS Safari's touch handling).
     <div
-      className="animate-fade-in fixed inset-0 z-[90] flex items-center justify-center px-4 bg-bourbon-deep/90 backdrop-blur-sm"
+      className="animate-fade-in fixed inset-0 z-[90] flex items-center justify-center p-4 bg-bourbon-deep/85 backdrop-blur-sm"
       onMouseDown={(e) => {
         // Backdrop click closes; clicks inside the card must not.
         if (!dialogRef.current?.contains(e.target as Node)) dismiss();
       }}
     >
+      {/* Light card rather than the old dark one. Against a dimmed page a white
+          panel reads as a distinct object rather than more of the same
+          background, which is most of why the offer lands. Corners stay square
+          — the rest of the site has no rounded surfaces. */}
       <div
         ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="email-capture-title"
-        className="animate-pop-in relative max-w-md w-full p-8 sm:p-10 bg-bourbon-dark border border-bourbon-gold/30 text-center shadow-2xl shadow-bourbon-deep/50"
+        className="animate-pop-in relative w-full max-w-3xl bg-white shadow-2xl shadow-black/40 overflow-hidden grid grid-cols-1 md:grid-cols-2"
       >
-        {/* Decorative corners — matches the age gate's framing. */}
-        <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-bourbon-gold" />
-        <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-bourbon-gold" />
-        <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-bourbon-gold" />
-        <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-bourbon-gold" />
-
         <button
           type="button"
           onClick={dismiss}
           aria-label="Close"
-          className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center text-bourbon-cream/40 hover:text-bourbon-cream transition-colors cursor-pointer text-xl leading-none"
+          /* White at every width. It always sits over the photo — which is the
+             right-hand column on md+, and the top of the card below that — so
+             the old dark-on-mobile variant put a near-black glyph on a dark
+             image. The drop-shadow keeps it readable if the photo is ever
+             swapped for a lighter one. */
+          className="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center text-white/80 hover:text-white transition-colors cursor-pointer text-2xl leading-none [text-shadow:0_1px_3px_rgba(0,0,0,0.6)]"
         >
           ×
         </button>
 
-        <span className="text-bourbon-gold text-[10px] tracking-[0.3em] uppercase">
-          Inner Circle
-        </span>
-        <h2
-          id="email-capture-title"
-          className="font-[family-name:var(--font-playfair)] text-2xl sm:text-3xl font-bold text-bourbon-cream mt-3 mb-3"
-        >
-          10% off your first bottle
-        </h2>
-        <div className="w-16 h-0.5 bg-bourbon-gold mx-auto mb-5" />
-        <p className="text-bourbon-cream/60 text-sm mb-7">
-          Join the list for allocated releases, barrel picks and distillery
-          events before they go public.
-        </p>
+        {/* ---- Copy + form ---- */}
+        <div className="p-7 sm:p-9 flex flex-col justify-center text-center md:text-left order-2 md:order-1">
+          <span className="text-bourbon-gold text-[10px] tracking-[0.3em] uppercase font-semibold">
+            The Inner Circle
+          </span>
 
-        {status === "success" ? (
-          <p className="text-bourbon-gold text-sm tracking-wide py-4">
-            {message}
+          <h2
+            id="email-capture-title"
+            className="font-[family-name:var(--font-playfair)] text-[1.75rem] sm:text-4xl font-bold text-bourbon-deep leading-[1.1] mt-2.5"
+          >
+            Claim <span className="text-bourbon-gold">10% off</span> your first
+            bottle
+          </h2>
+
+          <p className="text-bourbon-stone text-sm sm:text-[15px] leading-relaxed mt-3">
+            Allocated releases, barrel picks and distillery events reach the
+            list first — usually before anything is listed publicly.
           </p>
-        ) : (
-          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-            <input
-              ref={inputRef}
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={status === "submitting"}
-              placeholder="Enter your email"
-              aria-label="Email address"
-              className="w-full px-4 py-3 bg-bourbon-cream/5 border border-bourbon-cream/20 text-bourbon-cream placeholder:text-bourbon-cream/30 focus:outline-none focus:border-bourbon-gold transition-colors text-sm tracking-wide disabled:opacity-60"
-            />
-            <button
-              type="submit"
-              disabled={status === "submitting"}
-              className="w-full px-6 py-3 bg-bourbon-gold text-bourbon-deep font-semibold tracking-wider uppercase text-sm hover:bg-bourbon-amber transition-colors duration-300 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
-            >
-              {status === "submitting" ? "Subscribing..." : "Claim 10% off"}
-            </button>
-            {status === "error" && (
-              <p className="text-red-400 text-sm tracking-wide">{message}</p>
-            )}
-            <button
-              type="button"
-              onClick={dismiss}
-              className="text-bourbon-cream/40 hover:text-bourbon-cream/70 text-xs tracking-wider uppercase mt-1 transition-colors cursor-pointer"
-            >
-              No thanks
-            </button>
-          </form>
-        )}
 
-        <p className="text-bourbon-cream/30 text-[10px] mt-6">
-          By subscribing, you confirm you are 21+ and agree to our privacy
-          policy.
-        </p>
+          {status === "success" ? (
+            <p className="text-bourbon-deep text-sm bg-bourbon-gold/15 border border-bourbon-gold/40 px-4 py-4 mt-6">
+              {message}
+            </p>
+          ) : (
+            <form onSubmit={handleSubmit} className="flex flex-col gap-3 mt-6">
+              <input
+                ref={inputRef}
+                type="email"
+                name="email"
+                /* Lets the browser offer a saved address in one tap, which is
+                   most of the "continue with your email" convenience without
+                   any third-party script. The browser still requires the user
+                   to pick it — no API exposes a saved address silently. */
+                autoComplete="email"
+                inputMode="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={status === "submitting"}
+                placeholder="Enter your email address"
+                aria-label="Email address"
+                className="w-full px-4 py-3.5 bg-white border border-bourbon-deep/20 text-bourbon-deep placeholder:text-bourbon-stone/50 focus:outline-none focus:border-bourbon-gold focus:ring-1 focus:ring-bourbon-gold transition-colors text-sm disabled:opacity-60"
+              />
+              <button
+                type="submit"
+                disabled={status === "submitting"}
+                className="w-full px-6 py-3.5 bg-bourbon-gold text-bourbon-deep font-semibold tracking-wider uppercase text-sm hover:bg-bourbon-amber transition-colors duration-300 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+              >
+                {status === "submitting" ? "Subscribing..." : "Claim 10% off →"}
+              </button>
+              {status === "error" && (
+                <p className="text-red-600 text-sm" role="alert">
+                  {message}
+                </p>
+              )}
+              <button
+                type="button"
+                onClick={dismiss}
+                className="text-bourbon-stone hover:text-bourbon-deep text-xs font-semibold mt-1 transition-colors cursor-pointer"
+              >
+                No thanks, I&apos;ll pay full price.
+              </button>
+            </form>
+          )}
+
+          <p className="text-bourbon-stone/60 text-[10px] leading-relaxed mt-5">
+            By subscribing you confirm you are 21+ and agree to our privacy
+            policy.
+          </p>
+        </div>
+
+        {/* ---- Image ---- */}
+        {/* Fixed aspect on small screens so the card cannot grow taller than the
+            viewport; a filled column on md+. */}
+        <div className="relative order-1 md:order-2 h-40 sm:h-52 md:h-auto md:min-h-[27rem]">
+          <Image
+            src="/blog-btac.webp"
+            alt="A bottle of Kentucky bourbon poured over ice at the Bourbon & Oak bar"
+            fill
+            sizes="(max-width: 768px) 100vw, 384px"
+            className="object-cover"
+          />
+          {/* Keeps the close control legible over a light patch of the photo. */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-transparent md:from-black/25" />
+        </div>
       </div>
     </div>
   );

@@ -4,12 +4,12 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Bourbon Shipping & Delivery — State Restrictions | Bourbon & Oak",
   description:
-    "How we ship Kentucky bourbon — adult signature required, state-by-state shipping rules, transit times, and free shipping on orders over $250.",
+    "How we ship Kentucky bourbon — adult signature required, state-by-state shipping rules, transit times, a $100 order minimum and free shipping over $500.",
   alternates: { canonical: "/shipping" },
   openGraph: {
     title: "Bourbon Shipping & Delivery — State Restrictions",
     description:
-      "How we ship Kentucky bourbon — adult signature required, state-by-state shipping rules, transit times, and free shipping over $250.",
+      "How we ship Kentucky bourbon — adult signature required, state-by-state rules, transit times, $100 minimum order and free shipping over $500.",
     type: "website",
     url: "/shipping",
   },
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Bourbon Shipping & Delivery — State Restrictions",
     description:
-      "How we ship Kentucky bourbon — state restrictions, age verification, free shipping over $250.",
+      "How we ship Kentucky bourbon — state restrictions, age verification, $100 minimum order, free shipping over $500.",
   },
   keywords: [
     "ship bourbon to my state",
@@ -57,8 +57,9 @@ export default function ShippingPage() {
         <p className="text-bourbon-stone max-w-2xl text-base sm:text-lg leading-relaxed">
           Bourbon &amp; Oak ships Kentucky bourbon to every U.S. state where
           direct-to-consumer distilled-spirits shipping is legal. Every
-          package requires an adult signature with photo ID at delivery, and
-          orders over $250 ship free within the continental U.S.
+          package requires an adult signature with photo ID at delivery. Orders
+          start at $100, shipping is a flat $9.99, and anything over $500 ships
+          free within the continental U.S.
         </p>
       </header>
 
@@ -71,32 +72,32 @@ export default function ShippingPage() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pb-4 border-b border-bourbon-deep/10">
               <div>
                 <p className="text-bourbon-stone text-[10px] tracking-widest uppercase mb-1">
-                  Single bottle
+                  Minimum order
                 </p>
-                <p className="text-bourbon-deep font-semibold">$18 – $32</p>
+                <p className="text-bourbon-deep font-semibold">$100</p>
+                <p className="text-bourbon-stone text-xs mt-1">before shipping</p>
+              </div>
+              <div>
+                <p className="text-bourbon-stone text-[10px] tracking-widest uppercase mb-1">
+                  Under $500
+                </p>
+                <p className="text-bourbon-deep font-semibold">$9.99 flat</p>
                 <p className="text-bourbon-stone text-xs mt-1">2–5 business days</p>
               </div>
               <div>
                 <p className="text-bourbon-stone text-[10px] tracking-widest uppercase mb-1">
-                  Two to five bottles
+                  $500 and over
                 </p>
-                <p className="text-bourbon-deep font-semibold">$28 – $48</p>
+                <p className="text-bourbon-gold font-semibold">Free</p>
                 <p className="text-bourbon-stone text-xs mt-1">2–5 business days</p>
-              </div>
-              <div>
-                <p className="text-bourbon-stone text-[10px] tracking-widest uppercase mb-1">
-                  Case (6+ bottles)
-                </p>
-                <p className="text-bourbon-deep font-semibold">$35 – $60</p>
-                <p className="text-bourbon-stone text-xs mt-1">3–7 business days</p>
               </div>
             </div>
             <p className="text-bourbon-stone text-sm sm:text-base leading-relaxed">
-              <strong className="text-bourbon-deep">Orders over $250 ship free</strong>{" "}
-              to the continental U.S. (excluding states listed below). Rates
-              are shown live at checkout based on your delivery ZIP code and
-              package weight. We use UPS Adult Signature Required service on
-              every shipment.
+              <strong className="text-bourbon-deep">Orders over $500 ship free</strong>{" "}
+              to the continental U.S. (excluding states listed below).
+              Everything below that is a flat $9.99 however many bottles you
+              order, so a full case costs the same to ship as a single bottle.
+              We use UPS Adult Signature Required service on every shipment.
             </p>
           </div>
         </div>

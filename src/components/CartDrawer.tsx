@@ -3,6 +3,13 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import {
+  FREE_SHIPPING_THRESHOLD,
+  MIN_ORDER_TOTAL,
+  amountToFreeShipping,
+  amountToMinimum,
+  meetsMinimum,
+} from "@/lib/commerce";
 import { useCart } from "./CartContext";
 
 export default function CartDrawer() {
@@ -165,17 +172,76 @@ export default function CartDrawer() {
                 ${subtotal.toFixed(2)}
               </span>
             </div>
-            <p className="text-bourbon-stone/70 text-xs">
-              Shipping & taxes calculated at checkout
-            </p>
+            {/* Progress toward free shipping, and the minimum gate. Shown here
+                because the cart is where someone decides whether to add one
+                more bottle — telling them at checkout is too late. */}
+            {(() => {
+              const toMin = amountToMinimum(subtotal);
+              const toFree = amountToFreeShipping(subtotal);
+              const canCheckout = meetsMinimum(subtotal);
+              const pct = Math.min(100, (subtotal / FREE_SHIPPING_THRESHOLD) * 100);
 
-            <Link
-              href="/checkout"
-              onClick={closeCart}
-              className="block w-full py-4 bg-bourbon-gold text-bourbon-deep font-semibold tracking-wider uppercase text-sm hover:bg-bourbon-amber transition-colors cursor-pointer text-center"
-            >
-              Proceed to Checkout
-            </Link>
+              return (
+                <>
+                  {!canCheckout ? (
+                    <div className="border border-amber-300 bg-amber-50 px-3 py-2.5">
+                      <p className="text-amber-900 text-xs leading-relaxed">
+                        <span className="font-semibold">
+                          ${MIN_ORDER_TOTAL} minimum order.
+                        </span>{" "}
+                        Add ${toMin.toFixed(2)} more to check out.
+                      </p>
+                    </div>
+                  ) : toFree > 0 ? (
+                    <div>
+                      <p className="text-bourbon-stone text-xs mb-1.5">
+                        Add{" "}
+                        <span className="text-bourbon-deep font-semibold">
+                          ${toFree.toFixed(2)}
+                        </span>{" "}
+                        more for free shipping
+                      </p>
+                      <div
+                        className="h-1 bg-bourbon-deep/10 overflow-hidden"
+                        role="progressbar"
+                        aria-valuenow={Math.round(pct)}
+                        aria-valuemin={0}
+                        aria-valuemax={100}
+                        aria-label="Progress toward free shipping"
+                      >
+                        <div
+                          className="h-full bg-bourbon-gold transition-all duration-500"
+                          style={{ width: `${pct}%` }}
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-bourbon-gold text-xs font-semibold">
+                      ✓ Free shipping unlocked
+                    </p>
+                  )}
+
+                  {canCheckout ? (
+                    <Link
+                      href="/checkout"
+                      onClick={closeCart}
+                      className="block w-full py-4 bg-bourbon-gold text-bourbon-deep font-semibold tracking-wider uppercase text-sm hover:bg-bourbon-amber transition-colors cursor-pointer text-center"
+                    >
+                      Proceed to Checkout
+                    </Link>
+                  ) : (
+                    /* A dead link is worse than a disabled control — this says
+                       why it cannot be used instead of failing silently. */
+                    <span
+                      aria-disabled="true"
+                      className="block w-full py-4 bg-bourbon-deep/10 text-bourbon-deep/40 font-semibold tracking-wider uppercase text-sm text-center cursor-not-allowed"
+                    >
+                      Add ${toMin.toFixed(2)} to continue
+                    </span>
+                  )}
+                </>
+              );
+            })()}
 
             <button
               onClick={closeCart}

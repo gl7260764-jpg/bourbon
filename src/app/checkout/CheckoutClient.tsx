@@ -3,6 +3,13 @@
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import {
+  MIN_ORDER_TOTAL,
+  amountToFreeShipping,
+  amountToMinimum,
+  meetsMinimum,
+  shippingFor,
+} from "@/lib/commerce";
 import { useCart } from "@/components/CartContext";
 import { useRouter } from "next/navigation";
 import {
@@ -209,13 +216,17 @@ export default function CheckoutClient() {
     return subtotal * paymentOption.discount;
   }, [paymentOption, subtotal]);
 
-  // Shipping is free and no longer chosen at checkout; tax is no longer
-  // charged. Both are still sent as 0 so the order API and the email
-  // templates keep a stable shape, and so historical orders that DO carry a
-  // shipping charge still render their real figures.
-  const shippingCost = 0;
+  /* Shipping is derived from the subtotal by the same helper the server uses,
+     so the figure shown here and the figure charged cannot drift. */
+  const shippingCost = shippingFor(subtotal);
+  /* Tax was removed from the storefront; the field stays at zero so the
+     snapshot and the historical order columns keep the same shape. */
   const tax = 0;
-  const total = Math.max(0, subtotal - discount);
+  const belowMinimum = !meetsMinimum(subtotal);
+  const toMinimum = amountToMinimum(subtotal);
+  const toFreeShipping = amountToFreeShipping(subtotal);
+
+  const total = Math.max(0, subtotal - discount) + shippingCost;
 
   const canPlace =
     items.length > 0 &&
@@ -241,7 +252,12 @@ export default function CheckoutClient() {
       // Shipping is no longer chosen by the customer. The server forces the
       // method and a zero cost regardless of what's sent here — this only
       // keeps the payload shape stable.
-      shipping: { id: "standard", label: "Shipping", detail: "", cost: 0 },
+      shipping: {
+        id: "standard",
+        label: "Shipping",
+        detail: shippingCost === 0 ? "Free over $500" : "Flat rate",
+        cost: shippingCost,
+      },
       payment: {
         id: paymentId,
         label: paymentOption.label,
@@ -429,7 +445,7 @@ export default function CheckoutClient() {
               <StepHeading n={2} title="Delivery address" />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="sm:col-span-2">
-                  <FieldLabel htmlFor="fullName">Full name (signature required, 21+)</FieldLabel>
+                  <FieldLabel htmlFor="fullName">Full name</FieldLabel>
                   <Input
                     id="fullName"
                     autoComplete="name"
@@ -438,7 +454,7 @@ export default function CheckoutClient() {
                   />
                 </div>
                 <div className="sm:col-span-2">
-                  <FieldLabel htmlFor="line1">Street address</FieldLabel>
+                  <FieldLabel htmlFor="line1">Address</FieldLabel>
                   <Input
                     id="line1"
                     autoComplete="address-line1"
@@ -447,15 +463,15 @@ export default function CheckoutClient() {
                     onChange={(e) => setAddress({ ...address, line1: e.target.value })}
                   />
                 </div>
-                <div className="sm:col-span-2">
-                  <FieldLabel htmlFor="line2">Apt, suite, etc. (optional)</FieldLabel>
+                {/* <div className="sm:col-span-2">
+                   <FieldLabel htmlFor="line2">Apt, suite, etc. (optional)</FieldLabel> 
                   <Input
                     id="line2"
                     autoComplete="address-line2"
                     value={address.line2}
                     onChange={(e) => setAddress({ ...address, line2: e.target.value })}
                   />
-                </div>
+                </div> */}
                 <div>
                   <FieldLabel htmlFor="city">City</FieldLabel>
                   <Input
@@ -660,6 +676,19 @@ export default function CheckoutClient() {
                     <span>−${discount.toFixed(2)}</span>
                   </div>
                 )}
+                <div className="flex items-center justify-between text-bourbon-stone">
+                  <span>Shipping</span>
+                  {shippingCost === 0 ? (
+                    <span className="text-bourbon-gold font-semibold">Free</span>
+                  ) : (
+                    <span className="text-bourbon-deep">${shippingCost.toFixed(2)}</span>
+                  )}
+                </div>
+                {toFreeShipping > 0 && !belowMinimum && (
+                  <p className="text-bourbon-gold text-xs pt-1">
+                    Add ${toFreeShipping.toFixed(2)} more for free shipping.
+                  </p>
+                )}
               </div>
 
               <div className="mt-5 pt-5 border-t border-bourbon-deep/10 flex items-baseline justify-between">
@@ -668,6 +697,16 @@ export default function CheckoutClient() {
                   ${total.toFixed(2)}
                 </span>
               </div>
+
+              {belowMinimum && (
+                <div
+                  role="alert"
+                  className="mt-5 px-3 py-2.5 border border-amber-300 bg-amber-50 text-amber-900 text-xs"
+                >
+                  Minimum order is ${MIN_ORDER_TOTAL}. Add ${toMinimum.toFixed(2)}{" "}
+                  more to check out.
+                </div>
+              )}
 
               {placeError && (
                 <div
@@ -680,18 +719,20 @@ export default function CheckoutClient() {
 
               <button
                 onClick={handlePlaceOrder}
-                disabled={!canPlace || placing}
+                disabled={!canPlace || placing || belowMinimum}
                 className={`mt-5 w-full py-4 font-semibold tracking-widest uppercase text-xs transition-colors ${
-                  canPlace && !placing
+                  canPlace && !placing && !belowMinimum
                     ? "bg-bourbon-gold text-bourbon-deep hover:bg-bourbon-amber cursor-pointer"
                     : "bg-bourbon-deep/10 text-bourbon-deep/40 cursor-not-allowed"
                 }`}
               >
                 {placing
                   ? "Placing order…"
-                  : canPlace
-                    ? `Place Order — $${total.toFixed(2)}`
-                    : "Complete the form to continue"}
+                  : belowMinimum
+                    ? `Add $${toMinimum.toFixed(2)} to continue`
+                    : canPlace
+                      ? `Place Order — $${total.toFixed(2)}`
+                      : "Complete the form to continue"}
               </button>
 
               <Link

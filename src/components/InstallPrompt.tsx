@@ -140,123 +140,114 @@ export default function InstallPrompt() {
   const showOffer = canOfferInstall(platform);
 
   return (
-    <div
-      className="animate-fade-in fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6 bg-black/70 backdrop-blur-sm"
-      onClick={dismiss}
-      role="dialog"
-      aria-modal="true"
+    /* Non-modal on purpose. This is an invitation, not a decision the visitor
+       has to make before continuing: no backdrop, no scroll lock, no focus
+       trap, and the page stays fully interactive behind it. It is an <aside>
+       rather than role="dialog" because a dialog that neither traps focus nor
+       blocks the page misdescribes itself to a screen reader. */
+    <aside
       aria-labelledby="install-popup-title"
+      className="animate-fade-up fixed inset-x-0 bottom-0 z-[60] p-3 sm:p-4 pointer-events-none flex justify-center"
     >
       <div
-        onClick={(e) => e.stopPropagation()}
-        className="animate-pop-in relative w-full max-w-md bg-bourbon-deep border border-bourbon-gold/30 shadow-2xl shadow-black/60 overflow-hidden"
+        className="pointer-events-auto relative w-full sm:max-w-md bg-white shadow-2xl shadow-black/30 border border-bourbon-deep/10 overflow-hidden
+                   pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:pb-0 sm:mb-2"
       >
-          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-bourbon-gold/70 to-transparent" />
+        <div className="h-px bg-gradient-to-r from-transparent via-bourbon-gold to-transparent" />
 
-          <button
-            onClick={dismiss}
-            aria-label="Close"
-            className="absolute top-3 right-3 z-10 text-bourbon-cream/50 hover:text-bourbon-cream cursor-pointer"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
+        <button
+          onClick={dismiss}
+          aria-label="Dismiss"
+          className="absolute top-2.5 right-2.5 z-10 p-1 text-bourbon-stone/50 hover:text-bourbon-deep transition-colors cursor-pointer"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        {/* Compact horizontal layout — a bottom card has to stay short enough
+            that it never covers the content the visitor is reading. */}
+        <div className="flex items-start gap-3.5 p-4 pr-9">
+          <span className="shrink-0 w-11 h-11 bg-bourbon-gold flex items-center justify-center">
+            <svg className="w-5 h-5 text-bourbon-deep" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.75}
+                d="M12 3v11m0 0l-3.5-3.5M12 14l3.5-3.5M4 16v3a2 2 0 002 2h12a2 2 0 002-2v-3"
+              />
             </svg>
-          </button>
+          </span>
 
-          <div className="px-6 sm:px-8 pt-8 sm:pt-10 pb-6 sm:pb-8 text-center">
-            <div className="mx-auto w-20 h-20 sm:w-24 sm:h-24 bg-bourbon-dark border border-bourbon-gold/40 flex flex-col items-center justify-center mb-5">
-              <span className="text-[8px] sm:text-[9px] tracking-[0.3em] text-bourbon-gold/70 uppercase">
-                Est. 1876
-              </span>
-              <span className="font-[family-name:var(--font-playfair)] text-bourbon-gold text-2xl sm:text-3xl font-bold leading-none mt-1">
-                B&amp;O
-              </span>
-              <div className="w-6 h-px bg-bourbon-gold/60 mt-1.5" />
-            </div>
-
-            <p className="text-bourbon-gold text-[10px] sm:text-[11px] tracking-[0.3em] uppercase font-semibold">
-              Join the Inner Circle
-            </p>
+          <div className="min-w-0 flex-1">
             <h3
               id="install-popup-title"
-              className="font-[family-name:var(--font-playfair)] text-bourbon-cream text-2xl sm:text-3xl font-bold mt-2 leading-tight"
+              className="font-[family-name:var(--font-playfair)] text-bourbon-deep text-base font-bold leading-snug"
             >
               {headline}
+              {/* Marketing copy only — nothing is issued or redeemable here,
+                  matching how the newsletter popup states its 10%. */}
+              {showOffer && (
+                <span className="text-bourbon-gold"> — save 5% on every order</span>
+              )}
             </h3>
-            <p className="text-bourbon-cream/65 text-sm sm:text-base mt-3 leading-relaxed max-w-sm mx-auto">
+            <p className="text-bourbon-stone text-[13px] leading-snug mt-1">
               {subhead}
             </p>
 
-            {/* Marketing copy only — nothing is issued or redeemable here,
-                matching how the newsletter popup states its 10%. */}
-            {showOffer && (
-              <p className="mt-5 inline-flex items-center gap-2.5 border border-bourbon-gold/35 bg-bourbon-gold/10 px-4 py-2.5">
-                <span className="font-[family-name:var(--font-playfair)] text-bourbon-gold text-lg font-bold leading-none">
-                  5%
-                </span>
-                <span className="text-bourbon-cream/80 text-xs sm:text-sm leading-snug">
-                  off your next bottle when you install
-                </span>
-              </p>
-            )}
-
-            <div className="mt-7 flex flex-col gap-3">
+            <div className="flex items-center gap-2 mt-3">
               <button
                 onClick={handleInstall}
-                className="w-full px-6 py-3 bg-bourbon-gold text-bourbon-deep text-xs sm:text-sm font-semibold tracking-wider uppercase hover:bg-bourbon-amber transition-colors cursor-pointer"
+                className="px-4 py-2 bg-bourbon-gold text-bourbon-deep text-[11px] font-semibold tracking-wider uppercase hover:bg-bourbon-amber transition-colors cursor-pointer"
               >
                 {primaryLabel}
               </button>
               <button
                 onClick={dismiss}
-                className="text-bourbon-cream/50 text-xs tracking-wider uppercase hover:text-bourbon-cream transition-colors cursor-pointer"
+                className="px-3 py-2 text-bourbon-stone text-[11px] font-semibold tracking-wider uppercase hover:text-bourbon-deep transition-colors cursor-pointer"
               >
-                Maybe later
+                Not now
               </button>
             </div>
           </div>
+        </div>
 
-          {expanded && (
-            <div className="animate-fade-in border-t border-bourbon-gold/15 bg-bourbon-dark/60 px-6 sm:px-8 py-5">
-              {platform === "ios-safari" ? (
-                <ol className="text-bourbon-cream/80 text-sm space-y-2 list-decimal list-inside leading-relaxed">
-                  <li>
-                    Tap the <span className="text-bourbon-gold font-semibold">Share</span> icon at the bottom of Safari.
-                  </li>
-                  <li>
-                    Scroll and tap{" "}
-                    <span className="text-bourbon-gold font-semibold">Add to Home Screen</span>.
-                  </li>
-                  <li>
-                    Tap <span className="text-bourbon-gold font-semibold">Add</span> in the top-right.
-                  </li>
-                </ol>
-              ) : platform === "android-chrome" ? (
-                <ol className="text-bourbon-cream/80 text-sm space-y-2 list-decimal list-inside leading-relaxed">
-                  <li>Open the browser <span className="text-bourbon-gold font-semibold">menu</span> (three dots).</li>
-                  <li>
-                    Tap{" "}
-                    <span className="text-bourbon-gold font-semibold">Install app</span> or{" "}
-                    <span className="text-bourbon-gold font-semibold">Add to Home Screen</span>.
-                  </li>
-                  <li>Confirm <span className="text-bourbon-gold font-semibold">Install</span>.</li>
-                </ol>
-              ) : (
-                <div className="text-bourbon-cream/80 text-sm leading-relaxed text-center">
-                  Press{" "}
-                  <kbd className="px-2 py-0.5 bg-bourbon-cream/10 border border-bourbon-cream/20 text-bourbon-gold font-mono text-xs">
-                    {bookmarkKey}
-                  </kbd>{" "}
-                  to bookmark this page. In Chrome or Edge, you can also click the install icon in the address bar.
-                </div>
-              )}
-            </div>
-          )}
-
-          <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 font-[family-name:var(--font-playfair)] text-[6rem] font-bold text-bourbon-cream/[0.03] uppercase leading-none pointer-events-none whitespace-nowrap">
-            BOURBON
-          </span>
+        {expanded && (
+          <div className="animate-fade-in border-t border-bourbon-deep/10 bg-bourbon-cream/60 px-4 py-3.5">
+            {platform === "ios-safari" ? (
+              <ol className="text-bourbon-stone text-[13px] space-y-1.5 list-decimal list-inside leading-relaxed">
+                <li>
+                  Tap the <span className="text-bourbon-deep font-semibold">Share</span> icon at the bottom of Safari.
+                </li>
+                <li>
+                  Scroll and tap{" "}
+                  <span className="text-bourbon-deep font-semibold">Add to Home Screen</span>.
+                </li>
+                <li>
+                  Tap <span className="text-bourbon-deep font-semibold">Add</span> in the top-right.
+                </li>
+              </ol>
+            ) : platform === "android-chrome" ? (
+              <ol className="text-bourbon-stone text-[13px] space-y-1.5 list-decimal list-inside leading-relaxed">
+                <li>Open the browser <span className="text-bourbon-deep font-semibold">menu</span> (three dots).</li>
+                <li>
+                  Tap <span className="text-bourbon-deep font-semibold">Install app</span> or{" "}
+                  <span className="text-bourbon-deep font-semibold">Add to Home Screen</span>.
+                </li>
+                <li>Confirm <span className="text-bourbon-deep font-semibold">Install</span>.</li>
+              </ol>
+            ) : (
+              <div className="text-bourbon-stone text-[13px] leading-relaxed">
+                Press{" "}
+                <kbd className="px-1.5 py-0.5 bg-white border border-bourbon-deep/15 text-bourbon-deep font-mono text-[11px]">
+                  {bookmarkKey}
+                </kbd>{" "}
+                to bookmark this page. In Chrome or Edge you can also click the install icon in the address bar.
+              </div>
+            )}
+          </div>
+        )}
       </div>
-    </div>
+    </aside>
   );
 }

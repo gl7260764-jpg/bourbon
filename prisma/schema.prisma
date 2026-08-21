@@ -168,6 +168,11 @@ enum OrderStatus {
 // and "buyer says they paid, go verify it". Those need different queues.
 // mark-paid writes both this and OrderStatus in one transaction.
 enum SettlementState {
+  // An order starts here: the buyer has ordered but nobody has told them where
+  // to send the money yet. Admin issues per-order payment details, which moves
+  // it to AWAITING_PAYMENT. Orders placed before this state existed are still
+  // AWAITING_PAYMENT and keep working — they already carry instructions.
+  AWAITING_DETAILS
   AWAITING_PAYMENT
   PROOF_SUBMITTED
   PAID
@@ -263,7 +268,17 @@ model Order {
   paymentInstructions String? @db.Text
 
   // --- Manual settlement (P12) -------------------------------------------
-  settlementState SettlementState @default(AWAITING_PAYMENT)
+  settlementState SettlementState @default(AWAITING_DETAILS)
+
+  /* Payment details the admin issues for THIS order — an account number, a
+     wallet address, a reference to quote. Deliberately separate from
+     `paymentInstructions` above: that is an immutable snapshot of the rail as
+     it was at checkout, while this is written once per order by a human and is
+     what the buyer actually pays against. Until `paymentDetailsIssuedAt` is
+     set, the customer sees "details on the way" rather than a payment form. */
+  paymentDetailsBody      String?   @db.Text
+  paymentDetailsIssuedAt  DateTime?
+  paymentDetailsIssuedBy  String?
   // What the buyer sent us: txid, Chime confirmation, Zelle reference.
   // Without this, "PAID" is an assertion with nothing behind it.
   paymentReference String?
@@ -293,6 +308,7 @@ model Order {
   notes String? @db.Text
 
   items OrderItem[]
+  conversation Conversation?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -373,16 +389,31 @@ model PushSubscription {
   // true = a logged-in admin device that should receive live-chat pings.
   // false = a storefront visitor who opted into product announcements.
   isAdmin   Boolean  @default(false)
+
+  /* Set when the device was subscribed while signed in to a customer account.
+     Without it there is no way to notify ONE person — only "all admins" or
+     "everyone" — so per-order alerts about payment details or a reply would
+     have to be broadcast, which is obviously unacceptable. Nullable because
+     anonymous storefront subscribers still exist and still get announcements. */
+  customerId String?
+  customer   Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([createdAt])
   @@index([isAdmin])
+  @@index([customerId])
 }
 
 enum ChatSender {
   VISITOR
   ADMIN
+}
+
+enum ChatMessageKind {
+  TEXT
+  IMAGE
+  VOICE
 }
 
 enum ConversationStatus {
@@ -393,8 +424,23 @@ enum ConversationStatus {
 model Conversation {
   id        String             @id @default(cuid())
   // The bol_vid visitor cookie value — ties the thread to a device.
+  // Order threads have no device behind them, so this is empty for those.
   visitorId String
   status    ConversationStatus @default(OPEN)
+
+  /* Order-scoped threads. `orderId` is unique, so an order has at most one
+     conversation and "open the chat for this order" is a single lookup rather
+     than a scan. Null for the storefront widget threads, which are keyed to a
+     device cookie instead — the two kinds coexist in one table because they
+     are the same shape and share the admin inbox. */
+  orderId    String?  @unique
+  order      Order?   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  // Who the thread belongs to, so a signed-in customer can be authorised
+  // against it without trusting a cookie that was minted on another device.
+  customerId String?
+  customer   Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  // Messages from us the customer has not opened yet — drives their badge.
+  customerUnread Int @default(0)
 
   // Denormalized for fast inbox sorting + unread badges without scanning messages.
   lastMessageAt   DateTime @default(now())
@@ -413,6 +459,7 @@ model Conversation {
   @@index([visitorId])
   @@index([status])
   @@index([lastMessageAt])
+  @@index([customerId])
 }
 
 model ChatMessage {
@@ -420,7 +467,21 @@ model ChatMessage {
   conversationId String
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   sender         ChatSender
+  kind           ChatMessageKind @default(TEXT)
+  // Text body, or the caption on an attachment. Empty string for a bare
+  // image or voice note — never null, so readers never branch on it.
   body           String       @db.Text
+
+  /* Attachments live in Cloudinary as `authenticated` assets and only the
+     public id is stored. Chat carries payment screenshots, so the same rule as
+     payment proofs applies: no permanent public URL, signed at view time.
+     `mediaDurationMs` lets a voice note render its length without the client
+     downloading the audio first. */
+  mediaPublicId   String?
+  mediaMimeType   String?
+  mediaDurationMs Int?
+  mediaBytes      Int?
+
   createdAt      DateTime     @default(now())
 
   @@index([conversationId])
@@ -463,8 +524,10 @@ model Customer {
   updatedAt   DateTime  @updatedAt
   lastLoginAt DateTime?
 
-  orders   Order[]
-  sessions CustomerSession[]
+  orders            Order[]
+  sessions          CustomerSession[]
+  conversations     Conversation[]
+  pushSubscriptions PushSubscription[]
 
   @@index([createdAt])
 }
@@ -601,4 +664,23 @@ model VisitSession {
   @@index([visitorId])
   // Average-session-duration rollups filter on the window start.
   @@index([startedAt])
+}
+
+
+/* One-time login codes for the customer account.
+   Only a hash is stored: a leaked database row must not be a working login.
+   `attempts` caps brute force on a 6-digit space, and a consumed or expired
+   row is never accepted again. */
+model LoginCode {
+  id        String   @id @default(cuid())
+  // Lowercased, matching Customer.email normalisation.
+  email     String
+  codeHash  String
+  expiresAt DateTime
+  attempts  Int      @default(0)
+  consumedAt DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([email, createdAt])
+  @@index([expiresAt])
 }

@@ -46,6 +46,7 @@ export const ORDER_STATUS_BADGE: Record<OrderStatus, string> = {
 };
 
 export const SETTLEMENT_LABEL: Record<SettlementState, string> = {
+  AWAITING_DETAILS: "Needs payment details",
   AWAITING_PAYMENT: "Awaiting payment",
   PROOF_SUBMITTED: "Proof submitted — verify",
   PAID: "Payment confirmed",
@@ -53,6 +54,9 @@ export const SETTLEMENT_LABEL: Record<SettlementState, string> = {
 };
 
 export const SETTLEMENT_BADGE: Record<SettlementState, string> = {
+  // Deliberately the loudest badge in the set: this is the only state where
+  // the order is blocked on *us* rather than on the buyer.
+  AWAITING_DETAILS: "bg-rose-100 text-rose-800",
   AWAITING_PAYMENT: "bg-amber-100 text-amber-800",
   PROOF_SUBMITTED: "bg-sky-100 text-sky-800",
   PAID: "bg-emerald-100 text-emerald-800",

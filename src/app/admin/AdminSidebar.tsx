@@ -36,8 +36,14 @@ const NAV = [
       "M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z",
   },
   {
+    href: "/admin/clients-chat",
+    label: "Clients chat",
+    iconPath:
+      "M21 11.5a8.38 8.38 0 01-9 8.4 8.5 8.5 0 01-3.8-.9L3 21l1.9-5.2A8.38 8.38 0 014 11.5a8.5 8.5 0 018.5-8.5 8.38 8.38 0 018.5 8.5z",
+  },
+  {
     href: "/admin/chat",
-    label: "Live Chat",
+    label: "Storefront chat",
     iconPath:
       "M8 10h.01M12 10h.01M16 10h.01M21 12a9 9 0 11-3.6-7.2L21 3l-1.2 3.4A8.96 8.96 0 0121 12z",
   },
