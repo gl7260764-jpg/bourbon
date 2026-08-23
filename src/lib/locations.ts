@@ -648,6 +648,358 @@ export const LOCATIONS: Location[] = [
       },
     ],
   },
+  {
+    slug: "frankfort",
+    updatedAt: "2026-08-22",
+    city: "Frankfort",
+    isPrimarySite: false,
+    cardSummary:
+      "The state capital sits an hour north-east of us, close enough that Frankfort and Bardstown make one comfortable day together.",
+    driveNote: "56 miles · about 1 hr via US-127 and the Bluegrass Parkway",
+    title: "Visiting From Frankfort",
+    h1: "A Bourbon Distillery an Hour From Frankfort, Kentucky",
+    subtitle:
+      "Fifty-six miles of Kentucky between the state capital and the Bourbon Capital of the World — the shortest run to us from any city on this list.",
+    metaTitle: "Bourbon Distillery Near Frankfort, KY | Bourbon & Oak",
+    metaDescription:
+      "Bourbon & Oak is 56 miles from Frankfort, Kentucky — about an hour via US-127 and the Bluegrass Parkway. Directions, what to see on site, and how to pair it with a capital day.",
+    keywords: [
+      "bourbon distillery near Frankfort KY",
+      "Frankfort to Bardstown",
+      "Kentucky Bourbon Trail from Frankfort",
+      "distillery day trip Frankfort Kentucky",
+      "bourbon tasting near Frankfort",
+      "things to do near Frankfort Kentucky",
+      "Bluegrass Parkway distilleries",
+      "Kentucky capital bourbon trip",
+      "Frankfort Kentucky whiskey tour",
+    ],
+    heroImage: "/visit-shop.webp",
+    heroAlt:
+      "Backlit shelves in the Bourbon & Oak tasting room, an hour from Frankfort, Kentucky",
+    intro: [
+      "Bourbon & Oak has no Frankfort location. There is one distillery, in Bardstown, 56 miles south-west of the capital — a little over an hour on a clear run. We state that plainly because plenty of results for \"bourbon distillery near Frankfort\" imply a branch that does not exist.",
+      "Of every city on this page, Frankfort is the easiest. It is close enough that you can see us and be back for dinner, and close enough that the two towns genuinely make one day rather than two.",
+    ],
+    sections: [
+      {
+        heading: "The Drive",
+        paragraphs: [
+          "Take US-127 south out of Frankfort toward Lawrenceburg, then pick up the Bluegrass Parkway west and come off at Exit 21 for US-150 into Bardstown. It is 56 miles and about an hour, almost all of it on open road.",
+          "The alternative is prettier and barely longer: stay on US-127 through Lawrenceburg, then cut across on KY-55 through Bloomfield. Two-lane road through horse country, perhaps ten minutes more, and considerably better to look at than a parkway.",
+        ],
+        list: [
+          "1876 Oak Barrel Lane, Bardstown, KY 40004",
+          "56 miles · roughly 1 hour",
+          "Free on-site parking, including coach and RV spaces",
+          "No public transport reaches us — plan on a car or a booked tour",
+        ],
+      },
+      {
+        heading: "Making a Day of Both Towns",
+        paragraphs: [
+          "Frankfort has its own claim on this story, and the sensible version of this trip treats the two towns as one itinerary rather than choosing between them. Start in the capital in the morning, drive down after lunch, and take an afternoon tour with us.",
+          "That ordering matters for a practical reason: tasting first and driving second is a bad plan, and an afternoon slot with us leaves the drive home for someone who has not been pouring.",
+        ],
+      },
+      {
+        heading: "What Is On Site",
+        paragraphs: [
+          "This is a working distillery rather than a visitor centre. Depending on the day you may walk past an active fermenter, a running column still, or a crew dumping barrels.",
+        ],
+        list: [
+          "The mash floor and still house, in operation on production days",
+          "Rickhouse No. 7, our newest warehouse, holding 20,000 barrels",
+          "The tasting room, where flights are poured at cask strength and proofed side by side",
+          "The bottling line and single-barrel selection room",
+        ],
+      },
+      {
+        heading: "Booking",
+        paragraphs: [
+          "Everything runs by advance reservation rather than walk-up, because the rickhouse walks are capped at small numbers and the private barrel pick takes most of a day. Tour options and current pricing are listed in full on the tours page.",
+          "For a Frankfort visitor the afternoon Heritage Tour is usually the right choice: it leaves the morning free at home and gets you back before evening.",
+        ],
+      },
+      {
+        heading: "Designated Drivers",
+        paragraphs: [
+          "An hour each way is short enough that people talk themselves into driving after a tasting. Do not. A tasting flight is several pours of cask-strength whiskey, and Kentucky's limit arrives well before you feel it.",
+          "Nominate a driver before you leave Frankfort, or book a car for the return. Every flight can be poured as samples to take away instead, and we would far rather send you home with them than have you rush the room.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "How far is Bardstown from Frankfort?",
+        answer:
+          "56 miles, about an hour by road. Take US-127 south to the Bluegrass Parkway west and exit at 21 for US-150, or stay on US-127 and cut across on KY-55 through Bloomfield for the scenic version.",
+      },
+      {
+        question: "Is there a Bourbon & Oak in Frankfort?",
+        answer:
+          "No. We have one site, the distillery at 1876 Oak Barrel Lane in Bardstown. Frankfort is an hour away by car and there is no branch, shop or tasting room in the capital.",
+      },
+      {
+        question: "Can I visit Frankfort and Bardstown in one day?",
+        answer:
+          "Comfortably. Spend the morning in the capital, drive down after lunch and take an afternoon tour. Doing it in that order also keeps the driving away from the tasting.",
+      },
+      {
+        question: "Do I need to book a tour in advance?",
+        answer:
+          "Yes. Rickhouse walks are capped at small group sizes and the private barrel pick takes most of a day, so everything runs by advance reservation rather than walk-up.",
+      },
+      {
+        question: "Can you ship to a Frankfort address instead?",
+        answer:
+          "Yes. Kentucky permits direct-to-consumer shipping, so Frankfort addresses are straightforward. An adult signature is required at delivery, and the shipping page carries the current terms.",
+      },
+      {
+        question: "What else is worth seeing in Bardstown?",
+        answer:
+          "My Old Kentucky Home State Park, the Oscar Getz Museum of Whiskey History, and the town square, which is worth an hour on foot. Several other Kentucky Bourbon Trail stops sit within a fifteen minute drive.",
+      },
+    ],
+  },
+  {
+    slug: "indianapolis",
+    updatedAt: "2026-08-22",
+    city: "Indianapolis",
+    isPrimarySite: false,
+    cardSummary:
+      "A straight run south on I-65 — 154 miles, about two and a half hours, and one time-zone change to watch for.",
+    driveNote: "154 miles · about 2 hr 30 min via I-65 south",
+    title: "Visiting From Indianapolis",
+    h1: "A Kentucky Bourbon Distillery Two and a Half Hours From Indianapolis",
+    subtitle:
+      "One interstate, one state line and one time zone separate Indianapolis from Bardstown — and Indiana's own distilling history makes the drive better company than most.",
+    metaTitle: "Bourbon Distillery Near Indianapolis | Bourbon & Oak, Bardstown KY",
+    metaDescription:
+      "Bourbon & Oak is 154 miles south of Indianapolis in Bardstown, Kentucky — about two and a half hours down I-65. The route, the time-zone change, where to stay, and how to plan the trip.",
+    keywords: [
+      "bourbon distillery near Indianapolis",
+      "Indianapolis to Bardstown",
+      "Kentucky Bourbon Trail from Indianapolis",
+      "bourbon trip from Indiana",
+      "day trip Indianapolis to Kentucky bourbon",
+      "I-65 south distilleries",
+      "bourbon tasting near Indianapolis",
+      "Indiana to Kentucky whiskey tour",
+      "weekend trip from Indianapolis",
+    ],
+    heroImage: "/bar-cabinet.webp",
+    heroAlt:
+      "Warm backlit bourbon shelving at the Bourbon & Oak distillery, a drive south of Indianapolis",
+    intro: [
+      "Bourbon & Oak has no Indianapolis location and no Indiana location. There is one distillery, in Bardstown, Kentucky, 154 miles south of you — about two and a half hours down I-65.",
+      "It is one of the simplest drives on this page: a single interstate almost the whole way, with one thing to watch that catches people out.",
+    ],
+    sections: [
+      {
+        heading: "The Drive",
+        paragraphs: [
+          "I-65 south out of Indianapolis, past Columbus and Seymour, across the Ohio River at Louisville, and stay on it to Exit 112 for KY-245 east through Clermont into Bardstown. 154 miles, about two and a half hours without traffic.",
+          "Louisville is the pinch point. I-65 through downtown backs up badly at rush hour in both directions, so leaving Indianapolis before seven or after nine in the morning is worth the effort.",
+        ],
+        list: [
+          "1876 Oak Barrel Lane, Bardstown, KY 40004",
+          "154 miles · roughly 2 hours 30 minutes",
+          "Free on-site parking, including coach and RV spaces",
+          "Nearest airport to us is Louisville (SDF), about 45 minutes out",
+        ],
+      },
+      {
+        heading: "The Time Zone",
+        paragraphs: [
+          "Indianapolis and Bardstown are both on Eastern time, so unlike the drive up from Nashville there is no hour to lose. That surprises people who assume crossing into Kentucky means changing clocks — it does in the west of the state, but not on this route.",
+          "It matters because tour slots are booked in Eastern time. If you are coming from somewhere in Indiana that observes Central, check your own clock rather than assuming.",
+        ],
+      },
+      {
+        heading: "Two Days Is Better Than One",
+        paragraphs: [
+          "Five hours of driving in a day, with a tasting in the middle, is a poor plan. Most people who try the round trip in one go end up rushing the part they came for.",
+          "Stay a night in Bardstown or Louisville instead. Bardstown puts you inside walking distance of the town square and within fifteen minutes of several other trail stops; Louisville gives you restaurants and hotels and leaves a 45 minute run down in the morning.",
+        ],
+        list: [
+          "Day one: drive down, afternoon tour with us, dinner and a night in Bardstown",
+          "Day two: two or three more trail stops within fifteen minutes, then home",
+          "Or base in Louisville and drive out each morning",
+        ],
+      },
+      {
+        heading: "What Is On Site",
+        paragraphs: [
+          "This is a working distillery rather than a visitor centre with a still parked outside for photographs.",
+        ],
+        list: [
+          "The mash floor and still house, in operation on production days",
+          "Rickhouse No. 7, our newest warehouse, holding 20,000 barrels",
+          "The tasting room, where flights are poured at cask strength and proofed side by side",
+          "The bottling line and single-barrel selection room",
+        ],
+      },
+      {
+        heading: "Designated Drivers",
+        paragraphs: [
+          "Two and a half hours home is a long way to drive having tasted, and Kentucky's limit arrives well before most people expect. Nominate a driver before you leave Indianapolis, or book the night.",
+          "Every flight can be poured as take-away samples instead. We would much rather you carry it home than hurry through the room.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "How far is Bardstown from Indianapolis?",
+        answer:
+          "154 miles, about two and a half hours. Take I-65 south through Louisville to Exit 112, then KY-245 east through Clermont into Bardstown.",
+      },
+      {
+        question: "Is there a Bourbon & Oak in Indianapolis?",
+        answer:
+          "No. There is one site, the distillery at 1876 Oak Barrel Lane in Bardstown, Kentucky. Nothing in Indiana — this page exists to help you get here, not to imply a branch.",
+      },
+      {
+        question: "Do I lose an hour driving from Indianapolis to Bardstown?",
+        answer:
+          "No. Both are on Eastern time and this route stays in it the whole way. The Central time zone begins further west in Kentucky, not on I-65 between Louisville and Bardstown.",
+      },
+      {
+        question: "Can I do Indianapolis to Bardstown as a day trip?",
+        answer:
+          "You can, but five hours of driving around a tasting makes for a rushed day. Staying a night in Bardstown or Louisville is a much better trip and lets you add other trail stops.",
+      },
+      {
+        question: "When is the best time to leave to avoid traffic?",
+        answer:
+          "Before seven or after nine in the morning. I-65 through downtown Louisville is the pinch point on this route and it backs up in both directions at rush hour.",
+      },
+      {
+        question: "Can you ship to an Indiana address instead?",
+        answer:
+          "Rules for shipping spirits across state lines vary by state and change often. The shipping page carries the current position, and an adult signature is required at delivery wherever we can ship.",
+      },
+    ],
+  },
+  {
+    slug: "chicago",
+    updatedAt: "2026-08-22",
+    city: "Chicago",
+    isPrimarySite: false,
+    cardSummary:
+      "337 miles straight down I-65, or a short flight into Louisville — the longest run on this page, and worth a weekend rather than a day.",
+    driveNote: "337 miles · about 5 hr 30 min via I-65, or fly to Louisville",
+    title: "Visiting From Chicago",
+    h1: "Getting to Kentucky Bourbon Country From Chicago",
+    subtitle:
+      "Five and a half hours down a single interstate, or a ninety-minute flight and a short drive — two honest ways to reach Bardstown from Chicago.",
+    metaTitle: "Kentucky Bourbon Distillery From Chicago | Bourbon & Oak",
+    metaDescription:
+      "Bourbon & Oak is 337 miles from Chicago in Bardstown, Kentucky — about five and a half hours on I-65, or a short flight into Louisville. Routes, timings and how to plan the weekend.",
+    keywords: [
+      "Kentucky bourbon distillery from Chicago",
+      "Chicago to Bardstown Kentucky",
+      "Kentucky Bourbon Trail from Chicago",
+      "bourbon weekend from Chicago",
+      "Chicago to Kentucky bourbon country",
+      "fly Chicago to Louisville bourbon",
+      "I-65 Chicago to Kentucky",
+      "bourbon trip planning Chicago",
+      "Midwest bourbon trail trip",
+    ],
+    heroImage: "/blog-collecting.webp",
+    heroAlt:
+      "A collection of Kentucky bourbon at the Bourbon & Oak distillery, a weekend trip from Chicago",
+    intro: [
+      "Bourbon & Oak has no Chicago location and no Illinois location. There is one distillery, in Bardstown, Kentucky, 337 miles south of the city. This page is about getting here, not about a branch that does not exist.",
+      "This is the longest journey on this page, and the one where flying genuinely competes with driving. Both are reasonable; they suit different trips.",
+    ],
+    sections: [
+      {
+        heading: "Driving: One Interstate, Most of the Way",
+        paragraphs: [
+          "I-65 begins at Gary, Indiana and runs south through Indianapolis and Louisville. From Chicago you pick it up via I-90/I-94 east around the bottom of the lake, then stay on I-65 for roughly 300 miles, coming off at Exit 112 for KY-245 east into Bardstown.",
+          "337 miles, about five and a half hours in clear conditions. Realistically it is a seven hour day with stops, and Chicago's own traffic getting out of the city is the least predictable part of the whole run.",
+        ],
+        list: [
+          "1876 Oak Barrel Lane, Bardstown, KY 40004",
+          "337 miles · about 5 hours 30 minutes driving",
+          "Free on-site parking, including coach and RV spaces",
+          "Chicago is on Central time and Bardstown on Eastern — you lose an hour on the way down",
+        ],
+      },
+      {
+        heading: "Flying: The Faster Option",
+        paragraphs: [
+          "Louisville Muhammad Ali International (SDF) is roughly a ninety minute flight from either Chicago airport, and Bardstown is about 45 minutes further by car. Door to door that is usually half the driving time even allowing for the airport.",
+          "You will need a car at the other end — there is no public transport that reaches us, and no practical way to work the Bourbon Trail without one. Factor that into the comparison, because a rental for two days closes much of the cost gap with driving.",
+        ],
+      },
+      {
+        heading: "Make It a Weekend",
+        paragraphs: [
+          "At this distance a day trip is not a serious proposition. Three distilleries across two days is the version people describe accurately afterwards; four in a day is the version they endure.",
+          "Bardstown puts you inside walking distance of the town square and within fifteen minutes of several other trail stops. Louisville has more hotels and restaurants and a 45 minute run out each morning. Either works — Bardstown suits distillery-first trips, Louisville suits people who want the evenings.",
+        ],
+        list: [
+          "Friday: drive or fly down, evening in Bardstown or Louisville",
+          "Saturday: afternoon tour with us, one or two other stops nearby",
+          "Sunday: a third stop, then home",
+        ],
+      },
+      {
+        heading: "What Is On Site",
+        paragraphs: [
+          "This is a working distillery rather than a visitor centre. Depending on the day and season you may walk past an active fermenter, a running column still, or a crew dumping barrels.",
+        ],
+        list: [
+          "The mash floor and still house, in operation on production days",
+          "Rickhouse No. 7, our newest warehouse, holding 20,000 barrels",
+          "The tasting room, where flights are poured at cask strength and proofed side by side",
+          "The bottling line and single-barrel selection room",
+        ],
+      },
+      {
+        heading: "Carrying Bottles Home",
+        paragraphs: [
+          "If you are flying, bottles must go in checked baggage — anything above 100ml is out of the cabin, and spirits above 70 percent alcohol (140 proof) cannot fly at all. Some barrel proof releases have gone over that line, so check the proof on the bottle before you plan to carry it home.",
+          "Shipping is usually the simpler answer. Rules vary by state and change often, so the shipping page carries the current position, and an adult signature is required at delivery wherever we can send.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "How far is Bardstown, Kentucky from Chicago?",
+        answer:
+          "337 miles, about five and a half hours by road. I-65 runs almost the whole way, from Gary, Indiana south through Indianapolis and Louisville to Exit 112.",
+      },
+      {
+        question: "Is there a Bourbon & Oak in Chicago?",
+        answer:
+          "No. We have one site, the distillery in Bardstown, Kentucky. There is nothing in Chicago or anywhere in Illinois — this page is about reaching us, not a local branch.",
+      },
+      {
+        question: "Is it better to fly or drive from Chicago?",
+        answer:
+          "Flying into Louisville is roughly ninety minutes plus a 45 minute drive, usually about half the door-to-door time of driving. You will still need a car at the other end, which closes much of the cost difference.",
+      },
+      {
+        question: "Can I do this as a day trip from Chicago?",
+        answer:
+          "Not sensibly. Eleven hours of driving around a tasting is not a day out. Two nights makes it a genuinely good trip and lets you fit three distilleries in without rushing.",
+      },
+      {
+        question: "Can I fly home with bottles?",
+        answer:
+          "In checked baggage only, and nothing above 70 percent alcohol — 140 proof — may fly at all. Some barrel proof releases have gone over that line, so check the proof first. Shipping is often simpler.",
+      },
+      {
+        question: "Do I lose time driving from Chicago?",
+        answer:
+          "Yes. Chicago is on Central time and Bardstown is on Eastern, so you lose an hour heading south-east. Tour slots are booked in Eastern time, which catches people out on arrival day.",
+      },
+    ],
+  },
 ];
 
 export function getLocationBySlug(slug: string): Location | undefined {

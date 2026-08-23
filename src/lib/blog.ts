@@ -3999,6 +3999,794 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
   },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 17. Reading a Label — Fundamentals
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "how-to-read-a-bourbon-label",
+    title: "How to Read a Bourbon Label",
+    subtitle:
+      "Which words on the front are legally defined, which are pure marketing, and the one line on the back that tells you who really made it.",
+    excerpt:
+      "Small batch means nothing. Handcrafted means nothing. Bottled in bond means six specific things. Here is how to tell the regulated terms from the decoration, and how to find out which distillery actually filled the bottle.",
+    category: "Fundamentals",
+    author: "Eleanor Hayes",
+    authorTitle: "Master Distiller, Bourbon & Oak",
+    publishedAt: "2026-08-22",
+    readTimeMinutes: 10,
+    heroImage: "/shop-shelves.webp",
+    heroAlt:
+      "Shelves of bourbon bottles with their front labels facing out in a specialist shop",
+    tags: [
+      "bourbon label",
+      "small batch",
+      "bottled in bond",
+      "DSP number",
+      "age statement",
+      "sourced whiskey",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "A bourbon label is two documents printed on one piece of paper. Part of it is regulated, audited and legally meaningful. The rest is advertising copy that anyone may write about anything. They sit in the same typeface, often in the same sentence, and nothing marks where one ends and the other begins. Learning the seam is the single most useful skill in buying whiskey, because it is what stops you paying a premium for an adjective.",
+      },
+      { type: "heading", level: 2, text: "Terms That Are Legally Defined" },
+      {
+        type: "paragraph",
+        text: "These have federal meanings. A producer who prints them and does not meet the standard is committing labelling fraud, not stretching the truth.",
+      },
+      {
+        type: "list",
+        items: [
+          "Bourbon — at least 51 percent corn, distilled below 160 proof, entered into new charred oak below 125 proof, bottled at 80 proof or above, nothing added but water.",
+          "Straight bourbon — the above plus a minimum of two years in the barrel, and if it is under four years the label must state its exact age.",
+          "Bottled in bond — one distillery, one distillation season, at least four years in a federally supervised warehouse, exactly 100 proof. The strictest label in American whiskey.",
+          "Age statement — refers to the youngest whiskey in the bottle, never the average. A number here is a floor.",
+          "Cask strength / barrel proof — bottled at the strength it left the barrel, uncut.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "[[product:eh-taylor-small-batch|Colonel E.H. Taylor Small Batch]] carries the bonded standard on its neck, which is a genuine claim about how it was made. We unpack the whole framework in [[link:/blog/bourbon-vs-whiskey-explained|what actually makes a bourbon]].",
+      },
+      { type: "heading", level: 2, text: "Terms That Mean Nothing At All" },
+      {
+        type: "paragraph",
+        text: "Every phrase in this list is unregulated. Not loosely regulated — entirely undefined. A producer may print any of them on any bottle, for any reason.",
+      },
+      {
+        type: "list",
+        items: [
+          "Small batch — no maximum number of barrels exists. It has been used for four barrels and for four hundred.",
+          "Handcrafted, artisanal, hand-selected, hand-made — decoration. Every distillery is operated by hands.",
+          "Reserve, Select, Private Barrel, Founder's — brand names dressed as grades.",
+          "Old, Rare, Antique — words, not ages. A bottle saying Old with no number may be two years in the barrel.",
+          "Charcoal filtered, small pot still, sour mash — real processes, but so nearly universal in American whiskey that stating them tells you nothing about this bottle.",
+        ],
+      },
+      {
+        type: "callout",
+        title: "The single barrel exception",
+        text: "Single barrel is the one production term in this territory that carries real meaning, because it is verifiable on the bottle: a genuine single barrel release usually prints its barrel number, warehouse and rick position. [[product:blantons-original-single-barrel|Blanton's Original]] does exactly that. If a label claims single barrel and gives you no barrel to point at, treat the claim as decoration.",
+      },
+      { type: "heading", level: 2, text: "The Line That Tells You Who Made It" },
+      {
+        type: "paragraph",
+        text: "Somewhere on the back, usually in the smallest type on the bottle, is a phrase like Distilled by, Produced by, or Bottled by, followed by a company and a town. These are not interchangeable, and the difference is the most consequential thing on the label.",
+      },
+      {
+        type: "list",
+        items: [
+          "Distilled by — this company ran the still. The strongest claim on any label.",
+          "Distilled and bottled by — they made it and they filled the bottle. Stronger still.",
+          "Produced by — deliberately vague. Often means they bought whiskey somebody else distilled and did something to it.",
+          "Bottled by — they put it in glass. It says nothing about who made the liquid.",
+          "Imported by / Blended by — the whiskey came from elsewhere.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "None of this makes sourced whiskey bad. Some excellent bottles are distilled by one company and selected by another with real skill. What it does mean is that Produced by a company founded in 2019 does not describe a two-hundred-year heritage, whatever the front of the bottle implies.",
+      },
+      { type: "heading", level: 2, text: "The DSP Number" },
+      {
+        type: "paragraph",
+        text: "The most honest thing on any American whiskey bottle is a code like DSP-KY-113. It stands for Distilled Spirits Plant, the federal registration of the physical site where the whiskey was made, and the number identifies exactly one facility. Brands can be invented overnight; a DSP number cannot.",
+      },
+      {
+        type: "paragraph",
+        text: "Two bottles from different companies with different stories and the same DSP number came out of the same building. This is how people work out which brands are quietly sharing a distillery. It will not tell you the mash bill or the barrel selection, and those matter — but it settles the question of where the liquid was born.",
+      },
+      { type: "heading", level: 2, text: "Reading the Proof Correctly" },
+      {
+        type: "paragraph",
+        text: "Proof is exactly twice the alcohol by volume: 100 proof is 50 percent. The number matters more than most drinkers assume, because it changes what the whiskey can survive. At 90 proof a bourbon disappears under ice and sugar; at 130 it takes water and keeps its shape. [[product:eh-taylor-barrel-proof|E.H. Taylor Barrel Proof]] at 131 and [[product:weller-12-year|Weller 12 Year]] at 90 are not the same drink in different strengths — they are different tools. There is more on this in [[link:/blog/bourbon-proof-explained|the proof guide]].",
+      },
+      { type: "heading", level: 2, text: "A Label, Read Properly" },
+      {
+        type: "paragraph",
+        text: "Work through a bottle in this order and you will know most of what there is to know before you pay.",
+      },
+      {
+        type: "list",
+        ordered: true,
+        items: [
+          "Does it say bourbon, or straight bourbon? Straight buys you a two-year floor.",
+          "Is there an age statement? A number is a fact. Its absence is not automatically a warning — barrel proof releases often omit one deliberately.",
+          "What is the proof? That tells you how to serve it.",
+          "Who distilled it, in the small type on the back? Distilled by is the claim that counts.",
+          "Is there a DSP number? That is the physical truth of where it was made.",
+          "Everything else — reserve, small batch, handcrafted — read as packaging, and pay nothing extra for it.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "Once the label stops being decorative, buying gets much easier. [[link:/blog/best-bourbon-bottles-ranked|The ranked buying guide]] applies this to specific bottles, and everything in the [[link:/shop|shop]] lists its real age and proof on the product page rather than making you squint at a photograph.",
+      },
+    ],
+    seo: {
+      metaTitle: "How to Read a Bourbon Label: Regulated Terms vs Marketing",
+      metaDescription:
+        "Which bourbon label terms are legally defined, which mean nothing, what Distilled by really tells you, and how a DSP number reveals which distillery made the whiskey.",
+      focusKeyword: "how to read a bourbon label",
+      primaryKeywords: [
+        "how to read a bourbon label",
+        "bourbon label meaning",
+        "what does small batch mean",
+        "bottled in bond meaning",
+        "DSP number whiskey",
+        "distilled by vs produced by",
+        "bourbon age statement",
+      ],
+      longTailKeywords: [
+        "what do the words on a bourbon label mean",
+        "does small batch actually mean anything",
+        "what is a DSP number on whiskey",
+        "difference between distilled by and produced by",
+        "how do I know who made my bourbon",
+        "what does straight bourbon mean on a label",
+        "is handcrafted bourbon a real term",
+        "how to spot sourced whiskey",
+      ],
+      wordClusters: [
+        {
+          cluster: "Regulated Terms",
+          terms: [
+            "straight bourbon",
+            "bottled in bond",
+            "age statement",
+            "cask strength",
+            "barrel proof",
+            "Standards of Identity",
+          ],
+        },
+        {
+          cluster: "Marketing Language",
+          terms: [
+            "small batch",
+            "handcrafted",
+            "reserve",
+            "artisanal",
+            "hand-selected",
+            "founder's collection",
+          ],
+        },
+        {
+          cluster: "Provenance",
+          terms: [
+            "DSP number",
+            "distilled by",
+            "produced by",
+            "bottled by",
+            "sourced whiskey",
+            "contract distilling",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "eh-taylor-small-batch",
+      "blantons-original-single-barrel",
+      "eh-taylor-barrel-proof",
+      "weller-12-year",
+      "eagle-rare-10-year",
+    ],
+    faq: [
+      {
+        question: "Does small batch mean anything on a bourbon label?",
+        answer:
+          "No. There is no legal maximum number of barrels, so the term has been used for four barrels and for several hundred. It is marketing language, not a production standard.",
+      },
+      {
+        question: "What is a DSP number on a whiskey bottle?",
+        answer:
+          "Distilled Spirits Plant — the federal registration of the physical site where the whiskey was made. Each number identifies exactly one facility, so two brands sharing a DSP number were distilled in the same building.",
+      },
+      {
+        question: "What is the difference between distilled by and produced by?",
+        answer:
+          "Distilled by means that company ran the still. Produced by is deliberately vague and often means they bought whiskey somebody else distilled. Bottled by says only that they filled the glass.",
+      },
+      {
+        question: "Is bourbon without an age statement worse?",
+        answer:
+          "Not necessarily. Straight bourbon under four years old must state its age, so an unstated age means at least four years. Barrel proof releases often omit a number deliberately because barrels are chosen on taste rather than to protect a figure.",
+      },
+      {
+        question: "What does bottled in bond guarantee?",
+        answer:
+          "One distillery, one distillation season, at least four years in a federally supervised warehouse, and exactly 100 proof. It is the most demanding label in American whiskey and dates from the Bottled-in-Bond Act of 1897.",
+      },
+    ],
+  },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 18. Bottled in Bond — Fundamentals
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "bottled-in-bond-explained",
+    title: "Bottled in Bond: The Strictest Label in American Whiskey",
+    subtitle:
+      "An 1897 consumer-protection law, four hard requirements, and the reason a green strip on a neck still means something in 2026.",
+    excerpt:
+      "Passed decades before the FDA, when adulterated whiskey was a genuine public health problem. Four requirements, no exceptions, and the most reliable guarantee you can buy for under a hundred dollars.",
+    category: "Fundamentals",
+    author: "Eleanor Hayes",
+    authorTitle: "Master Distiller, Bourbon & Oak",
+    publishedAt: "2026-08-22",
+    readTimeMinutes: 9,
+    heroImage: "/process-rickhouse.webp",
+    heroAlt:
+      "A federally bonded brick rickhouse with barrels on the loading dock",
+    tags: [
+      "bottled in bond",
+      "Bottled-in-Bond Act",
+      "100 proof",
+      "E.H. Taylor",
+      "federal warehouse",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "In the 1890s a bottle labelled whiskey might contain whiskey. It might equally contain neutral spirit coloured with iodine, flavoured with prune juice, and sharpened with anything from tobacco to sulphuric acid. There was no federal food and drug law to stop it — the FDA would not exist for another decade — and buyers had no way to tell an honest bottle from a dangerous one.",
+      },
+      {
+        type: "paragraph",
+        text: "The Bottled-in-Bond Act of 1897 was the answer, and it is one of the first consumer protection laws the United States ever passed for any product. It did not ban adulteration. It did something cleverer: it created a voluntary standard so strict that meeting it was itself a guarantee, and put the federal government's name behind the label.",
+      },
+      { type: "heading", level: 2, text: "The Four Requirements" },
+      {
+        type: "paragraph",
+        text: "To print bottled in bond, a whiskey must satisfy all four. There are no partial credits.",
+      },
+      {
+        type: "list",
+        ordered: true,
+        items: [
+          "The product of one distillation season — a single January-to-June or July-to-December run. No blending across years to smooth out a bad batch.",
+          "The product of one distillery, by one distiller. No buying in whiskey from elsewhere and mixing it.",
+          "Aged at least four years in a federally supervised bonded warehouse.",
+          "Bottled at exactly 100 proof. Not around 100. Exactly.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "The label must also identify the distillery where it was made, and where different, where it was bottled. That requirement is the ancestor of the DSP number you can still read on a modern bottle, which we cover in [[link:/blog/how-to-read-a-bourbon-label|how to read a bourbon label]].",
+      },
+      { type: "heading", level: 2, text: "What Bonded Actually Meant" },
+      {
+        type: "paragraph",
+        text: "The bond in the name is a tax term, not a marketing one. Whiskey sat in a government-supervised warehouse under federal lock, with the excise tax deferred until it was bottled and removed. A Treasury official held the key. That supervision is what made the guarantee credible: the government was not taking the distiller's word for the age, it was watching the barrels.",
+      },
+      {
+        type: "paragraph",
+        text: "The green strip stamp that used to run over the cap was the visible proof, and for decades it was how ordinary buyers identified a bottle they could trust. The strip stamps ended in 1985; the standard did not.",
+      },
+      { type: "heading", level: 2, text: "Why 100 Proof Matters" },
+      {
+        type: "paragraph",
+        text: "The fixed strength looks arbitrary and is not. Proof was the easiest thing in the whole chain to cheat: watering a barrel down was cheap, invisible and profitable. Fixing the figure at exactly 100 removed the temptation and gave inspectors a single number to test against.",
+      },
+      {
+        type: "paragraph",
+        text: "It also happens to be an excellent drinking strength. At 100 proof a bourbon has enough body to survive an ice cube and enough restraint to drink neat without water — which is why bonded bottles make unusually reliable house pours. [[link:/blog/how-to-taste-bourbon|The tasting guide]] covers where dilution starts to matter.",
+      },
+      {
+        type: "callout",
+        title: "Bonded is a floor, not a ceiling",
+        text: "Four years is the minimum, not the target. Plenty of bonded whiskey is considerably older; the label simply stops describing it past four. A bonded bottle guarantees you a baseline nobody can fake — it does not promise the whiskey is exceptional, only that it is honestly what it says.",
+      },
+      { type: "heading", level: 2, text: "The Man on the Bottle" },
+      {
+        type: "paragraph",
+        text: "Colonel Edmund Haynes Taylor Jr. campaigned for the Act, and the range that carries his name is built on the standard he fought for. [[product:eh-taylor-small-batch|E.H. Taylor Small Batch]] is bonded at 100 proof, and [[product:eh-taylor-single-barrel|E.H. Taylor Single Barrel]] applies the same standard to one cask at a time.",
+      },
+      {
+        type: "paragraph",
+        text: "[[product:eh-taylor-barrel-proof|E.H. Taylor Barrel Proof]] breaks the rule deliberately, arriving uncut at 131 proof rather than the mandated 100 — which is worth understanding rather than assuming it is an upgrade. It is a different proposition from the bonded expressions, not a stronger version of the same guarantee.",
+      },
+      { type: "heading", level: 2, text: "Is It Still Worth Looking For?" },
+      {
+        type: "paragraph",
+        text: "Yes, for one specific reason: it is the only claim on an American whiskey shelf that cannot be gamed. Small batch means nothing. Reserve means nothing. Handcrafted means nothing. Bottled in bond means four verifiable things, and a producer who prints it without meeting them is committing fraud rather than exaggerating.",
+      },
+      {
+        type: "paragraph",
+        text: "In a market where a brand can be invented in an afternoon and a story written to match, that matters. It will not tell you a bottle is delicious — for that, work out whether you prefer [[link:/blog/wheated-vs-high-rye-bourbon|wheat or rye as the second grain]]. But it tells you the bottle is honest, and at this end of the shelf that is not nothing.",
+      },
+      {
+        type: "paragraph",
+        text: "The bonded expressions we stock sit in the [[link:/shop|shop]] alongside the rest of the Taylor range, and [[link:/blog/best-bourbon-bottles-ranked|the ranked guide]] puts them in context against the allocated bottles.",
+      },
+    ],
+    seo: {
+      metaTitle: "Bottled in Bond Explained: The 1897 Act and What It Guarantees",
+      metaDescription:
+        "What bottled in bond means, the four federal requirements, why the proof is fixed at exactly 100, and why it is the only whiskey label claim that cannot be gamed.",
+      focusKeyword: "bottled in bond",
+      primaryKeywords: [
+        "bottled in bond",
+        "Bottled-in-Bond Act",
+        "bonded bourbon",
+        "100 proof bourbon",
+        "bonded whiskey meaning",
+        "E.H. Taylor bottled in bond",
+      ],
+      longTailKeywords: [
+        "what does bottled in bond mean",
+        "bottled in bond requirements",
+        "why is bonded whiskey 100 proof",
+        "is bottled in bond better",
+        "what was the Bottled-in-Bond Act of 1897",
+        "bonded bourbon vs straight bourbon",
+        "what is a bonded warehouse whiskey",
+        "green strip stamp whiskey",
+      ],
+      wordClusters: [
+        {
+          cluster: "The Law",
+          terms: [
+            "Bottled-in-Bond Act 1897",
+            "distillation season",
+            "federally supervised warehouse",
+            "Treasury supervision",
+            "strip stamp",
+            "excise tax deferral",
+          ],
+        },
+        {
+          cluster: "The Standard",
+          terms: [
+            "one distillery",
+            "one distiller",
+            "four years minimum",
+            "exactly 100 proof",
+            "DSP identification",
+          ],
+        },
+        {
+          cluster: "In Practice",
+          terms: [
+            "bonded bourbon brands",
+            "E.H. Taylor",
+            "house pour",
+            "label trust",
+            "adulterated whiskey",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "eh-taylor-small-batch",
+      "eh-taylor-single-barrel",
+      "eh-taylor-barrel-proof",
+      "eagle-rare-10-year",
+      "weller-12-year",
+    ],
+    faq: [
+      {
+        question: "What does bottled in bond mean?",
+        answer:
+          "One distillation season, one distillery, one distiller, at least four years in a federally supervised warehouse, and bottled at exactly 100 proof. All four are required — there are no partial qualifications.",
+      },
+      {
+        question: "Why is bonded whiskey always 100 proof?",
+        answer:
+          "Proof was the easiest thing to cheat — watering a barrel down was cheap and invisible. Fixing the figure at exactly 100 removed the temptation and gave inspectors one number to test against. It also happens to be an excellent drinking strength.",
+      },
+      {
+        question: "Is bottled in bond better than straight bourbon?",
+        answer:
+          "It is a stricter guarantee. Straight bourbon requires two years and allows blending across distilleries and seasons; bonded requires four years from a single season at a single distillery. Stricter is not automatically tastier, but it is more honest.",
+      },
+      {
+        question: "What was the Bottled-in-Bond Act of 1897?",
+        answer:
+          "One of the first US consumer protection laws, passed when adulterated whiskey was a genuine public health problem and decades before the FDA existed. It created a voluntary standard strict enough that meeting it was itself a guarantee.",
+      },
+      {
+        question: "Does bottled in bond mean the whiskey is only four years old?",
+        answer:
+          "No. Four years is the minimum. Plenty of bonded whiskey is considerably older — the label simply stops describing age past that floor.",
+      },
+    ],
+  },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 19. Single Barrel vs Small Batch — Buying Guide
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "single-barrel-vs-small-batch",
+    title: "Single Barrel vs Small Batch: Which Should You Buy?",
+    subtitle:
+      "One is a legally meaningless phrase. The other is a verifiable claim printed on the bottle. That asymmetry is the whole answer.",
+    excerpt:
+      "Small batch has no legal definition and never has — it has been used for four barrels and for four hundred. Single barrel means exactly one cask. Here is what each actually buys you, and when consistency beats character.",
+    category: "Buying Guide",
+    author: "Eleanor Hayes",
+    authorTitle: "Master Distiller, Bourbon & Oak",
+    publishedAt: "2026-08-22",
+    readTimeMinutes: 9,
+    heroImage: "/process-cooperage.webp",
+    heroAlt: "A single bourbon barrel being worked on the cooperage floor",
+    tags: [
+      "single barrel",
+      "small batch",
+      "barrel pick",
+      "batch variation",
+      "buying guide",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "These two phrases sit side by side on the same shelf, in the same typeface, at similar prices, and they are not the same kind of statement. One describes a verifiable fact about a specific cask. The other is a phrase with no legal definition whatsoever. Knowing which is which changes how you read a whole shelf.",
+      },
+      { type: "heading", level: 2, text: "Single Barrel: One Cask, Bottled Alone" },
+      {
+        type: "paragraph",
+        text: "A single barrel release is exactly what it says. One cask is selected, emptied, and bottled on its own without being married to anything else. It typically yields somewhere between 150 and 250 bottles depending on age and how much the angels took, and when those are gone that expression of that whiskey no longer exists.",
+      },
+      {
+        type: "paragraph",
+        text: "Because the claim is checkable, honest producers make it checkable. [[product:blantons-original-single-barrel|Blanton's Original]] prints the barrel number, the warehouse and the rick position on the label, along with the dump date. [[product:elmer-t-lee-single-barrel|Elmer T. Lee]] and [[product:rock-hill-farms-single-barrel|Rock Hill Farms]] do the same. If a bottle claims single barrel and gives you no barrel to point at, treat the claim with suspicion.",
+      },
+      {
+        type: "paragraph",
+        text: "The consequence is variation, and it is the point rather than a defect. Two bottles of the same single barrel expression bought a year apart will not taste identical, because they came from different casks that sat in different parts of the warehouse. We walk through how that selection actually happens in [[link:/blog/master-distiller-barrel-selection-guide|the barrel selection guide]].",
+      },
+      { type: "heading", level: 2, text: "Small Batch: A Number Nobody Defined" },
+      {
+        type: "paragraph",
+        text: "There is no federal definition of small batch. None. No maximum barrel count, no ceiling on bottles produced, no requirement to disclose anything. The term was popularised in the 1980s to distinguish carefully-married whiskey from mass production, and it worked so well as marketing that it now appears on bottles produced by the hundreds of thousands.",
+      },
+      {
+        type: "paragraph",
+        text: "That does not make small batch whiskey bad. [[product:eh-taylor-small-batch|E.H. Taylor Small Batch]] is excellent, and its bonded status is a real guarantee sitting alongside a meaningless one. What it means is that the phrase itself carries no information: you have to judge the bottle on its age, proof, distillery and price, exactly as you would if the words were not there.",
+      },
+      {
+        type: "callout",
+        title: "What batching is actually for",
+        text: "Marrying barrels is a craft, not a compromise. A blender tastes many casks and combines them so the result is better and more consistent than most of the individual barrels would be alone. Done well it is genuinely skilled work. The complaint is not with the practice — it is with a label implying scarcity that the producer never has to demonstrate.",
+      },
+      { type: "heading", level: 2, text: "Which One Should You Buy?" },
+      {
+        type: "paragraph",
+        text: "It depends entirely on what you want the bottle to do.",
+      },
+      {
+        type: "list",
+        items: [
+          "Want the same drink every time — a house pour, a cocktail base, a bottle you replace without thinking? Batched whiskey is designed for exactly that. Consistency is the product.",
+          "Want to taste a specific place and moment in a warehouse, and accept that the next bottle will differ? Single barrel. The variation is what you are buying.",
+          "Buying a gift for someone who likes provenance? Single barrel, every time — a printed barrel number and warehouse position is a far better story than an adjective.",
+          "Building a shelf on a budget? Ignore both terms and buy on age, proof and distillery. They will tell you more than either phrase.",
+        ],
+      },
+      { type: "heading", level: 2, text: "The Store Pick, and Why It Matters" },
+      {
+        type: "paragraph",
+        text: "There is a third category worth knowing. A store pick, private selection or barrel pick is a single barrel chosen by a specific retailer or bar, usually from a lineup the distillery offers for tasting. The selector tastes several candidate casks and takes the one they like.",
+      },
+      {
+        type: "paragraph",
+        text: "The quality of a store pick is the quality of the palate that picked it, which is why the same expression can be outstanding from one shop and ordinary from another. It is also the closest most people get to the barrel-selection process itself — we run it on our own [[link:/tours|distillery tour]], where the private barrel pick takes most of a day.",
+      },
+      { type: "heading", level: 2, text: "Reading the Shelf Properly" },
+      {
+        type: "paragraph",
+        text: "Neither phrase belongs at the top of your decision. Grain comes first — [[link:/blog/wheated-vs-high-rye-bourbon|wheated or high-rye]] decides more about whether you will enjoy a bottle than anything else on the label. Then proof, then age, then price. Single barrel versus small batch is a question about consistency, not quality, and it belongs near the end of the list rather than the start.",
+      },
+      {
+        type: "paragraph",
+        text: "Everything we stock lists its real age, proof and format on the product page. Compare [[product:weller-12-year|Weller 12 Year]] against [[product:blantons-original-single-barrel|Blanton's Original]] at similar strength and the difference you taste will be the grain, not the batching — which is the most useful lesson either phrase can teach you. More on that in [[link:/blog/best-bourbon-bottles-ranked|the ranked buying guide]].",
+      },
+    ],
+    seo: {
+      metaTitle: "Single Barrel vs Small Batch Bourbon: What Each Really Means",
+      metaDescription:
+        "Single barrel is a verifiable claim printed on the bottle. Small batch has no legal definition at all. What each actually buys you, and when consistency beats character.",
+      focusKeyword: "single barrel vs small batch",
+      primaryKeywords: [
+        "single barrel vs small batch",
+        "what is small batch bourbon",
+        "what is single barrel bourbon",
+        "store pick bourbon",
+        "barrel pick",
+        "batch variation whiskey",
+      ],
+      longTailKeywords: [
+        "is single barrel better than small batch",
+        "does small batch mean anything legally",
+        "how many bottles come from one bourbon barrel",
+        "what is a store pick bourbon",
+        "why do single barrel bottles taste different",
+        "single barrel vs small batch for cocktails",
+        "what does a barrel number on a label mean",
+      ],
+      wordClusters: [
+        {
+          cluster: "Formats",
+          terms: [
+            "single barrel",
+            "small batch",
+            "store pick",
+            "private selection",
+            "barrel pick",
+            "marrying barrels",
+          ],
+        },
+        {
+          cluster: "Provenance Markers",
+          terms: [
+            "barrel number",
+            "warehouse",
+            "rick position",
+            "dump date",
+            "bottle count",
+          ],
+        },
+        {
+          cluster: "Buying Logic",
+          terms: [
+            "consistency",
+            "batch variation",
+            "house pour",
+            "cocktail base",
+            "age and proof",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "blantons-original-single-barrel",
+      "elmer-t-lee-single-barrel",
+      "rock-hill-farms-single-barrel",
+      "eh-taylor-small-batch",
+      "weller-12-year",
+      "eh-taylor-single-barrel",
+    ],
+    faq: [
+      {
+        question: "Is single barrel better than small batch?",
+        answer:
+          "Neither is better — they answer different needs. Single barrel gives you one specific cask with real variation between bottles. Batched whiskey is engineered for consistency, which is what you want in a house pour or a cocktail base.",
+      },
+      {
+        question: "Does small batch have a legal definition?",
+        answer:
+          "No. There is no maximum barrel count and no disclosure requirement. The phrase has been used for four barrels and for several hundred, so it carries no information on its own.",
+      },
+      {
+        question: "How many bottles come from a single bourbon barrel?",
+        answer:
+          "Typically 150 to 250, depending on the age of the whiskey and how much evaporated during maturation. Older barrels yield fewer bottles because the angels took more.",
+      },
+      {
+        question: "What is a store pick bourbon?",
+        answer:
+          "A single barrel chosen by a specific retailer or bar from a lineup the distillery offers for tasting. Its quality is the quality of the palate that selected it, which is why the same expression varies between shops.",
+      },
+      {
+        question: "Why do two bottles of the same single barrel taste different?",
+        answer:
+          "Because they came from different casks. Position in the rickhouse changes how a barrel matures, so two barrels filled the same day from the same batch can taste noticeably different after a decade.",
+      },
+    ],
+  },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 20. Food Pairing — Serving
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "bourbon-food-pairing",
+    title: "Bourbon and Food: What Actually Works",
+    subtitle:
+      "Match the weight, mind the proof, and stop pairing everything with chocolate. A practical guide to putting bourbon on the table.",
+    excerpt:
+      "Most pairing advice is a list of things somebody once enjoyed. This is the mechanism instead: why proof matters more than flavour notes, which foods flatten whiskey outright, and the three pairings worth building a dinner around.",
+    category: "Recipes",
+    author: "Wyatt Brennan",
+    authorTitle: "Head Bartender, The Cellar at Bourbon & Oak",
+    publishedAt: "2026-08-22",
+    readTimeMinutes: 9,
+    heroImage: "/image3.webp",
+    heroAlt: "Bourbon poured beside a spread on a counter, ready for a tasting",
+    tags: [
+      "bourbon food pairing",
+      "whiskey and cheese",
+      "bourbon dinner",
+      "palate fatigue",
+      "serving bourbon",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "Wine pairing has two centuries of convention behind it. Bourbon pairing has about twenty years, and most of what gets written is a list of things somebody happened to enjoy once. There is a mechanism underneath it though, and once you know it you can pair anything without a chart.",
+      },
+      { type: "heading", level: 2, text: "Proof Comes Before Flavour" },
+      {
+        type: "paragraph",
+        text: "The first thing bourbon does at a table is not taste of caramel. It is alcohol, and alcohol is an anaesthetic. A 130 proof pour numbs the palate for whatever follows, which is why a barrel proof bourbon alongside delicate food is not a pairing — it is a demolition.",
+      },
+      {
+        type: "paragraph",
+        text: "Work in the other direction. Decide what you are eating, then pick a strength that will not flatten it.",
+      },
+      {
+        type: "list",
+        items: [
+          "Delicate food — fish, fresh cheese, salad: 80 to 95 proof, or do not pour bourbon at all. [[product:weller-12-year|Weller 12 Year]] at 90 proof is about as loud as this should get.",
+          "Medium — roast chicken, aged cheddar, charcuterie: 90 to 100 proof. [[product:eh-taylor-small-batch|E.H. Taylor Small Batch]] at exactly 100 is built for this.",
+          "Rich — beef, smoked meat, hard aged cheese: 100 to 115 proof. [[product:russells-reserve-13-year|Russell's Reserve 13 Year]] at 114.8 holds its shape against anything off a grill.",
+          "Dessert and after dinner: anything, including barrel proof, because there is nothing delicate left to protect.",
+        ],
+      },
+      { type: "heading", level: 2, text: "Match the Weight, Not the Notes" },
+      {
+        type: "paragraph",
+        text: "The common mistake is pairing on flavour descriptors — vanilla notes with vanilla dessert, cherry notes with cherry tart. It rarely works, because two things tasting the same do not create contrast, they cancel. What matters is weight: a heavy whiskey needs food substantial enough to stand against it.",
+      },
+      {
+        type: "paragraph",
+        text: "The exception is fat. Fat coats the palate and blunts alcohol, which is why rich food makes strong whiskey drink softer than it does alone. That is a genuinely useful lever — a bourbon that seems too hot neat will often behave perfectly beside something fatty.",
+      },
+      { type: "heading", level: 2, text: "Three Pairings Worth Building Around" },
+      { type: "heading", level: 3, text: "Aged cheddar and a wheated bourbon" },
+      {
+        type: "paragraph",
+        text: "The most reliable pairing in the whole category. A good three-year cheddar is salty, crystalline and fatty; a wheated bourbon is soft, honeyed and low on spice. The salt sharpens the sweetness and the fat takes the edge off the alcohol. [[product:weller-12-year|Weller 12 Year]] is the obvious pour. If you want to understand why wheat works here where rye does not, [[link:/blog/wheated-vs-high-rye-bourbon|the mash bill guide]] covers it.",
+      },
+      { type: "heading", level: 3, text: "Smoked meat and high-rye bourbon" },
+      {
+        type: "paragraph",
+        text: "Rye spice does to barbecue what black pepper does to steak. The peppery, herbal edge cuts through smoke and fat instead of drowning in it, and the char on the meat echoes the char on the barrel. [[product:blantons-original-single-barrel|Blanton's Original]] at 93 proof handles a plate of brisket without either side giving way.",
+      },
+      { type: "heading", level: 3, text: "Dark chocolate and barrel proof" },
+      {
+        type: "paragraph",
+        text: "The one dessert pairing that earns its reputation, with a caveat: it needs to be genuinely dark, 70 percent or above. Milk chocolate is too sweet and turns the whiskey sour. At the end of a meal there is nothing delicate left to protect, so this is where [[product:eh-taylor-barrel-proof|E.H. Taylor Barrel Proof]] or [[product:george-t-stagg|George T. Stagg]] finally belong.",
+      },
+      { type: "heading", level: 2, text: "What Does Not Work" },
+      {
+        type: "list",
+        items: [
+          "Anything very spicy. Capsaicin and ethanol both hit the same heat receptors, and together they stop being flavour and start being pain.",
+          "Delicate fish. Even a gentle bourbon flattens it, and the pairing is unpleasant in both directions.",
+          "Very acidic dressings. Vinegar and citrus strip the palate and make oak taste bitter.",
+          "Milk chocolate, ice cream, anything sugary. Sweetness on sweetness makes the whiskey read sour and thin.",
+          "Mint, unless it is in the glass. Beside the glass it fights the bourbon; inside it, as a julep, it works — see [[link:/blog/summer-bourbon-cocktail-recipes|the summer cocktails]].",
+        ],
+      },
+      { type: "heading", level: 2, text: "Serving a Bourbon Dinner" },
+      {
+        type: "paragraph",
+        text: "If you are pouring across a whole meal rather than one course, order matters more than the individual matches. Palate fatigue arrives faster than people expect, and once it does nothing tastes of anything.",
+      },
+      {
+        type: "list",
+        ordered: true,
+        items: [
+          "Go low to high in proof, always. A barrel proof pour early flattens everything after it.",
+          "Half-ounce pours, not full ones. Three courses at a full pour each is a lot of whiskey and a wrecked palate.",
+          "Water on the table, still not sparkling — carbonation irritates the palate.",
+          "Three whiskeys across a meal is plenty. Five is the outer limit even for people who do this professionally.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "The mechanics of tasting itself — glassware, nosing, how much water — are in [[link:/blog/how-to-taste-bourbon|the tasting guide]]. For choosing the bottles, [[link:/blog/best-bourbon-bottles-ranked|the ranked guide]] covers what each one actually does, and the full range is in the [[link:/shop|shop]].",
+      },
+    ],
+    seo: {
+      metaTitle: "Bourbon and Food Pairing: What Actually Works",
+      metaDescription:
+        "Why proof matters more than tasting notes, which foods flatten whiskey, three pairings worth building a dinner around, and how to order pours across a meal.",
+      focusKeyword: "bourbon food pairing",
+      primaryKeywords: [
+        "bourbon food pairing",
+        "what to eat with bourbon",
+        "bourbon and cheese",
+        "whiskey pairing dinner",
+        "bourbon and chocolate",
+        "bourbon with barbecue",
+      ],
+      longTailKeywords: [
+        "what food goes well with bourbon",
+        "best cheese to pair with bourbon",
+        "does bourbon go with chocolate",
+        "what not to eat with whiskey",
+        "how to host a bourbon dinner",
+        "bourbon pairing with steak",
+        "why does spicy food ruin whiskey",
+        "what proof bourbon for food pairing",
+      ],
+      wordClusters: [
+        {
+          cluster: "Pairing Mechanics",
+          terms: [
+            "weight matching",
+            "proof and palate",
+            "fat and alcohol",
+            "contrast vs echo",
+            "palate fatigue",
+          ],
+        },
+        {
+          cluster: "Foods",
+          terms: [
+            "aged cheddar",
+            "smoked brisket",
+            "dark chocolate",
+            "charcuterie",
+            "grilled beef",
+            "pecan",
+          ],
+        },
+        {
+          cluster: "Service",
+          terms: [
+            "pour size",
+            "flight order",
+            "still water",
+            "bourbon dinner",
+            "course pairing",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "weller-12-year",
+      "eh-taylor-small-batch",
+      "russells-reserve-13-year",
+      "blantons-original-single-barrel",
+      "eh-taylor-barrel-proof",
+      "george-t-stagg",
+    ],
+    faq: [
+      {
+        question: "What food goes best with bourbon?",
+        answer:
+          "Aged cheddar with a wheated bourbon is the most reliable pairing in the category — the salt sharpens the sweetness and the fat softens the alcohol. Smoked meat with a high-rye bourbon is the second.",
+      },
+      {
+        question: "Does bourbon go with chocolate?",
+        answer:
+          "With genuinely dark chocolate, 70 percent or above, yes — and it is where barrel proof bottles finally belong. Milk chocolate is too sweet and makes the whiskey taste sour and thin.",
+      },
+      {
+        question: "What should you not eat with bourbon?",
+        answer:
+          "Very spicy food, since capsaicin and ethanol hit the same heat receptors; delicate fish, which any bourbon flattens; heavily acidic dressings, which make oak taste bitter; and sugary desserts.",
+      },
+      {
+        question: "What proof bourbon should I serve with dinner?",
+        answer:
+          "Match strength to the weight of the food: 80 to 95 proof for delicate dishes, 90 to 100 for roast meat and aged cheese, 100 to 115 for beef and smoked food. Save barrel proof for after the plates are cleared.",
+      },
+      {
+        question: "How many bourbons should I pour across a meal?",
+        answer:
+          "Three is plenty and five is the outer limit. Always go low to high in proof — a barrel proof pour early will flatten your palate for everything that follows.",
+      },
+    ],
+  },
 ];
 
 // ─── Helpers ────────────────────────────────────────────────────────────────

@@ -1,6 +1,6 @@
 # Google Search Console — URL submission list
 
-**70 indexable URLs.** Generated from the live sitemap, so this is exactly what Google is told to crawl.
+**77 indexable URLs.** Generated from the live sitemap, so this is exactly what Google is told to crawl.
 
 Sitemap: `https://bourbonoaklover.com/sitemap.xml` · Property: `https://bourbonoaklover.com/` (non-www)
 
@@ -73,7 +73,10 @@ Each is self-canonical and targets a brand-level search (e.g. "buy pappy van win
 Local-search landing pages. The index lists them all; the Bardstown page is the
 real distillery, the rest are catchment / trip-planning guides.
 
-- [ ] [https://bourbonoaklover.com/visit](https://bourbonoaklover.com/visit)  — Visit & Locations index (updated 2026-08-20)
+- [ ] [https://bourbonoaklover.com/visit](https://bourbonoaklover.com/visit)  — Visit & Locations index (updated 2026-08-22)
+- [ ] [https://bourbonoaklover.com/visit/frankfort](https://bourbonoaklover.com/visit/frankfort)  — Visiting From Frankfort (updated 2026-08-22, **new**)
+- [ ] [https://bourbonoaklover.com/visit/indianapolis](https://bourbonoaklover.com/visit/indianapolis)  — Visiting From Indianapolis (updated 2026-08-22, **new**)
+- [ ] [https://bourbonoaklover.com/visit/chicago](https://bourbonoaklover.com/visit/chicago)  — Getting Here From Chicago (updated 2026-08-22, **new**)
 - [ ] [https://bourbonoaklover.com/visit/lexington](https://bourbonoaklover.com/visit/lexington)  — Visiting From Lexington (updated 2026-08-20)
 - [ ] [https://bourbonoaklover.com/visit/cincinnati](https://bourbonoaklover.com/visit/cincinnati)  — Visiting From Cincinnati (updated 2026-08-20)
 - [ ] [https://bourbonoaklover.com/visit/nashville](https://bourbonoaklover.com/visit/nashville)  — Visiting From Nashville (updated 2026-08-20)
@@ -85,8 +88,12 @@ real distillery, the rest are catchment / trip-planning guides.
 
 These already carry full keyword research in `src/lib/blog.ts` — focus keyword,
 primary and long-tail sets, semantic clusters, and FAQ schema on the newer ones.
-Newest first; submit these before the older three.
+Newest first; the four dated 2026-08-22 are new and unindexed — submit those first.
 
+- [ ] [https://bourbonoaklover.com/blog/how-to-read-a-bourbon-label](https://bourbonoaklover.com/blog/how-to-read-a-bourbon-label)  — How to Read a Bourbon Label (updated 2026-08-22, **new**)
+- [ ] [https://bourbonoaklover.com/blog/bottled-in-bond-explained](https://bourbonoaklover.com/blog/bottled-in-bond-explained)  — Bottled in Bond: The Strictest Label in American Whiskey (updated 2026-08-22, **new**)
+- [ ] [https://bourbonoaklover.com/blog/single-barrel-vs-small-batch](https://bourbonoaklover.com/blog/single-barrel-vs-small-batch)  — Single Barrel vs Small Batch: Which Should You Buy? (updated 2026-08-22, **new**)
+- [ ] [https://bourbonoaklover.com/blog/bourbon-food-pairing](https://bourbonoaklover.com/blog/bourbon-food-pairing)  — Bourbon and Food: What Actually Works (updated 2026-08-22, **new**)
 - [ ] [https://bourbonoaklover.com/blog/bourbon-gift-guide](https://bourbonoaklover.com/blog/bourbon-gift-guide)  — Bourbon Gifts That Land: What to Give at $40, $100 and $250 (updated 2026-08-20)
 - [ ] [https://bourbonoaklover.com/blog/bourbon-proof-explained](https://bourbonoaklover.com/blog/bourbon-proof-explained)  — Bourbon Proof, Explained: From 80 to 136 and What Actually Changes (updated 2026-08-20)
 - [ ] [https://bourbonoaklover.com/blog/best-bourbon-for-an-old-fashioned](https://bourbonoaklover.com/blog/best-bourbon-for-an-old-fashioned)  — The Best Bourbon for an Old Fashioned, Tested Behind the Bar (updated 2026-08-20)
