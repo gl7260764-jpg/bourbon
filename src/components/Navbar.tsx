@@ -44,19 +44,19 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-14 sm:h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 border-2 border-bourbon-gold flex items-center justify-center group-hover:bg-bourbon-gold/10 transition-colors">
-              <span className="font-[family-name:var(--font-playfair)] text-bourbon-gold text-xl font-bold">
+          <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 border-2 border-bourbon-gold flex items-center justify-center shrink-0 group-hover:bg-bourbon-gold/10 transition-colors">
+              <span className="font-[family-name:var(--font-playfair)] text-bourbon-gold text-base sm:text-xl font-bold">
                 B
               </span>
             </div>
             <div>
-              <span className="font-[family-name:var(--font-playfair)] text-bourbon-cream text-lg font-bold tracking-wide">
+              <span className="font-[family-name:var(--font-playfair)] text-bourbon-cream text-[15px] sm:text-lg font-bold tracking-wide whitespace-nowrap">
                 Bourbon & Oak
               </span>
-              <span className="block text-bourbon-gold text-[10px] tracking-[0.3em] uppercase">
+              <span className="block text-bourbon-gold text-[8px] sm:text-[10px] tracking-[0.2em] sm:tracking-[0.3em] uppercase">
                 Est. 1876
               </span>
             </div>
@@ -88,7 +88,7 @@ export default function Navbar() {
           </nav>
 
           {/* Right icons */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4">
             {/* Renders only while an install is genuinely available. */}
             <InstallButton />
             <button
@@ -154,17 +154,24 @@ export default function Navbar() {
             : "grid-rows-[0fr] opacity-0 border-transparent"
         }`}
       >
-        <nav className="overflow-hidden flex flex-col py-4 px-6 gap-4">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              onClick={() => setMobileOpen(false)}
-              className="text-bourbon-cream/80 hover:text-bourbon-gold text-sm tracking-wider uppercase transition-colors py-2"
-            >
-              {link.name}
-            </Link>
-          ))}
+        {/* Padding lives on the inner wrapper, not the grid item. A grid item's
+            own padding still renders when the track collapses to 0fr, so
+            putting it on the <nav> left 32px of dead space under the bar on
+            every mobile page even with the menu shut. */}
+        <nav className="overflow-hidden">
+          <div className="flex flex-col py-4 px-6 gap-4">
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                onClick={() => setMobileOpen(false)}
+                tabIndex={mobileOpen ? undefined : -1}
+                className="text-bourbon-cream/80 hover:text-bourbon-gold text-sm tracking-wider uppercase transition-colors py-2"
+              >
+                {link.name}
+              </Link>
+            ))}
+          </div>
         </nav>
       </div>
 
