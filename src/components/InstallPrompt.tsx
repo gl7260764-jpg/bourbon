@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import {
   type BeforeInstallPromptEvent,
   INSTALLED_EVENT,
@@ -19,6 +20,11 @@ import {
 const DELAY_MS = 10_000;
 
 export default function InstallPrompt() {
+  /* Mounted from the root layout, which is outside SiteChrome's admin branch,
+     so without this the operator was shown a "save 5% on every order" install
+     card over their own tools — and on the chat page it sat on top of the
+     composer. */
+  const pathname = usePathname();
   const [visible, setVisible] = useState(false);
   const [platform, setPlatform] = useState<Platform>("desktop-bookmark");
   const [deferredEvent, setDeferredEvent] =
@@ -106,7 +112,7 @@ export default function InstallPrompt() {
     setExpanded(true);
   };
 
-  if (!visible) return null;
+  if (!visible || pathname?.startsWith("/admin")) return null;
 
   const isMac = typeof navigator !== "undefined" && /Mac/i.test(navigator.platform);
   const bookmarkKey = isMac ? "⌘ + D" : "Ctrl + D";

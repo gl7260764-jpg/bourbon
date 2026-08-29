@@ -76,8 +76,16 @@ export default function ChatClient({ vapidPublicKey }: { vapidPublicKey: string 
     return () => clearInterval(timer);
   }, [loadList]);
 
+  /* Pushed, not replaced: on a phone the list and the thread are two screens,
+     and the hardware Back button should return to the list rather than leave
+     the admin entirely. On desktop both panes are visible and this is just a
+     selection. */
   const openConversation = (id: string) => {
-    router.replace(`/admin/chat?c=${id}`, { scroll: false });
+    router.push(`/admin/chat?c=${id}`, { scroll: false });
+  };
+
+  const closeConversation = () => {
+    router.push("/admin/chat", { scroll: false });
   };
 
   const enableNotifications = async () => {
@@ -125,9 +133,24 @@ export default function ChatClient({ vapidPublicKey }: { vapidPublicKey: string 
 
   return (
     <div>
-      <GreetingEditor />
+      {/* Page furniture stands down on a phone once a conversation is open —
+          the thread is the screen at that point, and the editor plus the
+          notification button were eating the top third of it. Both panes are
+          on screen together from lg up, so it stays put there. */}
+      <div className={activeId ? "hidden lg:block" : "block"}>
+        <header className="mb-6">
+          <h1 className="font-[family-name:var(--font-playfair)] text-2xl sm:text-3xl font-bold text-bourbon-deep">
+            Live Chat
+          </h1>
+          <p className="text-sm text-bourbon-deep/60 mt-1">
+            Reply to visitors in real time. Enable notifications to get pinged
+            on this device.
+          </p>
+        </header>
+        <GreetingEditor />
+      </div>
 
-      <div className="mb-4">
+      <div className={`mb-4 ${activeId ? "hidden lg:block" : "block"}`}>
         <button
           onClick={enableNotifications}
           disabled={notifyState === "enabling" || notifyState === "on"}
@@ -149,9 +172,17 @@ export default function ChatClient({ vapidPublicKey }: { vapidPublicKey: string 
         )}
       </div>
 
-      <div className="grid h-[calc(100vh-16rem)] min-h-[28rem] grid-cols-1 gap-4 lg:grid-cols-[20rem_1fr]">
+      <div
+        className={`grid min-h-[26rem] grid-cols-1 gap-4 lg:h-[calc(100vh-16rem)] lg:grid-cols-[20rem_1fr] ${
+          activeId ? "h-[calc(100dvh-9rem)]" : "h-[calc(100dvh-20rem)]"
+        }`}
+      >
         {/* Inbox */}
-        <aside className="overflow-y-auto rounded-xl border border-bourbon-deep/10 bg-white">
+        <aside
+          className={`overflow-y-auto rounded-xl border border-bourbon-deep/10 bg-white ${
+            activeId ? "hidden lg:block" : "block"
+          }`}
+        >
           {conversations.length === 0 ? (
             <p className="p-6 text-sm text-bourbon-deep/50">No conversations yet.</p>
           ) : (
@@ -203,9 +234,18 @@ export default function ChatClient({ vapidPublicKey }: { vapidPublicKey: string 
         </aside>
 
         {/* Thread — keyed so switching conversations remounts with fresh state. */}
-        <section className="flex flex-col overflow-hidden rounded-xl border border-bourbon-deep/10 bg-white">
+        <section
+          className={`flex-col overflow-hidden rounded-xl border border-bourbon-deep/10 bg-white ${
+            activeId ? "flex" : "hidden lg:flex"
+          }`}
+        >
           {activeId ? (
-            <Thread key={activeId} conversationId={activeId} onActivity={loadList} />
+            <Thread
+              key={activeId}
+              conversationId={activeId}
+              onActivity={loadList}
+              onBack={closeConversation}
+            />
           ) : (
             <div className="flex flex-1 items-center justify-center p-8 text-sm text-bourbon-deep/40">
               Select a conversation to start chatting.
@@ -339,9 +379,12 @@ function GreetingEditor() {
 function Thread({
   conversationId,
   onActivity,
+  onBack,
 }: {
   conversationId: string;
   onActivity: () => void;
+  /** Returns to the list. Only rendered below lg, where they are two screens. */
+  onBack: () => void;
 }) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   /* Who you are talking to. Shown above the thread so you never have to guess
@@ -497,7 +540,18 @@ function Thread({
     <>
       {/* Identity bar. An email is a mailto so you can reply outside the chat
           without copying it out by hand. */}
-      <div className="shrink-0 border-b border-bourbon-deep/10 px-4 py-3">
+      <div className="flex shrink-0 items-center gap-3 border-b border-bourbon-deep/10 px-4 py-3">
+        <button
+          type="button"
+          onClick={onBack}
+          aria-label="Back to conversations"
+          className="-ml-1 shrink-0 rounded-lg p-1.5 text-bourbon-deep/60 hover:bg-bourbon-deep/5 hover:text-bourbon-deep transition-colors cursor-pointer lg:hidden"
+        >
+          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-semibold text-bourbon-deep">
           {who.name || who.email || who.codename || "Unidentified visitor"}
         </p>
@@ -513,6 +567,7 @@ function Thread({
             {who.codename ? `${who.codename} · ` : ""}no email yet
           </p>
         )}
+        </div>
       </div>
 
       <div ref={scrollRef} className="chat-canvas flex-1 space-y-1.5 overflow-y-auto p-4">
