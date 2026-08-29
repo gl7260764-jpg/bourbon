@@ -32,6 +32,7 @@ export async function GET(
       status: true,
       visitorTypingAt: true,
       customerLastReadAt: true,
+      customer: { select: { email: true, fullName: true } },
     },
   });
   if (!convo) {
@@ -70,6 +71,8 @@ export async function GET(
   return NextResponse.json({
     conversationId: id,
     status: convo.status,
+    email: convo.customer?.email ?? null,
+    name: convo.customer?.fullName || null,
     messages,
     // Only the operator sees these two.
     peerTyping: isFresh(convo.visitorTypingAt, TYPING_WINDOW_MS),

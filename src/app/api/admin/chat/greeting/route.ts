@@ -4,17 +4,24 @@ import {
   CHAT_GREETING_KEY,
   DEFAULT_CHAT_GREETING,
   MAX_GREETING_LEN,
+  CHAT_AUTO_REPLY_KEY,
+  DEFAULT_CHAT_AUTO_REPLY,
+  MAX_AUTO_REPLY_LEN,
 } from "@/lib/chat-constants";
 
 // Behind /api/admin → middleware guarantees an authenticated admin.
 
 export async function GET() {
-  const greeting = await getSetting(CHAT_GREETING_KEY, DEFAULT_CHAT_GREETING);
-  return NextResponse.json({ greeting });
+  const [greeting, autoReply] = await Promise.all([
+    getSetting(CHAT_GREETING_KEY, DEFAULT_CHAT_GREETING),
+    getSetting(CHAT_AUTO_REPLY_KEY, DEFAULT_CHAT_AUTO_REPLY),
+  ]);
+  return NextResponse.json({ greeting, autoReply });
 }
 
 interface SaveBody {
   greeting?: string;
+  autoReply?: string;
 }
 
 export async function POST(req: NextRequest) {
@@ -36,6 +43,20 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  /* Optional: an empty string is a deliberate "send no acknowledgement",
+     which is why it is only written when the field is present at all. */
+  let autoReply: string | undefined;
+  if (typeof body.autoReply === "string") {
+    autoReply = body.autoReply.trim();
+    if (autoReply.length > MAX_AUTO_REPLY_LEN) {
+      return NextResponse.json(
+        { error: `Auto-reply too long (max ${MAX_AUTO_REPLY_LEN} characters).` },
+        { status: 400 },
+      );
+    }
+    await setSetting(CHAT_AUTO_REPLY_KEY, autoReply);
+  }
+
   await setSetting(CHAT_GREETING_KEY, greeting);
-  return NextResponse.json({ greeting });
+  return NextResponse.json({ greeting, autoReply });
 }

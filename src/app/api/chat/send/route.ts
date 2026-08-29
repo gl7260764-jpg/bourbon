@@ -6,6 +6,7 @@ import {
   getOrCreateConversation,
   MAX_CHAT_MESSAGE_LEN,
 } from "@/lib/chat";
+import { maybeAutoReply } from "@/lib/chat-auto-reply";
 
 export const dynamic = "force-dynamic";
 
@@ -78,6 +79,8 @@ export async function POST(req: NextRequest) {
       console.error("[chat] admin email failed:", err),
     );
   }
+
+  await maybeAutoReply(conversationId);
 
   const out = NextResponse.json({ message: created, conversationId });
   // Carry over the visitor cookie that getOrCreateConversation may have set.

@@ -21,6 +21,7 @@ import {
   uploadChatImage,
 } from "@/lib/cloudinary";
 import { customerChannel, publishChatMessage } from "@/lib/realtime";
+import { maybeAutoReply } from "@/lib/chat-auto-reply";
 import {
   TYPING_WINDOW_MS,
   clearTyping,
@@ -113,6 +114,7 @@ export async function POST(req: NextRequest) {
       contextOrderNumber,
     });
     await publishChatMessage(channel, message);
+    await maybeAutoReply(r.thread.id);
     return NextResponse.json({ message });
   }
 

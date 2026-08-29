@@ -9,3 +9,11 @@ export const DEFAULT_CHAT_GREETING =
 
 // Cap on the greeting an admin can save.
 export const MAX_GREETING_LEN = 500;
+
+export const CHAT_AUTO_REPLY_KEY = "chat_auto_reply";
+
+/** Posted once per thread, right after someone's first message. */
+export const DEFAULT_CHAT_AUTO_REPLY =
+  "Thanks for your message — it's landed with us. A real person reads every one, and we'll get back to you shortly.";
+
+export const MAX_AUTO_REPLY_LEN = 500;

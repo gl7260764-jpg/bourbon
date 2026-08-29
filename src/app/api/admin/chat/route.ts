@@ -19,6 +19,10 @@ export async function GET() {
       lastMessageAt: true,
       lastMessageFrom: true,
       adminUnread: true,
+      /* Threads carry a customer once someone gives their address in the
+         widget or signs in, so the inbox can name them instead of showing a
+         city. Still null for a browser that has not identified itself. */
+      customer: { select: { email: true, fullName: true } },
       messages: {
         orderBy: { createdAt: "desc" },
         take: 1,
@@ -38,6 +42,8 @@ export async function GET() {
     const geo = geoById.get(c.visitorId);
     return {
       id: c.id,
+      email: c.customer?.email ?? null,
+      name: c.customer?.fullName || null,
       lastMessageAt: c.lastMessageAt,
       lastMessageFrom: c.lastMessageFrom,
       adminUnread: c.adminUnread,

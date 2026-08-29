@@ -12,6 +12,9 @@ interface ConversationSummary {
   lastMessageFrom: "VISITOR" | "ADMIN";
   adminUnread: number;
   preview: string;
+  /** Set once the person has identified themselves; null for a bare device. */
+  email: string | null;
+  name: string | null;
   location: string | null;
   countryCode: string | null;
 }
@@ -156,8 +159,8 @@ export default function ChatClient({ vapidPublicKey }: { vapidPublicKey: string 
                     }`}
                   >
                     <div className="flex items-center justify-between gap-2">
-                      <span className="truncate text-sm font-medium text-bourbon-deep">
-                        {c.location ?? "Visitor"}
+                      <span className="min-w-0 truncate text-sm font-medium text-bourbon-deep">
+                        {c.name || c.email || c.location || "Unknown visitor"}
                       </span>
                       {c.adminUnread > 0 && (
                         <span className="ml-auto inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 text-[11px] font-semibold text-white">
@@ -165,6 +168,13 @@ export default function ChatClient({ vapidPublicKey }: { vapidPublicKey: string 
                         </span>
                       )}
                     </div>
+                    {(c.email || c.location) && (
+                      <span className="truncate text-[11px] text-bourbon-deep/45">
+                        {[c.name && c.email ? c.email : null, c.location]
+                          .filter(Boolean)
+                          .join(" · ")}
+                      </span>
+                    )}
                     <span className="truncate text-xs text-bourbon-deep/55">
                       {c.lastMessageFrom === "ADMIN" ? "You: " : ""}
                       {c.preview || "…"}
@@ -193,6 +203,7 @@ export default function ChatClient({ vapidPublicKey }: { vapidPublicKey: string 
 
 function GreetingEditor() {
   const [value, setValue] = useState("");
+  const [autoReply, setAutoReply] = useState("");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [open, setOpen] = useState(false);
@@ -203,8 +214,9 @@ function GreetingEditor() {
       try {
         const res = await fetch("/api/admin/chat/greeting", { cache: "no-store" });
         if (!res.ok || cancelled) return;
-        const data = (await res.json()) as { greeting?: string };
+        const data = (await res.json()) as { greeting?: string; autoReply?: string };
         setValue(data.greeting ?? "");
+        setAutoReply(data.autoReply ?? "");
       } catch {
         /* ignore */
       }
@@ -224,7 +236,7 @@ function GreetingEditor() {
       const res = await fetch("/api/admin/chat/greeting", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ greeting: text }),
+        body: JSON.stringify({ greeting: text, autoReply: autoReply.trim() }),
       });
       if (res.ok) setSaved(true);
     } catch {
@@ -241,7 +253,7 @@ function GreetingEditor() {
         className="flex w-full items-center justify-between px-4 py-3 text-left cursor-pointer"
       >
         <span className="text-sm font-medium text-bourbon-deep">
-          Greeting message
+          Chat messages
         </span>
         <svg
           className={`h-4 w-4 text-bourbon-deep/50 transition-transform ${open ? "rotate-180" : ""}`}
@@ -254,8 +266,10 @@ function GreetingEditor() {
       </button>
       {open && (
         <div className="border-t border-bourbon-deep/10 p-4">
+          <p className="mb-2 text-xs font-medium text-bourbon-deep">Opening line</p>
           <p className="mb-2 text-xs text-bourbon-deep/55">
-            The first message visitors see when the chat opens. It types itself out — keep it warm and short.
+            Shown under &ldquo;Start the conversation&rdquo; before anyone has
+            typed. Not a message — nothing is sent.
           </p>
           <textarea
             value={value}
@@ -267,16 +281,38 @@ function GreetingEditor() {
             maxLength={500}
             className="w-full resize-none rounded-lg border border-bourbon-deep/15 bg-white px-3 py-2 text-sm text-bourbon-deep focus:border-bourbon-gold focus:outline-none"
           />
-          <div className="mt-2 flex items-center gap-3">
+          <p className="mt-4 mb-2 text-xs font-medium text-bourbon-deep">
+            Automatic first reply
+          </p>
+          <p className="mb-2 text-xs text-bourbon-deep/55">
+            Posted into the thread once, straight after someone&rsquo;s first
+            message, so they know it landed. Never sent again, and never after
+            you have replied yourself. Leave empty to send nothing.
+          </p>
+          <textarea
+            value={autoReply}
+            onChange={(e) => {
+              setAutoReply(e.target.value);
+              setSaved(false);
+            }}
+            rows={3}
+            maxLength={500}
+            placeholder="Leave empty to send no automatic reply"
+            className="w-full resize-none rounded-lg border border-bourbon-deep/15 bg-white px-3 py-2 text-sm text-bourbon-deep focus:border-bourbon-gold focus:outline-none"
+          />
+
+          <div className="mt-3 flex items-center gap-3">
             <button
               onClick={save}
               disabled={!value.trim() || saving}
               className="rounded-lg bg-bourbon-gold px-4 py-2 text-sm font-medium text-bourbon-deep hover:bg-bourbon-amber disabled:opacity-50 cursor-pointer disabled:cursor-default"
             >
-              {saving ? "Saving…" : "Save greeting"}
+              {saving ? "Saving…" : "Save"}
             </button>
             {saved && <span className="text-sm text-green-600">Saved ✓</span>}
-            <span className="ml-auto text-xs text-bourbon-deep/40">{value.length}/500</span>
+            <span className="ml-auto text-xs text-bourbon-deep/40">
+              {value.length}/500 · {autoReply.length}/500
+            </span>
           </div>
         </div>
       )}
@@ -292,6 +328,15 @@ function Thread({
   onActivity: () => void;
 }) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  /* Who you are talking to. Shown above the thread so you never have to guess
+     from the message body which customer this is. */
+  const [who, setWho] = useState<{ email: string | null; name: string | null }>({
+    email: null,
+    name: null,
+  });
+  /* When the customer last opened this thread. Anything you sent before it
+     has been read — that is the second tick. */
+  const [readAt, setReadAt] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
   const [sending, setSending] = useState(false);
   const lastIdRef = useRef<string | null>(null);
@@ -304,8 +349,15 @@ function Thread({
       try {
         const res = await fetch(`/api/admin/chat/${conversationId}`, { cache: "no-store" });
         if (!res.ok || cancelled) return;
-        const data = (await res.json()) as { messages: ChatMessage[] };
+        const data = (await res.json()) as {
+          messages: ChatMessage[];
+          email?: string | null;
+          name?: string | null;
+          customerLastReadAt?: string | null;
+        };
         setMessages(data.messages);
+        setWho({ email: data.email ?? null, name: data.name ?? null });
+        setReadAt(data.customerLastReadAt ?? null);
         lastIdRef.current = data.messages.at(-1)?.id ?? null;
         onActivity(); // refresh list (clears unread badge)
       } catch {
@@ -386,6 +438,26 @@ function Thread({
 
   return (
     <>
+      {/* Identity bar. An email is a mailto so you can reply outside the chat
+          without copying it out by hand. */}
+      <div className="shrink-0 border-b border-bourbon-deep/10 px-4 py-3">
+        <p className="truncate text-sm font-semibold text-bourbon-deep">
+          {who.name || who.email || "Unidentified visitor"}
+        </p>
+        {who.email ? (
+          <a
+            href={`mailto:${who.email}`}
+            className="truncate text-xs text-bourbon-deep/55 hover:text-bourbon-gold transition-colors"
+          >
+            {who.email}
+          </a>
+        ) : (
+          <p className="text-xs text-bourbon-deep/45">
+            No email yet — they haven&apos;t identified themselves.
+          </p>
+        )}
+      </div>
+
       <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto p-4">
         {messages.map((m) => (
           <div
@@ -393,13 +465,29 @@ function Thread({
             className={`flex ${m.sender === "ADMIN" ? "justify-end" : "justify-start"}`}
           >
             <div
-              className={`max-w-[75%] whitespace-pre-wrap rounded-2xl px-3.5 py-2 text-sm leading-relaxed ${
+              className={`max-w-[75%] rounded-2xl px-3.5 py-2 text-sm leading-relaxed ${
                 m.sender === "ADMIN"
                   ? "rounded-br-sm bg-bourbon-gold text-bourbon-deep"
                   : "rounded-bl-sm bg-bourbon-deep/5 text-bourbon-deep"
               }`}
             >
-              {m.body}
+              <span className="whitespace-pre-wrap">{m.body}</span>
+              <span className="mt-0.5 flex items-center justify-end gap-1 text-[10px] tabular-nums text-bourbon-deep/50">
+                {new Date(m.createdAt).toLocaleTimeString(undefined, {
+                  hour: "numeric",
+                  minute: "2-digit",
+                })}
+                {/* One tick sent, two once they have opened the thread. Only
+                    ever here — the customer is not shown ticks on ours. */}
+                {m.sender === "ADMIN" && (
+                  <Ticks
+                    read={Boolean(
+                      readAt &&
+                        new Date(readAt).getTime() >= new Date(m.createdAt).getTime(),
+                    )}
+                  />
+                )}
+              </span>
             </div>
           </div>
         ))}
@@ -434,5 +522,21 @@ function Thread({
         </div>
       </div>
     </>
+  );
+}
+
+/** WhatsApp-style delivery ticks: one for sent, two once it has been read. */
+function Ticks({ read }: { read: boolean }) {
+  return (
+    <span
+      title={read ? "Read" : "Sent"}
+      aria-label={read ? "Read" : "Sent"}
+      className={read ? "text-sky-600" : "text-bourbon-deep/45"}
+    >
+      <svg className="h-3.5 w-3.5" viewBox="0 0 20 14" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M1 7.5l3.6 3.6L11.5 4" />
+        {read && <path strokeLinecap="round" strokeLinejoin="round" d="M7.6 10.6l1 1L18.5 2" />}
+      </svg>
+    </span>
   );
 }

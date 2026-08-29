@@ -13,6 +13,7 @@ import { issueLoginLink } from "@/lib/login-link";
 import { buildSignInLinkEmail } from "@/lib/emails/signInLinkEmail";
 import { sendEmail } from "@/lib/mailer";
 import { sendToAdmins } from "@/lib/push";
+import { maybeAutoReply } from "@/lib/chat-auto-reply";
 
 export const dynamic = "force-dynamic";
 
@@ -105,6 +106,9 @@ export async function POST(req: NextRequest) {
         },
       }),
     ]);
+
+    // Acknowledge immediately so nobody wonders whether it sent.
+    await maybeAutoReply(conversationId);
 
     try {
       await sendToAdmins({
