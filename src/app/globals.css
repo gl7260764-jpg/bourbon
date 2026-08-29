@@ -36,6 +36,33 @@ body {
   color: #FAFAF9;
 }
 
+/* Browser chrome we did not draw but still ship: the caret and the focus ring
+   arrive as OS blue unless they are themed, which is the tell that a page was
+   assembled rather than designed. */
+input,
+textarea,
+[contenteditable] {
+  caret-color: #CA8A04;
+}
+
+:focus-visible {
+  outline: 2px solid #CA8A04;
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+
+/* Dark grounds need the ring in the light neutral instead, or it disappears
+   into the gold-on-near-black it is drawn over. */
+.bg-bourbon-deep :focus-visible,
+.bg-bourbon-dark :focus-visible {
+  outline-color: #FEF3C7;
+}
+
+/* Money and counts should not shift width as digits change. */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
