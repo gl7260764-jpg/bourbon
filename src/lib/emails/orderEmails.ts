@@ -277,21 +277,19 @@ function dashboardPanel(data: OrderEmailData): string {
             <td style="padding:22px;">
               ${sectionLabel("What happens next")}
               <div style="font-family:Georgia,'Times New Roman',serif;font-size:19px;color:${COLORS.deep};margin:2px 0 10px;line-height:1.3;">
-                We&rsquo;re preparing your payment details
+                We&rsquo;re preparing your ${escapeHtml(data.paymentMethodLabel)} payment details
               </div>
               <div style="font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.7;color:${COLORS.stone};margin:0 0 18px;">
-                Nothing to do right now. We&rsquo;ll email you the moment they&rsquo;re
-                ready, then you pay
-                <strong style="color:${COLORS.deep};">${currency(data.totals.total)}</strong>
-                and upload your receipt &mdash; both from your dashboard.
+                Nothing to do yet &mdash; we&rsquo;ll email you the moment they&rsquo;re ready.
+                You&rsquo;ll pay <strong style="color:${COLORS.deep};">${currency(data.totals.total)}</strong>
+                and upload your receipt from your dashboard.
               </div>
               <a href="${url}" class="cta" style="display:inline-block;background:${COLORS.gold};color:${COLORS.deep};text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-weight:bold;letter-spacing:.1em;text-transform:uppercase;font-size:13px;padding:14px 26px;">
                 Open your dashboard
               </a>
               <div style="font-family:Helvetica,Arial,sans-serif;font-size:12px;line-height:1.6;color:${COLORS.muted};margin-top:16px;padding-top:14px;border-top:1px solid ${COLORS.gold}33;">
-                For your safety we never put account or wallet details in an
-                email. If you receive one claiming to be from us with payment
-                details in it, it is not from us &mdash; check your dashboard instead.
+                We never send payment details by email. If you get one that does,
+                it is not from us.
               </div>
             </td>
           </tr>
@@ -312,21 +310,13 @@ export function buildCustomerOrderEmail(data: OrderEmailData): { subject: string
       <td class="gut" style="padding:28px 32px 8px;">
         <div style="font-family:Helvetica,Arial,sans-serif;font-size:11px;letter-spacing:3px;color:${COLORS.gold};text-transform:uppercase;font-weight:700;">Order Received</div>
         <h1 class="h1" style="font-family:Georgia,'Times New Roman',serif;font-size:24px;color:${COLORS.deep};margin:10px 0 14px;line-height:1.2;">Thank you, ${escapeHtml(firstName)}.</h1>
-        <p style="font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.7;color:${COLORS.stone};margin:0 0 8px;">
-          We have received your order and it is being processed. We&rsquo;ll send
-          your ${escapeHtml(data.paymentMethodLabel)} payment details shortly &mdash;
-          you&rsquo;ll pay and upload your receipt from your dashboard.
-        </p>
-        <p style="font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.7;color:${COLORS.stone};margin:0;">
-          Below is a summary of what you ordered. If anything looks wrong, just reply to this email.
-        </p>
       </td>
     </tr>
 
     ${dashboardPanel(data)}
 
     <tr>
-      <td class="gut" style="padding:24px 32px 8px;">
+      <td class="gut" style="padding:14px 32px 8px;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${COLORS.cream};border:1px solid ${COLORS.border};">
           <tr>
             <td style="padding:18px 20px;">
@@ -381,8 +371,7 @@ export function buildCustomerOrderEmail(data: OrderEmailData): { subject: string
     <tr>
       <td class="gut" style="padding:28px 32px 36px;">
         <div style="border-top:1px solid ${COLORS.border};padding-top:20px;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.7;color:${COLORS.stone};">
-          Thank you for choosing ${BRAND_NAME} &mdash; we appreciate your trust.
-          <div style="margin-top:14px;font-family:Georgia,'Times New Roman',serif;font-style:italic;color:${COLORS.gold};">&mdash; The ${BRAND_NAME} Team</div>
+          <div style="font-family:Georgia,'Times New Roman',serif;font-style:italic;color:${COLORS.gold};">&mdash; The ${BRAND_NAME} Team</div>
         </div>
       </td>
     </tr>
@@ -393,9 +382,9 @@ export function buildCustomerOrderEmail(data: OrderEmailData): { subject: string
   const text = [
     `Thank you, ${firstName}.`,
     "",
-    `We have received your order ${data.orderNumber} and it is being processed.`,
+    `We're preparing your ${data.paymentMethodLabel} payment details for order ${data.orderNumber}.`,
     "",
-    `We will send your ${data.paymentMethodLabel} payment details shortly. You will pay and upload your receipt from your dashboard:`,
+    `Nothing to do yet — we'll email you the moment they're ready. You'll pay ${currency(data.totals.total)} and upload your receipt from your dashboard:`,
     `${SITE}/account/login?email=${encodeURIComponent(data.customer.email)}`,
     "",
     "Order summary:",
@@ -410,9 +399,7 @@ export function buildCustomerOrderEmail(data: OrderEmailData): { subject: string
     `Shipping to: ${data.customer.fullName}, ${data.shippingAddress.line1}, ${data.shippingAddress.city}, ${data.shippingAddress.region} ${data.shippingAddress.postal}, ${data.shippingAddress.country}`,
     `Payment: ${data.paymentMethodLabel}`,
     "",
-    "We never put account or wallet details in an email. If you receive one",
-    "claiming to be from us with payment details in it, it is not from us —",
-    "check your dashboard instead.",
+    "We never send payment details by email. If you get one that does, it is not from us.",
     "",
     `— The ${BRAND_NAME} Team`,
   ]
