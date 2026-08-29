@@ -16,6 +16,12 @@ import {
   normalizePushPromptSettings,
   type PushPromptSettings,
 } from "@/lib/push-prompt-constants";
+import {
+  AUTH_MODE_KEY,
+  DEFAULT_AUTH_MODE,
+  normalizeAuthMode,
+  type AuthMode,
+} from "@/lib/auth-mode-constants";
 
 /**
  * Tiny key-value settings store backed by the `Setting` table. Use for small
@@ -152,4 +158,14 @@ export async function savePushPromptSettings(
       },
     }),
   ]);
+}
+
+/** How customers sign in. See auth-mode-constants for the three modes. */
+export async function getAuthMode(): Promise<AuthMode> {
+  const row = await prisma.setting.findUnique({ where: { key: AUTH_MODE_KEY } });
+  return row ? normalizeAuthMode(row.value) : DEFAULT_AUTH_MODE;
+}
+
+export async function saveAuthMode(mode: AuthMode): Promise<void> {
+  await setSetting(AUTH_MODE_KEY, mode);
 }

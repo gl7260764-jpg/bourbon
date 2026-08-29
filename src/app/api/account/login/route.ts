@@ -12,14 +12,19 @@ import {
   verifyLoginCode,
 } from "@/lib/login-code";
 import { sendEmail } from "@/lib/mailer";
+import { getAuthMode } from "@/lib/settings";
+import { issueLoginLink } from "@/lib/login-link";
+import { buildSignInLinkEmail } from "@/lib/emails/signInLinkEmail";
 
 export const dynamic = "force-dynamic";
 
 /**
- * Two-step customer sign-in.
+ * Customer sign-in. The shape depends on the mode set in Admin > Settings:
  *
- *   { email }          → emails a 6-digit code, creates no session
- *   { email, code }    → verifies the code, then creates the session
+ *   CODE       { email }        → emails a 6-digit code, creates no session
+ *              { email, code }  → verifies the code, then creates the session
+ *   LINK       { email }        → emails a one-click link, creates no session
+ *   EMAIL_ONLY { email }        → creates the session immediately
  *
  * Sign-in used to be email-only and unverified, which meant anyone who knew a
  * customer's address could read their order history. That was tolerable when
@@ -46,6 +51,57 @@ export async function POST(req: NextRequest) {
   }
   const email = normalizeEmail(raw);
   const code = typeof body.code === "string" ? body.code.trim() : "";
+  const mode = await getAuthMode();
+
+  /* EMAIL_ONLY: no proof of anything, straight in. The operator turned this on
+     knowing that anyone who knows an address can open that account — the admin
+     setting says so beside the control. Kept in one branch so the guarantee the
+     other two modes give is not diluted by shared code. */
+  if (mode === "EMAIL_ONLY") {
+    try {
+      const customer = await findOrCreateCustomer(email);
+      await prisma.customer.update({
+        where: { id: customer.id },
+        data: { lastLoginAt: new Date() },
+      });
+      await createSession(customer.id);
+      return NextResponse.json({ ok: true, stage: "signed_in" });
+    } catch (err) {
+      console.error("[account/login] email-only sign-in failed:", err);
+      return NextResponse.json(
+        { error: "Could not sign you in. Please try again." },
+        { status: 500 },
+      );
+    }
+  }
+
+  // ---- LINK: mail a one-click link, create nothing yet --------------------
+  if (mode === "LINK") {
+    try {
+      const issued = await issueLoginLink(email);
+      if (!issued.ok) {
+        return NextResponse.json(
+          { error: "Too many links requested. Try again in a few minutes." },
+          { status: 429 },
+        );
+      }
+      const built = buildSignInLinkEmail(issued.token);
+      const sent = await sendEmail({ to: email, ...built });
+      if (!sent) {
+        return NextResponse.json(
+          { error: "We couldn't send the link. Please try again shortly." },
+          { status: 502 },
+        );
+      }
+      return NextResponse.json({ ok: true, stage: "link_sent" });
+    } catch (err) {
+      console.error("[account/login] link issue failed:", err);
+      return NextResponse.json(
+        { error: "Could not start sign-in. Please try again." },
+        { status: 500 },
+      );
+    }
+  }
 
   // ---- Step 1: request a code -------------------------------------------
   if (!code) {

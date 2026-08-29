@@ -1,14 +1,16 @@
-import { getPopupSettings, getPushPromptSettings } from "@/lib/settings";
+import { getAuthMode, getPopupSettings, getPushPromptSettings } from "@/lib/settings";
 import PopupSettingsForm from "./PopupSettingsForm";
 import PushPromptSettingsForm from "./PushPromptSettingsForm";
+import AuthModeForm from "./AuthModeForm";
 
 export const metadata = { title: "Settings | Admin" };
 export const dynamic = "force-dynamic";
 
 export default async function AdminSettingsPage() {
-  const [popup, pushPrompt] = await Promise.all([
+  const [popup, pushPrompt, authMode] = await Promise.all([
     getPopupSettings(),
     getPushPromptSettings(),
+    getAuthMode(),
   ]);
 
   return (
@@ -27,6 +29,7 @@ export default async function AdminSettingsPage() {
 
       <PopupSettingsForm initial={popup} />
       <PushPromptSettingsForm initial={pushPrompt} />
+      <AuthModeForm initial={authMode} />
     </>
   );
 }

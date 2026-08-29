@@ -59,6 +59,8 @@ export interface OrderEmailData {
    *  optional so an older order can still be re-sent with its real method. */
   shippingMethodLabel?: string;
   paymentMethodLabel: string;
+  /** One-click sign-in URL. Falls back to the sign-in page when absent. */
+  dashboardUrl?: string;
   /**
    * Account details for the chosen rail, snapshotted at order time. When
    * present the customer can pay immediately instead of waiting for a
@@ -268,7 +270,12 @@ function sectionLabel(text: string): string {
  * is still what grants the session.
  */
 function dashboardPanel(data: OrderEmailData): string {
-  const url = `${SITE}/account/login?email=${encodeURIComponent(data.customer.email)}`;
+  /* A one-click link when the caller minted one, so the button lands the buyer
+     on the dashboard rather than on a form. The fallback still prefills the
+     address so they never retype what they just entered at checkout. */
+  const url =
+    data.dashboardUrl ??
+    `${SITE}/account/login?email=${encodeURIComponent(data.customer.email)}`;
   return `
     <tr>
       <td class="gut" style="padding:8px 32px 20px;">
@@ -385,7 +392,8 @@ export function buildCustomerOrderEmail(data: OrderEmailData): { subject: string
     `We're preparing your ${data.paymentMethodLabel} payment details for order ${data.orderNumber}.`,
     "",
     `Nothing to do yet — we'll email you the moment they're ready. You'll pay ${currency(data.totals.total)} and upload your receipt from your dashboard:`,
-    `${SITE}/account/login?email=${encodeURIComponent(data.customer.email)}`,
+    data.dashboardUrl ??
+      `${SITE}/account/login?email=${encodeURIComponent(data.customer.email)}`,
     "",
     "Order summary:",
     ...data.items.map((it) => `  - ${it.name} (${it.ageLabel ?? ""}) x${it.quantity} @ ${currency(it.unitPrice)}`),

@@ -3,6 +3,7 @@
 import { useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import OrderChat from "@/components/OrderChat";
 import EnablePushDialog from "@/components/EnablePushDialog";
 import PushSettingRow from "@/components/PushSettingRow";
@@ -18,7 +19,13 @@ export interface AccountOrder {
   settlementLabel: string | null;
   total: number;
   itemCount: number;
-  items: { name: string; quantity: number; unitPrice: number }[];
+  items: {
+    name: string;
+    image: string;
+    ageLabel: string | null;
+    quantity: number;
+    unitPrice: number;
+  }[];
   /** Payment details the admin issued for this order, or null if not yet sent. */
   paymentDetails: string | null;
   paymentDetailsIssuedAt: string | null;
@@ -144,8 +151,19 @@ export default function AccountClient({
 
       {/* Cellar band. Full-bleed dark ground that runs under the fixed header,
           so the page opens on the brand rather than on a form. */}
-      <header className="bg-bourbon-deep text-bourbon-cream pt-28 sm:pt-36">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 sm:pb-10">
+      {/* A single warm pool of light off-centre, the way a bottle looks on a
+          dark bar. Not decoration for its own sake — it stops the band reading
+          as a plain black rectangle and gives the name something to sit in. */}
+      <header className="relative bg-bourbon-deep text-bourbon-cream pt-28 sm:pt-36 overflow-hidden border-b border-bourbon-gold/30">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-24 -left-24 w-[36rem] h-[36rem] rounded-full opacity-[0.13]"
+          style={{
+            background:
+              "radial-gradient(circle, #D97706 0%, rgba(217,119,6,0.35) 42%, transparent 68%)",
+          }}
+        />
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 sm:pb-10">
           <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-4">
             <div className="min-w-0">
               <h1 className="font-[family-name:var(--font-playfair)] text-3xl sm:text-[2.75rem] font-bold leading-[1.1] text-bourbon-cream">
@@ -219,13 +237,16 @@ export default function AccountClient({
         <PushSettingRow />
 
         <section className="mb-12">
-          <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-bourbon-deep mb-4">
-            Your orders
-          </h2>
+          <div className="flex items-center gap-4 mb-5">
+            <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-bourbon-deep">
+              Your orders
+            </h2>
+            <span className="flex-1 h-px bg-gradient-to-r from-bourbon-gold/40 to-transparent" aria-hidden="true" />
+          </div>
 
           {orders.length === 0 ? (
             /* Teaches what this page becomes, rather than reporting emptiness. */
-            <div className="bg-white border border-bourbon-deep/10 px-6 py-14 text-center">
+            <div className="bg-white border border-bourbon-deep/10 shadow-[0_1px_2px_0_rgba(12,10,9,0.04)] px-6 py-14 text-center">
               <p className="font-[family-name:var(--font-playfair)] text-xl text-bourbon-deep mb-2">
                 Nothing here yet
               </p>
@@ -251,10 +272,12 @@ export default function AccountClient({
                     ref={(el) => {
                       orderRefs.current[o.orderNumber] = el;
                     }}
-                    className={`bg-white border transition-colors ${
+                    /* Offset + soft blur, tightening as the card lifts. A
+                       zero-offset halo would just be a glow. */
+                    className={`bg-white border transition-all duration-200 ${
                       open
-                        ? "border-bourbon-gold/50"
-                        : "border-bourbon-deep/10 hover:border-bourbon-deep/25"
+                        ? "border-bourbon-gold/50 shadow-[0_10px_30px_-12px_rgba(12,10,9,0.28)]"
+                        : "border-bourbon-deep/10 hover:border-bourbon-deep/25 shadow-[0_1px_2px_0_rgba(12,10,9,0.04)] hover:shadow-[0_6px_18px_-10px_rgba(12,10,9,0.22)]"
                     }`}
                   >
                     <button
@@ -272,16 +295,41 @@ export default function AccountClient({
                           className={`w-2 h-2 rounded-full shrink-0 ${statusTone(o)}`}
                           aria-hidden="true"
                         />
-                        <span className="font-[family-name:var(--font-playfair)] text-lg font-bold text-bourbon-deep truncate">
+                        {/* The bottles themselves, overlapped like a shelf.
+                            An order of whiskey should look like whiskey, not
+                            like a row of reference numbers. */}
+                        <span className="flex shrink-0 -space-x-2 sm:-space-x-3" aria-hidden="true">
+                          {o.items.slice(0, 3).map((it, i) => (
+                            <span
+                              key={i}
+                              className={`relative w-8 h-10 sm:w-9 sm:h-11 bg-bourbon-deep/5 ring-1 ring-white overflow-hidden ${
+                                /* Bottles are the first thing to give up room
+                                   on a narrow phone; the order number and the
+                                   amount are not. One below sm, three above. */
+                                i > 0 ? "hidden sm:block" : ""
+                              }`}
+                              style={{ zIndex: 3 - i }}
+                            >
+                              <Image
+                                src={it.image}
+                                alt=""
+                                fill
+                                sizes="36px"
+                                className="object-cover"
+                              />
+                            </span>
+                          ))}
+                        </span>
+                        <span className="font-[family-name:var(--font-playfair)] text-base sm:text-lg font-bold text-bourbon-deep whitespace-nowrap">
                           {o.orderNumber}
                         </span>
-                        <span className="ml-auto font-[family-name:var(--font-playfair)] text-xl font-bold text-bourbon-deep tabular-nums whitespace-nowrap">
+                        <span className="ml-auto font-[family-name:var(--font-playfair)] text-lg sm:text-xl font-bold text-bourbon-deep tabular-nums whitespace-nowrap">
                           {money(o.total)}
                         </span>
                         <Chevron open={open} />
                       </div>
 
-                      <div className="pl-5 mt-2">
+                      <div className="pl-0 sm:pl-[7.25rem] mt-2.5">
                         <div className="flex items-center gap-2 flex-wrap">
                           <span
                             className={`text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 ${o.statusBadge}`}
@@ -313,16 +361,31 @@ export default function AccountClient({
                           {o.items.map((it, i) => (
                             <li
                               key={i}
-                              className="flex justify-between gap-4 text-sm py-2 first:pt-0 last:pb-0"
+                              className="flex items-center gap-4 py-3 first:pt-0 last:pb-0"
                             >
-                              <span className="text-bourbon-deep">
-                                {it.name}
-                                <span className="text-bourbon-stone">
-                                  {" "}
-                                  × {it.quantity}
+                              <span className="relative w-14 h-16 shrink-0 bg-bourbon-deep/5 overflow-hidden">
+                                <Image
+                                  src={it.image}
+                                  alt={it.name}
+                                  fill
+                                  sizes="56px"
+                                  className="object-cover"
+                                />
+                              </span>
+                              <span className="min-w-0 flex-1">
+                                {it.ageLabel && (
+                                  <span className="block text-bourbon-gold text-[10px] tracking-[0.2em] uppercase mb-0.5">
+                                    {it.ageLabel} Aged
+                                  </span>
+                                )}
+                                <span className="block text-bourbon-deep text-sm font-semibold leading-snug">
+                                  {it.name}
+                                </span>
+                                <span className="block text-bourbon-stone text-xs mt-0.5 tabular-nums">
+                                  {it.quantity} × {money(it.unitPrice)}
                                 </span>
                               </span>
-                              <span className="text-bourbon-stone tabular-nums whitespace-nowrap">
+                              <span className="font-[family-name:var(--font-playfair)] text-bourbon-deep text-base font-bold tabular-nums whitespace-nowrap">
                                 {money(it.unitPrice * it.quantity)}
                               </span>
                             </li>
@@ -447,9 +510,12 @@ export default function AccountClient({
         </section>
 
         <section>
-          <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-bourbon-deep mb-1">
-            Delivery details
-          </h2>
+          <div className="flex items-center gap-4 mb-1">
+            <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-bourbon-deep">
+              Delivery details
+            </h2>
+            <span className="flex-1 h-px bg-gradient-to-r from-bourbon-gold/40 to-transparent" aria-hidden="true" />
+          </div>
           <p className="text-bourbon-stone text-sm mb-4">
             Used to prefill checkout. Changing them here doesn&apos;t alter
             orders you&apos;ve already placed.
@@ -462,7 +528,7 @@ export default function AccountClient({
                 setSaved(res.ok ? "Saved." : res.error ?? "Could not save.");
               })
             }
-            className="bg-white border border-bourbon-deep/10 p-5 sm:p-7 space-y-5"
+            className="bg-white border border-bourbon-deep/10 shadow-[0_1px_2px_0_rgba(12,10,9,0.04)] p-5 sm:p-7 space-y-5"
           >
             <div className="grid sm:grid-cols-2 gap-5">
               <Field name="fullName" label="Full name" defaultValue={details.fullName} />

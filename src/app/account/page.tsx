@@ -44,6 +44,8 @@ export default async function AccountPage() {
     itemCount: o.items.reduce((n, i) => n + i.quantity, 0),
     items: o.items.map((i) => ({
       name: i.productName,
+      image: i.productImage,
+      ageLabel: i.ageLabel,
       quantity: i.quantity,
       unitPrice: Number(i.unitPrice),
     })),

@@ -5,6 +5,8 @@ import { Prisma, OrderStatus, SettlementState } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { canTransition, ORDER_STATUS_LABEL } from "@/lib/order-status";
 import { notifyPaymentDetailsIssued } from "@/lib/emails/paymentDetailsEmail";
+import { issueLoginLink } from "@/lib/login-link";
+import { signInLinkUrl } from "@/lib/emails/signInLinkEmail";
 import { sendToCustomer } from "@/lib/push";
 
 // Reached only from /admin/orders/*, covered by the middleware guard
@@ -245,7 +247,15 @@ export async function issuePaymentDetails(
      dashboard and sees them, which is why nothing here is awaited into the
      result. */
   try {
+    let dashboardUrl: string | undefined;
+    try {
+      const link = await issueLoginLink(order.email, { consumePrevious: false });
+      if (link.ok) dashboardUrl = signInLinkUrl(link.token);
+    } catch (err) {
+      console.error("[issuePaymentDetails] could not mint a sign-in link:", err);
+    }
     await notifyPaymentDetailsIssued({
+      dashboardUrl,
       email: order.email,
       orderNumber: order.orderNumber,
       total: Number(order.total),

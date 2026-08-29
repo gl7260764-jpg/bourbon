@@ -2,13 +2,21 @@
 
 import { FormEvent, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import type { AuthMode } from "@/lib/auth-mode-constants";
 
 /* "confirm" is the step a buyer lands on straight from checkout: we already
    know the address they ordered with, so there is nothing to type — just a
    button that sends the code. They can still switch to a different email. */
-type Stage = "confirm" | "email" | "code";
+type Stage = "confirm" | "email" | "code" | "link_sent";
 
-export default function LoginForm({ initialEmail = "" }: { initialEmail?: string }) {
+export default function LoginForm({
+  initialEmail = "",
+  mode = "CODE",
+}: {
+  initialEmail?: string;
+  /** Set in Admin > Settings. Decides what submitting the address does. */
+  mode?: AuthMode;
+}) {
   const router = useRouter();
   const [stage, setStage] = useState<Stage>(initialEmail ? "confirm" : "email");
   const [email, setEmail] = useState(initialEmail);
@@ -40,7 +48,19 @@ export default function LoginForm({ initialEmail = "" }: { initialEmail?: string
     try {
       const { ok, data } = await post({ email });
       if (!ok) {
-        setError(data.error ?? "Could not send a code.");
+        setError(data.error ?? "Could not start sign-in.");
+        return;
+      }
+      /* Trust the server's own account of what it did rather than the mode
+         prop: the setting can change between the page render and this submit,
+         and the server is the one that acted. */
+      if (data.stage === "signed_in") {
+        router.refresh();
+        router.push("/account");
+        return;
+      }
+      if (data.stage === "link_sent") {
+        setStage("link_sent");
         return;
       }
       setStage("code");
@@ -75,10 +95,51 @@ export default function LoginForm({ initialEmail = "" }: { initialEmail?: string
     }
   }
 
+  /* Named for what the button will actually do, so the control never promises
+     a code in a mode that sends a link. */
+  const primaryLabel =
+    mode === "EMAIL_ONLY"
+      ? "Open my dashboard"
+      : mode === "LINK"
+        ? "Email me a sign-in link"
+        : "Send code";
+  const busyLabel =
+    mode === "EMAIL_ONLY" ? "Signing in..." : "Sending...";
+
   const label =
     "block text-bourbon-stone text-[10px] tracking-widest uppercase mb-1.5";
   const field =
     "w-full bg-white border border-bourbon-deep/15 px-3 py-3 text-bourbon-deep text-sm focus:outline-none focus:border-bourbon-gold transition-colors disabled:opacity-60";
+
+  if (stage === "link_sent") {
+    return (
+      <div className="text-center">
+        <span className="mx-auto mb-4 w-12 h-12 bg-bourbon-gold flex items-center justify-center">
+          <svg className="w-6 h-6 text-bourbon-deep" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M3 8l9 6 9-6M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+        </span>
+        <h2 className="font-[family-name:var(--font-playfair)] text-xl font-bold text-bourbon-deep mb-2">
+          Check your inbox
+        </h2>
+        <p className="text-bourbon-stone text-sm leading-relaxed">
+          We sent a sign-in link to{" "}
+          <span className="text-bourbon-deep font-semibold break-all">{email}</span>.
+          Tap it and you&apos;re in — there&apos;s no code to type.
+        </p>
+        <button
+          type="button"
+          onClick={() => {
+            setStage("email");
+            setError(null);
+          }}
+          className="mt-6 text-bourbon-stone hover:text-bourbon-deep text-xs transition-colors cursor-pointer"
+        >
+          Use a different email
+        </button>
+      </div>
+    );
+  }
 
   if (stage === "confirm") {
     return (
@@ -102,7 +163,7 @@ export default function LoginForm({ initialEmail = "" }: { initialEmail?: string
           disabled={busy}
           className="w-full py-3 bg-bourbon-gold text-bourbon-deep font-semibold tracking-widest uppercase text-xs hover:bg-bourbon-amber transition-colors cursor-pointer disabled:opacity-60"
         >
-          {busy ? "Sending..." : "Send code"}
+          {busy ? busyLabel : primaryLabel}
         </button>
 
         <button
@@ -221,7 +282,7 @@ export default function LoginForm({ initialEmail = "" }: { initialEmail?: string
         disabled={busy}
         className="w-full py-3 bg-bourbon-gold text-bourbon-deep font-semibold tracking-widest uppercase text-xs hover:bg-bourbon-amber transition-colors cursor-pointer disabled:opacity-60"
       >
-        {busy ? "Sending..." : "Email me a code"}
+        {busy ? busyLabel : primaryLabel}
       </button>
     </form>
   );

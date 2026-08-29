@@ -18,9 +18,11 @@ export async function notifyPaymentDetailsIssued(input: {
   orderNumber: string;
   total: number;
   reissued: boolean;
+  /** One-click sign-in URL, when the caller minted one. */
+  dashboardUrl?: string;
 }): Promise<boolean> {
   const { email, orderNumber, total, reissued } = input;
-  const url = `${SITE}/account`;
+  const url = input.dashboardUrl ?? `${SITE}/account`;
   const heading = reissued
     ? "Updated payment details for your order"
     : "Your payment details are ready";

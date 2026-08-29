@@ -673,6 +673,23 @@ model VisitSession {
    Only a hash is stored: a leaked database row must not be a working login.
    `attempts` caps brute force on a 6-digit space, and a consumed or expired
    row is never accepted again. */
+/// One-click sign-in links. Same single-use / expiring discipline as
+/// LoginCode, but the token is long and random rather than six digits, so the
+/// keyspace itself is the protection and no attempt cap is needed. Possession
+/// of the mailbox is the proof.
+model LoginLink {
+  id         String    @id @default(cuid())
+  /// Lowercased, matching Customer.email normalisation.
+  email      String
+  tokenHash  String    @unique
+  expiresAt  DateTime
+  consumedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([email, createdAt])
+  @@index([expiresAt])
+}
+
 model LoginCode {
   id        String   @id @default(cuid())
   // Lowercased, matching Customer.email normalisation.

@@ -6,6 +6,8 @@ import {
 } from "@/lib/commerce";
 import { Prisma, PaymentMethod, ShippingMethod } from "@prisma/client";
 import { isValidUsPhone, toE164Us, US_PHONE_ERROR } from "@/lib/phone";
+import { issueLoginLink } from "@/lib/login-link";
+import { signInLinkUrl } from "@/lib/emails/signInLinkEmail";
 import { prisma } from "@/lib/prisma";
 import { findOrCreateCustomer } from "@/lib/customer-auth";
 import { sendEmail } from "@/lib/mailer";
@@ -318,8 +320,21 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    /* One-click sign-in for the button in the confirmation email. Best effort:
+       a failure here costs the buyer a tap, not the order, and the email falls
+       back to the prefilled sign-in page. `consumePrevious: false` so a second
+       order does not invalidate the link in an earlier email. */
+    let dashboardUrl: string | undefined;
+    try {
+      const link = await issueLoginLink(email, { consumePrevious: false });
+      if (link.ok) dashboardUrl = signInLinkUrl(link.token);
+    } catch (err) {
+      console.error("[orders] could not mint a sign-in link:", err);
+    }
+
     try {
       const emailData = {
+        dashboardUrl,
         orderNumber,
         placedAt: createdOrder.createdAt,
         customer: {
