@@ -1,6 +1,6 @@
 # Google Search Console — URL submission list
 
-**77 indexable URLs.** Generated from the live sitemap, so this is exactly what Google is told to crawl.
+**85 indexable URLs.** Generated from the live sitemap, so this is exactly what Google is told to crawl.
 
 Sitemap: `https://bourbonoaklover.com/sitemap.xml` · Property: `https://bourbonoaklover.com/` (non-www)
 
@@ -73,7 +73,11 @@ Each is self-canonical and targets a brand-level search (e.g. "buy pappy van win
 Local-search landing pages. The index lists them all; the Bardstown page is the
 real distillery, the rest are catchment / trip-planning guides.
 
-- [ ] [https://bourbonoaklover.com/visit](https://bourbonoaklover.com/visit)  — Visit & Locations index (updated 2026-08-22)
+- [ ] [https://bourbonoaklover.com/visit](https://bourbonoaklover.com/visit)  — Visit & Locations index (updated 2026-08-29)
+- [ ] [https://bourbonoaklover.com/visit/columbus](https://bourbonoaklover.com/visit/columbus)  — Visiting From Columbus (updated 2026-08-29, **new**)
+- [ ] [https://bourbonoaklover.com/visit/st-louis](https://bourbonoaklover.com/visit/st-louis)  — Visiting From St. Louis (updated 2026-08-29, **new**)
+- [ ] [https://bourbonoaklover.com/visit/atlanta](https://bourbonoaklover.com/visit/atlanta)  — Visiting From Atlanta (updated 2026-08-29, **new**)
+- [ ] [https://bourbonoaklover.com/visit/detroit](https://bourbonoaklover.com/visit/detroit)  — Visiting From Detroit (updated 2026-08-29, **new**)
 - [ ] [https://bourbonoaklover.com/visit/frankfort](https://bourbonoaklover.com/visit/frankfort)  — Visiting From Frankfort (updated 2026-08-22, **new**)
 - [ ] [https://bourbonoaklover.com/visit/indianapolis](https://bourbonoaklover.com/visit/indianapolis)  — Visiting From Indianapolis (updated 2026-08-22, **new**)
 - [ ] [https://bourbonoaklover.com/visit/chicago](https://bourbonoaklover.com/visit/chicago)  — Getting Here From Chicago (updated 2026-08-22, **new**)
@@ -88,8 +92,12 @@ real distillery, the rest are catchment / trip-planning guides.
 
 These already carry full keyword research in `src/lib/blog.ts` — focus keyword,
 primary and long-tail sets, semantic clusters, and FAQ schema on the newer ones.
-Newest first; the four dated 2026-08-22 are new and unindexed — submit those first.
+Newest first; the four dated 2026-08-29 are new and unindexed — submit those first.
 
+- [ ] [https://bourbonoaklover.com/blog/what-allocated-bourbon-means](https://bourbonoaklover.com/blog/what-allocated-bourbon-means)  — Allocated Bourbon: Why You Can't Just Buy It (updated 2026-08-29, **new**)
+- [ ] [https://bourbonoaklover.com/blog/bourbon-for-beginners](https://bourbonoaklover.com/blog/bourbon-for-beginners)  — Bourbon for Beginners: Your First Five Bottles (updated 2026-08-29, **new**)
+- [ ] [https://bourbonoaklover.com/blog/the-angels-share](https://bourbonoaklover.com/blog/the-angels-share)  — The Angel's Share: Why Age Costs What It Does (updated 2026-08-29, **new**)
+- [ ] [https://bourbonoaklover.com/blog/how-to-build-a-bourbon-home-bar](https://bourbonoaklover.com/blog/how-to-build-a-bourbon-home-bar)  — How to Build a Bourbon Home Bar (updated 2026-08-29, **new**)
 - [ ] [https://bourbonoaklover.com/blog/how-to-read-a-bourbon-label](https://bourbonoaklover.com/blog/how-to-read-a-bourbon-label)  — How to Read a Bourbon Label (updated 2026-08-22, **new**)
 - [ ] [https://bourbonoaklover.com/blog/bottled-in-bond-explained](https://bourbonoaklover.com/blog/bottled-in-bond-explained)  — Bottled in Bond: The Strictest Label in American Whiskey (updated 2026-08-22, **new**)
 - [ ] [https://bourbonoaklover.com/blog/single-barrel-vs-small-batch](https://bourbonoaklover.com/blog/single-barrel-vs-small-batch)  — Single Barrel vs Small Batch: Which Should You Buy? (updated 2026-08-22, **new**)

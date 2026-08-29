@@ -1000,6 +1000,474 @@ export const LOCATIONS: Location[] = [
       },
     ],
   },
+  {
+    slug: "columbus",
+    updatedAt: "2026-08-29",
+    city: "Columbus",
+    isPrimarySite: false,
+    cardSummary:
+      "Straight down I-71 through Cincinnati — four hours, and the easiest of the Ohio runs to do in a single weekend.",
+    driveNote: "247 miles · about 4 hr via I-71 south",
+    title: "Visiting From Columbus",
+    h1: "A Kentucky Bourbon Distillery Four Hours From Columbus",
+    subtitle:
+      "One interstate most of the way, two states, and no time change — Columbus is close enough that a weekend covers the trail properly.",
+    metaTitle: "Bourbon Distillery Near Columbus, OH | Bourbon & Oak",
+    metaDescription:
+      "Bourbon & Oak is 247 miles from Columbus, Ohio — about four hours down I-71 through Cincinnati. The route, where to stay, and how to plan the trip.",
+    keywords: [
+      "bourbon distillery near Columbus Ohio",
+      "Columbus to Bardstown Kentucky",
+      "Kentucky Bourbon Trail from Columbus",
+      "bourbon weekend from Columbus",
+      "Ohio to Kentucky bourbon trip",
+      "I-71 south distilleries",
+      "bourbon tasting near Columbus",
+      "Columbus Ohio whiskey trip",
+      "weekend trip from Columbus Ohio",
+    ],
+    heroImage: "/image1.webp",
+    heroAlt:
+      "Kentucky bourbon at the Bourbon & Oak distillery, four hours from Columbus, Ohio",
+    intro: [
+      "Bourbon & Oak has no Columbus location and none anywhere in Ohio. There is one distillery, in Bardstown, Kentucky, 247 miles south of you — about four hours on a clear run.",
+      "Of the Ohio cities this is the straightforward one: I-71 does almost all of the work, and there is no time change to catch you out on arrival.",
+    ],
+    sections: [
+      {
+        heading: "The Drive",
+        paragraphs: [
+          "I-71 south out of Columbus, through Cincinnati, across the river into Kentucky and on toward Louisville. Come off at Exit 112 for KY-245 east through Clermont into Bardstown. 247 miles, about four hours without traffic.",
+          "Cincinnati is the pinch point. The stretch through downtown and over the Brent Spence Bridge backs up hard at rush hour, so leaving Columbus before seven or after nine in the morning is worth the effort.",
+        ],
+        list: [
+          "1876 Oak Barrel Lane, Bardstown, KY 40004",
+          "247 miles · roughly 4 hours",
+          "Free on-site parking, including coach and RV spaces",
+          "Columbus and Bardstown are both on Eastern time — no clock change",
+        ],
+      },
+      {
+        heading: "Make It a Weekend",
+        paragraphs: [
+          "Eight hours of driving around a tasting is a poor day out. Two nights turns the same trip into a proper one and lets you fit three distilleries in without rushing any of them.",
+          "Bardstown puts you within walking distance of the town square and fifteen minutes from several other trail stops. Louisville has more hotels and restaurants and leaves a 45 minute run out each morning — better if you want the evenings.",
+        ],
+        list: [
+          "Friday: drive down after work, night in Bardstown or Louisville",
+          "Saturday: afternoon tour with us, one or two other stops nearby",
+          "Sunday: a third stop, then the four hours home",
+        ],
+      },
+      {
+        heading: "What Is On Site",
+        paragraphs: [
+          "This is a working distillery rather than a visitor centre. Depending on the day you may walk past an active fermenter, a running column still, or a crew dumping barrels.",
+        ],
+        list: [
+          "The mash floor and still house, in operation on production days",
+          "Rickhouse No. 7, our newest warehouse, holding 20,000 barrels",
+          "The tasting room, where flights are poured at cask strength and proofed side by side",
+          "The bottling line and single-barrel selection room",
+        ],
+      },
+      {
+        heading: "Designated Drivers",
+        paragraphs: [
+          "Four hours home after a tasting is not a drive to talk yourself into, and Kentucky's limit arrives well before most people expect it to.",
+          "Nominate a driver before you leave Columbus, or book the night. Every flight can be poured as take-away samples instead — we would rather you carried it home than hurried through the room.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "How far is Bardstown from Columbus, Ohio?",
+        answer:
+          "247 miles, about four hours by road. I-71 south through Cincinnati to Louisville, then Exit 112 and KY-245 east into Bardstown.",
+      },
+      {
+        question: "Is there a Bourbon & Oak in Columbus?",
+        answer:
+          "No. There is one site, the distillery at 1876 Oak Barrel Lane in Bardstown, Kentucky. Nothing in Ohio — this page exists to help you get here.",
+      },
+      {
+        question: "Do I lose an hour driving from Columbus?",
+        answer:
+          "No. Columbus and Bardstown are both on Eastern time and this route stays in it the whole way, so a tour slot booked in Eastern time is the time on your own clock.",
+      },
+      {
+        question: "Can I do Columbus to Bardstown as a day trip?",
+        answer:
+          "You can, but eight hours of driving around a tasting makes for a rushed day. A single night turns it into a much better trip and lets you add other trail stops.",
+      },
+      {
+        question: "When should I leave to avoid traffic?",
+        answer:
+          "Before seven or after nine in the morning. Cincinnati is the pinch point on this route — the stretch through downtown and over the Brent Spence Bridge backs up at rush hour.",
+      },
+      {
+        question: "Can you ship to an Ohio address instead?",
+        answer:
+          "Rules for shipping spirits across state lines vary by state and change often. The shipping page carries the current position, and an adult signature is required at delivery wherever we can send.",
+      },
+    ],
+  },
+  {
+    slug: "st-louis",
+    updatedAt: "2026-08-29",
+    city: "St. Louis",
+    isPrimarySite: false,
+    cardSummary:
+      "I-64 east the whole way, through southern Indiana into Louisville — under five hours, and you lose an hour at the state line.",
+    driveNote: "302 miles · about 4 hr 45 min via I-64 east",
+    title: "Visiting From St. Louis",
+    h1: "Getting to Kentucky Bourbon Country From St. Louis",
+    subtitle:
+      "One interstate east, 302 miles, and a time zone to remember — St. Louis is a comfortable weekend away from the Bourbon Capital of the World.",
+    metaTitle: "Kentucky Bourbon Distillery From St. Louis | Bourbon & Oak",
+    metaDescription:
+      "Bourbon & Oak is 302 miles from St. Louis — about four and three quarter hours east on I-64. The route, the time-zone change, where to stay, and how to plan it.",
+    keywords: [
+      "bourbon distillery near St Louis",
+      "St Louis to Bardstown Kentucky",
+      "Kentucky Bourbon Trail from St Louis",
+      "bourbon trip from Missouri",
+      "I-64 east distilleries",
+      "St Louis bourbon weekend",
+      "Missouri to Kentucky whiskey trip",
+      "bourbon tasting near St Louis",
+      "weekend trip from St Louis",
+    ],
+    heroImage: "/image3.webp",
+    heroAlt:
+      "Bourbon poured at the Bourbon & Oak distillery, a drive east of St. Louis",
+    intro: [
+      "Bourbon & Oak has no St. Louis location and none in Missouri. There is one distillery, in Bardstown, Kentucky, 302 miles east of you — a little under five hours.",
+      "It is one interstate almost the whole way, with one thing to plan around: you lose an hour crossing into Eastern time.",
+    ],
+    sections: [
+      {
+        heading: "The Drive",
+        paragraphs: [
+          "I-64 east out of St. Louis, across Illinois and the length of southern Indiana, into Louisville. Stay on it to the KY-245 exit and run east through Clermont into Bardstown. 302 miles, about four hours and forty-five minutes.",
+          "It is an easy road — long, flat and quiet for most of its length — but it is genuinely long. Break it once around Evansville rather than pushing straight through.",
+        ],
+        list: [
+          "1876 Oak Barrel Lane, Bardstown, KY 40004",
+          "302 miles · roughly 4 hours 45 minutes",
+          "Free on-site parking, including coach and RV spaces",
+          "Nearest airport to us is Louisville (SDF), about 45 minutes out",
+        ],
+      },
+      {
+        heading: "The Hour You Lose",
+        paragraphs: [
+          "St. Louis is on Central time and Bardstown is on Eastern, so you arrive an hour later than the clock in your car suggests. Leave at nine and a five-hour drive puts you here at three, not two.",
+          "This catches people out on arrival day more than any other detail on this page, because tour slots are booked in Eastern time. Set your phone to the destination before you leave and the problem disappears.",
+        ],
+      },
+      {
+        heading: "What Is On Site",
+        paragraphs: [
+          "This is a working distillery rather than a visitor centre with a still parked outside for photographs.",
+        ],
+        list: [
+          "The mash floor and still house, in operation on production days",
+          "Rickhouse No. 7, our newest warehouse, holding 20,000 barrels",
+          "The tasting room, where flights are poured at cask strength and proofed side by side",
+          "The bottling line and single-barrel selection room",
+        ],
+      },
+      {
+        heading: "Where to Stay",
+        paragraphs: [
+          "At this distance a night is not optional if you want to enjoy the day you drove for. Bardstown keeps you close to the trail; Louisville gives you somewhere to eat afterwards and a 45 minute run out in the morning.",
+        ],
+        list: [
+          "Bardstown — walking distance to the town square, minutes from several trail stops",
+          "Louisville — more hotels and restaurants, 45 minutes from our gate",
+          "Either works; Bardstown suits distillery-first trips, Louisville suits the evenings",
+        ],
+      },
+      {
+        heading: "Designated Drivers",
+        paragraphs: [
+          "Nearly five hours home after a tasting is not a plan. Nominate a driver before you leave St. Louis, or book the night — Kentucky's limit arrives sooner than most people think.",
+          "Every flight can be poured as take-away samples instead, and we would far rather send you home with them.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "How far is Bardstown from St. Louis?",
+        answer:
+          "302 miles, about four hours and forty-five minutes. I-64 east across Illinois and southern Indiana into Louisville, then KY-245 east into Bardstown.",
+      },
+      {
+        question: "Is there a Bourbon & Oak in St. Louis?",
+        answer:
+          "No. We have one site, the distillery in Bardstown, Kentucky. There is nothing in Missouri — this page is about reaching us, not a local branch.",
+      },
+      {
+        question: "Do I lose time driving from St. Louis to Bardstown?",
+        answer:
+          "Yes, an hour. St. Louis is on Central time and Bardstown on Eastern. Tour slots are booked in Eastern time, so set your phone to the destination before you leave.",
+      },
+      {
+        question: "Can I drive from St. Louis and back in a day?",
+        answer:
+          "Not sensibly. Nearly ten hours of driving around a tasting is not a day out, and the drive home would fall exactly where you should not be driving.",
+      },
+      {
+        question: "Where is a good place to break the drive?",
+        answer:
+          "Evansville sits roughly two-thirds of the way and is the natural stop. The road is easy but long, and one break makes a real difference to how the day ends.",
+      },
+      {
+        question: "Can you ship to a Missouri address instead?",
+        answer:
+          "Rules for shipping spirits across state lines vary by state and change often. The shipping page carries the current position, and an adult signature is required at delivery.",
+      },
+    ],
+  },
+  {
+    slug: "atlanta",
+    updatedAt: "2026-08-29",
+    city: "Atlanta",
+    isPrimarySite: false,
+    cardSummary:
+      "400 miles up I-24 through Chattanooga and Nashville, or a short flight into Louisville — a proper long weekend either way.",
+    driveNote: "400 miles · about 6 hr 15 min via I-24, or fly to Louisville",
+    title: "Visiting From Atlanta",
+    h1: "Getting to Kentucky Bourbon Country From Atlanta",
+    subtitle:
+      "Six hours north through Tennessee, or ninety minutes in the air — two honest ways to reach Bardstown from Atlanta.",
+    metaTitle: "Kentucky Bourbon Distillery From Atlanta | Bourbon & Oak",
+    metaDescription:
+      "Bourbon & Oak is 400 miles from Atlanta — about six and a quarter hours north on I-24, or a short flight into Louisville. Routes, timings and how to plan the weekend.",
+    keywords: [
+      "Kentucky bourbon distillery from Atlanta",
+      "Atlanta to Bardstown Kentucky",
+      "Kentucky Bourbon Trail from Atlanta",
+      "bourbon weekend from Atlanta",
+      "Georgia to Kentucky bourbon trip",
+      "fly Atlanta to Louisville bourbon",
+      "I-24 north bourbon trail",
+      "bourbon tasting trip from Atlanta",
+      "long weekend from Atlanta",
+    ],
+    heroImage: "/blog-process.webp",
+    heroAlt:
+      "The Bourbon & Oak distillery in Kentucky, a long weekend from Atlanta",
+    intro: [
+      "Bourbon & Oak has no Atlanta location and none in Georgia. There is one distillery, in Bardstown, Kentucky, 400 miles north of you.",
+      "At this range flying genuinely competes with driving. Both are reasonable; they suit different trips, and the drive itself is one of the better ones on this page.",
+    ],
+    sections: [
+      {
+        heading: "Driving: Up Through Tennessee",
+        paragraphs: [
+          "I-75 north out of Atlanta to Chattanooga, then I-24 west through Nashville, then I-65 north across the Kentucky line and off at Exit 112 for KY-245 into Bardstown. 400 miles, about six and a quarter hours in clear conditions.",
+          "Realistically it is a full day with stops, and it crosses two time zones — Central through Tennessee, back to Eastern in Kentucky — which nets out to losing an hour by the time you arrive.",
+        ],
+        list: [
+          "1876 Oak Barrel Lane, Bardstown, KY 40004",
+          "400 miles · about 6 hours 15 minutes driving",
+          "Free on-site parking, including coach and RV spaces",
+          "Atlanta is Eastern, Nashville is Central, Bardstown is Eastern again",
+        ],
+      },
+      {
+        heading: "Flying: The Faster Option",
+        paragraphs: [
+          "Louisville Muhammad Ali International (SDF) is roughly a ninety minute flight from Hartsfield-Jackson, and Bardstown is 45 minutes further by car. Door to door that is usually less than half the driving time.",
+          "You will need a car at the other end. There is no public transport that reaches us and no practical way to work the Bourbon Trail without one, so factor a two-day rental into the comparison before deciding.",
+        ],
+      },
+      {
+        heading: "Make It a Long Weekend",
+        paragraphs: [
+          "A day trip is not a serious proposition at 400 miles. Three distilleries across two or three days is the version people describe fondly afterwards.",
+          "If you are driving, Nashville is almost exactly halfway and makes an obvious overnight in each direction — which also turns the journey into part of the trip rather than a cost of it.",
+        ],
+        list: [
+          "Friday: drive to Nashville, night there",
+          "Saturday: on to Bardstown, afternoon tour with us, night in town",
+          "Sunday: one or two more trail stops, then home",
+        ],
+      },
+      {
+        heading: "What Is On Site",
+        paragraphs: [
+          "This is a working distillery rather than a visitor centre. Depending on the day and season you may walk past an active fermenter, a running column still, or a crew dumping barrels.",
+        ],
+        list: [
+          "The mash floor and still house, in operation on production days",
+          "Rickhouse No. 7, our newest warehouse, holding 20,000 barrels",
+          "The tasting room, where flights are poured at cask strength and proofed side by side",
+          "The bottling line and single-barrel selection room",
+        ],
+      },
+      {
+        heading: "Carrying Bottles Home",
+        paragraphs: [
+          "If you are flying, bottles go in checked baggage only — anything above 100ml is out of the cabin, and spirits above 70 percent alcohol (140 proof) cannot fly at all. Some barrel proof releases have gone over that line, so check the proof before you plan to carry one.",
+          "Shipping is often simpler. Rules vary by state and change often, so the shipping page carries the current position, and an adult signature is required at delivery.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "How far is Bardstown, Kentucky from Atlanta?",
+        answer:
+          "400 miles, about six and a quarter hours by road — I-75 north to Chattanooga, I-24 west through Nashville, then I-65 north to Exit 112 and KY-245 east.",
+      },
+      {
+        question: "Is there a Bourbon & Oak in Atlanta?",
+        answer:
+          "No. We have one site, the distillery in Bardstown, Kentucky. There is nothing in Georgia — this page is about reaching us, not a local branch.",
+      },
+      {
+        question: "Is it better to fly or drive from Atlanta?",
+        answer:
+          "Flying into Louisville is about ninety minutes plus a 45 minute drive, usually less than half the door-to-door time. You will still need a car at the other end, which closes some of the cost gap.",
+      },
+      {
+        question: "Where should I stop on the drive up?",
+        answer:
+          "Nashville is almost exactly halfway and makes an obvious overnight in each direction, which turns the journey into part of the trip rather than a cost of it.",
+      },
+      {
+        question: "How many time zones does the drive cross?",
+        answer:
+          "Two changes that mostly cancel out. Atlanta is Eastern, middle Tennessee is Central, and Kentucky's Bardstown is Eastern again — you net out an hour later than your car clock suggests.",
+      },
+      {
+        question: "Can I fly home with bottles?",
+        answer:
+          "In checked baggage only, and nothing above 70 percent alcohol may fly at all. Some barrel proof releases have gone over that line, so check the proof first — shipping is often simpler.",
+      },
+    ],
+  },
+  {
+    slug: "detroit",
+    updatedAt: "2026-08-29",
+    city: "Detroit",
+    isPrimarySite: false,
+    cardSummary:
+      "I-75 almost the whole way down through Ohio — 393 miles, about six and a half hours, and no time change at all.",
+    driveNote: "393 miles · about 6 hr 30 min via I-75 south",
+    title: "Visiting From Detroit",
+    h1: "Getting to Kentucky Bourbon Country From Detroit",
+    subtitle:
+      "One interstate for most of 393 miles, no clock change, and a stretch of Ohio you will not have to think about — Detroit to the Bourbon Capital of the World.",
+    metaTitle: "Kentucky Bourbon Distillery From Detroit | Bourbon & Oak",
+    metaDescription:
+      "Bourbon & Oak is 393 miles from Detroit — about six and a half hours down I-75 through Ohio. The route, where to break it, and how to plan the weekend.",
+    keywords: [
+      "Kentucky bourbon distillery from Detroit",
+      "Detroit to Bardstown Kentucky",
+      "Kentucky Bourbon Trail from Detroit",
+      "bourbon weekend from Detroit",
+      "Michigan to Kentucky bourbon trip",
+      "I-75 south bourbon trail",
+      "bourbon tasting trip from Detroit",
+      "Detroit whiskey road trip",
+      "long weekend from Detroit",
+    ],
+    heroImage: "/process-distillery.webp",
+    heroAlt:
+      "The still house at Bourbon & Oak in Kentucky, a road trip south of Detroit",
+    intro: [
+      "Bourbon & Oak has no Detroit location and none in Michigan. There is one distillery, in Bardstown, Kentucky, 393 miles south of you — about six and a half hours.",
+      "It is the simplest long drive on this page: I-75 does nearly all of it, and unlike the runs from Chicago or St. Louis there is no time change to plan around.",
+    ],
+    sections: [
+      {
+        heading: "The Drive",
+        paragraphs: [
+          "I-75 south out of Detroit, down the length of Ohio past Toledo, Dayton and Cincinnati, across the river into Kentucky. Pick up I-71 south toward Louisville, then Exit 112 for KY-245 east into Bardstown. 393 miles, about six and a half hours in clear conditions.",
+          "Two places will decide how the day feels: Toledo early on, and Cincinnati near the end. Both back up at rush hour, and the Cincinnati stretch is the one worth timing your departure around.",
+        ],
+        list: [
+          "1876 Oak Barrel Lane, Bardstown, KY 40004",
+          "393 miles · about 6 hours 30 minutes",
+          "Free on-site parking, including coach and RV spaces",
+          "Detroit and Bardstown are both on Eastern time — no clock change",
+        ],
+      },
+      {
+        heading: "Where to Break It",
+        paragraphs: [
+          "Six and a half hours is enough that arriving fresh matters more than arriving early. Cincinnati sits about two-thirds of the way and is the obvious overnight if you want to split the drive.",
+          "It is also a genuinely good stop rather than a functional one — and we have a whole page for people coming the last leg from there, since Cincinnati is only about an hour and a half out.",
+        ],
+        list: [
+          "Friday: drive to Cincinnati, night there",
+          "Saturday: the last ninety minutes down, afternoon tour with us",
+          "Sunday: one or two more trail stops, then home",
+        ],
+      },
+      {
+        heading: "What Is On Site",
+        paragraphs: [
+          "This is a working distillery rather than a visitor centre with a still parked outside for photographs.",
+        ],
+        list: [
+          "The mash floor and still house, in operation on production days",
+          "Rickhouse No. 7, our newest warehouse, holding 20,000 barrels",
+          "The tasting room, where flights are poured at cask strength and proofed side by side",
+          "The bottling line and single-barrel selection room",
+        ],
+      },
+      {
+        heading: "Flying Instead",
+        paragraphs: [
+          "Louisville Muhammad Ali International (SDF) is a short hop from Detroit Metro, and Bardstown is about 45 minutes further by car. Door to door it usually beats the drive comfortably.",
+          "You will need a car at the other end either way — there is no public transport that reaches us, and no practical way to work the Bourbon Trail without one.",
+        ],
+      },
+      {
+        heading: "Designated Drivers",
+        paragraphs: [
+          "Six and a half hours home after a tasting is not a drive anyone should be planning, and Kentucky's limit arrives well before most people expect it to.",
+          "Nominate a driver before you leave Michigan, or book the night. Every flight can be poured as take-away samples instead, and we would rather you carried it home than rushed the room.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "How far is Bardstown, Kentucky from Detroit?",
+        answer:
+          "393 miles, about six and a half hours. I-75 south through Ohio to Cincinnati, then I-71 toward Louisville and off at Exit 112 for KY-245 east.",
+      },
+      {
+        question: "Is there a Bourbon & Oak in Detroit?",
+        answer:
+          "No. There is one site, the distillery at 1876 Oak Barrel Lane in Bardstown, Kentucky. Nothing in Michigan — this page exists to help you get here.",
+      },
+      {
+        question: "Do I lose an hour driving from Detroit?",
+        answer:
+          "No. Detroit and Bardstown are both on Eastern time and this route stays in it the whole way, unlike the drives from Chicago or St. Louis.",
+      },
+      {
+        question: "Where is the best place to break the drive?",
+        answer:
+          "Cincinnati, about two-thirds of the way down, leaving roughly ninety minutes for the morning. It is a good overnight in its own right rather than just a convenient one.",
+      },
+      {
+        question: "Is flying worth it from Detroit?",
+        answer:
+          "Usually. Louisville is a short hop from Detroit Metro and Bardstown is 45 minutes further by car, which beats six and a half hours of driving. You will still need a car at the other end.",
+      },
+      {
+        question: "Can you ship to a Michigan address instead?",
+        answer:
+          "Rules for shipping spirits across state lines vary by state and change often. The shipping page carries the current position, and an adult signature is required at delivery.",
+      },
+    ],
+  },
 ];
 
 export function getLocationBySlug(slug: string): Location | undefined {

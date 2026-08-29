@@ -4787,6 +4787,747 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
   },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 21. Allocated Bourbon — Buying Guide
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "what-allocated-bourbon-means",
+    title: "Allocated Bourbon: Why You Can't Just Buy It",
+    subtitle:
+      "Nobody is hiding the good stuff from you. The bottle you want was distilled before you wanted it, and there is no lever anyone can pull to make more.",
+    excerpt:
+      "Allocated does not mean rare by design. It means a decision made a decade ago about how many barrels to fill, meeting demand nobody forecast. Here is how allocation actually works, and how to buy well inside it.",
+    category: "Buying Guide",
+    author: "Eleanor Hayes",
+    authorTitle: "Master Distiller, Bourbon & Oak",
+    publishedAt: "2026-08-29",
+    readTimeMinutes: 9,
+    heroImage: "/blog-collecting.webp",
+    heroAlt: "Allocated Kentucky bourbon bottles on a collector's shelf",
+    tags: [
+      "allocated bourbon",
+      "bourbon allocation",
+      "Pappy Van Winkle",
+      "hard to find bourbon",
+      "secondary market",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "Walk into a good shop and ask for Pappy. You will be told, politely, that they do not have it, that they do not know when they will, and that the list closed months ago. This is not theatre. It is arithmetic, and once you see the arithmetic the whole frustrating business makes sense.",
+      },
+      { type: "heading", level: 2, text: "Allocation Is a Decision Made a Decade Ago" },
+      {
+        type: "paragraph",
+        text: "A bourbon released this year was distilled and barrelled years before. A 15-year release was filled when the person buying it may not have been drinking bourbon at all. Whoever decided how many barrels to fill that season was guessing at demand more than a decade out, in a market that has since grown beyond anyone's forecast.",
+      },
+      {
+        type: "paragraph",
+        text: "There is no lever to pull now. You cannot age whiskey faster, and you cannot go back and fill more barrels in 2011. The supply of a 15-year whiskey in 2026 was fixed in 2011 and has only shrunk since, because the angels take their share every year — which we cover in [[link:/blog/the-angels-share|why age costs what it does]].",
+      },
+      { type: "heading", level: 2, text: "What Allocation Actually Looks Like" },
+      {
+        type: "paragraph",
+        text: "The distillery decides how many cases each distributor gets. The distributor decides how many bottles each retailer gets. The retailer decides who gets the two or three they were given. By the time it reaches a shelf, a national release has been divided several times, and the last division is a shop owner with six bottles and two hundred regulars.",
+      },
+      {
+        type: "list",
+        items: [
+          "Allocation is per state, not national — the same release lands in wildly different quantities depending on where you live.",
+          "Most allocated bottles never reach a shelf at all. They go to a list, a raffle, or a long-standing customer.",
+          "A shop's allocation is usually tied to how much of everything else it buys, which is why the big-volume stores get the famous bottles.",
+          "The distillery has no say in what a retailer charges, and no way to stop a bottle being resold.",
+        ],
+      },
+      { type: "heading", level: 2, text: "The Tiers, Roughly" },
+      {
+        type: "paragraph",
+        text: "Not everything scarce is scarce to the same degree, and knowing where a bottle sits saves a lot of wasted hunting.",
+      },
+      {
+        type: "list",
+        items: [
+          "Unicorn — [[product:pappy-van-winkle-23-year|Pappy Van Winkle 23 Year]] and [[product:double-eagle-very-rare|Double Eagle Very Rare]]. A few thousand bottles for a continent. Lists and lotteries only.",
+          "Heavily allocated — [[product:pappy-van-winkle-15-year|Pappy 15]], [[product:george-t-stagg|George T. Stagg]], [[product:william-larue-weller|William Larue Weller]]. Annual releases, gone the day they land.",
+          "Allocated but findable — [[product:blantons-original-single-barrel|Blanton's Original]], [[product:eagle-rare-10-year|Eagle Rare 10]], [[product:weller-12-year|Weller 12]]. Genuinely on shelves if you are patient and not fussy about the day.",
+          "Not allocated at all, and excellent — [[product:eh-taylor-small-batch|E.H. Taylor Small Batch]], [[product:russells-reserve-13-year|Russell's Reserve 13]]. Better in the glass than plenty of bottles three tiers above them.",
+        ],
+      },
+      {
+        type: "callout",
+        title: "The uncomfortable part",
+        text: "Some allocated bottles are outstanding whiskey. Some are ordinary whiskey wearing a scarce label. Scarcity and quality are different axes, and the market prices the first one. If you would not pay the shelf price for the liquid alone, you are buying the label — which is a fine thing to do knowingly and a bad thing to do by accident.",
+      },
+      { type: "heading", level: 2, text: "How to Actually Get Some" },
+      {
+        type: "list",
+        ordered: true,
+        items: [
+          "Pick one good shop and become a regular. Allocation runs on relationships, and a shop with six bottles gives them to the six people it knows.",
+          "Buy the everyday things there too. Retailers earn their allocation on total volume, and so, in practice, do you.",
+          "Join the lists. Most states run legal lotteries for the big releases. They are free, the odds are poor, and the odds of not entering are zero.",
+          "Ask what came in this week rather than asking for one famous name. The answer is often something excellent you had not thought of.",
+          "Buy the tier below. The gap between an allocated bottle and its unallocated sibling is usually far smaller than the gap in price.",
+        ],
+      },
+      { type: "heading", level: 2, text: "On the Secondary Market" },
+      {
+        type: "paragraph",
+        text: "Reselling spirits without a licence is illegal in most of the United States, whatever a social media group implies. Beyond the legality, you are buying an unsealed-looking bottle from a stranger with no recourse, in a category where counterfeiting is a real and growing problem — refilled bottles with genuine labels are the usual method.",
+      },
+      {
+        type: "paragraph",
+        text: "If a price seems impossible, it is. Buy from people who are licensed to sell you whiskey, and treat a bargain on a unicorn as the warning it almost always is. Our own stock, allocated and otherwise, is in the [[link:/shop|shop]], and [[link:/blog/best-bourbon-bottles-ranked|the ranked guide]] is honest about which famous bottles are worth the chase.",
+      },
+    ],
+    seo: {
+      metaTitle: "Allocated Bourbon Explained: Why You Can't Just Buy It",
+      metaDescription:
+        "What allocated bourbon actually means, how allocation is divided from distillery to shelf, which bottles sit in which tier, and how to buy well without the secondary market.",
+      focusKeyword: "allocated bourbon",
+      primaryKeywords: [
+        "allocated bourbon",
+        "what does allocated mean bourbon",
+        "hard to find bourbon",
+        "bourbon allocation explained",
+        "why is Pappy so hard to find",
+        "bourbon lottery",
+      ],
+      longTailKeywords: [
+        "what does allocated bourbon mean",
+        "why can't I buy Pappy Van Winkle",
+        "how does bourbon allocation work",
+        "how to get allocated bourbon",
+        "is buying bourbon on the secondary market legal",
+        "which bourbons are allocated",
+        "how do bourbon lotteries work",
+      ],
+      wordClusters: [
+        {
+          cluster: "Supply",
+          terms: [
+            "barrels filled",
+            "distillation season",
+            "aging inventory",
+            "annual release",
+            "state allocation",
+            "distributor",
+          ],
+        },
+        {
+          cluster: "Access",
+          terms: [
+            "retailer list",
+            "bourbon lottery",
+            "raffle",
+            "regular customer",
+            "store pick",
+          ],
+        },
+        {
+          cluster: "Risk",
+          terms: [
+            "secondary market",
+            "counterfeit bourbon",
+            "refilled bottles",
+            "unlicensed resale",
+            "markup",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "pappy-van-winkle-15-year",
+      "george-t-stagg",
+      "william-larue-weller",
+      "eagle-rare-10-year",
+      "weller-12-year",
+      "eh-taylor-small-batch",
+    ],
+    faq: [
+      {
+        question: "What does allocated bourbon mean?",
+        answer:
+          "That supply is fixed and divided in advance — the distillery allots so many cases per distributor, who allots so many per retailer. It reflects a decision about how many barrels to fill years ago, not artificial scarcity created today.",
+      },
+      {
+        question: "Why is Pappy Van Winkle so hard to find?",
+        answer:
+          "A 15-year bourbon released now was barrelled 15 years ago, when demand was a fraction of today's. That supply cannot be increased retroactively, and evaporation shrinks it every year it sits.",
+      },
+      {
+        question: "How do I get on an allocation list?",
+        answer:
+          "Ask your local shop — most keep one, and most fill it by how well they know you rather than who asked first. Buying your everyday bottles there is what earns a place on it.",
+      },
+      {
+        question: "Is buying allocated bourbon on the secondary market legal?",
+        answer:
+          "Reselling spirits without a licence is illegal in most US states. You are also buying from a stranger with no recourse in a category where refilled genuine bottles are a real counterfeiting method.",
+      },
+      {
+        question: "Is allocated bourbon actually better?",
+        answer:
+          "Sometimes. Scarcity and quality are different things, and the market prices scarcity. Several unallocated bottles drink better than allocated ones costing several times as much.",
+      },
+    ],
+  },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 22. Beginners — Fundamentals
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "bourbon-for-beginners",
+    title: "Bourbon for Beginners: Your First Five Bottles",
+    subtitle:
+      "No jargon, no hunting, no spending three figures to find out what you like. Five bottles that teach you your own palate.",
+    excerpt:
+      "Most beginner guides list famous bottles you cannot buy. This one is a sequence: five widely available whiskeys chosen so that each teaches you something specific about what you actually enjoy.",
+    category: "Fundamentals",
+    author: "Wyatt Brennan",
+    authorTitle: "Head Bartender, The Cellar at Bourbon & Oak",
+    publishedAt: "2026-08-29",
+    readTimeMinutes: 10,
+    heroImage: "/image2.webp",
+    heroAlt: "A first bourbon poured neat in a tasting glass",
+    tags: [
+      "bourbon for beginners",
+      "first bourbon",
+      "how to start drinking bourbon",
+      "beginner whiskey",
+      "bourbon basics",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "The usual beginner guide is a list of bottles you cannot find at prices you should not pay. That is not a starting point, it is a wish list. What follows is a sequence instead: five bottles, each chosen because it isolates one variable, so by the end you know what you like rather than what you have been told to like.",
+      },
+      { type: "heading", level: 2, text: "Before the First Pour" },
+      {
+        type: "paragraph",
+        text: "Three things make more difference than any bottle choice, and all three are free.",
+      },
+      {
+        type: "list",
+        items: [
+          "Use a glass that narrows at the top. A tumbler throws the aroma sideways; anything tulip-shaped concentrates it. Most of tasting is smelling.",
+          "Add water. A few drops, not a splash. Cask-strength whiskey especially opens up, and there is nothing purist about drinking something too hot to taste.",
+          "Sip small and wait. The second sip always tastes different from the first, because the first was mostly your palate reacting to the alcohol.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "The full method — glassware, water, what to look for — is in [[link:/blog/how-to-taste-bourbon|how to taste bourbon]]. You do not need it to enjoy a drink, but it will make these five bottles teach you more.",
+      },
+      { type: "heading", level: 2, text: "One: A Baseline" },
+      {
+        type: "paragraph",
+        text: "Start with [[product:eagle-rare-10-year|Eagle Rare 10 Year]] at 90 proof. Ten years in oak, gentle, no rough edges, and widely available at a sane price. It is not the most exciting whiskey you will ever drink, and that is the point — it gives you a reference for what a well-made, well-aged bourbon tastes like when nothing is turned up loud.",
+      },
+      { type: "heading", level: 2, text: "Two: Turn the Grain" },
+      {
+        type: "paragraph",
+        text: "Now change one variable. [[product:weller-12-year|Weller 12 Year]] is wheated — wheat instead of rye as the secondary grain — and the difference is immediate. Softer, rounder, more honey and less pepper. Taste it beside the Eagle Rare and you will learn more in ten minutes than in a month of reading. [[link:/blog/wheated-vs-high-rye-bourbon|The mash bill guide]] explains what you are tasting.",
+      },
+      { type: "heading", level: 2, text: "Three: Turn the Proof" },
+      {
+        type: "paragraph",
+        text: "[[product:eh-taylor-small-batch|E.H. Taylor Small Batch]] is bottled in bond, which means exactly 100 proof and a genuine federal guarantee behind it — the standard we unpack in [[link:/blog/bottled-in-bond-explained|bottled in bond]]. Ten more proof points than the Eagle Rare is enough to feel: more weight, more grip, and enough backbone to survive an ice cube.",
+      },
+      { type: "heading", level: 2, text: "Four: Meet a Single Barrel" },
+      {
+        type: "paragraph",
+        text: "[[product:blantons-original-single-barrel|Blanton's Original]] comes from one cask, bottled alone, with the barrel number printed on the label. Two bottles bought a year apart will not taste identical, and understanding why is the moment bourbon stops being a product and starts being agriculture. See [[link:/blog/single-barrel-vs-small-batch|single barrel vs small batch]].",
+      },
+      { type: "heading", level: 2, text: "Five: Go Loud, Carefully" },
+      {
+        type: "paragraph",
+        text: "Only now is barrel proof worth your money. [[product:eh-taylor-barrel-proof|E.H. Taylor Barrel Proof]] arrives uncut at around 131 proof. Taste it neat, wince, add water a few drops at a time, and watch it change into something else entirely. That transformation is the whole argument for cask strength, and it is wasted on a palate that has not met the tamer versions first.",
+      },
+      {
+        type: "callout",
+        title: "What you have actually bought",
+        text: "Not five nice bottles — four comparisons. Age against age, wheat against rye, 90 proof against 100, one barrel against many, cut against uncut. Anyone can tell you Weller is soft. Only your own mouth can tell you whether you prefer it that way.",
+      },
+      { type: "heading", level: 2, text: "Mistakes Worth Skipping" },
+      {
+        type: "list",
+        items: [
+          "Chasing allocated bottles first. You will pay a premium to learn nothing — see [[link:/blog/what-allocated-bourbon-means|why they are hard to get]].",
+          "Judging on the first sip. Give the glass ten minutes; whiskey changes in air more than people expect.",
+          "Drowning it in ice. Cold mutes aroma. If you want it cold, one large cube melts slower than four small ones.",
+          "Buying by age alone. Older is different, not automatically better — [[link:/blog/does-older-bourbon-mean-better|the age guide]] covers where it stops helping.",
+          "Believing you must drink it neat. The best way to drink bourbon is the way you will actually finish the bottle.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "When you know which of the five you kept reaching for, the rest of the shelf gets easy. [[link:/blog/best-bourbon-bottles-ranked|The ranked guide]] takes it from there, and everything above is in the [[link:/shop|shop]] with its real age and proof on the page.",
+      },
+    ],
+    seo: {
+      metaTitle: "Bourbon for Beginners: Your First Five Bottles",
+      metaDescription:
+        "A beginner's sequence rather than a wish list — five widely available bourbons chosen so each one teaches you something specific about your own palate.",
+      focusKeyword: "bourbon for beginners",
+      primaryKeywords: [
+        "bourbon for beginners",
+        "best bourbon for beginners",
+        "first bourbon to buy",
+        "how to start drinking bourbon",
+        "beginner bourbon guide",
+        "easy drinking bourbon",
+      ],
+      longTailKeywords: [
+        "what bourbon should a beginner buy",
+        "best first bottle of bourbon",
+        "how do I learn to like bourbon",
+        "should beginners drink bourbon neat",
+        "beginner bourbon under 100",
+        "how to taste bourbon as a beginner",
+        "what order should I try bourbons in",
+      ],
+      wordClusters: [
+        {
+          cluster: "Getting Started",
+          terms: [
+            "first bottle",
+            "tasting glass",
+            "adding water",
+            "neat vs rocks",
+            "palate",
+          ],
+        },
+        {
+          cluster: "Variables",
+          terms: [
+            "mash bill",
+            "proof",
+            "age",
+            "single barrel",
+            "barrel proof",
+            "bottled in bond",
+          ],
+        },
+        {
+          cluster: "Common Errors",
+          terms: [
+            "chasing allocated bottles",
+            "too much ice",
+            "judging too fast",
+            "buying on age",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "eagle-rare-10-year",
+      "weller-12-year",
+      "eh-taylor-small-batch",
+      "blantons-original-single-barrel",
+      "eh-taylor-barrel-proof",
+    ],
+    faq: [
+      {
+        question: "What is the best bourbon for a beginner?",
+        answer:
+          "Something well-aged and gentle at around 90 proof, so nothing is turned up loud. Eagle Rare 10 Year is a good baseline because it gives you a reference point for everything you taste afterwards.",
+      },
+      {
+        question: "Should a beginner drink bourbon neat?",
+        answer:
+          "Try it neat first to see what it actually tastes like, then add a few drops of water. Water is not cheating — it opens the whiskey up, especially at higher proof.",
+      },
+      {
+        question: "How much should I spend on my first bottle?",
+        answer:
+          "Enough for something well made, not enough to hurt if you dislike it. The bottles that teach you the most are widely available rather than allocated, so you are not paying a scarcity premium to learn.",
+      },
+      {
+        question: "Is expensive bourbon better for beginners?",
+        answer:
+          "No. Allocated and expensive usually means scarce, not more enjoyable, and a beginner's palate has nothing to compare it against yet. Learn the variables first, then decide what a premium is worth to you.",
+      },
+      {
+        question: "What glass should I use?",
+        answer:
+          "Anything that narrows at the top — a Glencairn, a copita, even a small wine glass. A straight tumbler lets the aroma escape sideways, and most of what you taste is what you smell.",
+      },
+    ],
+  },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 23. Angel's Share — Behind the Scenes
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "the-angels-share",
+    title: "The Angel's Share: Why Age Costs What It Does",
+    subtitle:
+      "Every year a barrel loses whiskey to the air, and it never comes back. That evaporation is the single biggest reason old bourbon is expensive.",
+    excerpt:
+      "A Kentucky barrel gives up a meaningful share of its contents every year it sits. Compound that over fifteen years and the maths behind an old bourbon's price stops looking like greed and starts looking like arithmetic.",
+    category: "Behind the Scenes",
+    author: "Eleanor Hayes",
+    authorTitle: "Master Distiller, Bourbon & Oak",
+    publishedAt: "2026-08-29",
+    readTimeMinutes: 8,
+    heroImage: "/process-rickhouse.webp",
+    heroAlt: "Barrels resting in a Kentucky rickhouse losing whiskey to evaporation",
+    tags: [
+      "angel's share",
+      "bourbon evaporation",
+      "barrel aging",
+      "why is old bourbon expensive",
+      "rickhouse",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "Open the door of a full rickhouse in July and the smell hits you before your eyes adjust. That smell is whiskey leaving. Oak is porous, the barrel breathes with the weather, and every year some of what went in comes back out into the air. Distillers have called it the angel's share for centuries, which is a generous name for a loss nobody can prevent.",
+      },
+      { type: "heading", level: 2, text: "The Arithmetic" },
+      {
+        type: "paragraph",
+        text: "The loss is not trivial and it compounds. A Kentucky barrel typically gives up a few percent of its volume every year — more in the first year, more on a hot upper floor, less in a cool corner. Run that forward and the numbers get uncomfortable.",
+      },
+      {
+        type: "list",
+        items: [
+          "A barrel goes in holding roughly 53 gallons.",
+          "After four years, a bonded minimum, a meaningful fraction is already gone.",
+          "By ten to twelve years, many barrels have lost around a third.",
+          "At fifteen to twenty years, losing half or more is ordinary rather than exceptional.",
+          "Some barrels do not survive at all — they go too woody, or too low, and are dumped into something else or written off.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "So a 20-year bourbon is not one barrel's worth of 20-year-old whiskey. It is what is left of a barrel after two decades of the air taking its cut, from a batch where some barrels did not make it. That is before anyone has paid for twenty years of warehouse space, insurance, and the tax on the angels' portion.",
+      },
+      {
+        type: "callout",
+        title: "Why the price curve bends",
+        text: "Doubling the age does not double the cost — it does something worse. You lose more liquid, you lose more barrels entirely, and you have carried the whole inventory for twice as long on a bet placed two decades ago. This is the real reason [[product:pappy-van-winkle-23-year|a 23 year old bottle]] sits where it does, and why the jump from 10 to 15 years costs so much more than the jump from 5 to 10.",
+      },
+      { type: "heading", level: 2, text: "It Is Not Just Volume" },
+      {
+        type: "paragraph",
+        text: "Evaporation also changes what stays behind. Water and alcohol leave at different rates depending on humidity, so a barrel does not simply shrink — it drifts in strength. In a dry warehouse the whiskey climbs in proof; in a damp one it can fall. Two barrels filled the same day at the same strength can be several proof points apart a decade later purely because of where they sat.",
+      },
+      {
+        type: "paragraph",
+        text: "That is the same mechanism that makes one barrel taste different from its neighbour, which is why [[link:/blog/single-barrel-vs-small-batch|single barrel releases]] vary so much and why warehouse position matters as much as recipe. We walk through how it shapes selection in [[link:/blog/master-distiller-barrel-selection-guide|the barrel selection guide]].",
+      },
+      { type: "heading", level: 2, text: "Kentucky's Particular Problem" },
+      {
+        type: "paragraph",
+        text: "Scotland loses perhaps two percent a year in a cool, damp climate. Kentucky swings from freezing winters to punishing summers, and that swing is exactly what drives whiskey in and out of the wood — it is what makes bourbon mature faster than Scotch, and it is what makes it evaporate faster too.",
+      },
+      {
+        type: "paragraph",
+        text: "The maturity is the reward and the evaporation is the bill. You cannot take one without the other, which is why a 12-year bourbon can taste as developed as a much older Scotch, and why very old bourbon is rarer than very old Scotch rather than merely more expensive. There is more on what age does and does not buy you in [[link:/blog/does-older-bourbon-mean-better|the age statement guide]].",
+      },
+      { type: "heading", level: 2, text: "What This Means When You Buy" },
+      {
+        type: "list",
+        items: [
+          "An age statement is a cost floor, not a quality guarantee. It tells you what the distillery carried, not what is in the glass.",
+          "The sweet spot for most palates sits well below the top of the range. [[product:eagle-rare-10-year|Eagle Rare 10]] and [[product:weller-12-year|Weller 12]] are where age and price still make sense together.",
+          "Barrel proof bottles are partly a response to this: no water added back means no further dilution of something already scarce. [[product:george-t-stagg|George T. Stagg]] is the case in point.",
+          "If a very old bourbon tastes of nothing but oak, that is not you missing something. Wood keeps taking after the whiskey has finished improving.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "Rickhouse No. 7 holds 20,000 barrels, and every one of them is quietly getting smaller as you read this. You can walk through it on [[link:/tours|the distillery tour]], and the bottles that made it out are in the [[link:/shop|shop]].",
+      },
+    ],
+    seo: {
+      metaTitle: "The Angel's Share: Why Old Bourbon Costs What It Does",
+      metaDescription:
+        "How much whiskey a barrel loses to evaporation each year, why the loss compounds, and why that arithmetic — not greed — sets the price of old bourbon.",
+      focusKeyword: "angel's share",
+      primaryKeywords: [
+        "angel's share",
+        "bourbon evaporation",
+        "why is old bourbon expensive",
+        "barrel aging loss",
+        "how much bourbon evaporates",
+        "rickhouse evaporation",
+      ],
+      longTailKeywords: [
+        "what is the angel's share in whiskey",
+        "how much whiskey evaporates each year",
+        "why does old bourbon cost so much",
+        "how much is left in a 20 year old barrel",
+        "does bourbon proof change while aging",
+        "why does bourbon age faster than scotch",
+      ],
+      wordClusters: [
+        {
+          cluster: "Evaporation",
+          terms: [
+            "angel's share",
+            "barrel breathing",
+            "porous oak",
+            "humidity",
+            "proof drift",
+            "volume loss",
+          ],
+        },
+        {
+          cluster: "Economics",
+          terms: [
+            "warehouse cost",
+            "carrying inventory",
+            "age statement",
+            "barrel entry proof",
+            "price curve",
+          ],
+        },
+        {
+          cluster: "Climate",
+          terms: [
+            "Kentucky summers",
+            "temperature swing",
+            "rickhouse position",
+            "maturation rate",
+            "Scotland comparison",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "pappy-van-winkle-23-year",
+      "pappy-van-winkle-20-year",
+      "eagle-rare-17-year",
+      "george-t-stagg",
+      "eagle-rare-10-year",
+      "weller-12-year",
+    ],
+    faq: [
+      {
+        question: "What is the angel's share?",
+        answer:
+          "The whiskey a barrel loses to evaporation while it ages. Oak is porous and breathes with the weather, so some of what went in escapes into the air every year and never comes back.",
+      },
+      {
+        question: "How much bourbon evaporates each year?",
+        answer:
+          "A few percent a year in Kentucky, more in the first year and more on a hot upper floor. It compounds: many barrels have lost around a third by twelve years, and half or more by twenty.",
+      },
+      {
+        question: "Why is old bourbon so expensive?",
+        answer:
+          "Doubling the age more than doubles the cost. You lose more liquid, lose whole barrels that go too woody or too low, and carry the inventory twice as long on a bet placed two decades earlier.",
+      },
+      {
+        question: "Does bourbon get stronger or weaker as it ages?",
+        answer:
+          "Either, depending on humidity. Water and alcohol leave at different rates, so a dry warehouse pushes the proof up and a damp one pulls it down. Two barrels filled the same day can differ by several proof points a decade later.",
+      },
+      {
+        question: "Why does bourbon age faster than Scotch?",
+        answer:
+          "Kentucky's swing between freezing winters and hot summers drives whiskey in and out of the wood far harder than Scotland's cool, damp climate. That is why bourbon matures quicker — and why it evaporates quicker too.",
+      },
+    ],
+  },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 24. Home Bar — Buying Guide
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "how-to-build-a-bourbon-home-bar",
+    title: "How to Build a Bourbon Home Bar",
+    subtitle:
+      "Six bottles that cover every drink you will actually pour, plus the small number of things that are worth buying once and the many that are not.",
+    excerpt:
+      "A good home bar is not a wall of bottles. It is a short list that covers the sipping pour, the cocktail base, the crowd-pleaser and the one you open for something worth marking — and almost nothing else.",
+    category: "Buying Guide",
+    author: "Wyatt Brennan",
+    authorTitle: "Head Bartender, The Cellar at Bourbon & Oak",
+    publishedAt: "2026-08-29",
+    readTimeMinutes: 10,
+    heroImage: "/bar-cabinet.webp",
+    heroAlt: "A home bar cabinet stocked with bourbon",
+    tags: [
+      "bourbon home bar",
+      "home bar essentials",
+      "bar cart",
+      "whiskey collection",
+      "cocktail bourbon",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "Most home bars are built by accretion — a gift here, a duty-free bottle there, an impulse buy that seemed like a good idea in a shop. The result is a shelf with twenty bottles and nothing you actually want to drink. A useful bar is smaller than that and chosen on purpose.",
+      },
+      { type: "heading", level: 2, text: "The Six Roles" },
+      {
+        type: "paragraph",
+        text: "Every bottle should be doing a job. Six jobs cover almost everything anyone pours at home.",
+      },
+      { type: "heading", level: 3, text: "1. The house pour" },
+      {
+        type: "paragraph",
+        text: "The one you reach for without thinking, that you will replace forever, and that costs little enough not to think about. [[product:eagle-rare-10-year|Eagle Rare 10 Year]] at 90 proof is the archetype: aged enough to be interesting, gentle enough for a Tuesday.",
+      },
+      { type: "heading", level: 3, text: "2. The cocktail base" },
+      {
+        type: "paragraph",
+        text: "Higher proof, so it survives ice, sugar and bitters instead of vanishing under them. Bonded whiskey is built for exactly this — [[product:eh-taylor-small-batch|E.H. Taylor Small Batch]] at 100 proof holds its shape in an Old Fashioned. Do not use your best bottle here; see [[link:/blog/best-bourbon-for-an-old-fashioned|the Old Fashioned guide]] for why.",
+      },
+      { type: "heading", level: 3, text: "3. The soft one" },
+      {
+        type: "paragraph",
+        text: "For guests who say they do not like whiskey. Wheated bourbon is the answer nine times out of ten: [[product:weller-12-year|Weller 12 Year]] is round and honeyed with almost no pepper, and it converts people. [[link:/blog/wheated-vs-high-rye-bourbon|The mash bill guide]] explains what makes it land differently.",
+      },
+      { type: "heading", level: 3, text: "4. The one with a story" },
+      {
+        type: "paragraph",
+        text: "Something with a barrel number, a dump date, a thing to point at. [[product:blantons-original-single-barrel|Blanton's Original]] carries all of it on the label and the horse on the stopper, and it earns its place as much for the conversation as the liquid.",
+      },
+      { type: "heading", level: 3, text: "5. The loud one" },
+      {
+        type: "paragraph",
+        text: "Barrel proof, for the end of a meal and for people who want to see what water does to whiskey. [[product:eh-taylor-barrel-proof|E.H. Taylor Barrel Proof]] at around 131 is a demonstration as much as a drink.",
+      },
+      { type: "heading", level: 3, text: "6. The occasion bottle" },
+      {
+        type: "paragraph",
+        text: "One bottle you do not open casually. What it is matters less than that there is exactly one — [[product:russells-reserve-13-year|Russell's Reserve 13 Year]] does the job without the allocation chase, and so does anything you had to wait for.",
+      },
+      {
+        type: "callout",
+        title: "Six is the number, not the minimum",
+        text: "A seventh bottle usually duplicates a role rather than adding one. If you cannot say which job a bottle is doing, it is decoration — and decoration is what turns a bar into a shelf of half-empty bottles nobody finishes.",
+      },
+      { type: "heading", level: 2, text: "Everything Else You Need" },
+      {
+        type: "paragraph",
+        text: "The equipment list is much shorter than the internet suggests.",
+      },
+      {
+        type: "list",
+        items: [
+          "Two or three glasses that narrow at the top. Everything else is a preference.",
+          "Rocks glasses for cocktails. Heavy ones feel better and that is a real part of the drink.",
+          "A jigger. Eyeballing measures is how a good cocktail becomes an inconsistent one.",
+          "Angostura bitters. One bottle lasts years and is non-negotiable for an Old Fashioned.",
+          "Large ice. One big cube melts far slower than four small ones, which is the whole point.",
+          "A bar spoon. Stirring, not shaking, for anything that is only spirits.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "That is it. Not a smoker, not a set of spherical moulds, not a decanter — a decanter actively harms whiskey by leaving it half-exposed to air for months, which [[link:/blog/how-to-store-bourbon|the storage guide]] covers.",
+      },
+      { type: "heading", level: 2, text: "Storing It Properly" },
+      {
+        type: "list",
+        items: [
+          "Upright, always. Bourbon at 40 percent or more will degrade a cork lying down.",
+          "Out of sunlight. Light strips colour and flavour, and a sunny windowsill is the most common way people ruin a good bottle.",
+          "Stable temperature beats cold. A cupboard is better than a radiator alcove or an unheated garage.",
+          "Once a bottle is below a third, finish it within a year. Air is doing the work now, not oak.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "Build it in that order and the bar stays useful rather than ornamental. If you are starting from nothing, [[link:/blog/bourbon-for-beginners|the beginner's sequence]] is a gentler on-ramp, and everything above is in the [[link:/shop|shop]] with its real proof on the page.",
+      },
+    ],
+    seo: {
+      metaTitle: "How to Build a Bourbon Home Bar: Six Bottles That Cover Everything",
+      metaDescription:
+        "A home bar built on roles rather than accumulation — the house pour, cocktail base, soft one, conversation bottle, barrel proof and occasion bottle, plus the short equipment list.",
+      focusKeyword: "bourbon home bar",
+      primaryKeywords: [
+        "bourbon home bar",
+        "home bar essentials",
+        "whiskey bar cart",
+        "best bourbons to own",
+        "home bar bourbon list",
+        "stocking a home bar",
+      ],
+      longTailKeywords: [
+        "what bourbons should I have at home",
+        "how many bottles for a home bar",
+        "best bourbon for a home bar",
+        "what do I need for a whiskey bar cart",
+        "which bourbon for cocktails at home",
+        "do I need a decanter for bourbon",
+        "how to store bourbon at home",
+      ],
+      wordClusters: [
+        {
+          cluster: "The Bottles",
+          terms: [
+            "house pour",
+            "cocktail base",
+            "wheated bourbon",
+            "single barrel",
+            "barrel proof",
+            "occasion bottle",
+          ],
+        },
+        {
+          cluster: "Equipment",
+          terms: [
+            "Glencairn",
+            "rocks glass",
+            "jigger",
+            "bar spoon",
+            "Angostura bitters",
+            "large ice cube",
+          ],
+        },
+        {
+          cluster: "Keeping It",
+          terms: [
+            "store upright",
+            "cork care",
+            "sunlight",
+            "oxidation",
+            "half-empty bottle",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "eagle-rare-10-year",
+      "eh-taylor-small-batch",
+      "weller-12-year",
+      "blantons-original-single-barrel",
+      "eh-taylor-barrel-proof",
+      "russells-reserve-13-year",
+    ],
+    faq: [
+      {
+        question: "How many bourbons do I need for a home bar?",
+        answer:
+          "Six, if each one is doing a different job: a house pour, a cocktail base, a soft one for guests, one with a story, a barrel proof, and a single occasion bottle. A seventh usually duplicates a role.",
+      },
+      {
+        question: "What is the best bourbon for cocktails at home?",
+        answer:
+          "Something around 100 proof so it survives ice, sugar and bitters. Bottled-in-bond whiskey is built for it. Save the expensive bottle for drinking neat, where you will actually notice it.",
+      },
+      {
+        question: "What equipment do I actually need?",
+        answer:
+          "Glasses that narrow at the top, heavy rocks glasses, a jigger, Angostura bitters, large ice and a bar spoon. Nearly everything else sold as bar equipment is optional.",
+      },
+      {
+        question: "Should I keep bourbon in a decanter?",
+        answer:
+          "No. A decanter leaves whiskey half-exposed to air for months and often has a poor seal, so it degrades the spirit for the sake of appearance. Keep it in the bottle it came in.",
+      },
+      {
+        question: "How should I store bourbon at home?",
+        answer:
+          "Upright, out of sunlight, at a stable temperature. Lying a bottle down lets high-proof spirit degrade the cork, and a sunny shelf is the most common way a good bottle gets ruined.",
+      },
+    ],
+  },
 ];
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
