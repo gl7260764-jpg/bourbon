@@ -24,6 +24,8 @@ const PAYMENT_REVERSE: Record<PaymentMethod, string> = {
   CHIME: "chime",
   APPLE_PAY: "apple-pay",
   CRYPTO: "crypto",
+  ZELLE: "zelle",
+  CASH_APP: "cash-app",
   OTHER: "other",
 };
 
@@ -46,6 +48,8 @@ const PAYMENT_LABELS: Record<PaymentMethod, string> = {
   CHIME: "Chime",
   APPLE_PAY: "Apple Pay",
   CRYPTO: "Cryptocurrency",
+  ZELLE: "Zelle",
+  CASH_APP: "Cash App",
   OTHER: "Other",
 };
 
