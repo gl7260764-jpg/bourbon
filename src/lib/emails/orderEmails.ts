@@ -100,11 +100,11 @@ export function paymentLabel(id: string): string {
 function header(): string {
   return `
     <tr>
-      <td style="padding:36px 32px 28px;text-align:center;background:${COLORS.deep};border-bottom:2px solid ${COLORS.gold};">
-        <div style="font-family:Georgia,'Times New Roman',serif;font-size:11px;letter-spacing:6px;color:${COLORS.gold};text-transform:uppercase;margin-bottom:10px;">Est. 1876</div>
-        <div style="font-family:Georgia,'Times New Roman',serif;font-size:30px;letter-spacing:5px;color:${COLORS.cream};font-weight:700;text-transform:uppercase;line-height:1.1;">${BRAND_NAME}</div>
-        <div style="width:48px;height:1px;background:${COLORS.gold};margin:14px auto 10px;"></div>
-        <div style="font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:13px;color:${COLORS.gold};letter-spacing:2px;">${BRAND_TAGLINE}</div>
+      <td class="gut hdr" style="padding:26px 24px 22px;text-align:center;background:${COLORS.deep};border-bottom:2px solid ${COLORS.gold};">
+        <div class="eyebrow" style="font-family:Georgia,'Times New Roman',serif;font-size:10px;letter-spacing:5px;color:${COLORS.gold};text-transform:uppercase;margin-bottom:8px;">Est. 1876</div>
+        <div class="brand" style="font-family:Georgia,'Times New Roman',serif;font-size:26px;letter-spacing:4px;color:${COLORS.cream};font-weight:700;text-transform:uppercase;line-height:1.15;">${BRAND_NAME}</div>
+        <div class="rule" style="width:40px;height:1px;background:${COLORS.gold};margin:12px auto 8px;"></div>
+        <div class="tagline" style="font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:12px;color:${COLORS.gold};letter-spacing:1px;">${BRAND_TAGLINE}</div>
       </td>
     </tr>
   `;
@@ -113,7 +113,7 @@ function header(): string {
 function footer(): string {
   return `
     <tr>
-      <td style="padding:28px 32px;text-align:center;background:${COLORS.dark};color:${COLORS.cream};">
+      <td class="gut" style="padding:28px 32px;text-align:center;background:${COLORS.dark};color:${COLORS.cream};">
         <div style="font-family:Georgia,'Times New Roman',serif;font-size:14px;letter-spacing:3px;color:${COLORS.gold};text-transform:uppercase;margin-bottom:8px;">${BRAND_NAME}</div>
         <div style="font-family:Helvetica,Arial,sans-serif;font-size:11px;color:#A8A29E;line-height:1.6;">
           Crafted in Kentucky &middot; Please drink responsibly<br/>
@@ -131,6 +131,26 @@ function shell(inner: string, preheader: string): string {
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>${BRAND_NAME}</title>
+  <!-- Progressive enhancement only. Every rule below has a sane inline
+       counterpart, so a client that strips <style> (some older Outlooks) still
+       renders a correct, if roomier, email. !important is required because
+       inline styles otherwise win over a media rule. -->
+  <style>
+    @media only screen and (max-width:600px) {
+      /* The 32px gutter cost 64px of a ~360px screen. */
+      .gut { padding-left:16px !important; padding-right:16px !important; }
+      .hdr { padding-top:20px !important; padding-bottom:16px !important; }
+      /* At 26px/4px the wordmark could not fit and broke onto three lines,
+         which is what pushed the whole message below the fold. */
+      .brand { font-size:20px !important; letter-spacing:2px !important; }
+      .eyebrow { font-size:9px !important; letter-spacing:3px !important; margin-bottom:6px !important; }
+      .rule { margin-top:9px !important; margin-bottom:6px !important; }
+      .tagline { font-size:11px !important; letter-spacing:0.5px !important; }
+      .h1 { font-size:21px !important; margin-top:6px !important; margin-bottom:10px !important; }
+      /* Full-width tap target — a 26px side padding leaves a cramped button. */
+      .cta { display:block !important; text-align:center !important; padding:15px 12px !important; }
+    }
+  </style>
 </head>
 <body style="margin:0;padding:0;background:${COLORS.cream};font-family:Helvetica,Arial,sans-serif;color:${COLORS.dark};">
   <div style="display:none;font-size:1px;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">${escapeHtml(preheader)}</div>
@@ -251,27 +271,25 @@ function dashboardPanel(data: OrderEmailData): string {
   const url = `${SITE}/account/login?email=${encodeURIComponent(data.customer.email)}`;
   return `
     <tr>
-      <td style="padding:8px 32px 20px;">
+      <td class="gut" style="padding:8px 32px 20px;">
         <table width="100%" cellpadding="0" cellspacing="0" style="background:${COLORS.cream};border:2px solid ${COLORS.gold};">
           <tr>
             <td style="padding:22px;">
               ${sectionLabel("What happens next")}
               <div style="font-family:Georgia,'Times New Roman',serif;font-size:19px;color:${COLORS.deep};margin:2px 0 10px;line-height:1.3;">
-                We&rsquo;re preparing your payment details
+                We&rsquo;re preparing your ${escapeHtml(data.paymentMethodLabel)} payment details
               </div>
               <div style="font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.7;color:${COLORS.stone};margin:0 0 18px;">
-                Nothing to do right now. We&rsquo;ll email you the moment they&rsquo;re
-                ready, then you pay
-                <strong style="color:${COLORS.deep};">${currency(data.totals.total)}</strong>
-                and upload your receipt &mdash; both from your dashboard.
+                Nothing to do yet &mdash; we&rsquo;ll email you the moment they&rsquo;re ready.
+                You&rsquo;ll pay <strong style="color:${COLORS.deep};">${currency(data.totals.total)}</strong>
+                and upload your receipt from your dashboard.
               </div>
-              <a href="${url}" style="display:inline-block;background:${COLORS.gold};color:${COLORS.deep};text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-weight:bold;letter-spacing:.1em;text-transform:uppercase;font-size:13px;padding:14px 26px;">
+              <a href="${url}" class="cta" style="display:inline-block;background:${COLORS.gold};color:${COLORS.deep};text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-weight:bold;letter-spacing:.1em;text-transform:uppercase;font-size:13px;padding:14px 26px;">
                 Open your dashboard
               </a>
               <div style="font-family:Helvetica,Arial,sans-serif;font-size:12px;line-height:1.6;color:${COLORS.muted};margin-top:16px;padding-top:14px;border-top:1px solid ${COLORS.gold}33;">
-                For your safety we never put account or wallet details in an
-                email. If you receive one claiming to be from us with payment
-                details in it, it is not from us &mdash; check your dashboard instead.
+                We never send payment details by email. If you get one that does,
+                it is not from us.
               </div>
             </td>
           </tr>
@@ -289,24 +307,16 @@ export function buildCustomerOrderEmail(data: OrderEmailData): { subject: string
 
   const inner = `
     <tr>
-      <td style="padding:36px 32px 8px;">
+      <td class="gut" style="padding:28px 32px 8px;">
         <div style="font-family:Helvetica,Arial,sans-serif;font-size:11px;letter-spacing:3px;color:${COLORS.gold};text-transform:uppercase;font-weight:700;">Order Received</div>
-        <h1 style="font-family:Georgia,'Times New Roman',serif;font-size:26px;color:${COLORS.deep};margin:10px 0 14px;line-height:1.2;">Thank you, ${escapeHtml(firstName)}.</h1>
-        <p style="font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.7;color:${COLORS.stone};margin:0 0 8px;">
-          We have received your order and it is being processed. We&rsquo;ll send
-          your ${escapeHtml(data.paymentMethodLabel)} payment details shortly &mdash;
-          you&rsquo;ll pay and upload your receipt from your dashboard.
-        </p>
-        <p style="font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.7;color:${COLORS.stone};margin:0;">
-          Below is a summary of what you ordered. If anything looks wrong, just reply to this email.
-        </p>
+        <h1 class="h1" style="font-family:Georgia,'Times New Roman',serif;font-size:24px;color:${COLORS.deep};margin:10px 0 14px;line-height:1.2;">Thank you, ${escapeHtml(firstName)}.</h1>
       </td>
     </tr>
 
     ${dashboardPanel(data)}
 
     <tr>
-      <td style="padding:24px 32px 8px;">
+      <td class="gut" style="padding:14px 32px 8px;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${COLORS.cream};border:1px solid ${COLORS.border};">
           <tr>
             <td style="padding:18px 20px;">
@@ -327,20 +337,20 @@ export function buildCustomerOrderEmail(data: OrderEmailData): { subject: string
     </tr>
 
     <tr>
-      <td style="padding:20px 32px 4px;">
+      <td class="gut" style="padding:20px 32px 4px;">
         ${sectionLabel("Your Order")}
         ${itemsTable(data.items)}
       </td>
     </tr>
 
     <tr>
-      <td style="padding:14px 32px 8px;">
+      <td class="gut" style="padding:14px 32px 8px;">
         ${totalsBlock(data.totals)}
       </td>
     </tr>
 
     <tr>
-      <td style="padding:24px 32px 8px;">
+      <td class="gut" style="padding:24px 32px 8px;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
           <tr>
             <td width="50%" valign="top" style="padding-right:12px;">
@@ -359,10 +369,9 @@ export function buildCustomerOrderEmail(data: OrderEmailData): { subject: string
     </tr>
 
     <tr>
-      <td style="padding:28px 32px 36px;">
+      <td class="gut" style="padding:28px 32px 36px;">
         <div style="border-top:1px solid ${COLORS.border};padding-top:20px;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.7;color:${COLORS.stone};">
-          Thank you for choosing ${BRAND_NAME} &mdash; we appreciate your trust.
-          <div style="margin-top:14px;font-family:Georgia,'Times New Roman',serif;font-style:italic;color:${COLORS.gold};">&mdash; The ${BRAND_NAME} Team</div>
+          <div style="font-family:Georgia,'Times New Roman',serif;font-style:italic;color:${COLORS.gold};">&mdash; The ${BRAND_NAME} Team</div>
         </div>
       </td>
     </tr>
@@ -373,9 +382,9 @@ export function buildCustomerOrderEmail(data: OrderEmailData): { subject: string
   const text = [
     `Thank you, ${firstName}.`,
     "",
-    `We have received your order ${data.orderNumber} and it is being processed.`,
+    `We're preparing your ${data.paymentMethodLabel} payment details for order ${data.orderNumber}.`,
     "",
-    `We will send your ${data.paymentMethodLabel} payment details shortly. You will pay and upload your receipt from your dashboard:`,
+    `Nothing to do yet — we'll email you the moment they're ready. You'll pay ${currency(data.totals.total)} and upload your receipt from your dashboard:`,
     `${SITE}/account/login?email=${encodeURIComponent(data.customer.email)}`,
     "",
     "Order summary:",
@@ -390,9 +399,7 @@ export function buildCustomerOrderEmail(data: OrderEmailData): { subject: string
     `Shipping to: ${data.customer.fullName}, ${data.shippingAddress.line1}, ${data.shippingAddress.city}, ${data.shippingAddress.region} ${data.shippingAddress.postal}, ${data.shippingAddress.country}`,
     `Payment: ${data.paymentMethodLabel}`,
     "",
-    "We never put account or wallet details in an email. If you receive one",
-    "claiming to be from us with payment details in it, it is not from us —",
-    "check your dashboard instead.",
+    "We never send payment details by email. If you get one that does, it is not from us.",
     "",
     `— The ${BRAND_NAME} Team`,
   ]
@@ -414,7 +421,7 @@ export function buildSalesOrderEmail(data: OrderEmailData): { subject: string; h
 
   const inner = `
     <tr>
-      <td style="padding:30px 32px 8px;">
+      <td class="gut" style="padding:30px 32px 8px;">
         <div style="font-family:Helvetica,Arial,sans-serif;font-size:11px;letter-spacing:3px;color:${COLORS.amber};text-transform:uppercase;font-weight:700;">New Order &middot; Action Required</div>
         <h1 style="font-family:Georgia,'Times New Roman',serif;font-size:24px;color:${COLORS.deep};margin:10px 0 6px;">${escapeHtml(data.orderNumber)}</h1>
         <div style="font-family:Helvetica,Arial,sans-serif;font-size:13px;color:${COLORS.muted};">${escapeHtml(placedAt)}</div>
@@ -422,7 +429,7 @@ export function buildSalesOrderEmail(data: OrderEmailData): { subject: string; h
     </tr>
 
     <tr>
-      <td style="padding:18px 32px 8px;">
+      <td class="gut" style="padding:18px 32px 8px;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${COLORS.cream};border:1px solid ${COLORS.border};">
           <tr>
             <td style="padding:18px 20px;">
@@ -439,20 +446,20 @@ export function buildSalesOrderEmail(data: OrderEmailData): { subject: string; h
     </tr>
 
     <tr>
-      <td style="padding:18px 32px 4px;">
+      <td class="gut" style="padding:18px 32px 4px;">
         ${sectionLabel("Items")}
         ${itemsTable(data.items)}
       </td>
     </tr>
 
     <tr>
-      <td style="padding:14px 32px 8px;">
+      <td class="gut" style="padding:14px 32px 8px;">
         ${totalsBlock(data.totals)}
       </td>
     </tr>
 
     <tr>
-      <td style="padding:24px 32px 8px;">
+      <td class="gut" style="padding:24px 32px 8px;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
           <tr>
             <td width="50%" valign="top" style="padding-right:12px;">
@@ -472,7 +479,7 @@ export function buildSalesOrderEmail(data: OrderEmailData): { subject: string; h
     </tr>
 
     <tr>
-      <td style="padding:24px 32px 32px;">
+      <td class="gut" style="padding:24px 32px 32px;">
         <div style="border-top:1px solid ${COLORS.border};padding-top:18px;font-family:Helvetica,Arial,sans-serif;font-size:12px;color:${COLORS.muted};line-height:1.6;">
           Reach out to the customer to confirm payment and arrange shipping. Manage this order in the admin panel using the order number above.
         </div>
