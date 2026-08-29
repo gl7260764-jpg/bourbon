@@ -21,23 +21,26 @@ export default function ChatWidget() {
   const [hasNew, setHasNew] = useState(false);
   // The greeting types itself out on first open. "" = still showing the
   // typing-dots indicator; fills up to the full GREETING as it "types".
-  const [typedGreeting, setTypedGreeting] = useState("");
+  /* Now the supporting line under the empty-state heading rather than a
+     message bubble, so it never reads as a reply nobody sent. Still
+     admin-editable from the same setting. */
+  const [greeting, setGreeting] = useState(DEFAULT_CHAT_GREETING);
   /* The first message needs an address, so a reply has somewhere to go and the
      thread belongs to a person rather than a cookie. Once captured, the widget
      hands the conversation over to the dashboard. */
   const [email, setEmail] = useState("");
   const [needEmail, setNeedEmail] = useState(false);
   const [startError, setStartError] = useState<string | null>(null);
-  const [handoff, setHandoff] = useState<"none" | "check_email" | "sent_only">("none");
+  /* Once an address is captured the widget carries on normally — the thread is
+     the same device-scoped one, now stamped with who it belongs to. */
+  const [emailCaptured, setEmailCaptured] = useState(false);
+  const [linkNote, setLinkNote] = useState<string | null>(null);
   const router = useRouter();
 
   const lastIdRef = useRef<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   // Once the visitor opens/closes the widget themselves, stop auto-opening it.
   const userInteractedRef = useRef(false);
-  const greetingRanRef = useRef(false);
-  // Admin-customizable greeting, fetched on mount; defaults until it loads.
-  const greetingRef = useRef(DEFAULT_CHAT_GREETING);
 
   const mergeMessages = useCallback((incoming: ChatMessage[]) => {
     if (incoming.length === 0) return;
@@ -108,7 +111,7 @@ export default function ChatWidget() {
     if (open && scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages, open, typedGreeting]);
+  }, [messages, open]);
 
   // Auto-open once after the visitor has spent ~5s on the site — unless they've
   // already opened it themselves. Guarded per session so it doesn't re-pop.
@@ -137,9 +140,7 @@ export default function ChatWidget() {
     fetch("/api/chat/greeting", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : null))
       .then((data: { greeting?: string } | null) => {
-        if (!cancelled && data?.greeting && !greetingRanRef.current) {
-          greetingRef.current = data.greeting;
-        }
+        if (!cancelled && data?.greeting) setGreeting(data.greeting);
       })
       .catch(() => {
         /* keep default greeting */
@@ -148,28 +149,6 @@ export default function ChatWidget() {
       cancelled = true;
     };
   }, []);
-
-  // On first open, play a "typing…" indicator then typewrite the greeting.
-  // All state updates happen inside timers (never synchronously in the effect
-  // body) so a partial reopen never restarts a finished animation.
-  useEffect(() => {
-    if (!open || greetingRanRef.current) return;
-    greetingRanRef.current = true;
-    const text = greetingRef.current;
-    let intervalId: ReturnType<typeof setInterval> | undefined;
-    const startTimer = setTimeout(() => {
-      let i = 0;
-      intervalId = setInterval(() => {
-        i += 1;
-        setTypedGreeting(text.slice(0, i));
-        if (i >= text.length && intervalId) clearInterval(intervalId);
-      }, 22);
-    }, 1100); // dots show for ~1.1s before the text starts
-    return () => {
-      clearTimeout(startTimer);
-      if (intervalId) clearInterval(intervalId);
-    };
-  }, [open]);
 
   /* First message with an address: creates the account, files the message in
      the customer's one thread, and then either signs them in (when the site is
@@ -187,20 +166,42 @@ export default function ChatWidget() {
       });
       const data = (await res.json().catch(() => ({}))) as {
         error?: string;
-        next?: "dashboard" | "check_email" | "sent_only";
+        next?: "dashboard" | "continue";
+        linkSent?: boolean;
       };
       if (!res.ok) {
         setStartError(data.error ?? "Could not send your message.");
         return;
       }
+
+      const text2 = text;
+      setDraft("");
+
       if (data.next === "dashboard") {
-        setDraft("");
         router.refresh();
         router.push("/account?chat=1");
         return;
       }
-      setDraft("");
-      setHandoff(data.next === "sent_only" ? "sent_only" : "check_email");
+
+      /* Stay in the widget. The message is echoed locally rather than
+         refetched so the visitor sees it land immediately, and polling
+         reconciles it against the server copy on the next tick. */
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `local-start-${text2.length}`,
+          body: text2,
+          sender: "VISITOR",
+          createdAt: new Date().toISOString(),
+        },
+      ]);
+      setEmailCaptured(true);
+      setNeedEmail(false);
+      setLinkNote(
+        data.linkSent
+          ? "We've emailed you a link — open it any time to pick this up on your dashboard."
+          : "We have your message and we'll reply here.",
+      );
     } catch {
       setStartError("Network error. Please try again.");
     } finally {
@@ -212,7 +213,7 @@ export default function ChatWidget() {
     const text = draft.trim();
     if (!text || sending) return;
     // No address captured yet — ask for one before anything is sent.
-    if (!needEmail) {
+    if (!emailCaptured) {
       setNeedEmail(true);
       return;
     }
@@ -310,32 +311,35 @@ export default function ChatWidget() {
 
           {/* Messages */}
           <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
-            {/* Greeting is client-side only — it never pings the admin. It shows
-                a typing indicator first, then types itself out. */}
-            {typedGreeting === "" ? (
-              <TypingIndicator />
+            {/* An empty thread opens on an invitation rather than a fake
+                message from us. The old typed greeting looked like a reply
+                nobody had written, and it pushed the composer down on a
+                phone before the visitor had said anything. */}
+            {messages.length === 0 ? (
+              <div className="flex h-full flex-col items-center justify-center px-6 text-center">
+                <span className="mb-4 flex h-14 w-14 items-center justify-center border border-bourbon-gold/40 bg-bourbon-gold/10">
+                  <svg className="h-6 w-6 text-bourbon-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                      d="M21 11.5a8.38 8.38 0 01-9 8.4 8.5 8.5 0 01-3.8-.9L3 21l1.9-5.2A8.38 8.38 0 014 11.5a8.5 8.5 0 018.5-8.5 8.38 8.38 0 018.5 8.5z" />
+                  </svg>
+                </span>
+                <p className="font-[family-name:var(--font-playfair)] text-lg font-bold text-bourbon-cream">
+                  Start the conversation
+                </p>
+                <p className="mt-1.5 text-[13px] leading-relaxed text-bourbon-cream/55">
+                  {greeting}
+                </p>
+              </div>
             ) : (
-              <Bubble sender="ADMIN" body={typedGreeting} />
+              messages.map((m) => (
+                <Bubble key={m.id} sender={m.sender} body={m.body} />
+              ))
             )}
-            {messages.map((m) => (
-              <Bubble key={m.id} sender={m.sender} body={m.body} />
-            ))}
           </div>
 
           {/* Composer */}
           <div className="border-t border-bourbon-gold/15 bg-bourbon-dark p-3">
-            {handoff !== "none" ? (
-              <div className="px-1 py-2 text-center">
-                <p className="text-bourbon-cream text-sm font-semibold mb-1">
-                  Message sent
-                </p>
-                <p className="text-bourbon-cream/60 text-xs leading-relaxed">
-                  {handoff === "check_email"
-                    ? "We've emailed you a link — tap it to open your dashboard and carry on the conversation there."
-                    : "We have your message and we'll reply by email. You can also sign in any time to see the thread."}
-                </p>
-              </div>
-            ) : needEmail ? (
+            {needEmail ? (
               /* One field, shown only once. The message they already typed is
                  kept and sent with it, so nothing has to be retyped. */
               <div>
@@ -382,6 +386,12 @@ export default function ChatWidget() {
                 </button>
               </div>
             ) : (
+            <>
+            {linkNote && (
+              <p className="mb-2 px-1 text-[11px] leading-relaxed text-bourbon-cream/50">
+                {linkNote}
+              </p>
+            )}
             <div className="flex items-end gap-2">
               <textarea
                 value={draft}
@@ -408,27 +418,12 @@ export default function ChatWidget() {
                 </svg>
               </button>
             </div>
+            </>
             )}
           </div>
         </div>
       )}
     </>
-  );
-}
-
-function TypingIndicator() {
-  return (
-    <div className="flex justify-start">
-      <div className="flex items-center gap-1.5 rounded-2xl rounded-bl-sm bg-bourbon-deep px-4 py-3">
-        {[0, 150, 300].map((delay) => (
-          <span
-            key={delay}
-            className="h-2 w-2 animate-bounce rounded-full bg-bourbon-cream/60"
-            style={{ animationDelay: `${delay}ms` }}
-          />
-        ))}
-      </div>
-    </div>
   );
 }
 

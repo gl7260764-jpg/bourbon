@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getCurrentCustomer } from "@/lib/customer-auth";
-import { customerUnreadCount, mergeOrderThreadsIntoPrimary } from "@/lib/customer-chat";
+import { customerUnreadCount, mergeIntoPrimaryThread } from "@/lib/customer-chat";
 import { customerChannel } from "@/lib/realtime";
 import {
   ORDER_STATUS_BADGE,
@@ -31,7 +31,7 @@ export default async function AccountPage({
   /* Chat is one thread per person now. Any leftover per-order threads fold in
      on the first dashboard load, so nothing is stranded behind a surface the
      customer can no longer open. Idempotent — a no-op once merged. */
-  await mergeOrderThreadsIntoPrimary(customer.id).catch((err) =>
+  await mergeIntoPrimaryThread(customer.id).catch((err) =>
     console.error("[account] thread merge failed:", err),
   );
   const unread = await customerUnreadCount(customer.id);

@@ -8,7 +8,7 @@ import {
 } from "@/lib/order-chat";
 import {
   getOrCreateCustomerThread,
-  mergeOrderThreadsIntoPrimary,
+  mergeIntoPrimaryThread,
 } from "@/lib/customer-chat";
 import {
   baseMimeType,
@@ -39,7 +39,7 @@ async function resolve() {
   }
   // Folds any leftover per-order threads in on first touch, so history is
   // never stranded behind a surface the customer can no longer reach.
-  await mergeOrderThreadsIntoPrimary(customer.id);
+  await mergeIntoPrimaryThread(customer.id);
   const thread = await getOrCreateCustomerThread(customer.id);
   return { customer, thread } as const;
 }

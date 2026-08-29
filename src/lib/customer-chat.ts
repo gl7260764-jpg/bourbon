@@ -33,7 +33,9 @@ export async function getOrCreateCustomerThread(customerId: string) {
 }
 
 /**
- * Fold a customer's old per-order threads into their primary one.
+ * Fold everything else that belongs to this customer into their primary
+ * thread: the old per-order threads, and the device-scoped storefront threads
+ * they started from the chat widget before signing in.
  *
  * Messages are re-pointed rather than copied, so ids, timestamps and any
  * Cloudinary attachments survive untouched and nothing is duplicated. Each
@@ -43,14 +45,14 @@ export async function getOrCreateCustomerThread(customerId: string) {
  *
  * Idempotent: running it twice moves nothing the second time.
  */
-export async function mergeOrderThreadsIntoPrimary(customerId: string): Promise<{
+export async function mergeIntoPrimaryThread(customerId: string): Promise<{
   movedMessages: number;
   mergedThreads: number;
 }> {
   const primary = await getOrCreateCustomerThread(customerId);
 
   const orderThreads = await prisma.conversation.findMany({
-    where: { customerId, isPrimary: false, orderId: { not: null } },
+    where: { customerId, isPrimary: false },
     select: {
       id: true,
       customerUnread: true,
@@ -66,7 +68,8 @@ export async function mergeOrderThreadsIntoPrimary(customerId: string): Promise<
       where: { conversationId: t.id },
       data: {
         conversationId: primary.id,
-        contextOrderNumber: t.order?.orderNumber ?? null,
+        // Only order threads carry a context; widget threads have none.
+        ...(t.order?.orderNumber ? { contextOrderNumber: t.order.orderNumber } : {}),
       },
     });
     movedMessages += moved.count;
