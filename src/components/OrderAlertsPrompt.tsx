@@ -1,90 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { OPEN_INSTALL_EVENT } from "@/lib/pwa";
+import { usePushEnable } from "@/lib/use-push-enable";
 
 /* Offered on the confirmation page, where the buyer has just been told their
-   payment details are coming and has a concrete reason to want an alert. Both
-   actions are optional: if they decline, the details still appear on the
-   dashboard and an email still goes out. Nothing in the flow depends on this. */
+   payment details are coming. Note they are usually NOT signed in here, so the
+   subscription is stored without a customerId and cannot be pushed to until
+   they subscribe again while signed in — which is what the dashboard dialog is
+   for. Both actions are optional: details still appear on the dashboard and an
+   email still goes out.
 
-/* Backed by an explicit ArrayBuffer: `applicationServerKey` requires a
-   BufferSource over ArrayBuffer, and a bare Uint8Array widens to
-   ArrayBufferLike. Same shape PushManager already uses. */
-function urlBase64ToUint8Array(base64String: string): Uint8Array<ArrayBuffer> {
-  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
-  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
-  const raw = atob(base64);
-  const buffer = new ArrayBuffer(raw.length);
-  const out = new Uint8Array(buffer);
-  for (let i = 0; i < raw.length; i++) out[i] = raw.charCodeAt(i);
-  return out;
-}
-
-type State = "idle" | "working" | "granted" | "denied" | "unsupported" | "error";
+   The opt-in itself lives in usePushEnable so this and the dashboard dialog
+   cannot drift apart. */
 
 export default function OrderAlertsPrompt() {
-  const [state, setState] = useState<State>("idle");
-
-  useEffect(() => {
-    // Deferred so this isn't a synchronous setState in the effect body.
-    const t = window.setTimeout(() => {
-      if (typeof window === "undefined") return;
-      if (!("Notification" in window) || !("serviceWorker" in navigator)) {
-        setState("unsupported");
-      } else if (Notification.permission === "granted") {
-        setState("granted");
-      } else if (Notification.permission === "denied") {
-        setState("denied");
-      }
-    }, 0);
-    return () => window.clearTimeout(t);
-  }, []);
-
-  async function enable() {
-    const vapid = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
-    if (!vapid) {
-      setState("error");
-      return;
-    }
-    setState("working");
-    try {
-      /* Must stay inside the click handler: iOS only grants permission from a
-         user gesture, and awaiting anything first can break that chain. */
-      const reg =
-        (await navigator.serviceWorker.getRegistration()) ??
-        (await navigator.serviceWorker.register("/sw.js", { scope: "/" }));
-      await navigator.serviceWorker.ready;
-
-      let permission = Notification.permission;
-      if (permission === "default") permission = await Notification.requestPermission();
-      if (permission !== "granted") {
-        setState(permission === "denied" ? "denied" : "idle");
-        return;
-      }
-
-      const sub =
-        (await reg.pushManager.getSubscription()) ??
-        (await reg.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey: urlBase64ToUint8Array(vapid),
-        }));
-
-      const json = sub.toJSON();
-      const res = await fetch("/api/push/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          endpoint: json.endpoint,
-          keys: json.keys,
-          userAgent: navigator.userAgent,
-        }),
-      });
-      setState(res.ok ? "granted" : "error");
-    } catch {
-      setState("error");
-    }
-  }
+  const { state, enable } = usePushEnable();
 
   if (state === "unsupported") return null;
 

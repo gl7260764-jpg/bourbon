@@ -4,6 +4,8 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import OrderChat from "@/components/OrderChat";
+import EnablePushDialog from "@/components/EnablePushDialog";
+import PushSettingRow from "@/components/PushSettingRow";
 import PaymentProofUpload from "@/app/checkout/confirmation/PaymentProofUpload";
 import { updateAccountDetails } from "./actions";
 
@@ -50,6 +52,12 @@ export default function AccountClient({
   const [pending, startTransition] = useTransition();
   const [saved, setSaved] = useState<string | null>(null);
   const [chatFor, setChatFor] = useState<string | null>(null);
+  /* Drives the opt-in prompt: an order that is still pending with no details
+     issued is exactly the case a push notification is useful for. */
+  const waitingOnDetails = orders.filter(
+    (o) => o.status === "PENDING" && !o.paymentDetailsIssuedAt,
+  ).length;
+
   const [expanded, setExpanded] = useState<string | null>(
     // Open the first order that still needs a receipt — that's the one the
     // customer most likely came here to deal with.
@@ -64,6 +72,7 @@ export default function AccountClient({
 
   return (
     <main className="bg-bourbon-cream min-h-screen pt-24 sm:pt-32 pb-16 sm:pb-20">
+      <EnablePushDialog waitingCount={waitingOnDetails} />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
           <div>
@@ -83,6 +92,8 @@ export default function AccountClient({
             Sign out
           </button>
         </div>
+
+        <PushSettingRow />
 
         {/* Orders */}
         <section className="mb-10">
