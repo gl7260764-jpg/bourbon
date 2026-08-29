@@ -246,3 +246,16 @@ textarea,
     display: none;
   }
 }
+
+/* Typing indicator. Three dots on one 1.2s cycle, staggered by delay, so the
+   wave reads as a single motion rather than three separate blinks. */
+@keyframes bourbon-typing-dot {
+  0%, 60%, 100% { transform: translateY(0);     opacity: 0.45; }
+  30%           { transform: translateY(-3px);  opacity: 1; }
+}
+.animate-typing-dot {
+  animation: bourbon-typing-dot 1.2s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-typing-dot { animation: none; opacity: 0.7; }
+}

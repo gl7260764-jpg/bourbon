@@ -3,6 +3,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { DEFAULT_CHAT_GREETING } from "@/lib/chat-constants";
+import {
+  DASHBOARD_CHAT_EVENT,
+  isDashboardChatOpen,
+} from "@/lib/dashboard-chat-signal";
 
 const POLL_INTERVAL_MS = 4000;
 
@@ -252,11 +256,17 @@ export default function ChatWidget() {
   };
 
   useEffect(() => {
+    // Read the current state first — the dashboard may have set it before this
+    // component existed — then follow changes.
+    const t = window.setTimeout(() => setDashboardChatOpen(isDashboardChatOpen()), 0);
     const onPanel = (e: Event) => {
       setDashboardChatOpen(Boolean((e as CustomEvent<boolean>).detail));
     };
-    window.addEventListener("bol-dashboard-chat", onPanel as EventListener);
-    return () => window.removeEventListener("bol-dashboard-chat", onPanel as EventListener);
+    window.addEventListener(DASHBOARD_CHAT_EVENT, onPanel as EventListener);
+    return () => {
+      window.clearTimeout(t);
+      window.removeEventListener(DASHBOARD_CHAT_EVENT, onPanel as EventListener);
+    };
   }, []);
 
   const openWidget = () => {

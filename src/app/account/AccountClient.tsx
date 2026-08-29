@@ -9,6 +9,7 @@ import EnablePushDialog from "@/components/EnablePushDialog";
 import PushSettingRow from "@/components/PushSettingRow";
 import PaymentProofUpload from "@/app/checkout/confirmation/PaymentProofUpload";
 import { updateAccountDetails } from "./actions";
+import { setDashboardChatOpen } from "@/lib/dashboard-chat-signal";
 
 export interface AccountOrder {
   orderNumber: string;
@@ -48,14 +49,30 @@ export interface AccountDetails {
 
 const money = (n: number) => `$${n.toFixed(2)}`;
 
-type TabId = "messages" | "orders" | "addresses";
+type TabId = "messages" | "orders" | "settings";
+
+/* Icons are drawn here rather than pulled from a set, so the sidebar keeps
+   one stroke weight with the rest of the site. */
+const NAV_ICON: Record<TabId, React.ReactNode> = {
+  messages: (
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.6}
+      d="M21 11.5a8.38 8.38 0 01-9 8.4 8.5 8.5 0 01-3.8-.9L3 21l1.9-5.2A8.38 8.38 0 014 11.5a8.5 8.5 0 018.5-8.5 8.38 8.38 0 018.5 8.5z" />
+  ),
+  orders: (
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.6}
+      d="M16 11V7a4 4 0 10-8 0v4M5 9h14l1 12H4L5 9z" />
+  ),
+  settings: (
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.6}
+      d="M10.3 4.3a1 1 0 011-.8h1.4a1 1 0 011 .8l.2 1.2a6.6 6.6 0 011.6.9l1.1-.4a1 1 0 011.2.4l.7 1.2a1 1 0 01-.2 1.2l-.9.8a6.6 6.6 0 010 1.9l.9.8a1 1 0 01.2 1.2l-.7 1.2a1 1 0 01-1.2.4l-1.1-.4a6.6 6.6 0 01-1.6.9l-.2 1.2a1 1 0 01-1 .8h-1.4a1 1 0 01-1-.8l-.2-1.2a6.6 6.6 0 01-1.6-.9l-1.1.4a1 1 0 01-1.2-.4l-.7-1.2a1 1 0 01.2-1.2l.9-.8a6.6 6.6 0 010-1.9l-.9-.8a1 1 0 01-.2-1.2l.7-1.2a1 1 0 011.2-.4l1.1.4a6.6 6.6 0 011.6-.9l.2-1.2zM12 14.2a2.2 2.2 0 100-4.4 2.2 2.2 0 000 4.4z" />
+  ),
+};
 
 const TABS: { id: TabId; label: string }[] = [
   { id: "messages", label: "Messages" },
   { id: "orders", label: "Orders" },
-  { id: "addresses", label: "Addresses" },
+  { id: "settings", label: "Settings" },
 ];
-
 const shortDate = (iso: string) =>
   new Date(iso).toLocaleDateString(undefined, {
     month: "short",
@@ -160,15 +177,8 @@ export default function AccountClient({
      panel is up. Announced rather than imported so neither component has to
      know the other exists. */
   useEffect(() => {
-    const showing = tab === "messages";
-    window.dispatchEvent(
-      new CustomEvent("bol-dashboard-chat", { detail: showing }),
-    );
-    return () => {
-      window.dispatchEvent(
-        new CustomEvent("bol-dashboard-chat", { detail: false }),
-      );
-    };
+    setDashboardChatOpen(tab === "messages");
+    return () => setDashboardChatOpen(false);
   }, [tab]);
 
   function openChat(orderNumber?: string) {
@@ -285,56 +295,72 @@ export default function AccountClient({
         </div>
       </header>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10">
-        <PushSettingRow />
-
-        {/* Tabs. The dashboard used to be one long scroll where the address
-            form sat below every order; on a phone the chat was three screens
-            down. The header above stays put — it is the overview. */}
-        <div className="border-b border-bourbon-deep/10 mb-7 -mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto">
-          <div className="flex gap-1 min-w-max" role="tablist" aria-label="Account sections">
-            {TABS.map((t) => {
-              const active = tab === t.id;
-              return (
-                <button
-                  key={t.id}
-                  role="tab"
-                  aria-selected={active}
-                  aria-controls={`panel-${t.id}`}
-                  id={`tab-${t.id}`}
-                  type="button"
-                  onClick={() => setTab(t.id)}
-                  className={`relative px-4 py-3 text-xs font-semibold tracking-widest uppercase whitespace-nowrap transition-colors cursor-pointer ${
-                    active
-                      ? "text-bourbon-deep"
-                      : "text-bourbon-stone hover:text-bourbon-deep"
-                  }`}
-                >
-                  <span className="inline-flex items-center gap-2">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10">
+        <div className="lg:grid lg:grid-cols-[13.5rem_1fr] lg:gap-10">
+          {/* Sidebar on desktop, a scrolling row of the same controls on a
+              phone. One list, two shapes — the items, order and states stay
+              identical so there is nothing to keep in sync. */}
+          <nav
+            aria-label="Account sections"
+            role="tablist"
+            className="mb-6 lg:mb-0 -mx-4 px-4 lg:mx-0 lg:px-0 overflow-x-auto lg:overflow-visible"
+          >
+            <div className="flex lg:flex-col gap-1.5 min-w-max lg:min-w-0 lg:sticky lg:top-28">
+              {TABS.map((t) => {
+                const active = tab === t.id;
+                const badge = t.id === "messages" ? unread : 0;
+                return (
+                  <button
+                    key={t.id}
+                    role="tab"
+                    id={`tab-${t.id}`}
+                    aria-selected={active}
+                    aria-controls={`panel-${t.id}`}
+                    type="button"
+                    onClick={() => setTab(t.id)}
+                    className={`group relative flex items-center gap-3 px-4 py-3 text-xs font-semibold tracking-widest uppercase whitespace-nowrap transition-colors cursor-pointer lg:w-full ${
+                      active
+                        ? "bg-bourbon-deep text-bourbon-cream"
+                        : "text-bourbon-stone hover:text-bourbon-deep hover:bg-bourbon-deep/[0.04]"
+                    }`}
+                  >
+                    {/* Gold spine on the active item — the same cue the admin
+                        sidebar uses. */}
+                    <span
+                      aria-hidden="true"
+                      className={`absolute left-0 top-0 bottom-0 w-0.5 transition-colors ${
+                        active ? "bg-bourbon-gold" : "bg-transparent"
+                      }`}
+                    />
+                    <svg
+                      className={`w-4 h-4 shrink-0 transition-colors ${
+                        active ? "text-bourbon-gold" : "text-bourbon-stone/70 group-hover:text-bourbon-deep"
+                      }`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+                      {NAV_ICON[t.id]}
+                    </svg>
                     {t.label}
-                    {t.id === "messages" && unread > 0 && (
-                      <span className="inline-flex items-center justify-center min-w-4 h-4 px-1 bg-bourbon-gold text-bourbon-deep text-[10px] font-bold rounded-full tabular-nums">
-                        {unread > 9 ? "9+" : unread}
+                    {badge > 0 && (
+                      <span className="ml-auto inline-flex items-center justify-center min-w-5 h-5 px-1.5 bg-bourbon-gold text-bourbon-deep text-[10px] font-bold rounded-full tabular-nums">
+                        {badge > 9 ? "9+" : badge}
                       </span>
                     )}
-                    {t.id === "orders" && orders.length > 0 && (
-                      <span className="text-bourbon-stone/60 tabular-nums">{orders.length}</span>
+                    {t.id === "orders" && orders.length > 0 && badge === 0 && (
+                      <span className={`ml-auto tabular-nums ${active ? "text-bourbon-cream/50" : "text-bourbon-stone/50"}`}>
+                        {orders.length}
+                      </span>
                     )}
-                  </span>
-                  {/* Sits on the container's border so the active tab reads as
-                      joined to its panel rather than underlined. */}
-                  <span
-                    aria-hidden="true"
-                    className={`absolute left-3 right-3 -bottom-px h-0.5 transition-colors ${
-                      active ? "bg-bourbon-gold" : "bg-transparent"
-                    }`}
-                  />
-                </button>
-              );
-            })}
-          </div>
-        </div>
+                  </button>
+                );
+              })}
+            </div>
+          </nav>
 
+          <div className="min-w-0">
         <div role="tabpanel" id="panel-messages" aria-labelledby="tab-messages" hidden={tab !== "messages"}>
           {/* The tab is the chat — there is nothing to expand into, so it is
               simply here. The collapsed "open chat" card this replaced made
@@ -360,7 +386,7 @@ export default function AccountClient({
               me="VISITOR"
               channel={customerChannelName}
               contextOrderNumber={chatAbout}
-              emptyHint="Ask us anything — an order, a bottle, delivery. You can send photos and voice notes too."
+              emptyHint="Ask us anything — an order, a bottle, delivery. Send photos and voice notes too. A real person reads every message and usually replies within a few hours."
             />
           </section>
         </div>
@@ -608,7 +634,10 @@ export default function AccountClient({
         </section>
         </div>
 
-        <div role="tabpanel" id="panel-addresses" aria-labelledby="tab-addresses" hidden={tab !== "addresses"}>
+        <div role="tabpanel" id="panel-settings" aria-labelledby="tab-settings" hidden={tab !== "settings"}>
+          {/* Notification opt-in lives with the other account settings now,
+              rather than floating above every tab. */}
+          <PushSettingRow />
         <section>
           <div className="flex items-center gap-4 mb-1">
 
@@ -662,7 +691,8 @@ export default function AccountClient({
           </form>
         </section>
         </div>
-
+          </div>
+        </div>
       </div>
     </main>
   );

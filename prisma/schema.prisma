@@ -444,6 +444,17 @@ model Conversation {
   // Messages from us the customer has not opened yet — drives their badge.
   customerUnread Int @default(0)
 
+  /// Live-ish presence, polled rather than pushed — Pusher is returning 401
+  /// so realtime is unavailable. Each side stamps the moment it was last
+  /// typing; a stamp inside the last few seconds renders the three dots.
+  visitorTypingAt DateTime?
+  adminTypingAt   DateTime?
+
+  /// Read receipts, deliberately one-way. The operator can see when the
+  /// customer opened the thread; the customer is never told when the operator
+  /// opened theirs, so nobody feels ignored by a tick.
+  customerLastReadAt DateTime?
+
   /// True for the one ongoing thread a customer has. Chat moved from a thread
   /// per order to a single conversation per person, so this marks that thread
   /// and keeps it apart from the archived order threads and the anonymous

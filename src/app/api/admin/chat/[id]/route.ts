@@ -4,6 +4,13 @@ import { MAX_CHAT_MESSAGE_LEN } from "@/lib/chat";
 import { appendMessage } from "@/lib/order-chat";
 import { customerChannel, publishChatMessage } from "@/lib/realtime";
 import { sendToCustomer } from "@/lib/push";
+import {
+  TYPING_WINDOW_MS,
+  clearTyping,
+  isFresh,
+  setTyping,
+  touchAdminPresence,
+} from "@/lib/chat-presence";
 
 export const dynamic = "force-dynamic";
 
@@ -20,11 +27,19 @@ export async function GET(
 
   const convo = await prisma.conversation.findUnique({
     where: { id },
-    select: { id: true, status: true },
+    select: {
+      id: true,
+      status: true,
+      visitorTypingAt: true,
+      customerLastReadAt: true,
+    },
   });
   if (!convo) {
     return NextResponse.json({ error: "Conversation not found." }, { status: 404 });
   }
+
+  // The inbox being open is what "online" means for the operator.
+  await touchAdminPresence().catch(() => {});
 
   let afterDate: Date | undefined;
   if (after) {
@@ -52,7 +67,31 @@ export async function GET(
     });
   }
 
-  return NextResponse.json({ conversationId: id, status: convo.status, messages });
+  return NextResponse.json({
+    conversationId: id,
+    status: convo.status,
+    messages,
+    // Only the operator sees these two.
+    peerTyping: isFresh(convo.visitorTypingAt, TYPING_WINDOW_MS),
+    customerLastReadAt: convo.customerLastReadAt?.toISOString() ?? null,
+  });
+}
+
+/** Typing ping from the operator, and a presence heartbeat with it. */
+export async function PATCH(
+  _req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  const { id } = await params;
+  const exists = await prisma.conversation.findUnique({
+    where: { id },
+    select: { id: true },
+  });
+  if (!exists) {
+    return NextResponse.json({ error: "Conversation not found." }, { status: 404 });
+  }
+  await Promise.all([setTyping(id, "admin"), touchAdminPresence()]);
+  return NextResponse.json({ ok: true });
 }
 
 interface ReplyBody {
@@ -105,6 +144,7 @@ export async function POST(
 
   // The admin has clearly read the thread they just replied in.
   await prisma.conversation.update({ where: { id }, data: { adminUnread: 0 } });
+  await clearTyping(id, "admin");
 
   /* Neither of these may fail the reply — the message is already written and
      the dashboard polls regardless. */

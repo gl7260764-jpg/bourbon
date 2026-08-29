@@ -21,7 +21,11 @@ export type ChatMessage = {
    dropped socket or a browser that blocked the connection. It is deliberately
    slow — with Pusher connected it should almost never be the thing that
    surfaces a message. */
-const FALLBACK_POLL_MS = 20000;
+/* Typing and online status have to feel live, and Pusher is unavailable, so
+   the thread polls faster while it is on screen. Cheap: one row read. */
+const PRESENCE_POLL_MS = 3500;
+/* Don't stamp "typing" on every keystroke — once per this window is plenty. */
+const TYPING_PING_MS = 2500;
 const MAX_VOICE_MS = 3 * 60 * 1000;
 
 function clock(ms: number): string {
@@ -82,15 +86,42 @@ export default function OrderChat({
   const tickRef = useRef<number | null>(null);
   const autoStopRef = useRef<number | null>(null);
 
+  const [peerTyping, setPeerTyping] = useState(false);
+  const [peerOnline, setPeerOnline] = useState(false);
+  /* Only ever set on the admin side; the customer is never told when we read
+     their message. */
+  const [peerReadAt, setPeerReadAt] = useState<string | null>(null);
+  const lastTypingPingRef = useRef(0);
+
+  const pingTyping = useCallback(() => {
+    const now = Date.now();
+    if (now - lastTypingPingRef.current < TYPING_PING_MS) return;
+    lastTypingPingRef.current = now;
+    void fetch(endpoint, { method: "PATCH" }).catch(() => {
+      /* presence is cosmetic; a dropped ping costs nothing */
+    });
+  }, [endpoint]);
+
   const listRef = useRef<HTMLDivElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  /* Read receipts are the operator's tool only. The customer never sees a
+     tick, so nobody sits watching for one. */
+  const showReadReceipts = me === "ADMIN";
 
   const load = useCallback(async () => {
     try {
       const res = await fetch(endpoint, { cache: "no-store" });
       if (!res.ok) return;
-      const data = (await res.json()) as { messages?: ChatMessage[] };
+      const data = (await res.json()) as {
+        messages?: ChatMessage[];
+        peerTyping?: boolean;
+        peerOnline?: boolean;
+        customerLastReadAt?: string | null;
+      };
       setMessages(data.messages ?? []);
+      setPeerTyping(Boolean(data.peerTyping));
+      setPeerOnline(Boolean(data.peerOnline));
+      setPeerReadAt(data.customerLastReadAt ?? null);
     } catch {
       /* a dropped poll is not worth surfacing; the next one covers it */
     } finally {
@@ -103,10 +134,12 @@ export default function OrderChat({
        effect body: `load` sets state, and calling it synchronously here
        triggers the cascading-render lint rule this repo enforces. */
     const first = window.setTimeout(() => void load(), 0);
+    /* Two cadences: the slow one is the message fallback, the fast one keeps
+       typing and online status honest now that Pusher is returning 401. */
     const id = window.setInterval(() => {
       // Don't poll a tab nobody is looking at.
       if (document.visibilityState === "visible") void load();
-    }, FALLBACK_POLL_MS);
+    }, PRESENCE_POLL_MS);
     return () => {
       window.clearTimeout(first);
       window.clearInterval(id);
@@ -299,6 +332,33 @@ export default function OrderChat({
 
   return (
     <div className="flex flex-col h-[26rem] sm:h-[30rem] border border-bourbon-deep/10 bg-[#F6F1E7] overflow-hidden">
+      {/* Status strip. Only rendered when it has something to say, so a quiet
+          thread does not carry an empty bar. */}
+      {(peerOnline || peerTyping) && (
+        <div className="shrink-0 flex items-center gap-2 px-3.5 py-2 bg-white border-b border-bourbon-deep/10">
+          {peerOnline && !peerTyping && (
+            <>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" aria-hidden="true" />
+              <span className="text-bourbon-stone text-[11px]">
+                {me === "ADMIN" ? "Customer online" : "We're online"}
+              </span>
+            </>
+          )}
+          {peerTyping && (
+            <>
+              <span className="flex items-end gap-0.5 h-3" aria-hidden="true">
+                <Dot delay="0ms" />
+                <Dot delay="150ms" />
+                <Dot delay="300ms" />
+              </span>
+              <span className="text-bourbon-stone text-[11px]">
+                {me === "ADMIN" ? "Customer is typing…" : "Typing…"}
+              </span>
+            </>
+          )}
+        </div>
+      )}
+
       {/* ---- Messages ---- */}
       <div ref={listRef} className="flex-1 overflow-y-auto px-3 py-4 space-y-1.5">
         {!loaded ? (
@@ -361,8 +421,20 @@ export default function OrderChat({
                       </p>
                     )}
 
-                    <p className="text-bourbon-stone/70 text-[10px] text-right mt-0.5 tabular-nums">
+                    <p className="text-bourbon-stone/70 text-[10px] text-right mt-0.5 tabular-nums flex items-center justify-end gap-1">
                       {timeOf(m.createdAt)}
+                      {/* Operator-only. A double tick once the customer has
+                          opened the thread since this was sent. The customer
+                          never gets this on our replies. */}
+                      {showReadReceipts && mine && (
+                        <ReadTick
+                          read={Boolean(
+                            peerReadAt &&
+                              new Date(peerReadAt).getTime() >=
+                                new Date(m.createdAt).getTime(),
+                          )}
+                        />
+                      )}
                     </p>
                   </div>
                 </div>
@@ -427,7 +499,10 @@ export default function OrderChat({
             <textarea
               rows={1}
               value={text}
-              onChange={(e) => setText(e.target.value)}
+              onChange={(e) => {
+                setText(e.target.value);
+                if (e.target.value) pingTyping();
+              }}
               onKeyDown={(e) => {
                 // Enter sends, Shift+Enter makes a new line — the messaging
                 // convention people already have in their fingers.
@@ -471,5 +546,39 @@ export default function OrderChat({
         )}
       </div>
     </div>
+  );
+}
+
+/** One bouncing dot of the WhatsApp-style typing indicator. */
+function Dot({ delay }: { delay: string }) {
+  return (
+    <span
+      className="w-1.5 h-1.5 rounded-full bg-bourbon-stone/60 animate-typing-dot"
+      style={{ animationDelay: delay }}
+    />
+  );
+}
+
+/**
+ * Sent / read ticks, shown to the operator only.
+ *
+ * Read is derived from when the customer last opened the thread rather than
+ * stored per message, which is enough to answer the only question worth
+ * asking — have they seen this yet — without a row per message per reader.
+ */
+function ReadTick({ read }: { read: boolean }) {
+  return (
+    <span
+      title={read ? "Read by customer" : "Sent"}
+      aria-label={read ? "Read by customer" : "Sent"}
+      className={read ? "text-sky-600" : "text-bourbon-stone/50"}
+    >
+      <svg className="w-3.5 h-3.5" viewBox="0 0 20 14" fill="none" stroke="currentColor" strokeWidth={1.9} aria-hidden="true">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M1 7.5l3.6 3.6L11.5 4" />
+        {read && (
+          <path strokeLinecap="round" strokeLinejoin="round" d="M7.6 10.6l1 1L18.5 2" />
+        )}
+      </svg>
+    </span>
   );
 }

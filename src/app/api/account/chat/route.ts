@@ -21,6 +21,14 @@ import {
   uploadChatImage,
 } from "@/lib/cloudinary";
 import { customerChannel, publishChatMessage } from "@/lib/realtime";
+import {
+  TYPING_WINDOW_MS,
+  clearTyping,
+  isAdminOnline,
+  isFresh,
+  markCustomerRead,
+  setTyping,
+} from "@/lib/chat-presence";
 
 export const dynamic = "force-dynamic";
 
@@ -49,8 +57,23 @@ export async function GET() {
   if ("error" in r) return NextResponse.json({ error: r.error }, { status: r.status });
 
   const messages = await listMessages(r.thread.id);
-  await markRead(r.thread.id, "customer");
-  return NextResponse.json({ messages });
+  await markCustomerRead(r.thread.id);
+
+  /* No read state comes back here on purpose. The customer is never told
+     whether we have opened their message — see chat-presence. */
+  return NextResponse.json({
+    messages,
+    peerTyping: isFresh(r.thread.adminTypingAt, TYPING_WINDOW_MS),
+    peerOnline: await isAdminOnline(),
+  });
+}
+
+/** Typing ping. Cheap on purpose — one row, one column, no body. */
+export async function PATCH() {
+  const r = await resolve();
+  if ("error" in r) return NextResponse.json({ error: r.error }, { status: r.status });
+  await setTyping(r.thread.id, "customer");
+  return NextResponse.json({ ok: true });
 }
 
 export async function POST(req: NextRequest) {
@@ -79,6 +102,7 @@ export async function POST(req: NextRequest) {
   const rawContext = String(form.get("contextOrderNumber") ?? "").trim();
   const contextOrderNumber = rawContext ? rawContext.slice(0, 40) : null;
   const channel = customerChannel(r.customer.id);
+  await clearTyping(r.thread.id, "customer");
 
   if (!hasFile) {
     const message = await appendMessage({
