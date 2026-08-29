@@ -2,6 +2,11 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePushEnable, pushSupported } from "@/lib/use-push-enable";
+import {
+  DEFAULT_PUSH_PROMPT_SETTINGS,
+  normalizePushPromptSettings,
+  type PushPromptSettings,
+} from "@/lib/push-prompt-constants";
 
 /**
  * Dashboard opt-in for payment-detail alerts.
@@ -18,17 +23,20 @@ import { usePushEnable, pushSupported } from "@/lib/use-push-enable";
  */
 
 const DISMISS_KEY = "bourbon:push-prompt-dismissed";
-/* Long enough not to nag on every visit, short enough that someone who
-   dismissed it during one order is asked again for the next. */
-const DISMISS_DAYS = 14;
 
-function recentlyDismissed(): boolean {
+/* How long a success message stays up before the dialog dismisses itself.
+   Long enough to read the tick, short enough not to need a second click. */
+const CLOSE_AFTER_SUCCESS_MS = 1400;
+
+function recentlyDismissed(withinDays: number): boolean {
+  // 0 days means "ask again on the next visit".
+  if (withinDays <= 0) return false;
   try {
     const raw = window.localStorage.getItem(DISMISS_KEY);
     if (!raw) return false;
     const ts = Number(raw);
     if (!Number.isFinite(ts)) return false;
-    return Date.now() - ts < DISMISS_DAYS * 24 * 60 * 60 * 1000;
+    return Date.now() - ts < withinDays * 24 * 60 * 60 * 1000;
   } catch {
     // Private mode / blocked storage: treat as never dismissed.
     return false;
@@ -55,17 +63,51 @@ export default function EnablePushDialog({
     setOpen(false);
   }, []);
 
+  /* Timing is admin-configurable (Admin > Settings), fetched the same way the
+     email popup fetches its own. A failed fetch falls back to the built-in
+     defaults rather than leaving the prompt permanently silent. */
   useEffect(() => {
     if (waitingCount < 1) return;
-    // Deferred so this is not a synchronous setState inside the effect body.
-    const t = window.setTimeout(() => {
-      if (!pushSupported()) return;
-      if (Notification.permission !== "default") return; // granted or blocked
-      if (recentlyDismissed()) return;
-      setOpen(true);
-    }, 600);
-    return () => window.clearTimeout(t);
+    if (!pushSupported()) return;
+    if (Notification.permission !== "default") return; // already granted or blocked
+
+    let cancelled = false;
+    let timer = 0;
+
+    const arm = (s: PushPromptSettings) => {
+      if (cancelled || !s.enabled) return;
+      timer = window.setTimeout(() => {
+        // Re-checked at fire time: the persistent row may have been used to
+        // enable notifications while the timer was running.
+        if (cancelled) return;
+        if (Notification.permission !== "default") return;
+        if (recentlyDismissed(s.repromptAfterDays)) return;
+        setOpen(true);
+      }, s.delaySeconds * 1000);
+    };
+
+    fetch("/api/push-prompt-settings")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) =>
+        arm(data ? normalizePushPromptSettings(data) : DEFAULT_PUSH_PROMPT_SETTINGS),
+      )
+      .catch(() => arm(DEFAULT_PUSH_PROMPT_SETTINGS));
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
   }, [waitingCount]);
+
+  /* Once permission is granted the dialog has nothing left to ask, so it
+     dismisses itself after showing the confirmation. Closed directly rather
+     than through close(): there is no dismissal to remember, and the
+     permission check above already stops it reappearing. */
+  useEffect(() => {
+    if (!open || state !== "granted") return;
+    const t = window.setTimeout(() => setOpen(false), CLOSE_AFTER_SUCCESS_MS);
+    return () => window.clearTimeout(t);
+  }, [open, state]);
 
   // Escape closes, and focus moves into the dialog so it is reachable by
   // keyboard rather than being an unlabelled visual layer.
@@ -135,20 +177,25 @@ export default function EnablePushDialog({
             id="push-dialog-title"
             className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-bourbon-deep leading-tight mb-2.5"
           >
-            Get an alert the moment your payment details arrive
+            Get notified about your order
           </h2>
           <p id="push-dialog-body" className="text-bourbon-stone text-sm leading-relaxed mb-6">
             {waitingCount === 1
               ? "Your order is waiting on payment details."
               : `${waitingCount} of your orders are waiting on payment details.`}{" "}
-            Turn on notifications and we&apos;ll ping this device the second
-            they&apos;re ready.
+            Turn on notifications and we&apos;ll ping this device when
+            they&apos;re ready &mdash; and whenever we reply to your messages.
           </p>
 
-          {state === "denied" ? (
+          {state === "granted" ? (
+            <p className="text-bourbon-deep text-sm flex items-center justify-center gap-2 py-2">
+              <span className="text-bourbon-gold text-lg" aria-hidden="true">✓</span>
+              You&apos;re all set — we&apos;ll let you know.
+            </p>
+          ) : state === "denied" ? (
             <p className="text-bourbon-stone text-[13px] bg-bourbon-cream border border-bourbon-deep/10 p-3">
               Notifications are blocked for this site in your browser settings.
-              You&apos;ll still get an email, and the details always appear here.
+              You&apos;ll still get an email, and everything always appears here.
             </p>
           ) : (
             <button
@@ -161,25 +208,22 @@ export default function EnablePushDialog({
             </button>
           )}
 
-          {state === "granted" && (
-            <p className="text-bourbon-deep text-[13px] mt-3 flex items-center justify-center gap-2">
-              <span className="text-bourbon-gold" aria-hidden="true">✓</span>
-              You&apos;re all set — we&apos;ll let you know.
-            </p>
-          )}
           {state === "error" && (
             <p className="text-red-600 text-[12px] mt-3">
               Couldn&apos;t turn notifications on. You&apos;ll still get an email.
             </p>
           )}
 
-          <button
-            type="button"
-            onClick={close}
-            className="mt-3 text-bourbon-stone text-[11px] tracking-wider uppercase hover:text-bourbon-deep transition-colors cursor-pointer"
-          >
-            {state === "granted" ? "Close" : "Not now"}
-          </button>
+          {/* Hidden once granted — the dialog closes itself from there. */}
+          {state !== "granted" && (
+            <button
+              type="button"
+              onClick={close}
+              className="mt-3 text-bourbon-stone text-[11px] tracking-wider uppercase hover:text-bourbon-deep transition-colors cursor-pointer"
+            >
+              Not now
+            </button>
+          )}
         </div>
       </div>
     </div>

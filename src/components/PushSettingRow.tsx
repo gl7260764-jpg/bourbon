@@ -15,27 +15,24 @@ export default function PushSettingRow() {
 
   // Nothing useful to offer on a browser with no Push support.
   if (state === "unsupported") return null;
+  /* Once alerts are on there is nothing left to do here, so the row goes
+     rather than sitting on the dashboard as a permanent "✓ On" badge. */
+  if (state === "granted") return null;
 
   return (
     <div className="bg-white border border-bourbon-deep/10 p-5 mb-10 flex flex-wrap items-center justify-between gap-4">
       <div className="min-w-0">
         <p className="text-bourbon-deep font-semibold text-sm">
-          Payment detail alerts
+          Order notifications
         </p>
         <p className="text-bourbon-stone text-[13px] mt-0.5">
-          {state === "granted"
-            ? "On for this device — we'll notify you the moment details are ready."
-            : state === "denied"
-              ? "Blocked in your browser settings. You'll still get an email."
-              : "Get notified on this device the moment your payment details are ready."}
+          {state === "denied"
+            ? "Blocked in your browser settings. You'll still get an email."
+            : "Get alerts on this device when your payment details are ready and when we reply to your messages."}
         </p>
       </div>
 
-      {state === "granted" ? (
-        <span className="shrink-0 text-[10px] font-bold tracking-widest uppercase px-2.5 py-1 bg-emerald-100 text-emerald-800">
-          ✓ On
-        </span>
-      ) : state === "denied" ? (
+      {state === "denied" ? (
         <span className="shrink-0 text-[10px] font-bold tracking-widest uppercase px-2.5 py-1 bg-bourbon-deep/5 text-bourbon-stone">
           Blocked
         </span>

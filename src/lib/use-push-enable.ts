@@ -17,6 +17,11 @@ import { useCallback, useEffect, useState } from "react";
  *   offering this on the dashboard matters: there, the visitor is signed in.
  */
 
+/* Every usePushEnable() instance holds its own state, so enabling from the
+   dialog would leave the settings row still offering an "Enable" button on the
+   same screen. Success is broadcast and each instance syncs to it. */
+export const PUSH_ENABLED_EVENT = "bourbon:push-enabled";
+
 export type PushState =
   | "idle"
   | "working"
@@ -63,7 +68,12 @@ export function usePushEnable() {
         setState("denied");
       }
     }, 0);
-    return () => window.clearTimeout(t);
+    const onEnabledElsewhere = () => setState("granted");
+    window.addEventListener(PUSH_ENABLED_EVENT, onEnabledElsewhere);
+    return () => {
+      window.clearTimeout(t);
+      window.removeEventListener(PUSH_ENABLED_EVENT, onEnabledElsewhere);
+    };
   }, []);
 
   const enable = useCallback(async () => {
@@ -106,6 +116,7 @@ export function usePushEnable() {
         }),
       });
       setState(res.ok ? "granted" : "error");
+      if (res.ok) window.dispatchEvent(new Event(PUSH_ENABLED_EVENT));
       return res.ok;
     } catch {
       setState("error");
