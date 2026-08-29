@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getCurrentCustomer } from "@/lib/customer-auth";
+import { customerUnreadCount, mergeOrderThreadsIntoPrimary } from "@/lib/customer-chat";
+import { customerChannel } from "@/lib/realtime";
 import {
   ORDER_STATUS_BADGE,
   ORDER_STATUS_LABEL,
@@ -18,9 +20,21 @@ export const metadata = {
 
 export const dynamic = "force-dynamic";
 
-export default async function AccountPage() {
+export default async function AccountPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ chat?: string }>;
+}) {
   const customer = await getCurrentCustomer();
   if (!customer) redirect("/account/login");
+
+  /* Chat is one thread per person now. Any leftover per-order threads fold in
+     on the first dashboard load, so nothing is stranded behind a surface the
+     customer can no longer open. Idempotent — a no-op once merged. */
+  await mergeOrderThreadsIntoPrimary(customer.id).catch((err) =>
+    console.error("[account] thread merge failed:", err),
+  );
+  const unread = await customerUnreadCount(customer.id);
 
   // Match on the account link AND the email, so orders placed before accounts
   // existed (customerId is null on those) still show up for their owner.
@@ -71,5 +85,15 @@ export default async function AccountPage() {
     country: customer.country ?? "",
   };
 
-  return <AccountClient orders={mapped} details={details} />;
+  const { chat } = await searchParams;
+
+  return (
+    <AccountClient
+      orders={mapped}
+      details={details}
+      unread={unread}
+      customerChannelName={customerChannel(customer.id)}
+      openChatOnLoad={chat === "1"}
+    />
+  );
 }

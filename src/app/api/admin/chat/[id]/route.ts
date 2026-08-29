@@ -1,6 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { MAX_CHAT_MESSAGE_LEN } from "@/lib/chat";
+import { appendMessage } from "@/lib/order-chat";
+import { customerChannel, publishChatMessage } from "@/lib/realtime";
+import { sendToCustomer } from "@/lib/push";
 
 export const dynamic = "force-dynamic";
 
@@ -83,25 +86,46 @@ export async function POST(
 
   const convo = await prisma.conversation.findUnique({
     where: { id },
-    select: { id: true },
+    select: { id: true, customerId: true },
   });
   if (!convo) {
     return NextResponse.json({ error: "Conversation not found." }, { status: 404 });
   }
 
-  const created = await prisma.chatMessage.create({
-    data: { conversationId: id, sender: "ADMIN", body: message },
-    select: { id: true, body: true, sender: true, createdAt: true },
+  /* appendMessage rather than a raw create: it moves lastMessageAt and BOTH
+     unread counters inside one transaction. Writing the message by hand here
+     bumped nothing on the customer's side, so a reply sent from this inbox
+     never lit their badge. */
+  const created = await appendMessage({
+    conversationId: id,
+    sender: "ADMIN",
+    kind: "TEXT",
+    body: message,
   });
 
-  await prisma.conversation.update({
-    where: { id },
-    data: {
-      lastMessageAt: created.createdAt,
-      lastMessageFrom: "ADMIN",
-      adminUnread: 0,
-    },
-  });
+  // The admin has clearly read the thread they just replied in.
+  await prisma.conversation.update({ where: { id }, data: { adminUnread: 0 } });
+
+  /* Neither of these may fail the reply — the message is already written and
+     the dashboard polls regardless. */
+  if (convo.customerId) {
+    const preview = message.length > 90 ? `${message.slice(0, 90)}…` : message;
+    try {
+      await publishChatMessage(customerChannel(convo.customerId), created);
+    } catch (err) {
+      console.error("[admin chat] realtime publish failed:", err);
+    }
+    try {
+      await sendToCustomer(convo.customerId, {
+        title: "Bourbon & Oak replied",
+        body: preview,
+        url: "/account?chat=1",
+        tag: `customer-${convo.customerId}-chat`,
+      });
+    } catch (err) {
+      console.error("[admin chat] push failed:", err);
+    }
+  }
 
   return NextResponse.json({ message: created });
 }

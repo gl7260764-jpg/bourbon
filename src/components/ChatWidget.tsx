@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { DEFAULT_CHAT_GREETING } from "@/lib/chat-constants";
 
 const POLL_INTERVAL_MS = 4000;
@@ -21,6 +22,14 @@ export default function ChatWidget() {
   // The greeting types itself out on first open. "" = still showing the
   // typing-dots indicator; fills up to the full GREETING as it "types".
   const [typedGreeting, setTypedGreeting] = useState("");
+  /* The first message needs an address, so a reply has somewhere to go and the
+     thread belongs to a person rather than a cookie. Once captured, the widget
+     hands the conversation over to the dashboard. */
+  const [email, setEmail] = useState("");
+  const [needEmail, setNeedEmail] = useState(false);
+  const [startError, setStartError] = useState<string | null>(null);
+  const [handoff, setHandoff] = useState<"none" | "check_email" | "sent_only">("none");
+  const router = useRouter();
 
   const lastIdRef = useRef<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -162,9 +171,51 @@ export default function ChatWidget() {
     };
   }, [open]);
 
+  /* First message with an address: creates the account, files the message in
+     the customer's one thread, and then either signs them in (when the site is
+     set to email-only sign-in) or emails them a one-tap link. */
+  const startWithEmail = async () => {
+    const text = draft.trim();
+    if (!text || sending) return;
+    setSending(true);
+    setStartError(null);
+    try {
+      const res = await fetch("/api/chat/start", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, message: text }),
+      });
+      const data = (await res.json().catch(() => ({}))) as {
+        error?: string;
+        next?: "dashboard" | "check_email" | "sent_only";
+      };
+      if (!res.ok) {
+        setStartError(data.error ?? "Could not send your message.");
+        return;
+      }
+      if (data.next === "dashboard") {
+        setDraft("");
+        router.refresh();
+        router.push("/account?chat=1");
+        return;
+      }
+      setDraft("");
+      setHandoff(data.next === "sent_only" ? "sent_only" : "check_email");
+    } catch {
+      setStartError("Network error. Please try again.");
+    } finally {
+      setSending(false);
+    }
+  };
+
   const send = async () => {
     const text = draft.trim();
     if (!text || sending) return;
+    // No address captured yet — ask for one before anything is sent.
+    if (!needEmail) {
+      setNeedEmail(true);
+      return;
+    }
     setSending(true);
     setDraft("");
 
@@ -273,6 +324,64 @@ export default function ChatWidget() {
 
           {/* Composer */}
           <div className="border-t border-bourbon-gold/15 bg-bourbon-dark p-3">
+            {handoff !== "none" ? (
+              <div className="px-1 py-2 text-center">
+                <p className="text-bourbon-cream text-sm font-semibold mb-1">
+                  Message sent
+                </p>
+                <p className="text-bourbon-cream/60 text-xs leading-relaxed">
+                  {handoff === "check_email"
+                    ? "We've emailed you a link — tap it to open your dashboard and carry on the conversation there."
+                    : "We have your message and we'll reply by email. You can also sign in any time to see the thread."}
+                </p>
+              </div>
+            ) : needEmail ? (
+              /* One field, shown only once. The message they already typed is
+                 kept and sent with it, so nothing has to be retyped. */
+              <div>
+                <label htmlFor="chat-email" className="block text-bourbon-cream/70 text-[11px] mb-1.5">
+                  Your email, so we can reply
+                </label>
+                <div className="flex items-center gap-2">
+                  <input
+                    id="chat-email"
+                    type="email"
+                    autoComplete="email"
+                    inputMode="email"
+                    autoFocus
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        startWithEmail();
+                      }
+                    }}
+                    placeholder="you@example.com"
+                    className="min-w-0 flex-1 rounded-lg bg-bourbon-deep px-3 py-2 text-sm text-bourbon-cream placeholder:text-bourbon-cream/40 focus:outline-none focus:ring-1 focus:ring-bourbon-gold/50"
+                  />
+                  <button
+                    onClick={startWithEmail}
+                    disabled={sending || !email.includes("@")}
+                    className="shrink-0 rounded-lg bg-bourbon-gold px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-bourbon-deep transition-colors hover:bg-bourbon-amber disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
+                  >
+                    {sending ? "Sending…" : "Send"}
+                  </button>
+                </div>
+                {startError && (
+                  <p className="text-red-400 text-[11px] mt-1.5" role="alert">
+                    {startError}
+                  </p>
+                )}
+                <button
+                  type="button"
+                  onClick={() => { setNeedEmail(false); setStartError(null); }}
+                  className="mt-2 text-bourbon-cream/45 text-[11px] hover:text-bourbon-cream/80 transition-colors cursor-pointer"
+                >
+                  Back to my message
+                </button>
+              </div>
+            ) : (
             <div className="flex items-end gap-2">
               <textarea
                 value={draft}
@@ -299,6 +408,7 @@ export default function ChatWidget() {
                 </svg>
               </button>
             </div>
+            )}
           </div>
         </div>
       )}

@@ -2,12 +2,14 @@ import { NextResponse, type NextRequest } from "next/server";
 import { getCurrentCustomer } from "@/lib/customer-auth";
 import {
   appendMessage,
-  findOrderForCustomer,
-  getOrCreateOrderThread,
   listMessages,
   markRead,
   MAX_BODY_CHARS,
 } from "@/lib/order-chat";
+import {
+  getOrCreateCustomerThread,
+  mergeOrderThreadsIntoPrimary,
+} from "@/lib/customer-chat";
 import {
   baseMimeType,
   CHAT_AUDIO_MIME_TYPES,
@@ -18,45 +20,41 @@ import {
   uploadChatAudio,
   uploadChatImage,
 } from "@/lib/cloudinary";
-import { prisma } from "@/lib/prisma";
-import { orderChannel, publishChatMessage } from "@/lib/realtime";
+import { customerChannel, publishChatMessage } from "@/lib/realtime";
 
 export const dynamic = "force-dynamic";
 
-type Ctx = { params: Promise<{ orderNumber: string }> };
-
-/** Both verbs need the same three checks, so they share one gate. */
-async function resolve(orderNumber: string) {
+/**
+ * The customer's one ongoing conversation.
+ *
+ * Replaces the per-order routes as the customer-facing surface: a buyer now
+ * has a single thread and names the order in the message when it matters,
+ * rather than hunting for the right inbox. Same media rules as before —
+ * images and voice notes only, stored as Cloudinary `authenticated` assets.
+ */
+async function resolve() {
   const customer = await getCurrentCustomer();
-  if (!customer) return { error: "Sign in to view this conversation.", status: 401 } as const;
-
-  const order = await findOrderForCustomer(orderNumber, customer);
-  // 404 for "not found" and "not yours" alike, so order numbers stay
-  // non-enumerable.
-  if (!order) return { error: "Order not found.", status: 404 } as const;
-
-  return { customer, order } as const;
+  if (!customer) {
+    return { error: "Sign in to view your messages.", status: 401 } as const;
+  }
+  // Folds any leftover per-order threads in on first touch, so history is
+  // never stranded behind a surface the customer can no longer reach.
+  await mergeOrderThreadsIntoPrimary(customer.id);
+  const thread = await getOrCreateCustomerThread(customer.id);
+  return { customer, thread } as const;
 }
 
-export async function GET(_req: NextRequest, ctx: Ctx) {
-  const { orderNumber } = await ctx.params;
-  const r = await resolve(orderNumber);
+export async function GET() {
+  const r = await resolve();
   if ("error" in r) return NextResponse.json({ error: r.error }, { status: r.status });
 
-  const thread = await prisma.conversation.findUnique({
-    where: { orderId: r.order.id },
-    select: { id: true },
-  });
-  if (!thread) return NextResponse.json({ messages: [] });
-
-  const messages = await listMessages(thread.id);
-  await markRead(thread.id, "customer");
+  const messages = await listMessages(r.thread.id);
+  await markRead(r.thread.id, "customer");
   return NextResponse.json({ messages });
 }
 
-export async function POST(req: NextRequest, ctx: Ctx) {
-  const { orderNumber } = await ctx.params;
-  const r = await resolve(orderNumber);
+export async function POST(req: NextRequest) {
+  const r = await resolve();
   if ("error" in r) return NextResponse.json({ error: r.error }, { status: r.status });
 
   const form = await req.formData().catch(() => null);
@@ -76,16 +74,21 @@ export async function POST(req: NextRequest, ctx: Ctx) {
     );
   }
 
-  const thread = await getOrCreateOrderThread({
-    orderId: r.order.id,
-    customerId: r.customer.id,
-  });
+  /* Optional: which order this message is about. Only ever a label — it never
+     grants access to anything, so an unrecognised value is harmless. */
+  const rawContext = String(form.get("contextOrderNumber") ?? "").trim();
+  const contextOrderNumber = rawContext ? rawContext.slice(0, 40) : null;
+  const channel = customerChannel(r.customer.id);
 
   if (!hasFile) {
     const message = await appendMessage({
-      conversationId: thread.id, sender: "VISITOR", kind: "TEXT", body,
+      conversationId: r.thread.id,
+      sender: "VISITOR",
+      kind: "TEXT",
+      body,
+      contextOrderNumber,
     });
-    await publishChatMessage(orderChannel(orderNumber), message);
+    await publishChatMessage(channel, message);
     return NextResponse.json({ message });
   }
 
@@ -114,28 +117,41 @@ export async function POST(req: NextRequest, ctx: Ctx) {
       const up = await uploadChatAudio(buffer);
       // The client's stated duration is a hint; Cloudinary's is authoritative.
       const clientMs = Number(form.get("durationMs"));
-      const durationMs = up.durationMs
-        ?? (Number.isFinite(clientMs) && clientMs > 0
+      const durationMs =
+        up.durationMs ??
+        (Number.isFinite(clientMs) && clientMs > 0
           ? Math.min(Math.round(clientMs), MAX_VOICE_NOTE_MS)
           : null);
       const message = await appendMessage({
-        conversationId: thread.id, sender: "VISITOR", kind: "VOICE", body,
-        mediaPublicId: up.publicId, mediaMimeType: mime,
-        mediaDurationMs: durationMs, mediaBytes: up.bytes,
+        conversationId: r.thread.id,
+        sender: "VISITOR",
+        kind: "VOICE",
+        body,
+        contextOrderNumber,
+        mediaPublicId: up.publicId,
+        mediaMimeType: mime,
+        mediaDurationMs: durationMs,
+        mediaBytes: up.bytes,
       });
-      await publishChatMessage(orderChannel(orderNumber), message);
-    return NextResponse.json({ message });
+      await publishChatMessage(channel, message);
+      return NextResponse.json({ message });
     }
 
     const up = await uploadChatImage(buffer);
     const message = await appendMessage({
-      conversationId: thread.id, sender: "VISITOR", kind: "IMAGE", body,
-      mediaPublicId: up.publicId, mediaMimeType: mime, mediaBytes: up.bytes,
+      conversationId: r.thread.id,
+      sender: "VISITOR",
+      kind: "IMAGE",
+      body,
+      contextOrderNumber,
+      mediaPublicId: up.publicId,
+      mediaMimeType: mime,
+      mediaBytes: up.bytes,
     });
-    await publishChatMessage(orderChannel(orderNumber), message);
+    await publishChatMessage(channel, message);
     return NextResponse.json({ message });
   } catch (err) {
-    console.error("[order-chat] attachment failed:", err);
+    console.error("[account-chat] attachment failed:", err);
     return NextResponse.json(
       { error: "Could not upload that attachment. Please try again." },
       { status: 502 },

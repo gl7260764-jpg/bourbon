@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { publishChatMessage } from "@/lib/realtime";
+import { orderChannel, publishChatMessage } from "@/lib/realtime";
 import { sendToCustomer } from "@/lib/push";
 import {
   appendMessage,
@@ -96,7 +96,7 @@ export async function POST(req: NextRequest, ctx: Ctx) {
       conversationId: thread.id, sender: "ADMIN", kind: "TEXT", body,
     });
     await pingCustomer(body.length > 90 ? `${body.slice(0, 90)}…` : body);
-    await publishChatMessage(orderNumber, message);
+    await publishChatMessage(orderChannel(orderNumber), message);
     return NextResponse.json({ message });
   }
 
@@ -132,7 +132,7 @@ export async function POST(req: NextRequest, ctx: Ctx) {
         mediaDurationMs: durationMs, mediaBytes: up.bytes,
       });
       await pingCustomer("Sent you a voice note.");
-      await publishChatMessage(orderNumber, message);
+      await publishChatMessage(orderChannel(orderNumber), message);
     return NextResponse.json({ message });
     }
     const up = await uploadChatImage(buffer);
@@ -141,7 +141,7 @@ export async function POST(req: NextRequest, ctx: Ctx) {
       mediaPublicId: up.publicId, mediaMimeType: mime, mediaBytes: up.bytes,
     });
     await pingCustomer("Sent you a photo.");
-    await publishChatMessage(orderNumber, message);
+    await publishChatMessage(orderChannel(orderNumber), message);
     return NextResponse.json({ message });
   } catch (err) {
     console.error("[admin order-chat] attachment failed:", err);

@@ -51,12 +51,18 @@ export default function OrderChat({
   endpoint,
   me,
   orderNumber,
+  channel,
+  contextOrderNumber,
   emptyHint,
 }: {
   endpoint: string;
   me: "VISITOR" | "ADMIN";
-  /** Drives the private Pusher channel for this thread. */
-  orderNumber: string;
+  /** Legacy per-order threads. Ignored when `channel` is given. */
+  orderNumber?: string;
+  /** Full realtime channel name. Preferred over orderNumber. */
+  channel?: string;
+  /** Tags outgoing messages with the order they are about. */
+  contextOrderNumber?: string | null;
   emptyHint?: string;
 }) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -126,8 +132,9 @@ export default function OrderChat({
           cluster,
           authEndpoint: "/api/realtime/auth",
         });
-        const channel = socket.subscribe(`private-order-${orderNumber}`);
-        channel.bind("chat:message", (incoming: ChatMessage) => {
+        const name = channel ?? `private-order-${orderNumber}`;
+        const sub = socket.subscribe(name);
+        sub.bind("chat:message", (incoming: ChatMessage) => {
           setMessages((prev) =>
             /* The sender already appended this optimistically, and a dropped
                socket can redeliver — dedupe on id so neither doubles up. */
@@ -135,8 +142,8 @@ export default function OrderChat({
           );
         });
         cleanup = () => {
-          channel.unbind_all();
-          socket.unsubscribe(`private-order-${orderNumber}`);
+          sub.unbind_all();
+          socket.unsubscribe(name);
           socket.disconnect();
         };
       } catch {
@@ -149,7 +156,7 @@ export default function OrderChat({
       cancelled = true;
       cleanup?.();
     };
-  }, [orderNumber]);
+  }, [orderNumber, channel]);
 
   // Stick to the bottom as messages arrive.
   useEffect(() => {
@@ -172,6 +179,7 @@ export default function OrderChat({
     setError(null);
     try {
       const fd = new FormData();
+      if (contextOrderNumber) fd.append("contextOrderNumber", contextOrderNumber);
       if (payload.body) fd.set("body", payload.body);
       if (payload.file) fd.set("file", payload.file);
       if (payload.durationMs) fd.set("durationMs", String(payload.durationMs));

@@ -20,6 +20,10 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  /* Unread replies from us. Polled rather than pushed: the navbar is on every
+     page and a socket per page load is far more than a badge is worth. The
+     endpoint answers 0 when signed out, so this needs no auth branch. */
+  const [unread, setUnread] = useState(0);
   const { totalItems, toggleCart } = useCart();
   const pathname = usePathname();
   const isHome = pathname === "/";
@@ -34,6 +38,32 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      try {
+        const res = await fetch("/api/account/unread", { cache: "no-store" });
+        if (!res.ok) return;
+        const data = (await res.json()) as { unread?: number };
+        if (!cancelled) setUnread(Number(data.unread) || 0);
+      } catch {
+        /* offline or signed out — leave the badge as it is */
+      }
+    };
+    load();
+    const timer = window.setInterval(load, 60_000);
+    // Coming back to the tab is the moment a stale badge is most obvious.
+    const onVisible = () => {
+      if (document.visibilityState === "visible") load();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      cancelled = true;
+      window.clearInterval(timer);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+  }, [pathname]);
 
   return (
     <header
@@ -105,15 +135,22 @@ export default function Navbar() {
                 so one link serves both states. */}
             <Link
               href="/account"
-              aria-label="Your account"
+              aria-label={unread > 0 ? `Your account, ${unread} unread` : "Your account"}
               /* Desktop-only on purpose: a fifth icon leaves 0px between the
                  wordmark and the cluster at 320px. The mobile menu carries a
                  labelled entry instead, clearer than a 20px glyph. */
               className="text-bourbon-cream/70 hover:text-bourbon-gold transition-colors cursor-pointer hidden sm:block"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
+              <span className="relative block">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                {unread > 0 && (
+                  <span className="animate-pop-in absolute -top-2 -right-2 min-w-4 h-4 px-1 bg-bourbon-gold text-bourbon-deep text-[10px] font-bold rounded-full flex items-center justify-center tabular-nums">
+                    {unread > 9 ? "9+" : unread}
+                  </span>
+                )}
+              </span>
             </Link>
             <button
               onClick={toggleCart}
@@ -196,6 +233,11 @@ export default function Navbar() {
                 />
               </svg>
               Sign in / My account
+              {unread > 0 && (
+                <span className="ml-auto min-w-5 h-5 px-1.5 bg-bourbon-gold text-bourbon-deep text-[10px] font-bold rounded-full flex items-center justify-center tabular-nums">
+                  {unread > 9 ? "9+" : unread}
+                </span>
+              )}
             </Link>
           </div>
         </nav>

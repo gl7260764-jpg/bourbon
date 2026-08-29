@@ -81,14 +81,27 @@ function Chevron({ open }: { open: boolean }) {
 export default function AccountClient({
   orders,
   details,
+  unread,
+  customerChannelName,
+  openChatOnLoad = false,
 }: {
   orders: AccountOrder[];
   details: AccountDetails;
+  /** Unread replies waiting for this customer. */
+  unread: number;
+  /** Realtime channel for their one thread. */
+  customerChannelName: string;
+  /** ?chat=1 — arriving from the storefront widget or a push notification. */
+  openChatOnLoad?: boolean;
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [saved, setSaved] = useState<string | null>(null);
-  const [chatFor, setChatFor] = useState<string | null>(null);
+  /* One conversation, opened from the header or from any order. The order
+     number is only a prefill for the composer — the thread is the same one. */
+  const [chatOpen, setChatOpen] = useState(openChatOnLoad);
+  const [chatAbout, setChatAbout] = useState<string | null>(null);
+  const chatRef = useRef<HTMLDivElement>(null);
   /* Drives the opt-in prompt: an order that is still pending with no details
      issued is exactly the case a push notification is useful for. */
   const waitingOnDetails = orders.filter(
@@ -130,6 +143,15 @@ export default function AccountClient({
             jumpTo: null,
           }
         : null;
+
+  function openChat(orderNumber?: string) {
+    setChatAbout(orderNumber ?? null);
+    setChatOpen(true);
+    window.setTimeout(
+      () => chatRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }),
+      60,
+    );
+  }
 
   function jumpTo(orderNumber: string) {
     setExpanded(orderNumber);
@@ -235,6 +257,71 @@ export default function AccountClient({
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10">
         <PushSettingRow />
+
+        {/* Messages. One thread, always here, whatever it is about. */}
+        <section ref={chatRef} className="mb-12 scroll-mt-28">
+          <div className="flex items-center gap-4 mb-5">
+            <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-bourbon-deep">
+              Messages
+            </h2>
+            <span className="flex-1 h-px bg-gradient-to-r from-bourbon-gold/40 to-transparent" aria-hidden="true" />
+            {!chatOpen && (
+              <button
+                type="button"
+                onClick={() => openChat()}
+                className="shrink-0 inline-flex items-center gap-2 px-4 py-2 border border-bourbon-deep/15 text-bourbon-deep text-xs font-semibold tracking-wider uppercase hover:border-bourbon-gold hover:text-bourbon-gold transition-colors cursor-pointer"
+              >
+                {unread > 0 && (
+                  <span className="inline-flex items-center justify-center min-w-5 h-5 px-1.5 bg-bourbon-gold text-bourbon-deep text-[10px] font-bold rounded-full tabular-nums">
+                    {unread > 9 ? "9+" : unread}
+                  </span>
+                )}
+                Open chat
+              </button>
+            )}
+          </div>
+
+          {chatOpen ? (
+            <>
+              {chatAbout && (
+                <p className="text-bourbon-stone text-xs mb-2">
+                  Asking about{" "}
+                  <span className="text-bourbon-deep font-semibold">{chatAbout}</span>.
+                </p>
+              )}
+              <OrderChat
+                endpoint="/api/account/chat"
+                me="VISITOR"
+                channel={customerChannelName}
+                contextOrderNumber={chatAbout}
+                emptyHint="Ask us anything — an order, a bottle, delivery. You can send photos and voice notes too."
+              />
+            </>
+          ) : (
+            <button
+              type="button"
+              onClick={() => openChat()}
+              className="w-full bg-white border border-bourbon-deep/10 shadow-[0_1px_2px_0_rgba(12,10,9,0.04)] hover:border-bourbon-deep/25 transition-colors p-5 flex items-center gap-4 text-left cursor-pointer"
+            >
+              <span className="shrink-0 w-10 h-10 bg-bourbon-deep flex items-center justify-center">
+                <svg className="w-5 h-5 text-bourbon-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
+                    d="M21 11.5a8.38 8.38 0 01-9 8.4 8.5 8.5 0 01-3.8-.9L3 21l1.9-5.2A8.38 8.38 0 014 11.5a8.5 8.5 0 018.5-8.5 8.38 8.38 0 018.5 8.5z" />
+                </svg>
+              </span>
+              <span className="min-w-0">
+                <span className="block text-bourbon-deep text-sm font-semibold">
+                  {unread > 0
+                    ? `${unread} new ${unread === 1 ? "reply" : "replies"} from us`
+                    : "Chat with us"}
+                </span>
+                <span className="block text-bourbon-stone text-[13px] mt-0.5">
+                  One conversation for everything — orders, bottles, delivery.
+                </span>
+              </span>
+            </button>
+          )}
+        </section>
 
         <section className="mb-12">
           <div className="flex items-center gap-4 mb-5">
@@ -455,50 +542,21 @@ export default function AccountClient({
                           </p>
                         )}
 
-                        {/* Chat with the admin about this specific order.
-                            Collapsed by default: most orders never need it,
-                            and an always-open thread would push the payment
-                            details and the receipt box below the fold. */}
+                        {/* Chat moved to one thread per customer, so this
+                            points at it and pre-fills which order it is about
+                            rather than opening a separate inbox per order. */}
                         <div className="mt-5 pt-4 border-t border-bourbon-deep/[0.08]">
                           <button
                             type="button"
-                            onClick={() =>
-                              setChatFor(
-                                chatFor === o.orderNumber ? null : o.orderNumber,
-                              )
-                            }
-                            aria-expanded={chatFor === o.orderNumber}
+                            onClick={() => openChat(o.orderNumber)}
                             className="inline-flex items-center gap-2 text-bourbon-stone text-xs font-semibold tracking-wider uppercase hover:text-bourbon-gold transition-colors cursor-pointer"
                           >
-                            <svg
-                              className="w-4 h-4"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                              aria-hidden="true"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={1.75}
-                                d="M21 11.5a8.38 8.38 0 01-9 8.4 8.5 8.5 0 01-3.8-.9L3 21l1.9-5.2A8.38 8.38 0 014 11.5a8.5 8.5 0 018.5-8.5 8.38 8.38 0 018.5 8.5z"
-                              />
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
+                                d="M21 11.5a8.38 8.38 0 01-9 8.4 8.5 8.5 0 01-3.8-.9L3 21l1.9-5.2A8.38 8.38 0 014 11.5a8.5 8.5 0 018.5-8.5 8.38 8.38 0 018.5 8.5z" />
                             </svg>
-                            {chatFor === o.orderNumber
-                              ? "Hide chat"
-                              : "Chat with us about this order"}
+                            Ask us about this order
                           </button>
-
-                          {chatFor === o.orderNumber && (
-                            <div className="mt-3">
-                              <OrderChat
-                                endpoint={`/api/account/orders/${o.orderNumber}/chat`}
-                                me="VISITOR"
-                                orderNumber={o.orderNumber}
-                                emptyHint={`Ask us anything about ${o.orderNumber} — payment, delivery, or anything else. You can send photos and voice notes too.`}
-                              />
-                            </div>
-                          )}
                         </div>
                       </div>
                     )}

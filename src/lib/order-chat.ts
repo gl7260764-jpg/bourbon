@@ -22,6 +22,8 @@ export type ChatMessageView = {
   /** Signed, short-lived. Null for text messages. */
   mediaUrl: string | null;
   mediaDurationMs: number | null;
+  /** Order this message is about, when it is about one. Rendered as a chip. */
+  contextOrderNumber: string | null;
 };
 
 /**
@@ -77,6 +79,7 @@ export function toView(m: {
   createdAt: Date;
   mediaPublicId: string | null;
   mediaDurationMs: number | null;
+  contextOrderNumber?: string | null;
 }): ChatMessageView {
   return {
     id: m.id,
@@ -88,6 +91,7 @@ export function toView(m: {
       ? signedChatMediaUrl(m.mediaPublicId, m.kind === "VOICE" ? "audio" : "image")
       : null,
     mediaDurationMs: m.mediaDurationMs,
+    contextOrderNumber: m.contextOrderNumber ?? null,
   };
 }
 
@@ -97,7 +101,7 @@ export async function listMessages(conversationId: string): Promise<ChatMessageV
     orderBy: { createdAt: "asc" },
     select: {
       id: true, sender: true, kind: true, body: true, createdAt: true,
-      mediaPublicId: true, mediaDurationMs: true,
+      mediaPublicId: true, mediaDurationMs: true, contextOrderNumber: true,
     },
   });
   return rows.map(toView);
@@ -116,6 +120,8 @@ export async function appendMessage(input: {
   mediaMimeType?: string | null;
   mediaDurationMs?: number | null;
   mediaBytes?: number | null;
+  /** Which order this message is about, when it is about one. Label only. */
+  contextOrderNumber?: string | null;
 }): Promise<ChatMessageView> {
   const fromCustomer = input.sender === "VISITOR";
 
@@ -130,10 +136,11 @@ export async function appendMessage(input: {
         mediaMimeType: input.mediaMimeType ?? null,
         mediaDurationMs: input.mediaDurationMs ?? null,
         mediaBytes: input.mediaBytes ?? null,
+        contextOrderNumber: input.contextOrderNumber ?? null,
       },
       select: {
         id: true, sender: true, kind: true, body: true, createdAt: true,
-        mediaPublicId: true, mediaDurationMs: true,
+        mediaPublicId: true, mediaDurationMs: true, contextOrderNumber: true,
       },
     }),
     prisma.conversation.update({

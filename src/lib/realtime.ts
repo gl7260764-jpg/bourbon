@@ -39,16 +39,22 @@ export function orderChannel(orderNumber: string): string {
   return `private-order-${orderNumber}`;
 }
 
+/** Channel for a customer's single ongoing thread. */
+export function customerChannel(customerId: string): string {
+  return `private-customer-${customerId}`;
+}
+
 export const CHAT_EVENT = "chat:message";
 
+/** Takes a full channel name — order threads and customer threads both use it. */
 export async function publishChatMessage(
-  orderNumber: string,
+  channel: string,
   message: unknown,
 ): Promise<void> {
   const p = pusher();
   if (!p) return;
   try {
-    await p.trigger(orderChannel(orderNumber), CHAT_EVENT, message);
+    await p.trigger(channel, CHAT_EVENT, message);
   } catch (err) {
     // Never let a realtime failure surface to the sender — the message is
     // already written and the next fetch will show it.
