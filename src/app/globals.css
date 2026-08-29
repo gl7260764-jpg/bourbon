@@ -63,23 +63,10 @@ textarea,
   font-variant-numeric: tabular-nums;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #1C1917;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #CA8A04;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #D97706;
-}
+/* No custom scrollbar. A gold thumb on a near-black track was painted over
+   every scrollable surface on the site, including light ones, where it read
+   as a stray yellow stripe rather than a control. The platform scrollbar is
+   the one people already know how to use. */
 
 /* ----- Animation primitives (formerly framer-motion) -----
    The classes below cover the patterns that previously used
@@ -258,4 +245,17 @@ textarea,
 }
 @media (prefers-reduced-motion: reduce) {
   .animate-typing-dot { animation: none; opacity: 0.7; }
+}
+
+/* Chat canvas. A warm paper ground with a faint oak-grain tick, so a thread
+   reads as a conversation surface rather than an empty panel — the role the
+   doodle pattern plays in WhatsApp. Kept far quieter than that: this sits
+   under text that has to stay comfortable to read for minutes at a time. */
+.chat-canvas {
+  background-color: #EFE7D8;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(12, 10, 9, 0.045) 1px, transparent 0),
+    radial-gradient(circle at 1px 1px, rgba(12, 10, 9, 0.03) 1px, transparent 0);
+  background-size: 22px 22px, 22px 22px;
+  background-position: 0 0, 11px 11px;
 }

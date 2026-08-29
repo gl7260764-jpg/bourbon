@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { visitorLabel } from "@/lib/visitor";
 
 export const dynamic = "force-dynamic";
 
@@ -44,6 +45,10 @@ export async function GET() {
       id: c.id,
       email: c.customer?.email ?? null,
       name: c.customer?.fullName || null,
+      /* Stable per device and readable — the same visitor is always the same
+         codename, so an unidentified thread is still recognisable across
+         visits rather than being another anonymous row. */
+      codename: visitorLabel(c.visitorId),
       lastMessageAt: c.lastMessageAt,
       lastMessageFrom: c.lastMessageFrom,
       adminUnread: c.adminUnread,

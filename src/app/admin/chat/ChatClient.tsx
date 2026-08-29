@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { countryFlag } from "@/lib/geo";
 import { useRouter, useSearchParams } from "next/navigation";
 
 const LIST_POLL_MS = 4000;
@@ -15,6 +16,7 @@ interface ConversationSummary {
   /** Set once the person has identified themselves; null for a bare device. */
   email: string | null;
   name: string | null;
+  codename: string;
   location: string | null;
   countryCode: string | null;
 }
@@ -24,6 +26,10 @@ interface ChatMessage {
   body: string;
   sender: "VISITOR" | "ADMIN";
   createdAt: string;
+  kind?: "TEXT" | "IMAGE" | "VOICE";
+  /** Signed and short-lived — never a permanent URL. */
+  mediaUrl?: string | null;
+  mediaDurationMs?: number | null;
 }
 
 function urlBase64ToUint8Array(base64String: string): Uint8Array<ArrayBuffer> {
@@ -159,8 +165,13 @@ export default function ChatClient({ vapidPublicKey }: { vapidPublicKey: string 
                     }`}
                   >
                     <div className="flex items-center justify-between gap-2">
-                      <span className="min-w-0 truncate text-sm font-medium text-bourbon-deep">
-                        {c.name || c.email || c.location || "Unknown visitor"}
+                      <span className="flex min-w-0 items-center gap-1.5">
+                        <span className="shrink-0 text-base leading-none" title={c.location ?? undefined} aria-hidden="true">
+                          {c.countryCode ? countryFlag(c.countryCode) : "🌐"}
+                        </span>
+                        <span className="min-w-0 truncate text-sm font-medium text-bourbon-deep">
+                          {c.name || c.email || c.codename}
+                        </span>
                       </span>
                       {c.adminUnread > 0 && (
                         <span className="ml-auto inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 text-[11px] font-semibold text-white">
@@ -168,13 +179,18 @@ export default function ChatClient({ vapidPublicKey }: { vapidPublicKey: string 
                         </span>
                       )}
                     </div>
-                    {(c.email || c.location) && (
-                      <span className="truncate text-[11px] text-bourbon-deep/45">
-                        {[c.name && c.email ? c.email : null, c.location]
-                          .filter(Boolean)
-                          .join(" · ")}
-                      </span>
-                    )}
+                    {/* Second line: the address when the first line used a
+                        name, the codename when it used an address, plus where
+                        they are. Never repeats what is already above it. */}
+                    <span className="truncate text-[11px] text-bourbon-deep/45">
+                      {[
+                        c.name && c.email ? c.email : null,
+                        c.name || c.email ? c.codename : null,
+                        c.location,
+                      ]
+                        .filter(Boolean)
+                        .join(" · ")}
+                    </span>
                     <span className="truncate text-xs text-bourbon-deep/55">
                       {c.lastMessageFrom === "ADMIN" ? "You: " : ""}
                       {c.preview || "…"}
@@ -330,13 +346,16 @@ function Thread({
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   /* Who you are talking to. Shown above the thread so you never have to guess
      from the message body which customer this is. */
-  const [who, setWho] = useState<{ email: string | null; name: string | null }>({
-    email: null,
-    name: null,
-  });
+  const [who, setWho] = useState<{
+    email: string | null;
+    name: string | null;
+    codename: string | null;
+  }>({ email: null, name: null, codename: null });
   /* When the customer last opened this thread. Anything you sent before it
      has been read — that is the second tick. */
   const [readAt, setReadAt] = useState<string | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
   const [draft, setDraft] = useState("");
   const [sending, setSending] = useState(false);
   const lastIdRef = useRef<string | null>(null);
@@ -353,10 +372,15 @@ function Thread({
           messages: ChatMessage[];
           email?: string | null;
           name?: string | null;
+          codename?: string | null;
           customerLastReadAt?: string | null;
         };
         setMessages(data.messages);
-        setWho({ email: data.email ?? null, name: data.name ?? null });
+        setWho({
+          email: data.email ?? null,
+          name: data.name ?? null,
+          codename: data.codename ?? null,
+        });
         setReadAt(data.customerLastReadAt ?? null);
         lastIdRef.current = data.messages.at(-1)?.id ?? null;
         onActivity(); // refresh list (clears unread badge)
@@ -403,6 +427,39 @@ function Thread({
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [messages]);
 
+  const sendFile = async (file: File) => {
+    if (sending) return;
+    setSending(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      if (draft.trim()) fd.append("message", draft.trim());
+      const res = await fetch(`/api/admin/chat/${conversationId}`, {
+        method: "POST",
+        body: fd,
+      });
+      const data = (await res.json().catch(() => ({}))) as {
+        message?: ChatMessage;
+        error?: string;
+      };
+      if (!res.ok) {
+        setUploadError(data.error ?? "Could not send that file.");
+        return;
+      }
+      setUploadError(null);
+      setDraft("");
+      if (data.message) {
+        setMessages((prev) => [...prev, data.message!]);
+        lastIdRef.current = data.message.id;
+      }
+      onActivity();
+    } catch {
+      setUploadError("Network error. Please try again.");
+    } finally {
+      setSending(false);
+    }
+  };
+
   const reply = async () => {
     const text = draft.trim();
     if (!text || sending) return;
@@ -442,7 +499,7 @@ function Thread({
           without copying it out by hand. */}
       <div className="shrink-0 border-b border-bourbon-deep/10 px-4 py-3">
         <p className="truncate text-sm font-semibold text-bourbon-deep">
-          {who.name || who.email || "Unidentified visitor"}
+          {who.name || who.email || who.codename || "Unidentified visitor"}
         </p>
         {who.email ? (
           <a
@@ -453,25 +510,38 @@ function Thread({
           </a>
         ) : (
           <p className="text-xs text-bourbon-deep/45">
-            No email yet — they haven&apos;t identified themselves.
+            {who.codename ? `${who.codename} · ` : ""}no email yet
           </p>
         )}
       </div>
 
-      <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto p-4">
+      <div ref={scrollRef} className="chat-canvas flex-1 space-y-1.5 overflow-y-auto p-4">
         {messages.map((m) => (
           <div
             key={m.id}
             className={`flex ${m.sender === "ADMIN" ? "justify-end" : "justify-start"}`}
           >
             <div
-              className={`max-w-[75%] rounded-2xl px-3.5 py-2 text-sm leading-relaxed ${
+              className={`max-w-[75%] rounded-lg px-3 py-2 text-sm leading-relaxed shadow-[0_1px_1px_rgba(12,10,9,0.12)] ${
                 m.sender === "ADMIN"
-                  ? "rounded-br-sm bg-bourbon-gold text-bourbon-deep"
-                  : "rounded-bl-sm bg-bourbon-deep/5 text-bourbon-deep"
+                  ? "rounded-br-none bg-[#FBEFC8] text-bourbon-deep"
+                  : "rounded-bl-none bg-white text-bourbon-deep"
               }`}
             >
-              <span className="whitespace-pre-wrap">{m.body}</span>
+              {m.kind === "IMAGE" && m.mediaUrl && (
+                /* Plain <img>: the source is a signed, short-lived Cloudinary
+                   URL, which next/image cannot cache or re-sign. */
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={m.mediaUrl}
+                  alt={m.body || "Attachment"}
+                  className="mb-1 max-h-56 w-full rounded-lg object-cover"
+                />
+              )}
+              {m.kind === "VOICE" && m.mediaUrl && (
+                <audio src={m.mediaUrl} controls className="mb-1 w-56 max-w-full" />
+              )}
+              {m.body && <span className="whitespace-pre-wrap">{m.body}</span>}
               <span className="mt-0.5 flex items-center justify-end gap-1 text-[10px] tabular-nums text-bourbon-deep/50">
                 {new Date(m.createdAt).toLocaleTimeString(undefined, {
                   hour: "numeric",
@@ -494,7 +564,38 @@ function Thread({
       </div>
 
       <div className="border-t border-bourbon-deep/10 p-3">
+        {uploadError && (
+          <p className="mb-2 text-xs text-red-600" role="alert">
+            {uploadError}
+          </p>
+        )}
         <div className="flex items-end gap-2">
+          {/* Same media rules as the customer side: images and voice notes,
+              stored as Cloudinary authenticated assets. */}
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*,audio/*"
+            hidden
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              e.target.value = "";
+              if (f) void sendFile(f);
+            }}
+          />
+          <button
+            type="button"
+            onClick={() => fileRef.current?.click()}
+            disabled={sending}
+            aria-label="Attach a file"
+            title="Attach an image or voice note"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-bourbon-deep/15 text-bourbon-deep/60 hover:border-bourbon-gold hover:text-bourbon-gold transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.7}
+                d="M21.4 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.2-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" />
+            </svg>
+          </button>
           <textarea
             value={draft}
             onChange={(e) => setDraft(e.target.value)}

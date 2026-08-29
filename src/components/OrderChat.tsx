@@ -331,7 +331,7 @@ export default function OrderChat({
   let lastDay = "";
 
   return (
-    <div className="flex flex-col h-[26rem] sm:h-[30rem] border border-bourbon-deep/10 bg-[#F6F1E7] overflow-hidden">
+    <div className="flex flex-col h-[26rem] sm:h-[30rem] border border-bourbon-deep/10 overflow-hidden">
       {/* Status strip. Only rendered when it has something to say, so a quiet
           thread does not carry an empty bar. */}
       {(peerOnline || peerTyping) && (
@@ -360,7 +360,7 @@ export default function OrderChat({
       )}
 
       {/* ---- Messages ---- */}
-      <div ref={listRef} className="flex-1 overflow-y-auto px-3 py-4 space-y-1.5">
+      <div ref={listRef} className="chat-canvas flex-1 overflow-y-auto px-3 py-4 space-y-1.5">
         {!loaded ? (
           <p className="text-bourbon-stone text-sm text-center py-8">Loading…</p>
         ) : messages.length === 0 ? (
@@ -384,10 +384,14 @@ export default function OrderChat({
                 )}
                 <div className={`flex ${mine ? "justify-end" : "justify-start"}`}>
                   <div
-                    className={`max-w-[80%] px-2.5 py-2 shadow-sm ${
+                    /* Messaging convention: received white on the left, sent
+                       tinted on the right, one square corner where the tail
+                       would be. Borders dropped for a shadow — an outline on
+                       every bubble made a busy thread look like a form. */
+                    className={`max-w-[80%] rounded-lg px-3 py-2 shadow-[0_1px_1px_rgba(12,10,9,0.12)] ${
                       mine
-                        ? "bg-bourbon-gold/25 border border-bourbon-gold/40"
-                        : "bg-white border border-bourbon-deep/10"
+                        ? "rounded-br-none bg-[#FBEFC8]"
+                        : "rounded-bl-none bg-white"
                     }`}
                   >
                     {m.kind === "IMAGE" && m.mediaUrl && (
