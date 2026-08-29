@@ -29,12 +29,15 @@ export default function ChatWidget() {
      thread belongs to a person rather than a cookie. Once captured, the widget
      hands the conversation over to the dashboard. */
   const [email, setEmail] = useState("");
-  const [needEmail, setNeedEmail] = useState(false);
   const [startError, setStartError] = useState<string | null>(null);
   /* Once an address is captured the widget carries on normally — the thread is
      the same device-scoped one, now stamped with who it belongs to. */
   const [emailCaptured, setEmailCaptured] = useState(false);
   const [linkNote, setLinkNote] = useState<string | null>(null);
+  /* The dashboard's Messages tab is the same conversation, so two entry points
+     on one screen is just clutter. The dashboard announces its panel and this
+     stands down while it is up. */
+  const [dashboardChatOpen, setDashboardChatOpen] = useState(false);
   const router = useRouter();
 
   const lastIdRef = useRef<string | null>(null);
@@ -156,6 +159,10 @@ export default function ChatWidget() {
   const startWithEmail = async () => {
     const text = draft.trim();
     if (!text || sending) return;
+    if (!email.includes("@")) {
+      setStartError("Add your email so we can reply.");
+      return;
+    }
     setSending(true);
     setStartError(null);
     try {
@@ -196,7 +203,6 @@ export default function ChatWidget() {
         },
       ]);
       setEmailCaptured(true);
-      setNeedEmail(false);
       setLinkNote(
         data.linkSent
           ? "We've emailed you a link — open it any time to pick this up on your dashboard."
@@ -212,11 +218,6 @@ export default function ChatWidget() {
   const send = async () => {
     const text = draft.trim();
     if (!text || sending) return;
-    // No address captured yet — ask for one before anything is sent.
-    if (!emailCaptured) {
-      setNeedEmail(true);
-      return;
-    }
     setSending(true);
     setDraft("");
 
@@ -250,6 +251,14 @@ export default function ChatWidget() {
     }
   };
 
+  useEffect(() => {
+    const onPanel = (e: Event) => {
+      setDashboardChatOpen(Boolean((e as CustomEvent<boolean>).detail));
+    };
+    window.addEventListener("bol-dashboard-chat", onPanel as EventListener);
+    return () => window.removeEventListener("bol-dashboard-chat", onPanel as EventListener);
+  }, []);
+
   const openWidget = () => {
     userInteractedRef.current = true;
     setOpen(true);
@@ -260,6 +269,9 @@ export default function ChatWidget() {
     userInteractedRef.current = true;
     setOpen(false);
   };
+
+  // Stand down entirely while the dashboard is showing the same conversation.
+  if (dashboardChatOpen) return null;
 
   return (
     <>
@@ -339,59 +351,48 @@ export default function ChatWidget() {
 
           {/* Composer */}
           <div className="border-t border-bourbon-gold/15 bg-bourbon-dark p-3">
-            {needEmail ? (
-              /* One field, shown only once. The message they already typed is
-                 kept and sent with it, so nothing has to be retyped. */
-              <div>
-                <label htmlFor="chat-email" className="block text-bourbon-cream/70 text-[11px] mb-1.5">
-                  Your email, so we can reply
-                </label>
-                <div className="flex items-center gap-2">
-                  <input
-                    id="chat-email"
-                    type="email"
-                    autoComplete="email"
-                    inputMode="email"
-                    autoFocus
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        startWithEmail();
-                      }
-                    }}
-                    placeholder="you@example.com"
-                    className="min-w-0 flex-1 rounded-lg bg-bourbon-deep px-3 py-2 text-sm text-bourbon-cream placeholder:text-bourbon-cream/40 focus:outline-none focus:ring-1 focus:ring-bourbon-gold/50"
-                  />
-                  <button
-                    onClick={startWithEmail}
-                    disabled={sending || !email.includes("@")}
-                    className="shrink-0 rounded-lg bg-bourbon-gold px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-bourbon-deep transition-colors hover:bg-bourbon-amber disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
-                  >
-                    {sending ? "Sending…" : "Send"}
-                  </button>
-                </div>
+            {/* Both fields visible at once until an address is captured: the
+                old version swapped the composer out for the email field, so
+                the message you were mid-way through typing vanished behind a
+                second step. */}
+            {!emailCaptured && (
+              <div className="mb-2">
+                <input
+                  id="chat-email"
+                  type="email"
+                  autoComplete="email"
+                  inputMode="email"
+                  value={email}
+                  onChange={(e) => { setEmail(e.target.value); setStartError(null); }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      if (draft.trim()) startWithEmail();
+                    }
+                  }}
+                  placeholder="Your email — so we can reply"
+                  aria-label="Your email, so we can reply"
+                  aria-invalid={Boolean(startError)}
+                  className={`w-full rounded-lg bg-bourbon-deep px-3 py-2.5 text-sm text-bourbon-cream placeholder:text-bourbon-cream/40 focus:outline-none focus:ring-1 transition-shadow ${
+                    startError
+                      ? "ring-1 ring-red-500/70 focus:ring-red-500"
+                      : "focus:ring-bourbon-gold/60"
+                  }`}
+                />
                 {startError && (
-                  <p className="text-red-400 text-[11px] mt-1.5" role="alert">
+                  <p className="mt-1.5 px-1 text-[11px] text-red-400" role="alert">
                     {startError}
                   </p>
                 )}
-                <button
-                  type="button"
-                  onClick={() => { setNeedEmail(false); setStartError(null); }}
-                  className="mt-2 text-bourbon-cream/45 text-[11px] hover:text-bourbon-cream/80 transition-colors cursor-pointer"
-                >
-                  Back to my message
-                </button>
               </div>
-            ) : (
-            <>
+            )}
+
             {linkNote && (
               <p className="mb-2 px-1 text-[11px] leading-relaxed text-bourbon-cream/50">
                 {linkNote}
               </p>
             )}
+
             <div className="flex items-end gap-2">
               <textarea
                 value={draft}
@@ -399,7 +400,8 @@ export default function ChatWidget() {
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
-                    send();
+                    if (emailCaptured) send();
+                    else startWithEmail();
                   }
                 }}
                 rows={1}
@@ -408,8 +410,13 @@ export default function ChatWidget() {
                 className="max-h-28 flex-1 resize-none rounded-lg bg-bourbon-deep px-3 py-2 text-sm text-bourbon-cream placeholder:text-bourbon-cream/40 focus:outline-none focus:ring-1 focus:ring-bourbon-gold/50"
               />
               <button
-                onClick={send}
-                disabled={!draft.trim() || sending}
+                onClick={emailCaptured ? send : startWithEmail}
+                disabled={!draft.trim() || sending || (!emailCaptured && !email.includes("@"))}
+                title={
+                  !emailCaptured && !email.includes("@")
+                    ? "Add your email so we can reply"
+                    : undefined
+                }
                 aria-label="Send message"
                 className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-bourbon-gold text-bourbon-deep transition-opacity hover:bg-bourbon-amber disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
               >
@@ -418,8 +425,6 @@ export default function ChatWidget() {
                 </svg>
               </button>
             </div>
-            </>
-            )}
           </div>
         </div>
       )}

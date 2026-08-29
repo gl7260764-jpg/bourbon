@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -47,6 +47,14 @@ export interface AccountDetails {
 }
 
 const money = (n: number) => `$${n.toFixed(2)}`;
+
+type TabId = "messages" | "orders" | "addresses";
+
+const TABS: { id: TabId; label: string }[] = [
+  { id: "messages", label: "Messages" },
+  { id: "orders", label: "Orders" },
+  { id: "addresses", label: "Addresses" },
+];
 
 const shortDate = (iso: string) =>
   new Date(iso).toLocaleDateString(undefined, {
@@ -99,7 +107,11 @@ export default function AccountClient({
   const [saved, setSaved] = useState<string | null>(null);
   /* One conversation, opened from the header or from any order. The order
      number is only a prefill for the composer — the thread is the same one. */
-  const [chatOpen, setChatOpen] = useState(openChatOnLoad);
+  /* Orders is the usual reason to be here; messages wins when there is
+     something waiting or the visitor arrived from the chat widget. */
+  const [tab, setTab] = useState<TabId>(
+    openChatOnLoad || unread > 0 ? "messages" : "orders",
+  );
   const [chatAbout, setChatAbout] = useState<string | null>(null);
   const chatRef = useRef<HTMLDivElement>(null);
   /* Drives the opt-in prompt: an order that is still pending with no details
@@ -144,13 +156,31 @@ export default function AccountClient({
           }
         : null;
 
+  /* The storefront bubble is the same conversation, so it hides while this
+     panel is up. Announced rather than imported so neither component has to
+     know the other exists. */
+  useEffect(() => {
+    const showing = tab === "messages";
+    window.dispatchEvent(
+      new CustomEvent("bol-dashboard-chat", { detail: showing }),
+    );
+    return () => {
+      window.dispatchEvent(
+        new CustomEvent("bol-dashboard-chat", { detail: false }),
+      );
+    };
+  }, [tab]);
+
   function openChat(orderNumber?: string) {
     setChatAbout(orderNumber ?? null);
-    setChatOpen(true);
-    window.setTimeout(
-      () => chatRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }),
-      60,
-    );
+    setTab("messages");
+    // Only worth scrolling when they came from an order card further down.
+    if (orderNumber) {
+      window.setTimeout(
+        () => chatRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }),
+        60,
+      );
+    }
   }
 
   function jumpTo(orderNumber: string) {
@@ -258,77 +288,87 @@ export default function AccountClient({
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10">
         <PushSettingRow />
 
-        {/* Messages. One thread, always here, whatever it is about. */}
-        <section ref={chatRef} className="mb-12 scroll-mt-28">
-          <div className="flex items-center gap-4 mb-5">
-            <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-bourbon-deep">
-              Messages
-            </h2>
-            <span className="flex-1 h-px bg-gradient-to-r from-bourbon-gold/40 to-transparent" aria-hidden="true" />
-            {!chatOpen && (
-              <button
-                type="button"
-                onClick={() => openChat()}
-                className="shrink-0 inline-flex items-center gap-2 px-4 py-2 border border-bourbon-deep/15 text-bourbon-deep text-xs font-semibold tracking-wider uppercase hover:border-bourbon-gold hover:text-bourbon-gold transition-colors cursor-pointer"
-              >
-                {unread > 0 && (
-                  <span className="inline-flex items-center justify-center min-w-5 h-5 px-1.5 bg-bourbon-gold text-bourbon-deep text-[10px] font-bold rounded-full tabular-nums">
-                    {unread > 9 ? "9+" : unread}
+        {/* Tabs. The dashboard used to be one long scroll where the address
+            form sat below every order; on a phone the chat was three screens
+            down. The header above stays put — it is the overview. */}
+        <div className="border-b border-bourbon-deep/10 mb-7 -mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto">
+          <div className="flex gap-1 min-w-max" role="tablist" aria-label="Account sections">
+            {TABS.map((t) => {
+              const active = tab === t.id;
+              return (
+                <button
+                  key={t.id}
+                  role="tab"
+                  aria-selected={active}
+                  aria-controls={`panel-${t.id}`}
+                  id={`tab-${t.id}`}
+                  type="button"
+                  onClick={() => setTab(t.id)}
+                  className={`relative px-4 py-3 text-xs font-semibold tracking-widest uppercase whitespace-nowrap transition-colors cursor-pointer ${
+                    active
+                      ? "text-bourbon-deep"
+                      : "text-bourbon-stone hover:text-bourbon-deep"
+                  }`}
+                >
+                  <span className="inline-flex items-center gap-2">
+                    {t.label}
+                    {t.id === "messages" && unread > 0 && (
+                      <span className="inline-flex items-center justify-center min-w-4 h-4 px-1 bg-bourbon-gold text-bourbon-deep text-[10px] font-bold rounded-full tabular-nums">
+                        {unread > 9 ? "9+" : unread}
+                      </span>
+                    )}
+                    {t.id === "orders" && orders.length > 0 && (
+                      <span className="text-bourbon-stone/60 tabular-nums">{orders.length}</span>
+                    )}
                   </span>
-                )}
-                Open chat
-              </button>
-            )}
+                  {/* Sits on the container's border so the active tab reads as
+                      joined to its panel rather than underlined. */}
+                  <span
+                    aria-hidden="true"
+                    className={`absolute left-3 right-3 -bottom-px h-0.5 transition-colors ${
+                      active ? "bg-bourbon-gold" : "bg-transparent"
+                    }`}
+                  />
+                </button>
+              );
+            })}
           </div>
+        </div>
 
-          {chatOpen ? (
-            <>
-              {chatAbout && (
-                <p className="text-bourbon-stone text-xs mb-2">
+        <div role="tabpanel" id="panel-messages" aria-labelledby="tab-messages" hidden={tab !== "messages"}>
+          {/* The tab is the chat — there is nothing to expand into, so it is
+              simply here. The collapsed "open chat" card this replaced made
+              you click twice to reach the only thing on the tab. */}
+          <section ref={chatRef} className="mb-12 scroll-mt-28">
+            {chatAbout && (
+              <div className="mb-3 flex items-center gap-2 flex-wrap">
+                <p className="text-bourbon-stone text-xs">
                   Asking about{" "}
-                  <span className="text-bourbon-deep font-semibold">{chatAbout}</span>.
+                  <span className="text-bourbon-deep font-semibold">{chatAbout}</span>
                 </p>
-              )}
-              <OrderChat
-                endpoint="/api/account/chat"
-                me="VISITOR"
-                channel={customerChannelName}
-                contextOrderNumber={chatAbout}
-                emptyHint="Ask us anything — an order, a bottle, delivery. You can send photos and voice notes too."
-              />
-            </>
-          ) : (
-            <button
-              type="button"
-              onClick={() => openChat()}
-              className="w-full bg-white border border-bourbon-deep/10 shadow-[0_1px_2px_0_rgba(12,10,9,0.04)] hover:border-bourbon-deep/25 transition-colors p-5 flex items-center gap-4 text-left cursor-pointer"
-            >
-              <span className="shrink-0 w-10 h-10 bg-bourbon-deep flex items-center justify-center">
-                <svg className="w-5 h-5 text-bourbon-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75}
-                    d="M21 11.5a8.38 8.38 0 01-9 8.4 8.5 8.5 0 01-3.8-.9L3 21l1.9-5.2A8.38 8.38 0 014 11.5a8.5 8.5 0 018.5-8.5 8.38 8.38 0 018.5 8.5z" />
-                </svg>
-              </span>
-              <span className="min-w-0">
-                <span className="block text-bourbon-deep text-sm font-semibold">
-                  {unread > 0
-                    ? `${unread} new ${unread === 1 ? "reply" : "replies"} from us`
-                    : "Chat with us"}
-                </span>
-                <span className="block text-bourbon-stone text-[13px] mt-0.5">
-                  One conversation for everything — orders, bottles, delivery.
-                </span>
-              </span>
-            </button>
-          )}
-        </section>
+                <button
+                  type="button"
+                  onClick={() => setChatAbout(null)}
+                  className="text-bourbon-stone/70 text-[11px] underline underline-offset-2 hover:text-bourbon-deep transition-colors cursor-pointer"
+                >
+                  clear
+                </button>
+              </div>
+            )}
+            <OrderChat
+              endpoint="/api/account/chat"
+              me="VISITOR"
+              channel={customerChannelName}
+              contextOrderNumber={chatAbout}
+              emptyHint="Ask us anything — an order, a bottle, delivery. You can send photos and voice notes too."
+            />
+          </section>
+        </div>
 
+        <div role="tabpanel" id="panel-orders" aria-labelledby="tab-orders" hidden={tab !== "orders"}>
         <section className="mb-12">
           <div className="flex items-center gap-4 mb-5">
-            <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-bourbon-deep">
-              Your orders
-            </h2>
-            <span className="flex-1 h-px bg-gradient-to-r from-bourbon-gold/40 to-transparent" aria-hidden="true" />
+
           </div>
 
           {orders.length === 0 ? (
@@ -566,13 +606,12 @@ export default function AccountClient({
             </ul>
           )}
         </section>
+        </div>
 
+        <div role="tabpanel" id="panel-addresses" aria-labelledby="tab-addresses" hidden={tab !== "addresses"}>
         <section>
           <div className="flex items-center gap-4 mb-1">
-            <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-bourbon-deep">
-              Delivery details
-            </h2>
-            <span className="flex-1 h-px bg-gradient-to-r from-bourbon-gold/40 to-transparent" aria-hidden="true" />
+
           </div>
           <p className="text-bourbon-stone text-sm mb-4">
             Used to prefill checkout. Changing them here doesn&apos;t alter
@@ -622,6 +661,8 @@ export default function AccountClient({
             </div>
           </form>
         </section>
+        </div>
+
       </div>
     </main>
   );
