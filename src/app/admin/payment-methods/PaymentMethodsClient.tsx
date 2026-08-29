@@ -3,7 +3,6 @@
 import { useState, useTransition } from "react";
 import {
   MAX_DETAIL_LEN,
-  MAX_INSTRUCTIONS_LEN,
   MAX_LABEL_LEN,
 } from "@/lib/payment-options";
 import {
@@ -17,7 +16,6 @@ export interface PaymentOptionRow {
   key: string;
   label: string;
   detail: string | null;
-  instructions: string | null;
   discountRate: number;
   isActive: boolean;
   sortOrder: number;
@@ -173,21 +171,6 @@ export default function PaymentMethodsClient({
               </div>
             </div>
 
-            <div className="mt-4 pt-4 border-t border-bourbon-deep/10">
-              <p className="text-bourbon-stone text-[10px] tracking-widest uppercase mb-1.5">
-                Payment details sent to the customer
-              </p>
-              {o.instructions ? (
-                <pre className="text-bourbon-deep text-sm whitespace-pre-wrap font-[family-name:var(--font-inter)] bg-bourbon-cream/50 p-3">
-                  {o.instructions}
-                </pre>
-              ) : (
-                <p className="text-red-600 text-sm">
-                  No details set — the customer will be told this method exists but
-                  not how to pay. Add the account details.
-                </p>
-              )}
-            </div>
           </section>
         ))}
       </div>
@@ -258,26 +241,6 @@ function OptionForm({
           defaultValue={option?.detail ?? ""}
           placeholder="Send from your bank app — no fees."
           className="w-full px-3 py-2 border border-bourbon-deep/20 text-bourbon-deep text-sm focus:outline-none focus:border-bourbon-gold"
-        />
-      </div>
-
-      <div className="mb-5">
-        <label htmlFor="instructions" className="block text-bourbon-deep text-sm font-semibold mb-1">
-          Payment details / how to pay
-        </label>
-        <p className="text-bourbon-stone text-xs mb-2">
-          The account details the customer needs — handle, wallet address, bank
-          info. Sent in the order email and shown on the confirmation page.
-          Never shown before an order is placed.
-        </p>
-        <textarea
-          id="instructions"
-          name="instructions"
-          rows={6}
-          maxLength={MAX_INSTRUCTIONS_LEN}
-          defaultValue={option?.instructions ?? ""}
-          placeholder={"Send the total to:\n\nZelle: payments@bourbonoaklover.com\nName: Bourbon & Oak LLC\n\nReply with the confirmation once sent."}
-          className="w-full px-3 py-2 border border-bourbon-deep/20 text-bourbon-deep text-sm font-mono focus:outline-none focus:border-bourbon-gold"
         />
       </div>
 

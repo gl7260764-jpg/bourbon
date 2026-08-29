@@ -27,7 +27,6 @@ export async function savePaymentOption(
     key: formData.get("key"),
     label: formData.get("label"),
     detail: formData.get("detail"),
-    instructions: formData.get("instructions"),
     discountRate: Number(formData.get("discountPercent") ?? 0) / 100,
     isActive: formData.get("isActive") === "on",
     sortOrder: Number(formData.get("sortOrder") ?? 0),
@@ -45,7 +44,6 @@ export async function savePaymentOption(
         data: {
           label: v.label,
           detail: v.detail,
-          instructions: v.instructions,
           discountRate: new Prisma.Decimal(v.discountRate),
           isActive: v.isActive,
           sortOrder: v.sortOrder,
@@ -57,7 +55,6 @@ export async function savePaymentOption(
           key: v.key,
           label: v.label,
           detail: v.detail,
-          instructions: v.instructions,
           discountRate: new Prisma.Decimal(v.discountRate),
           isActive: v.isActive,
           sortOrder: v.sortOrder,

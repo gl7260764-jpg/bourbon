@@ -1,19 +1,23 @@
 // Shared types + normalisation for operator-managed payment rails.
 // Client-safe: no prisma, no server imports (the checkout form imports this).
+//
+// A rail deliberately carries NO account details. Canned per-method
+// instructions were removed: the buyer is now given details per order by an
+// operator from the order page, which is the only way to quote a reference
+// unique to that payment and the only place the details are ever shown. The
+// PaymentOption.instructions column is left in place for historical rows and
+// is no longer read or written.
 
 export interface PaymentOptionView {
   key: string;
   label: string;
   detail: string | null;
-  /** Account details / how-to-pay text. Only sent to the buyer after ordering. */
-  instructions: string | null;
   /** 0.1 = 10% off. Display only — the server resolves the real rate. */
   discountRate: number;
 }
 
 export const MAX_LABEL_LEN = 60;
 export const MAX_DETAIL_LEN = 160;
-export const MAX_INSTRUCTIONS_LEN = 2000;
 export const MAX_DISCOUNT_RATE = 0.5;
 
 /** Slugify a label into a stable key: "Cash App" -> "cash-app". */
@@ -35,7 +39,6 @@ export interface PaymentOptionInput {
   key: string;
   label: string;
   detail: string | null;
-  instructions: string | null;
   discountRate: number;
   isActive: boolean;
   sortOrder: number;
@@ -64,14 +67,6 @@ export function validatePaymentOption(
     return { error: `Detail must be ${MAX_DETAIL_LEN} characters or fewer.` };
   }
 
-  const instructions =
-    typeof o.instructions === "string" ? o.instructions.trim() : "";
-  if (instructions.length > MAX_INSTRUCTIONS_LEN) {
-    return {
-      error: `Payment details must be ${MAX_INSTRUCTIONS_LEN} characters or fewer.`,
-    };
-  }
-
   const rateRaw = Number(o.discountRate ?? 0);
   if (!Number.isFinite(rateRaw) || rateRaw < 0 || rateRaw > MAX_DISCOUNT_RATE) {
     return {
@@ -84,7 +79,6 @@ export function validatePaymentOption(
       key,
       label,
       detail: detail || null,
-      instructions: instructions || null,
       discountRate: clampDiscountRate(rateRaw),
       isActive: o.isActive !== false,
       sortOrder: Number.isFinite(Number(o.sortOrder)) ? Number(o.sortOrder) : 0,

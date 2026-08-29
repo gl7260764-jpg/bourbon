@@ -25,14 +25,12 @@ export default async function AdminPaymentMethodsPage() {
     key: o.key,
     label: o.label,
     detail: o.detail,
-    instructions: o.instructions,
     discountRate: Number(o.discountRate),
     isActive: o.isActive,
     sortOrder: o.sortOrder,
     orderCount: countByKey.get(o.key) ?? 0,
   }));
 
-  const missingDetails = rows.filter((r) => r.isActive && !r.instructions).length;
 
   return (
     <>
@@ -44,19 +42,17 @@ export default async function AdminPaymentMethodsPage() {
           Payment methods
         </h1>
         <p className="text-bourbon-stone text-sm mt-2">
-          What customers can pay with, and the account details they receive once
-          they order. Changes go live immediately — no deploy needed.
+          What customers can pay with at checkout. Changes go live immediately —
+          no deploy needed.
         </p>
       </div>
 
-      {missingDetails > 0 && (
-        <p className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 text-sm">
-          <strong>{missingDetails}</strong> live payment method
-          {missingDetails === 1 ? " has" : "s have"} no account details set.
-          Customers choosing {missingDetails === 1 ? "it" : "them"} are told the
-          method exists but not where to send the money.
-        </p>
-      )}
+      <p className="mb-6 p-4 bg-bourbon-gold/10 border border-bourbon-gold/30 text-bourbon-deep text-sm">
+        These rails are the <strong>choices</strong> shown at checkout &mdash; they
+        carry no account details. After an order is placed you open it under{" "}
+        <strong>Orders</strong> and send that buyer their payment details, which
+        is the only place the details are ever shown. Nothing here is emailed.
+      </p>
 
       <PaymentMethodsClient options={rows} />
     </>

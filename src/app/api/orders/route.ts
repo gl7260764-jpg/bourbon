@@ -287,11 +287,15 @@ export async function POST(req: NextRequest) {
         paymentMethod,
         // Rate comes from the PaymentOption row, never from the request body.
         discountRate: new Prisma.Decimal(resolvedDiscountRate),
-        // Snapshot the rail as the customer saw it. Editing a wallet address
-        // later must never rewrite what an earlier buyer was told to pay.
+        // Snapshot the rail as the customer saw it. Renaming a rail later must
+        // never rewrite what an earlier buyer was shown.
+        //
+        // No instructions are snapshotted: rails no longer carry canned account
+        // details. What the buyer is told to pay against is issued per order by
+        // an operator and lives in paymentDetailsBody. The column stays for
+        // orders placed before that change.
         paymentOptionKey: option.key,
         paymentLabel: option.label,
-        paymentInstructions: option.instructions,
         // Every figure below is computed from the catalogue above.
         subtotal: new Prisma.Decimal(computedSubtotal),
         discount: new Prisma.Decimal(computedDiscount),
