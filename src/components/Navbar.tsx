@@ -106,6 +106,9 @@ export default function Navbar() {
             <Link
               href="/account"
               aria-label="Your account"
+              /* Desktop-only on purpose: a fifth icon leaves 0px between the
+                 wordmark and the cluster at 320px. The mobile menu carries a
+                 labelled entry instead, clearer than a 20px glyph. */
               className="text-bourbon-cream/70 hover:text-bourbon-gold transition-colors cursor-pointer hidden sm:block"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -171,6 +174,29 @@ export default function Navbar() {
                 {link.name}
               </Link>
             ))}
+
+            {/* Account. The icon beside the cart is hidden below sm, and this
+                menu previously listed only the marketing sections, so a phone
+                had no route to /account or to signing in at all. Separated
+                from the section links because it is an account action, not
+                another part of the catalogue. /account redirects to sign-in
+                when there is no session, so one entry serves both states. */}
+            <Link
+              href="/account"
+              onClick={() => setMobileOpen(false)}
+              tabIndex={mobileOpen ? undefined : -1}
+              className="mt-1 pt-4 border-t border-bourbon-cream/10 flex items-center gap-3 text-bourbon-gold hover:text-bourbon-amber text-sm tracking-wider uppercase transition-colors py-2"
+            >
+              <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                />
+              </svg>
+              Sign in / My account
+            </Link>
           </div>
         </nav>
       </div>
