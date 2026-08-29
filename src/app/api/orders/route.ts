@@ -331,7 +331,7 @@ export async function POST(req: NextRequest) {
         `${resolvedLines.length} item${resolvedLines.length === 1 ? "" : "s"} · ${option.label}`,
         resolvedLines.map((l) => `${l.quantity}x ${l.productName}`).join(", "),
       ].join("\n"),
-      url: `/admin/orders`,
+      url: `/admin/orders/${createdOrder.id}`,
     });
 
     /* One-click sign-in for the button in the confirmation email. Best effort:
