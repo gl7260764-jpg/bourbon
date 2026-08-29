@@ -19,13 +19,21 @@ import {
   type SavedProfile,
 } from "./profileStorage";
 import {
+  formatUsPhone,
+  isValidUsPhone,
+  toE164Us,
+  US_PHONE_ERROR,
+} from "@/lib/phone";
+import {
   // AmexLogo, // unused while credit card payment is disabled
   ApplePayLogo,
   BitcoinLogo,
+  CashAppLogo,
   ChimeLogo,
   EthereumLogo,
   // MastercardLogo, // unused while credit card payment is disabled
   // VisaLogo, // unused while credit card payment is disabled
+  ZelleLogo,
 } from "./Logos";
 
 interface PaymentOption {
@@ -41,6 +49,8 @@ interface PaymentOption {
 // logo rather than breaking the layout.
 const PAYMENT_LOGOS: Record<string, React.ReactNode> = {
   chime: <ChimeLogo />,
+  zelle: <ZelleLogo />,
+  "cash-app": <CashAppLogo />,
   "apple-pay": <ApplePayLogo />,
   crypto: (
     <div className="flex items-center gap-2">
@@ -75,6 +85,18 @@ const FALLBACK_PAYMENT_OPTIONS: PaymentOption[] = [
     label: "Chime",
     detail: "Pay from your Chime account via Pay Anyone.",
     logos: <ChimeLogo />,
+  },
+  {
+    id: "zelle",
+    label: "Zelle",
+    detail: "Send from your bank app — no fees, arrives in minutes.",
+    logos: <ZelleLogo />,
+  },
+  {
+    id: "cash-app",
+    label: "Cash App",
+    detail: "Pay to our $Cashtag from the Cash App.",
+    logos: <CashAppLogo />,
   },
   {
     id: "apple-pay",
@@ -151,6 +173,7 @@ export default function CheckoutClient() {
   );
   const [placing, setPlacing] = useState(false);
   const [placeError, setPlaceError] = useState<string | null>(null);
+  const [phoneTouched, setPhoneTouched] = useState(false);
 
   const [savedProfile, setSavedProfile] = useState<SavedProfile | null>(null);
   const [saveForLater, setSaveForLater] = useState(true);
@@ -188,7 +211,11 @@ export default function CheckoutClient() {
     const profile = loadProfile();
     if (profile) {
       setContact(profile.contact);
-      setAddress(profile.address);
+      /* A profile saved before delivery was restricted to the US may carry
+         another country. The field is no longer editable, so honouring the
+         stored value would strand the customer on an address they cannot
+         correct — force it back to US. */
+      setAddress({ ...profile.address, country: "US" });
       setSavedProfile(profile);
     }
   }, []);
@@ -228,12 +255,19 @@ export default function CheckoutClient() {
 
   const total = Math.max(0, subtotal - discount) + shippingCost;
 
+  const phoneValid = isValidUsPhone(contact.phone);
+
   const canPlace =
     items.length > 0 &&
     contact.email.includes("@") &&
+    phoneValid &&
     address.fullName.trim() &&
     address.line1.trim() &&
     address.city.trim() &&
+    /* The API has always rejected a missing region, but the button did not
+       check it — so this was reachable as a generic "could not place your
+       order" after submit. */
+    address.region.trim() &&
     address.postal.trim();
 
   const handlePlaceOrder = async () => {
@@ -247,7 +281,7 @@ export default function CheckoutClient() {
     const snapshot = {
       orderNumber,
       placedAt: new Date().toISOString(),
-      contact: { ...contact },
+      contact: { ...contact, phone: toE164Us(contact.phone) ?? contact.phone },
       address: { ...address },
       // Shipping is no longer chosen by the customer. The server forces the
       // method and a zero cost regardless of what's sent here — this only
@@ -431,11 +465,32 @@ export default function CheckoutClient() {
                   <Input
                     id="phone"
                     type="tel"
-                    autoComplete="tel"
-                    placeholder="(555) 555-0000"
+                    inputMode="tel"
+                    autoComplete="tel-national"
+                    maxLength={14}
+                    placeholder="(502) 555-0199"
+                    aria-invalid={phoneTouched && !phoneValid}
+                    aria-describedby={
+                      phoneTouched && !phoneValid ? "phone-error" : undefined
+                    }
                     value={contact.phone}
-                    onChange={(e) => setContact({ ...contact, phone: e.target.value })}
+                    /* Formatted as they type so the shape of a US number is
+                       obvious before they ever hit submit. */
+                    onChange={(e) =>
+                      setContact({ ...contact, phone: formatUsPhone(e.target.value) })
+                    }
+                    onBlur={() => setPhoneTouched(true)}
+                    className={
+                      phoneTouched && !phoneValid
+                        ? "border-red-500 focus:border-red-500"
+                        : ""
+                    }
                   />
+                  {phoneTouched && !phoneValid && (
+                    <p id="phone-error" role="alert" className="mt-1.5 text-red-600 text-xs">
+                      {US_PHONE_ERROR}
+                    </p>
+                  )}
                 </div>
               </div>
             </section>
@@ -501,19 +556,21 @@ export default function CheckoutClient() {
                 </div>
                 <div>
                   <FieldLabel htmlFor="country">Country</FieldLabel>
-                  <select
+                  {/* Fixed, not chosen. `readOnly` rather than `disabled` so it
+                      stays focusable and is still announced by screen readers;
+                      the value is forced to US in state and re-checked by the
+                      API, so this is not the only thing holding the rule. */}
+                  <input
                     id="country"
-                    value={address.country}
-                    onChange={(e) => setAddress({ ...address, country: e.target.value })}
-                    className="w-full bg-white border border-bourbon-deep/15 px-3 py-3 text-bourbon-deep text-sm focus:outline-none focus:border-bourbon-gold cursor-pointer"
-                  >
-                    <option value="US">United States</option>
-                    <option value="CA">Canada</option>
-                    <option value="UK">United Kingdom</option>
-                    <option value="DE">Germany</option>
-                    <option value="JP">Japan</option>
-                    <option value="AU">Australia</option>
-                  </select>
+                    readOnly
+                    aria-readonly="true"
+                    tabIndex={-1}
+                    value="United States"
+                    className="w-full bg-bourbon-cream border border-bourbon-deep/15 px-3 py-3 text-bourbon-stone text-sm cursor-not-allowed focus:outline-none"
+                  />
+                  <p className="mt-1.5 text-bourbon-stone text-xs">
+                    We currently ship within the United States only.
+                  </p>
                 </div>
               </div>
 

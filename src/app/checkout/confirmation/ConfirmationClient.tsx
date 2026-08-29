@@ -205,6 +205,77 @@ export default function ConfirmationClient({
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6">
           {/* Left column */}
           <div className="space-y-6">
+            {/* Payment — first in the column so it sits directly under the
+                order number in both the stacked mobile view and the two-
+                column desktop one. It carries the only action the buyer
+                still has to take, so it should not be below the receipt. */}
+            <section className="bg-white border border-bourbon-deep/10 p-5">
+              <h3 className="text-bourbon-stone text-[10px] tracking-widest uppercase mb-3">
+                Payment
+              </h3>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <p className="text-bourbon-deep font-semibold">{order.payment.label}</p>
+                    {order.payment.discountRate > 0 && (
+                      <span className="px-2 py-0.5 bg-bourbon-gold text-bourbon-deep text-[10px] font-bold tracking-widest uppercase">
+                        {Math.round(order.payment.discountRate * 100)}% Off
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div>{paymentLogos(order.payment.id)}</div>
+              </div>
+
+              {/* The checkout-time instructions block used to live here. It is
+                  gone deliberately: payment details are now issued per order
+                  by a human afterwards, so anything shown at this moment is
+                  either a placeholder or stale — and it directly contradicted
+                  the notice below by claiming the details had been emailed. */}
+
+              {/* No receipt upload here any more. Payment details are issued
+                  per order by a human, so at this moment the buyer has not
+                  been told where to send anything — an upload box would be
+                  asking for proof of a payment they cannot yet make. The
+                  handoff is to the dashboard, which is also the only place
+                  the details are ever shown. */}
+              {(order.status ?? "PENDING") === "PENDING" && (
+                <div className="mt-6 border border-bourbon-gold/40 bg-bourbon-gold/5 p-5">
+                  <p className="text-bourbon-gold text-[10px] tracking-[0.25em] uppercase font-semibold mb-2">
+                    What happens next
+                  </p>
+                  <h3 className="font-[family-name:var(--font-playfair)] text-xl font-bold text-bourbon-deep mb-2">
+                    We&apos;re preparing your payment details
+                  </h3>
+                  <p className="text-bourbon-stone text-sm leading-relaxed mb-4">
+                    We&apos;ll email you the moment they&apos;re ready. Pay
+                    the{" "}
+                    <span className="text-bourbon-deep font-semibold">
+                      ${order.totals.total.toFixed(2)}
+                    </span>{" "}
+                    and upload your receipt from your dashboard.
+                  </p>
+
+                  {/* Carries the order's email to the sign-in step so the
+                      buyer never retypes the address they just entered at
+                      checkout. It only prefills — the emailed code is still
+                      what grants the session. */}
+                  <Link
+                    href={`/account/login?email=${encodeURIComponent(order.contact.email)}`}
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-bourbon-gold text-bourbon-deep text-xs font-semibold tracking-wider uppercase hover:bg-bourbon-amber transition-colors"
+                  >
+                    Open your dashboard →
+                  </Link>
+
+                  <OrderAlertsPrompt />
+
+                  <p className="text-bourbon-stone/70 text-[11px] mt-4">
+                    We never send payment details by email.
+                  </p>
+                </div>
+              )}
+            </section>
+
             {/* Items */}
             <section className="bg-white border border-bourbon-deep/10 p-5 sm:p-7">
               <h2 className="font-[family-name:var(--font-playfair)] text-xl sm:text-2xl font-bold text-bourbon-deep mb-5">
@@ -233,93 +304,24 @@ export default function ConfirmationClient({
               </ul>
             </section>
 
-            {/* Address + Shipping + Payment */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <section className="bg-white border border-bourbon-deep/10 p-5">
-                <h3 className="text-bourbon-stone text-[10px] tracking-widest uppercase mb-3">
-                  Shipping to
-                </h3>
-                <p className="text-bourbon-deep font-semibold">{order.address.fullName}</p>
-                <p className="text-bourbon-stone text-sm leading-relaxed mt-2">
-                  {order.address.line1}
-                  {order.address.line2 ? <><br />{order.address.line2}</> : null}
-                  <br />
-                  {order.address.city}, {order.address.region} {order.address.postal}
-                  <br />
-                  {order.address.country}
-                </p>
-                <p className="text-bourbon-stone text-sm mt-3">
-                  {order.contact.phone}
-                </p>
-              </section>
+            <section className="bg-white border border-bourbon-deep/10 p-5">
+              <h3 className="text-bourbon-stone text-[10px] tracking-widest uppercase mb-3">
+                Shipping to
+              </h3>
+              <p className="text-bourbon-deep font-semibold">{order.address.fullName}</p>
+              <p className="text-bourbon-stone text-sm leading-relaxed mt-2">
+                {order.address.line1}
+                {order.address.line2 ? <><br />{order.address.line2}</> : null}
+                <br />
+                {order.address.city}, {order.address.region} {order.address.postal}
+                <br />
+                {order.address.country}
+              </p>
+              <p className="text-bourbon-stone text-sm mt-3">
+                {order.contact.phone}
+              </p>
+            </section>
 
-              <section className="bg-white border border-bourbon-deep/10 p-5 sm:col-span-2">
-                <h3 className="text-bourbon-stone text-[10px] tracking-widest uppercase mb-3">
-                  Payment
-                </h3>
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <p className="text-bourbon-deep font-semibold">{order.payment.label}</p>
-                      {order.payment.discountRate > 0 && (
-                        <span className="px-2 py-0.5 bg-bourbon-gold text-bourbon-deep text-[10px] font-bold tracking-widest uppercase">
-                          {Math.round(order.payment.discountRate * 100)}% Off
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  <div>{paymentLogos(order.payment.id)}</div>
-                </div>
-
-                {/* The checkout-time instructions block used to live here. It is
-                    gone deliberately: payment details are now issued per order
-                    by a human afterwards, so anything shown at this moment is
-                    either a placeholder or stale — and it directly contradicted
-                    the notice below by claiming the details had been emailed. */}
-
-                {/* No receipt upload here any more. Payment details are issued
-                    per order by a human, so at this moment the buyer has not
-                    been told where to send anything — an upload box would be
-                    asking for proof of a payment they cannot yet make. The
-                    handoff is to the dashboard, which is also the only place
-                    the details are ever shown. */}
-                {(order.status ?? "PENDING") === "PENDING" && (
-                  <div className="mt-6 border border-bourbon-gold/40 bg-bourbon-gold/5 p-5">
-                    <p className="text-bourbon-gold text-[10px] tracking-[0.25em] uppercase font-semibold mb-2">
-                      What happens next
-                    </p>
-                    <h3 className="font-[family-name:var(--font-playfair)] text-xl font-bold text-bourbon-deep mb-2">
-                      We&apos;re preparing your payment details
-                    </h3>
-                    <p className="text-bourbon-stone text-sm leading-relaxed mb-4">
-                      We&apos;ll email you the moment they&apos;re ready. Pay
-                      the{" "}
-                      <span className="text-bourbon-deep font-semibold">
-                        ${order.totals.total.toFixed(2)}
-                      </span>{" "}
-                      and upload your receipt from your dashboard.
-                    </p>
-
-                    {/* Carries the order's email to the sign-in step so the
-                        buyer never retypes the address they just entered at
-                        checkout. It only prefills — the emailed code is still
-                        what grants the session. */}
-                    <Link
-                      href={`/account/login?email=${encodeURIComponent(order.contact.email)}`}
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-bourbon-gold text-bourbon-deep text-xs font-semibold tracking-wider uppercase hover:bg-bourbon-amber transition-colors"
-                    >
-                      Open your dashboard →
-                    </Link>
-
-                    <OrderAlertsPrompt />
-
-                    <p className="text-bourbon-stone/70 text-[11px] mt-4">
-                      We never send payment details by email.
-                    </p>
-                  </div>
-                )}
-              </section>
-            </div>
           </div>
 
           {/* Totals card */}

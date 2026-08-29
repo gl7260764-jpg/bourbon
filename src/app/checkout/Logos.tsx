@@ -68,6 +68,26 @@ export function ChimeLogo({ className = "h-6" }: { className?: string }) {
   );
 }
 
+export function ZelleLogo({ className = "h-6" }: { className?: string }) {
+  return (
+    <span className={`${className} inline-flex items-center justify-center px-2 bg-[#6D1ED4] rounded-sm`}>
+      <span className="font-extrabold tracking-tight text-white text-sm leading-none">
+        Zelle
+      </span>
+    </span>
+  );
+}
+
+export function CashAppLogo({ className = "h-6" }: { className?: string }) {
+  return (
+    <span className={`${className} inline-flex items-center justify-center px-2 bg-[#00D632] rounded-sm`}>
+      <span className="font-extrabold tracking-tight text-white text-sm leading-none">
+        Cash App
+      </span>
+    </span>
+  );
+}
+
 export function EthereumLogo({ className = "h-6 w-6" }: { className?: string }) {
   return (
     <span className={`${className} inline-flex items-center justify-center rounded-full bg-[#627EEA]`}>

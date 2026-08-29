@@ -28,6 +28,8 @@ const PAYMENT_LABEL: Record<PaymentMethod, string> = {
   CHIME: "Chime",
   APPLE_PAY: "Apple Pay",
   CRYPTO: "Crypto",
+  ZELLE: "Zelle",
+  CASH_APP: "Cash App",
   OTHER: "Other",
 };
 

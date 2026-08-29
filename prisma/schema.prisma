@@ -185,6 +185,8 @@ enum PaymentMethod {
   CHIME
   APPLE_PAY
   CRYPTO
+  ZELLE
+  CASH_APP
   // Anything the operator adds from the admin panel that isn't one of the
   // built-ins above. The real identity lives in Order.paymentOptionKey /
   // paymentLabel — this enum only exists for the pre-existing orders and

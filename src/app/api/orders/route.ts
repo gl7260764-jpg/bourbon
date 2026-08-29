@@ -5,6 +5,7 @@ import {
   shippingFor,
 } from "@/lib/commerce";
 import { Prisma, PaymentMethod, ShippingMethod } from "@prisma/client";
+import { isValidUsPhone, toE164Us, US_PHONE_ERROR } from "@/lib/phone";
 import { prisma } from "@/lib/prisma";
 import { findOrCreateCustomer } from "@/lib/customer-auth";
 import { sendEmail } from "@/lib/mailer";
@@ -15,7 +16,14 @@ import {
 } from "@/lib/emails/orderEmails";
 
 type ShippingId = "standard" | "express" | "overnight" | "white-glove";
-type PaymentId = "card" | "paypal" | "chime" | "apple-pay" | "crypto";
+type PaymentId =
+  | "card"
+  | "paypal"
+  | "chime"
+  | "apple-pay"
+  | "crypto"
+  | "zelle"
+  | "cash-app";
 
 const PAYMENT_MAP: Record<PaymentId, PaymentMethod> = {
   card: "CARD",
@@ -23,6 +31,8 @@ const PAYMENT_MAP: Record<PaymentId, PaymentMethod> = {
   chime: "CHIME",
   "apple-pay": "APPLE_PAY",
   crypto: "CRYPTO",
+  zelle: "ZELLE",
+  "cash-app": "CASH_APP",
 };
 
 interface IncomingOrderItem {
@@ -72,7 +82,7 @@ export async function POST(req: NextRequest) {
 
   const orderNumber = body.orderNumber?.trim();
   const email = body.contact?.email?.trim();
-  const phone = body.contact?.phone?.trim() ?? "";
+  const rawPhone = body.contact?.phone?.trim() ?? "";
   const address = body.address;
   const payment = body.payment;
   const items = body.items ?? [];
@@ -80,6 +90,9 @@ export async function POST(req: NextRequest) {
 
   if (!orderNumber) return badRequest("Missing orderNumber.");
   if (!email || !email.includes("@")) return badRequest("Valid email is required.");
+  if (!isValidUsPhone(rawPhone)) return badRequest(US_PHONE_ERROR);
+  // Stored E.164 so the admin panel and order emails show one consistent shape.
+  const phone = toE164Us(rawPhone)!;
   if (
     !address ||
     !address.fullName?.trim() ||
@@ -90,6 +103,14 @@ export async function POST(req: NextRequest) {
     !address.country?.trim()
   ) {
     return badRequest("Complete shipping address is required.");
+  }
+  /* Delivery is US-only. The checkout field is fixed and not editable, but
+     this is a public endpoint — without the check here the lock is cosmetic
+     and a crafted POST could book an address we cannot ship to. Rejected
+     rather than silently coerced, so a non-US address is never quietly
+     rewritten into a US one. */
+  if (address.country.trim().toUpperCase() !== "US") {
+    return badRequest("We currently ship within the United States only.");
   }
   // Shipping is no longer selectable and is always free, so nothing about it
   // is validated against the request any more — see below where it's forced.
@@ -312,10 +333,11 @@ export async function POST(req: NextRequest) {
         },
         // No shippingMethodLabel: shipping is free and no longer shown to the
         // customer, so the email omits the delivery block entirely.
-        // Label and details come from the resolved rail, so a newly added
-        // method works in email without a code change.
+        // Label comes from the resolved rail, so a newly added method works in
+        // email without a code change. Instructions are deliberately NOT passed:
+        // payment details are issued per order to the signed-in dashboard and
+        // never emailed — see dashboardPanel() in orderEmails.ts.
         paymentMethodLabel: option.label,
-        paymentInstructions: option.instructions,
         // Same resolved lines the order was written from, so the email can
         // never quote a different price than the database holds.
         items: resolvedLines.map((l) => ({

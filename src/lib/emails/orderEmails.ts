@@ -9,6 +9,10 @@ const COLORS = {
   muted: "#78716C",
 };
 
+const SITE =
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
+  "https://bourbonoaklover.com";
+
 const BRAND_NAME = "Bourbon Oak Lover";
 const BRAND_TAGLINE = "Aged Kentucky Reserve";
 
@@ -60,7 +64,6 @@ export interface OrderEmailData {
    * present the customer can pay immediately instead of waiting for a
    * follow-up. Null means the operator hasn't configured that method yet.
    */
-  paymentInstructions?: string | null;
   items: OrderEmailItem[];
   totals: {
     subtotal: number;
@@ -230,19 +233,45 @@ function sectionLabel(text: string): string {
  * empty string when the rail has no details configured, so the email quietly
  * falls back to "we'll be in touch" rather than showing an empty box.
  */
-function paymentPanel(data: OrderEmailData): string {
-  if (!data.paymentInstructions) return "";
+/**
+ * Buyer-facing call to action: get them into the signed-in dashboard.
+ *
+ * Payment details are issued per order by a human and shown ONLY there. This
+ * email therefore points at the dashboard instead of carrying account or
+ * wallet details — emailed payment details are precisely what payment-
+ * redirection fraud imitates, and a lookalike "our bank changed" follow-up is
+ * indistinguishable to the recipient. Same reasoning as
+ * notifyPaymentDetailsIssued in paymentDetailsEmail.ts.
+ *
+ * The address is carried into the sign-in step so the buyer never retypes
+ * what they just entered at checkout; it only prefills, and the emailed code
+ * is still what grants the session.
+ */
+function dashboardPanel(data: OrderEmailData): string {
+  const url = `${SITE}/account/login?email=${encodeURIComponent(data.customer.email)}`;
   return `
     <tr>
       <td style="padding:8px 32px 20px;">
         <table width="100%" cellpadding="0" cellspacing="0" style="background:${COLORS.cream};border:2px solid ${COLORS.gold};">
           <tr>
-            <td style="padding:20px 22px;">
-              ${sectionLabel(`How to pay — ${escapeHtml(data.paymentMethodLabel)}`)}
-              <div style="font-family:'Courier New',Courier,monospace;font-size:14px;line-height:1.8;color:${COLORS.deep};white-space:pre-wrap;">${escapeHtml(data.paymentInstructions)}</div>
-              <div style="font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.6;color:${COLORS.stone};margin-top:14px;padding-top:14px;border-top:1px solid ${COLORS.gold}33;">
-                Amount due: <strong style="color:${COLORS.deep};">${currency(data.totals.total)}</strong><br/>
-                Reference your order number <strong style="color:${COLORS.deep};">${escapeHtml(data.orderNumber)}</strong> so we can match your payment.
+            <td style="padding:22px;">
+              ${sectionLabel("What happens next")}
+              <div style="font-family:Georgia,'Times New Roman',serif;font-size:19px;color:${COLORS.deep};margin:2px 0 10px;line-height:1.3;">
+                We&rsquo;re preparing your payment details
+              </div>
+              <div style="font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.7;color:${COLORS.stone};margin:0 0 18px;">
+                Nothing to do right now. We&rsquo;ll email you the moment they&rsquo;re
+                ready, then you pay
+                <strong style="color:${COLORS.deep};">${currency(data.totals.total)}</strong>
+                and upload your receipt &mdash; both from your dashboard.
+              </div>
+              <a href="${url}" style="display:inline-block;background:${COLORS.gold};color:${COLORS.deep};text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-weight:bold;letter-spacing:.1em;text-transform:uppercase;font-size:13px;padding:14px 26px;">
+                Open your dashboard
+              </a>
+              <div style="font-family:Helvetica,Arial,sans-serif;font-size:12px;line-height:1.6;color:${COLORS.muted};margin-top:16px;padding-top:14px;border-top:1px solid ${COLORS.gold}33;">
+                For your safety we never put account or wallet details in an
+                email. If you receive one claiming to be from us with payment
+                details in it, it is not from us &mdash; check your dashboard instead.
               </div>
             </td>
           </tr>
@@ -264,11 +293,9 @@ export function buildCustomerOrderEmail(data: OrderEmailData): { subject: string
         <div style="font-family:Helvetica,Arial,sans-serif;font-size:11px;letter-spacing:3px;color:${COLORS.gold};text-transform:uppercase;font-weight:700;">Order Received</div>
         <h1 style="font-family:Georgia,'Times New Roman',serif;font-size:26px;color:${COLORS.deep};margin:10px 0 14px;line-height:1.2;">Thank you, ${escapeHtml(firstName)}.</h1>
         <p style="font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.7;color:${COLORS.stone};margin:0 0 8px;">
-          ${
-            data.paymentInstructions
-              ? `We have received your order. To complete it, send payment using the ${escapeHtml(data.paymentMethodLabel)} details below — we ship as soon as it clears.`
-              : "We have received your order and a member of our team will be in touch shortly to confirm payment and arrange shipping."
-          }
+          We have received your order and it is being processed. We&rsquo;ll send
+          your ${escapeHtml(data.paymentMethodLabel)} payment details shortly &mdash;
+          you&rsquo;ll pay and upload your receipt from your dashboard.
         </p>
         <p style="font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.7;color:${COLORS.stone};margin:0;">
           Below is a summary of what you ordered. If anything looks wrong, just reply to this email.
@@ -276,7 +303,7 @@ export function buildCustomerOrderEmail(data: OrderEmailData): { subject: string
       </td>
     </tr>
 
-    ${paymentPanel(data)}
+    ${dashboardPanel(data)}
 
     <tr>
       <td style="padding:24px 32px 8px;">
@@ -334,7 +361,7 @@ export function buildCustomerOrderEmail(data: OrderEmailData): { subject: string
     <tr>
       <td style="padding:28px 32px 36px;">
         <div style="border-top:1px solid ${COLORS.border};padding-top:20px;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.7;color:${COLORS.stone};">
-          We will reach out shortly with next steps. Thank you for choosing ${BRAND_NAME} &mdash; we appreciate your trust.
+          Thank you for choosing ${BRAND_NAME} &mdash; we appreciate your trust.
           <div style="margin-top:14px;font-family:Georgia,'Times New Roman',serif;font-style:italic;color:${COLORS.gold};">&mdash; The ${BRAND_NAME} Team</div>
         </div>
       </td>
@@ -346,33 +373,30 @@ export function buildCustomerOrderEmail(data: OrderEmailData): { subject: string
   const text = [
     `Thank you, ${firstName}.`,
     "",
-    `We have received your order ${data.orderNumber} and will be in touch shortly to confirm payment and shipping.`,
+    `We have received your order ${data.orderNumber} and it is being processed.`,
+    "",
+    `We will send your ${data.paymentMethodLabel} payment details shortly. You will pay and upload your receipt from your dashboard:`,
+    `${SITE}/account/login?email=${encodeURIComponent(data.customer.email)}`,
     "",
     "Order summary:",
     ...data.items.map((it) => `  - ${it.name} (${it.ageLabel ?? ""}) x${it.quantity} @ ${currency(it.unitPrice)}`),
     "",
     `Subtotal: ${currency(data.totals.subtotal)}`,
-    data.totals.discount > 0 ? `Discount: -${currency(data.totals.discount)}` : "",
-    data.totals.shippingCost > 0 ? `Shipping: ${currency(data.totals.shippingCost)}` : "",
-    data.totals.tax > 0 ? `Tax: ${currency(data.totals.tax)}` : "",
+    data.totals.discount > 0 ? `Discount: -${currency(data.totals.discount)}` : null,
+    data.totals.shippingCost > 0 ? `Shipping: ${currency(data.totals.shippingCost)}` : null,
+    data.totals.tax > 0 ? `Tax: ${currency(data.totals.tax)}` : null,
     `Total: ${currency(data.totals.total)}`,
     "",
     `Shipping to: ${data.customer.fullName}, ${data.shippingAddress.line1}, ${data.shippingAddress.city}, ${data.shippingAddress.region} ${data.shippingAddress.postal}, ${data.shippingAddress.country}`,
     `Payment: ${data.paymentMethodLabel}`,
-    ...(data.paymentInstructions
-      ? [
-          "",
-          `HOW TO PAY — ${data.paymentMethodLabel}`,
-          data.paymentInstructions,
-          "",
-          `Amount due: ${currency(data.totals.total)}`,
-          `Reference your order number ${data.orderNumber} so we can match your payment.`,
-        ]
-      : []),
+    "",
+    "We never put account or wallet details in an email. If you receive one",
+    "claiming to be from us with payment details in it, it is not from us —",
+    "check your dashboard instead.",
     "",
     `— The ${BRAND_NAME} Team`,
   ]
-    .filter(Boolean)
+    .filter((line) => line !== null)
     .join("\n");
 
   return {
@@ -468,9 +492,9 @@ export function buildSalesOrderEmail(data: OrderEmailData): { subject: string; h
     ...data.items.map((it) => `  - ${it.name} (${it.ageLabel ?? ""}) x${it.quantity} @ ${currency(it.unitPrice)} = ${currency(it.unitPrice * it.quantity)}`),
     "",
     `Subtotal: ${currency(data.totals.subtotal)}`,
-    data.totals.discount > 0 ? `Discount: -${currency(data.totals.discount)}` : "",
-    data.totals.shippingCost > 0 ? `Shipping: ${currency(data.totals.shippingCost)}` : "",
-    data.totals.tax > 0 ? `Tax: ${currency(data.totals.tax)}` : "",
+    data.totals.discount > 0 ? `Discount: -${currency(data.totals.discount)}` : null,
+    data.totals.shippingCost > 0 ? `Shipping: ${currency(data.totals.shippingCost)}` : null,
+    data.totals.tax > 0 ? `Tax: ${currency(data.totals.tax)}` : null,
     `Total: ${currency(data.totals.total)}`,
     "",
     "Ship to:",
@@ -479,10 +503,13 @@ export function buildSalesOrderEmail(data: OrderEmailData): { subject: string; h
     `  ${data.shippingAddress.city}, ${data.shippingAddress.region} ${data.shippingAddress.postal}`,
     `  ${data.shippingAddress.country}`,
     "",
-    `Shipping method: ${data.shippingMethodLabel}`,
+    // Guarded like the HTML above: shipping is no longer selectable so the
+    // API stops passing a label, and interpolating it printed the literal
+    // string "Shipping method: undefined" in every sales email.
+    data.shippingMethodLabel ? `Shipping method: ${data.shippingMethodLabel}` : null,
     `Payment method: ${data.paymentMethodLabel}`,
   ]
-    .filter(Boolean)
+    .filter((line) => line !== null)
     .join("\n");
 
   return {
