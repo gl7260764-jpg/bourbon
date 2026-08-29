@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { notifyAsync } from "@/lib/ntfy";
 import { revalidatePath } from "next/cache";
 
 export type ContactFormState = {
@@ -49,6 +50,13 @@ export async function sendMessage(
       error: "Something went wrong on our end. Please try again in a moment.",
     };
   }
+
+  notifyAsync({
+    event: "contact",
+    title: `Contact form: ${subjectRaw.trim() || "no subject"}`,
+    message: `${name} · ${email}\n\n${body}`,
+    url: "/admin/messages",
+  });
 
   revalidatePath("/admin/messages");
   revalidatePath("/admin");

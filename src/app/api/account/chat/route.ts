@@ -3,7 +3,6 @@ import { getCurrentCustomer } from "@/lib/customer-auth";
 import {
   appendMessage,
   listMessages,
-  markRead,
   MAX_BODY_CHARS,
 } from "@/lib/order-chat";
 import {
@@ -22,6 +21,7 @@ import {
 } from "@/lib/cloudinary";
 import { customerChannel, publishChatMessage } from "@/lib/realtime";
 import { maybeAutoReply } from "@/lib/chat-auto-reply";
+import { notifyAsync } from "@/lib/ntfy";
 import {
   TYPING_WINDOW_MS,
   clearTyping,
@@ -114,6 +114,13 @@ export async function POST(req: NextRequest) {
       contextOrderNumber,
     });
     await publishChatMessage(channel, message);
+    notifyAsync({
+      event: "messages",
+      title: `Message from ${r.customer.fullName || r.customer.email}`,
+      message: body,
+      url: `/admin/chat?c=${r.thread.id}`,
+      priority: 4,
+    });
     await maybeAutoReply(r.thread.id);
     return NextResponse.json({ message });
   }
@@ -160,6 +167,13 @@ export async function POST(req: NextRequest) {
         mediaBytes: up.bytes,
       });
       await publishChatMessage(channel, message);
+      notifyAsync({
+        event: "messages",
+        title: `Voice note from ${r.customer.fullName || r.customer.email}`,
+        message: body || "Sent a voice note.",
+        url: `/admin/chat?c=${r.thread.id}`,
+        priority: 4,
+      });
       return NextResponse.json({ message });
     }
 
@@ -175,6 +189,13 @@ export async function POST(req: NextRequest) {
       mediaBytes: up.bytes,
     });
     await publishChatMessage(channel, message);
+    notifyAsync({
+      event: "messages",
+      title: `Photo from ${r.customer.fullName || r.customer.email}`,
+      message: body || "Sent a photo.",
+      url: `/admin/chat?c=${r.thread.id}`,
+      priority: 4,
+    });
     return NextResponse.json({ message });
   } catch (err) {
     console.error("[account-chat] attachment failed:", err);

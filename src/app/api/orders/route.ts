@@ -7,6 +7,7 @@ import {
 import { Prisma, PaymentMethod, ShippingMethod } from "@prisma/client";
 import { isValidUsPhone, toE164Us, US_PHONE_ERROR } from "@/lib/phone";
 import { issueLoginLink } from "@/lib/login-link";
+import { notifyAsync } from "@/lib/ntfy";
 import { signInLinkUrl } from "@/lib/emails/signInLinkEmail";
 import { prisma } from "@/lib/prisma";
 import { findOrCreateCustomer } from "@/lib/customer-auth";
@@ -318,6 +319,19 @@ export async function POST(req: NextRequest) {
           })),
         },
       },
+    });
+
+    /* Straight to the operator's phone. Fire and forget: the order is already
+       written, and a failed notification must never fail a checkout. */
+    notifyAsync({
+      event: "orders",
+      title: `New order ${orderNumber} - $${computedTotal.toFixed(2)}`,
+      message: [
+        `${address.fullName!.trim()} · ${email}`,
+        `${resolvedLines.length} item${resolvedLines.length === 1 ? "" : "s"} · ${option.label}`,
+        resolvedLines.map((l) => `${l.quantity}x ${l.productName}`).join(", "),
+      ].join("\n"),
+      url: `/admin/orders`,
     });
 
     /* One-click sign-in for the button in the confirmation email. Best effort:

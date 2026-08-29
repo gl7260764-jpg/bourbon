@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { sendToAdmins } from "@/lib/push";
+import { notifyAsync } from "@/lib/ntfy";
 import { sendEmail } from "@/lib/mailer";
 import {
   getOrCreateConversation,
@@ -79,6 +80,14 @@ export async function POST(req: NextRequest) {
       console.error("[chat] admin email failed:", err),
     );
   }
+
+  notifyAsync({
+    event: "frontchat",
+    title: "Live chat message",
+    message,
+    url: `/admin/chat?c=${conversationId}`,
+    priority: 4,
+  });
 
   await maybeAutoReply(conversationId);
 

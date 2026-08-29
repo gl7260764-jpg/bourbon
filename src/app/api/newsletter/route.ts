@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
+import { notifyAsync } from "@/lib/ntfy";
 import { VISITOR_COOKIE } from "@/lib/visitor";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -47,6 +48,14 @@ export async function POST(req: NextRequest) {
         // captured them with a later one.
         ...(linkedVisitorId ? { visitorId: linkedVisitorId } : {}),
       },
+    });
+
+    notifyAsync({
+      event: "subscriber",
+      title: "New subscriber",
+      message: `${email}${source ? `\nvia ${source}` : ""}`,
+      url: "/admin/subscribers",
+      priority: 2,
     });
 
     // Stamp the identity onto the visitor so their whole journey — including

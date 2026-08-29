@@ -13,6 +13,7 @@ import { issueLoginLink } from "@/lib/login-link";
 import { buildSignInLinkEmail } from "@/lib/emails/signInLinkEmail";
 import { sendEmail } from "@/lib/mailer";
 import { sendToAdmins } from "@/lib/push";
+import { notifyAsync } from "@/lib/ntfy";
 import { maybeAutoReply } from "@/lib/chat-auto-reply";
 
 export const dynamic = "force-dynamic";
@@ -106,6 +107,14 @@ export async function POST(req: NextRequest) {
         },
       }),
     ]);
+
+    notifyAsync({
+      event: "frontchat",
+      title: `Live chat: ${email}`,
+      message,
+      url: `/admin/chat?c=${conversationId}`,
+      priority: 4,
+    });
 
     // Acknowledge immediately so nobody wonders whether it sent.
     await maybeAutoReply(conversationId);
