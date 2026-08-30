@@ -129,15 +129,64 @@ export function isValidClientToken(value: unknown): value is string {
   return typeof value === "string" && CLIENT_TOKEN_RE.test(value);
 }
 
-// Bots are loud, they don't matter for "unique humans", and they would
-// otherwise inflate every metric on the analytics page — including engagement
-// time, where a crawler that never fires a beacon looks like a zero-second
-// visit. Shared by every tracking endpoint so they can't drift apart.
+/*
+ * Bots are loud, they don't matter for "unique humans", and they would
+ * otherwise inflate every metric on the analytics page — including engagement
+ * time, where a crawler that never fires a beacon looks like a zero-second
+ * visit. Shared by every tracking endpoint so they can't drift apart.
+ *
+ * Two things this list deliberately does NOT match, because they are real
+ * people and dropping them would quietly understate real traffic:
+ *
+ *   - In-app browsers. "WhatsApp", "Instagram", "FBAV", "Pinterest" and the
+ *     like appear in the user agent when someone taps a link inside that app.
+ *     That is a customer, not a crawler. Only the specific fetcher tokens —
+ *     facebookexternalhit, and anything self-identifying as a bot — are here.
+ *   - Old or obscure browsers. Anything not positively identified as
+ *     automation is counted; a false negative costs one inflated row, a false
+ *     positive silently deletes a customer from the numbers.
+ */
+const BOT_UA_PATTERNS = [
+  // Self-identifying crawlers. Covers the overwhelming majority by name:
+  // Googlebot, Bingbot, DuckDuckBot, Applebot, GPTBot, ClaudeBot, AhrefsBot,
+  // SemrushBot, Bytespider, PetalBot, YandexBot, Baiduspider…
+  "bot", "crawl", "spider", "slurp", "scrape", "scraper",
+
+  // Headless browsers and automation drivers. These execute JavaScript, so
+  // unlike a plain crawler they DO reach a client-side beacon — which makes
+  // them the group that actually pollutes this dataset.
+  "headless", "phantomjs", "puppeteer", "playwright", "selenium",
+  "webdriver", "cypress", "prerender", "chrome-lighthouse",
+
+  // Performance, uptime and monitoring probes.
+  "lighthouse", "pagespeed", "gtmetrix", "pingdom", "uptime", "statuscake",
+  "site24x7", "newrelic", "datadog", "checkly", "monitoring", "zabbix",
+
+  // Plain HTTP clients: a script hitting the endpoint directly, never a
+  // browser and never a person.
+  "curl/", "wget", "python-requests", "python-urllib", "aiohttp", "httpx",
+  "node-fetch", "axios", "okhttp", "go-http-client", "java/", "jakarta",
+  "libwww-perl", "httpclient", "postmanruntime", "insomnia", "restsharp",
+  "guzzle", "urllib", "http_request",
+
+  // Fetchers that do not carry "bot" in the name.
+  "facebookexternalhit", "meta-externalagent", "google-inspectiontool",
+  "googleother", "google-read-aloud", "chatgpt-user", "oai-search",
+  "anthropic-ai", "perplexity", "skypeuripreview", "embedly", "preview",
+
+  // Archivers and feed readers.
+  "ia_archiver", "archive.org", "feedfetcher", "feedly", "feedburner",
+];
+
+const BOT_UA_RE = new RegExp(
+  BOT_UA_PATTERNS.map((p) => p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|"),
+  "i",
+);
+
 export function isLikelyBot(userAgent: string): boolean {
+  // A request with no user agent at all is never a browser.
   if (!userAgent) return true;
-  return /bot|crawler|spider|crawling|preview|lighthouse|pingdom|uptimerobot|headlesschrome|prerender/i.test(
-    userAgent,
-  );
+  return BOT_UA_RE.test(userAgent);
 }
 
 // Renders a duration for the admin UI: "48s", "4m 12s", "1h 06m". Returns null

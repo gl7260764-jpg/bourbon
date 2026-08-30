@@ -83,6 +83,22 @@ export default function Analytics() {
     // Don't track admin's own browsing — keeps the analytics honest.
     if (pathname?.startsWith("/admin")) return;
 
+    /* Nor automation. The server drops anything whose user agent names a bot,
+       but a headless browser can be told to send any user agent it likes —
+       including a real iPhone's — and would sail through that check while
+       executing the very JavaScript that fires this beacon. webdriver is set
+       by the automation layer, not by the UA string, so it survives a UA
+       override.
+
+       Its reach is narrower than it looks, and measured rather than assumed:
+       Playwright, Puppeteer and Selenium set it in their default launches,
+       but a browser driven over raw CDP reports false, so that traffic is
+       still counted. Closing that last gap needs headless fingerprinting —
+       absent plugins, empty navigator.languages — which misfires on privacy
+       browsers, and a false positive here silently deletes a real customer
+       from the numbers. Not worth it for analytics hygiene. */
+    if (typeof navigator !== "undefined" && navigator.webdriver) return;
+
     if (!sessionKeyRef.current) {
       const restored = loadSession();
       sessionKeyRef.current = restored.key;
