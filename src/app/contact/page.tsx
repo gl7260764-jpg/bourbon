@@ -42,9 +42,6 @@ const MailIcon = (
     <path d="m3 6 9 6.5L21 6" />
   </>
 );
-const PhoneIcon = (
-  <path d="M6.5 3.5h3l1.5 4-2 1.5a12 12 0 0 0 6 6l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.5 5.7a2 2 0 0 1 2-2.2Z" />
-);
 const PinIcon = (
   <>
     <path d="M20 10.5c0 5.2-8 12-8 12s-8-6.8-8-12a8 8 0 0 1 16 0Z" />
@@ -138,18 +135,6 @@ export default function ContactPage() {
             >
               support@bourbonoaklover.com
             </a>
-          </Channel>
-
-          <Channel icon={PhoneIcon} label="Phone">
-            <a
-              href="tel:+15025550199"
-              className="text-bourbon-deep font-semibold hover:text-bourbon-gold transition-colors"
-            >
-              (502) 555-0199
-            </a>
-            <p className="text-bourbon-stone text-xs mt-1">
-              Cellar concierge · 21+ only
-            </p>
           </Channel>
 
           <Channel icon={ClockIcon} label="Hours">
