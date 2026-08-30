@@ -34,13 +34,24 @@ export type Platform =
 export function detectPlatform(): Platform {
   if (typeof window === "undefined") return "desktop-bookmark";
   const ua = window.navigator.userAgent;
-  const isIOS = /iPad|iPhone|iPod/i.test(ua) && !("MSStream" in window);
+  const nav = window.navigator;
+
+  /* iPadOS 13+ Safari reports a Macintosh user agent, so a UA test alone hides
+     the install offer from every iPad. A Mac that reports touch points is one:
+     real Macs report 0, including the ones with a Touch Bar. */
+  const isIPadOS =
+    /Macintosh/i.test(ua) && typeof nav.maxTouchPoints === "number" && nav.maxTouchPoints > 1;
+  const isIOS = (/iPad|iPhone|iPod/i.test(ua) || isIPadOS) && !("MSStream" in window);
   const isAndroid = /android/i.test(ua);
   const isMobile = isIOS || isAndroid || /Mobi/i.test(ua);
   const isChromium = /Chrome|Chromium|Edg|CriOS/i.test(ua) && !/Firefox|FxiOS/i.test(ua);
 
   if (isIOS) return "ios-safari";
-  if (isAndroid && isChromium) return "android-chrome";
+  /* Every Android browser worth installing from carries an "add to home
+     screen" item in its own menu, and the written steps say "the browser
+     menu" rather than naming Chrome — so a non-Chromium Android browser is
+     served by the same branch instead of falling through to bookmark copy. */
+  if (isAndroid) return "android-chrome";
   if (!isMobile && isChromium) return "desktop-chromium";
   return "desktop-bookmark";
 }
@@ -95,8 +106,13 @@ export function wasRecentlyDismissed(): boolean {
 /* Bookmarking is not installing, so the desktop-bookmark fallback never counts
    as an install opportunity — it earns no button and no discount offer. */
 export function canOfferInstall(platform: Platform): boolean {
-  return Boolean(
-    (typeof window !== "undefined" && window.__bipDeferred) ||
-      platform === "ios-safari",
-  );
+  /* A captured beforeinstallprompt means a one-tap install is in hand. Failing
+     that, both mobile platforms can still install from their own browser menu,
+     and the popup walks through it — so the entry point is offered there too.
+     It stayed hidden on Android before this whenever the event had not fired,
+     which is most of the time: it needs the install criteria met AND the
+     browser's own engagement heuristic. Desktop is deliberately left out;
+     without the event there is nothing to offer but a bookmark. */
+  if (typeof window !== "undefined" && window.__bipDeferred) return true;
+  return platform === "ios-safari" || platform === "android-chrome";
 }
