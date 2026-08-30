@@ -13,7 +13,7 @@ const navLinks = [
   { name: "Shop", href: "/shop" },
   { name: "Collection", href: "/collection" },
   { name: "Stories", href: "/blog" },
-  { name: "Contact", href: "/#footer" },
+  { name: "Contact", href: "/contact" },
 ];
 
 export default function Navbar() {
