@@ -5528,6 +5528,937 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
   },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // 25. Mash Bill — Fundamentals
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "bourbon-mash-bill-explained",
+    title: "Mash Bill: The Recipe That Decides How Your Bourbon Tastes",
+    subtitle:
+      "Corn, rye, wheat and malted barley — what the grain recipe does, and how to taste it in the glass.",
+    excerpt:
+      "Every bourbon starts as a grain recipe, and most of what you taste was decided before the spirit ever touched oak. Here is what a mash bill actually is, the three archetypes worth knowing, and how to tell them apart blind.",
+    category: "Fundamentals",
+    author: "Eleanor Hayes",
+    authorTitle: "Master Distiller, Bourbon & Oak",
+    publishedAt: "2026-08-30",
+    readTimeMinutes: 9,
+    heroImage:
+      "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=1600&q=85",
+    heroAlt:
+      "Corn, rye and malted barley grains laid out beside a glass of Kentucky bourbon",
+    tags: ["mash bill", "high rye", "wheated bourbon", "corn", "malted barley"],
+    content: [
+      {
+        type: "paragraph",
+        text: "Ask a distiller what makes their bourbon taste the way it does and you will hear about the yeast, the water, the barrel and the warehouse. All of that is true. But the first decision — the one made before a single drop of spirit exists — is the mash bill: the recipe of grains that goes into the cooker. It sets the frame that everything else works inside. Oak can deepen a bourbon, soften it, sweeten it and darken it. Oak cannot turn a wheated bourbon into a high-rye one.",
+      },
+      {
+        type: "paragraph",
+        text: "A mash bill is simply the percentage breakdown of grains by weight. American law requires that bourbon be made from a grain mixture of at least 51% corn. The remaining 49% is where distilleries express themselves, and the differences are not subtle — two bourbons of the same age, from the same warehouse, at the same proof, can taste like different categories of whiskey because their grain recipes diverged.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "What Each Grain Is Actually Doing",
+      },
+      {
+        type: "paragraph",
+        text: "Corn is the sugar engine. It ferments into a broad, sweet, slightly oily spirit that carries caramel, vanilla and baked-corn notes. It is also relatively neutral in character, which is why the law can require so much of it and still leave room for real differences. Push corn very high — into the high 70s and beyond — and you get bourbons that read as soft, sweet and round, sometimes at the cost of structure.",
+      },
+      {
+        type: "paragraph",
+        text: "Rye is the spice. It brings black pepper, cinnamon, mint, dill and a dry, brisk finish. Rye is also what gives a bourbon its backbone: the reason a high-rye whiskey can stand up to a decade in oak without collapsing into syrup. Wheat plays the opposite role. Substituted for rye, it contributes very little flavor of its own, which is exactly the point — it steps out of the way and lets corn sweetness and oak come forward, producing the soft, honeyed profile that made [[product:weller-12-year|W.L. Weller 12 Year]] and the [[product:pappy-van-winkle-15-year|Van Winkle]] line famous.",
+      },
+      {
+        type: "paragraph",
+        text: "Malted barley is the smallest number on almost every bourbon mash bill — usually 5% or less — and it is there to work, not to flavor. Malting activates enzymes that convert grain starch into fermentable sugar. Without it, the corn and rye starches largely stay locked up. Some modern distilleries use added enzymes instead and drop the barley further, but the classic Kentucky recipe keeps a small malt component.",
+      },
+      {
+        type: "callout",
+        title: "The 51% is a floor, not a target",
+        text: "A whiskey at exactly 51% corn is legally bourbon, but almost nobody makes one. Most Kentucky mash bills run 68% to 78% corn. The interesting question is never whether a bourbon cleared the legal minimum — it is what the distiller did with the other quarter of the recipe.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "The Three Archetypes",
+      },
+      {
+        type: "paragraph",
+        text: "Almost every bourbon you will meet falls into one of three families. Learning to place a whiskey into the right family blind is the single most useful tasting skill in American whiskey, and it takes an afternoon, not a career.",
+      },
+      {
+        type: "list",
+        ordered: false,
+        items: [
+          "Traditional or low-rye: roughly 70 to 78% corn, 8 to 13% rye, the balance malted barley. Balanced, caramel-forward, the house style of much of Kentucky. Think Eagle Rare and the Buffalo Trace Mash Bill #1 family.",
+          "High-rye: roughly 60 to 70% corn with rye pushed to 18 to 35%. Peppery, dry, structured, with a finish that snaps rather than fades. Mash Bill #2 bourbons like Blanton's and Elmer T. Lee live here.",
+          "Wheated: rye replaced entirely by wheat, usually 16 to 20%. Soft, round, honeyed, low on spice. Weller and Van Winkle are the reference points.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "The families are not a quality ranking. A great high-rye and a great wheater are equally great; they simply answer different questions. If you find yourself consistently reaching for one family, that is worth knowing — it will save you a great deal of money on bottles you were never going to love.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "How to Taste the Mash Bill",
+      },
+      {
+        type: "paragraph",
+        text: "Pour two bourbons side by side from different families — a [[product:blantons-original-single-barrel|Blanton's]] and a [[product:weller-full-proof|Weller Full Proof]] is an unusually clear pairing — and ignore everything except the finish. Wheated bourbon tends to fade slowly and sweetly, like the last of a caramel. High-rye finishes drier and shorter, and often leaves a faint peppery tingle at the back of the tongue. That difference is more reliable than anything on the nose, where oak and proof crowd everything else out.",
+      },
+      {
+        type: "paragraph",
+        text: "Then go back to the mid-palate. Rye announces itself as a distinct spice note somewhere in the middle of the sip, usually cinnamon or black pepper. Wheat announces itself by absence — a smooth, uninterrupted sweep from arrival to finish with no spike of spice. Once you have felt that contrast a few times you will hear it immediately, and you will start recognising the recipe behind bourbons whose numbers were never published.",
+      },
+      {
+        type: "callout",
+        title: "Proof will lie to you",
+        text: "A 125-proof bourbon reads as spicier than a 90-proof one regardless of its mash bill, because ethanol itself carries heat. When comparing recipes, add water until both glasses sit around 90 proof. The grain character survives dilution; the burn does not.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Why Distilleries Guard the Numbers",
+      },
+      {
+        type: "paragraph",
+        text: "Many Kentucky distilleries publish their mash bills. Several do not, and the most famous holdout is Buffalo Trace, which has never released the exact ratios for Mash Bill #1 or #2 — only that #2 contains more rye. Enthusiasts have estimated the numbers for decades. The reticence is partly competitive and partly a fair point about emphasis: the recipe is one of several variables, and a distillery that publishes it invites customers to treat it as the whole story.",
+      },
+      {
+        type: "paragraph",
+        text: "It is not the whole story. Yeast strain contributes fruit and floral esters that no grain bill can explain. Entry proof — the strength at which new spirit goes into the barrel — changes how much wood character the whiskey extracts. Fermentation length, cook temperature and the sour mash proportion all leave fingerprints. A mash bill tells you the shape of the whiskey. It does not tell you how good it is.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Reading a Label for Clues",
+      },
+      {
+        type: "paragraph",
+        text: "Most bottles will not print a mash bill, but they usually leave clues. Any label that says wheated, or names wheat as the secondary grain, has told you everything you need. A bottle that advertises high rye is making a promise about spice. Bourbons that say nothing at all are, more often than not, traditional recipes — the house style is rarely the thing a marketing department chooses to shout about.",
+      },
+      {
+        type: "paragraph",
+        text: "Where a brand publishes nothing, the family it belongs to is often the better guide. Buffalo Trace's Mash Bill #2 whiskeys — [[product:elmer-t-lee-single-barrel|Elmer T. Lee]], [[product:rock-hill-farms-single-barrel|Rock Hill Farms]] and Blanton's among them — share a recognisable dry, peppery signature even across very different ages and proofs. Learn the family and you can predict the bottle.",
+      },
+      {
+        type: "paragraph",
+        text: "None of this is homework. It is simply the difference between drinking a bourbon and understanding why you like it — and once you can name the reason, the next bottle you buy is far more likely to be one you finish.",
+      },
+    ],
+    seo: {
+      metaTitle: "Bourbon Mash Bill Explained: Corn, Rye, Wheat and Barley",
+      metaDescription:
+        "What a bourbon mash bill is, the three grain recipes worth knowing, and how to taste the difference between high-rye and wheated bourbon blind.",
+      focusKeyword: "bourbon mash bill",
+      primaryKeywords: [
+        "bourbon mash bill",
+        "what is a mash bill",
+        "high rye bourbon",
+        "wheated bourbon mash bill",
+        "corn percentage bourbon",
+        "malted barley bourbon",
+        "Buffalo Trace mash bill",
+        "bourbon grain recipe",
+      ],
+      longTailKeywords: [
+        "what does mash bill mean in bourbon",
+        "how much corn is in bourbon",
+        "difference between high rye and wheated bourbon",
+        "how to taste the difference in mash bills",
+        "what is Buffalo Trace mash bill number 2",
+        "why is malted barley in bourbon",
+        "does mash bill affect bourbon flavor",
+      ],
+      wordClusters: [
+        {
+          cluster: "Grains",
+          terms: ["corn", "rye", "winter wheat", "malted barley", "grain bill", "sour mash"],
+        },
+        {
+          cluster: "Flavor",
+          terms: ["black pepper", "cinnamon", "caramel", "honeyed", "dry finish", "mid-palate"],
+        },
+        {
+          cluster: "Process",
+          terms: ["fermentation", "entry proof", "yeast strain", "enzyme conversion", "cook"],
+        },
+      ],
+    },
+    relatedProducts: [
+      "blantons-original-single-barrel",
+      "weller-12-year",
+      "eagle-rare-10-year",
+      "elmer-t-lee-single-barrel",
+    ],
+    faq: [
+      {
+        question: "What is a bourbon mash bill?",
+        answer:
+          "A mash bill is the recipe of grains used to make the whiskey, given as percentages by weight. U.S. law requires bourbon to be at least 51% corn; the rest is typically rye or wheat plus a small amount of malted barley.",
+      },
+      {
+        question: "What is the difference between high-rye and wheated bourbon?",
+        answer:
+          "High-rye bourbon uses 18% or more rye and tastes peppery, dry and structured with a short, brisk finish. Wheated bourbon replaces rye with wheat, which adds little flavor of its own and leaves a soft, sweet, honeyed profile with a long fade.",
+      },
+      {
+        question: "Does the mash bill matter more than the barrel?",
+        answer:
+          "Neither dominates. The mash bill sets the shape of the whiskey — where the spice and sweetness sit — and the barrel and warehouse determine how deep, dark and oaky it becomes. Oak cannot turn a wheated bourbon into a high-rye one.",
+      },
+    ],
+  },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 26. Barrel Finishing — Fundamentals
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "barrel-finished-bourbon-guide",
+    title: "Barrel-Finished Bourbon: What a Second Cask Really Does",
+    subtitle:
+      "Port, sherry, rum and toasted oak finishes — where the flavor comes from, and how to spot a finish covering for young whiskey.",
+    excerpt:
+      "Finishing moves mature bourbon into a second cask for a few months. Done with restraint it adds a genuine new layer; done carelessly it is makeup on a young spirit. Here is how to tell which one you are buying.",
+    category: "Fundamentals",
+    author: "Eleanor Hayes",
+    authorTitle: "Master Distiller, Bourbon & Oak",
+    publishedAt: "2026-08-30",
+    readTimeMinutes: 8,
+    heroImage:
+      "https://images.unsplash.com/photo-1516594915697-87eb3b1c14ea?w=1600&q=85",
+    heroAlt:
+      "Rows of wine and sherry casks used for finishing bourbon in a dim warehouse",
+    tags: ["barrel finish", "secondary maturation", "port cask", "sherry cask", "toasted barrel"],
+    content: [
+      {
+        type: "paragraph",
+        text: "Bourbon has one non-negotiable rule about wood: it must be aged in new charred oak containers. That single requirement is why bourbon tastes the way it does — a fresh barrel gives up far more vanillin, caramelized sugar and tannin than a cask that has already held whiskey once. It is also why finishing was, for most of bourbon's modern history, a rarity. If new oak is mandatory, what exactly do you do with a second barrel?",
+      },
+      {
+        type: "paragraph",
+        text: "The answer that the industry settled on is straightforward. The whiskey completes its bourbon maturation in new charred oak, satisfying the standard of identity. Then, already fully bourbon, it is moved into a second cask — one that previously held port, sherry, rum, maple syrup or almost anything else — for a comparatively short additional stay. Regulators require the finish to be disclosed, which is why these bottles carry a phrase like finished in port barrels rather than hiding it in the small print.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "What Actually Happens in the Second Cask",
+      },
+      {
+        type: "paragraph",
+        text: "Three things, in rough order of importance. First, the whiskey extracts whatever the previous occupant left behind. A port pipe holds several litres of wine soaked into the staves; the bourbon pulls that out, which is where the red-fruit, raisin and cocoa notes come from. Second, the wood itself contributes — a European oak sherry butt has a different tannin and spice profile from American white oak, drier and more astringent. Third, ordinary maturation continues: oxidation softens the spirit, and evaporation concentrates it.",
+      },
+      {
+        type: "paragraph",
+        text: "The timescale is short by bourbon standards. A finish is typically three to eighteen months, against eight or twelve years in the primary barrel. That ratio matters. Finishing is a seasoning step, not a second act, and the honest ones read that way: you should still recognise the base bourbon underneath.",
+      },
+      {
+        type: "callout",
+        title: "Toasted barrel is not the same thing",
+        text: "A toasted-barrel finish uses a second NEW oak cask that has been toasted rather than charred, or toasted then lightly charred. There is no previous spirit to extract — the flavor comes entirely from a different heat treatment of the wood, giving baking-spice, nut and dark-caramel notes rather than fruit.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "The Finishes You Will Actually Meet",
+      },
+      {
+        type: "list",
+        ordered: false,
+        items: [
+          "Port: red fruit, raisin, cocoa and a rounder mouthfeel. The most forgiving finish, and the most common.",
+          "Sherry: dried fig, orange peel and nuttiness from oloroso; brighter, saline notes from fino. European oak adds drying tannin.",
+          "Rum: tropical fruit, banana and extra sweetness. Can tip into cloying when the base bourbon is already corn-heavy.",
+          "French oak wine casks: firm tannin, structure and a slightly grippy finish. Good with high-rye bourbons that can carry it.",
+          "Toasted new oak: baking spice, hazelnut and deep caramel. No fruit, because there is no previous liquid to draw on.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "In our catalogue, [[product:blood-oath|Blood Oath]] is the clearest working example — a series built around marrying mature bourbons and, in most releases, a finishing cask chosen to fit that year's blend. It is deliberate about disclosing what it did, which is exactly the behaviour worth rewarding.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "When Finishing Is Covering Something Up",
+      },
+      {
+        type: "paragraph",
+        text: "This is the part worth being clear-eyed about. A heavy finish is very good at masking a young, thin or hot spirit. Port and rum in particular add sweetness and body that can paper over a whiskey which spent three years in the barrel rather than eight. The finish is not the problem; the silence around the base whiskey is.",
+      },
+      {
+        type: "list",
+        ordered: false,
+        items: [
+          "Look for an age statement on the base bourbon. A brand proud of the underlying whiskey will tell you how old it is before it mentions the finish.",
+          "Be wary when the finishing cask is the loudest thing on the label — larger type for the wine than for the whiskey is a tell.",
+          "Check the finish duration if it is disclosed. Anything over two years is doing more than seasoning.",
+          "Taste for the seam. In an over-finished whiskey the fruit sits on top of the bourbon rather than through it, and the two never quite meet.",
+          "Distrust colour. Finishing casks darken whiskey quickly, so a deep mahogany bottle proves nothing about age.",
+        ],
+      },
+      {
+        type: "callout",
+        title: "A fair test",
+        text: "Add a few drops of water. A well-integrated finish opens up along with the bourbon. A finish being used as cover tends to separate — the fruit thins out and the young spirit underneath shows through as raw grain or acetone.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Where Finished Bourbon Belongs",
+      },
+      {
+        type: "paragraph",
+        text: "A good finished bourbon is one of the more rewarding pours in American whiskey, precisely because it is unusual. It also makes a strong entry point for someone coming from wine or rum, where those flavors are familiar. What it is not is a replacement for a great straight bourbon — and it is rarely the right bottle for judging a distillery's craft, because the finish sits between you and the house style.",
+      },
+      {
+        type: "paragraph",
+        text: "If you are building a shelf, treat finished bottles as accents rather than foundations. One or two alongside a traditional [[product:eagle-rare-10-year|Eagle Rare 10 Year]] and a wheater will give you range without letting the wine casks take over. And when a finish is done properly — restrained, disclosed, and applied to whiskey that was already good — it earns its place easily.",
+      },
+    ],
+    seo: {
+      metaTitle: "Barrel-Finished Bourbon: Port, Sherry and Toasted Oak",
+      metaDescription:
+        "How bourbon barrel finishing works, what port, sherry, rum and toasted oak casks actually add, and how to spot a finish hiding young whiskey.",
+      focusKeyword: "barrel finished bourbon",
+      primaryKeywords: [
+        "barrel finished bourbon",
+        "secondary maturation bourbon",
+        "port finished bourbon",
+        "sherry cask bourbon",
+        "toasted barrel bourbon",
+        "double oaked bourbon",
+        "bourbon finishing casks",
+      ],
+      longTailKeywords: [
+        "what does barrel finished bourbon mean",
+        "how long is bourbon finished in a second barrel",
+        "is finished bourbon still bourbon",
+        "difference between toasted and charred barrel finish",
+        "does barrel finishing hide young whiskey",
+        "what does port finish do to bourbon",
+      ],
+      wordClusters: [
+        {
+          cluster: "Casks",
+          terms: ["port pipe", "oloroso butt", "French oak", "rum cask", "toasted oak", "new charred oak"],
+        },
+        {
+          cluster: "Flavor",
+          terms: ["dried fig", "red fruit", "cocoa", "baking spice", "tannin", "mouthfeel"],
+        },
+        {
+          cluster: "Judgement",
+          terms: ["age statement", "integration", "disclosure", "over-finished", "base whiskey"],
+        },
+      ],
+    },
+    relatedProducts: ["blood-oath", "eagle-rare-10-year", "eh-taylor-barrel-proof"],
+    faq: [
+      {
+        question: "Is barrel-finished whiskey still legally bourbon?",
+        answer:
+          "Yes, provided the whiskey completed its maturation in new charred oak first, which is what the standard of identity requires. The additional cask is a finish applied afterwards, and U.S. labelling rules require it to be disclosed on the bottle.",
+      },
+      {
+        question: "How long is bourbon usually finished for?",
+        answer:
+          "Most finishes run three to eighteen months, against eight or more years in the primary barrel. Finishing is a seasoning step rather than a second maturation, and a disclosed finish longer than about two years is doing considerably more than seasoning.",
+      },
+      {
+        question: "Can a barrel finish hide a young bourbon?",
+        answer:
+          "It can. Port and rum casks add sweetness and body that mask a thin or hot young spirit. Look for an age statement on the base whiskey, and add a few drops of water — an over-finished bourbon tends to separate, with the fruit thinning out and raw grain showing underneath.",
+      },
+    ],
+  },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 27. Sourced Bourbon — Buying Guide
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "sourced-bourbon-who-distilled-it",
+    title: "Who Actually Distilled Your Bourbon?",
+    subtitle:
+      "Non-distiller producers, the Indiana question, and how to read a back label for the truth about where a whiskey was made.",
+    excerpt:
+      "A great many bourbon brands do not own a still. That is not a scandal — some sourced whiskey is superb — but the label will tell you, if you know the six words to look for.",
+    category: "Buying Guide",
+    author: "Wyatt Brennan",
+    authorTitle: "Head Bartender, The Cellar at Bourbon & Oak",
+    publishedAt: "2026-08-30",
+    readTimeMinutes: 8,
+    heroImage:
+      "https://images.unsplash.com/photo-1582819509237-d6c264ee9a34?w=1600&q=85",
+    heroAlt:
+      "Close-up of the back label of a bourbon bottle showing the distillery and bottling statement",
+    tags: ["sourced bourbon", "non-distiller producer", "MGP", "label reading", "transparency"],
+    content: [
+      {
+        type: "paragraph",
+        text: "Somewhere between a third and a half of the bourbon brands on a well-stocked shelf were not distilled by the company whose name is on the front. The brand bought mature whiskey from someone else, blended it, proofed it and bottled it. The industry calls these companies non-distiller producers, or NDPs, and there is a long-running argument about whether that matters.",
+      },
+      {
+        type: "paragraph",
+        text: "The honest answer is that it matters less than the internet says and more than the marketing does. Sourcing is not a defect — it is how the American whiskey industry has worked for well over a century, and some of the best-reviewed bottles of the past decade were sourced. What is a defect is a brand that invents a heritage it does not have, prints a founding date for a distillery that never existed, and hopes you do not read the back.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Why Sourcing Exists at All",
+      },
+      {
+        type: "paragraph",
+        text: "Bourbon has a structural problem: you must spend the money years before you can earn it. A new distillery pays for grain, equipment, barrels, a warehouse and staff, then waits four, eight or twelve years before it has anything worth selling at a premium. Very few businesses can survive that gap. Buying mature whiskey from a distillery with surplus stock lets a new brand exist while its own barrels sleep.",
+      },
+      {
+        type: "paragraph",
+        text: "There is also a genuine craft in it. Selecting barrels from someone else's warehouse, blending them into something coherent, and choosing a proof is real work — the same work a master blender does at a distillery that owns its stills. A skilled NDP with access to good stock can and does outperform a mediocre distillery bottling its own product.",
+      },
+      {
+        type: "callout",
+        title: "Bottled by is not distilled by",
+        text: "These two phrases mean entirely different things and appear in the same size type. Bottled by tells you only who put the liquid in the glass. Distilled by names the company that made it. If a label says only the former, the whiskey came from somewhere else.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "How to Read the Back Label",
+      },
+      {
+        type: "paragraph",
+        text: "U.S. labelling rules require certain disclosures, and they are usually printed in the smallest legal type on the back. Learning to find them takes about thirty seconds per bottle.",
+      },
+      {
+        type: "list",
+        ordered: true,
+        items: [
+          "Find the state of distillation. A bourbon made outside Kentucky must say so. The phrase distilled in Indiana is the single most informative sentence on many back labels.",
+          "Look for distilled by followed by a company name and city. That is the actual maker. If the sentence begins produced by or bottled by, the brand is not claiming to have distilled it.",
+          "Check for a DSP number — a Distilled Spirits Plant registration like DSP-KY-113. Enthusiast databases map these to real facilities.",
+          "Read the age statement, or note its absence. A bourbon with no age statement is at least four years old, or it would have to declare a younger age.",
+          "Ignore the front entirely for this purpose. Founding dates, family names and the word craft carry no legal meaning whatsoever.",
+        ],
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "The Indiana Question",
+      },
+      {
+        type: "paragraph",
+        text: "One facility in Lawrenceburg, Indiana — known for most of its modern life as MGP — has supplied so many brands that its house recipes are recognisable on their own. Its high-rye bourbon and its 95% rye whiskey have appeared under dozens of labels at wildly different prices. Two bottles that look like competitors can be the same liquid at different proofs.",
+      },
+      {
+        type: "paragraph",
+        text: "This is worth knowing mainly as a pricing check. If you enjoy a particular sourced profile, there is usually a version of it costing considerably less than the one with the most elaborate packaging. It is also a reminder that a Kentucky-shaped bottle and a Kentucky-sounding name do not make a whiskey Kentucky bourbon. Only the state of distillation does — which is why [[product:eagle-rare-10-year|Kentucky straight bourbon]] on a label is a specific factual claim rather than a mood.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "What Distillery-Owned Bottles Give You",
+      },
+      {
+        type: "paragraph",
+        text: "The case for buying from a distillery that made the whiskey is not that the liquid is automatically better. It is consistency and traceability. When a distillery controls the mash bill, the yeast, the entry proof and the warehouse, it can reproduce a profile year after year, and it can tell you exactly which warehouse and floor a barrel came from. That is why single barrel programmes from distillery-owned brands — [[product:blantons-original-single-barrel|Blanton's]], [[product:elmer-t-lee-single-barrel|Elmer T. Lee]], [[product:eh-taylor-single-barrel|E.H. Taylor Single Barrel]] — can print a barrel number and mean something specific by it.",
+      },
+      {
+        type: "paragraph",
+        text: "A sourced brand buying whatever mature stock is available in a given year cannot make that promise, however good this year's batch is. Some are refreshingly open about it and publish their sources; those are the ones worth following.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "A Reasonable Position",
+      },
+      {
+        type: "paragraph",
+        text: "Buy the whiskey, not the story. If a sourced bourbon tastes excellent at its price, the fact that another company distilled it takes nothing away from your glass. If a brand hides where its whiskey came from, invents a lineage, or charges a heritage premium for a commodity purchase, that is worth declining — not because sourcing is shameful, but because a company willing to mislead you about the easy facts is unlikely to be scrupulous about the hard ones.",
+      },
+      {
+        type: "paragraph",
+        text: "Turn the bottle around before you buy. Thirty seconds of small print will tell you more than any front label ever will.",
+      },
+    ],
+    seo: {
+      metaTitle: "Sourced Bourbon: Who Actually Distilled It, and How to Tell",
+      metaDescription:
+        "Non-distiller producers explained — what sourced bourbon is, why brands do it, and the six back-label phrases that reveal who really made your whiskey.",
+      focusKeyword: "sourced bourbon",
+      primaryKeywords: [
+        "sourced bourbon",
+        "non-distiller producer",
+        "NDP whiskey",
+        "MGP bourbon",
+        "distilled in Indiana",
+        "who made my bourbon",
+        "bottled by vs distilled by",
+      ],
+      longTailKeywords: [
+        "what does sourced bourbon mean",
+        "how to tell if bourbon is sourced",
+        "what does distilled in Indiana mean on a label",
+        "is sourced whiskey worse than distillery whiskey",
+        "what is a DSP number on a bourbon bottle",
+        "difference between bottled by and distilled by",
+      ],
+      wordClusters: [
+        {
+          cluster: "Label terms",
+          terms: ["distilled by", "bottled by", "produced by", "DSP number", "state of distillation"],
+        },
+        {
+          cluster: "Industry",
+          terms: ["non-distiller producer", "MGP Lawrenceburg", "contract distilling", "bulk whiskey", "master blender"],
+        },
+        {
+          cluster: "Judgement",
+          terms: ["transparency", "traceability", "heritage claims", "age statement", "batch variation"],
+        },
+      ],
+    },
+    relatedProducts: [
+      "eagle-rare-10-year",
+      "blantons-original-single-barrel",
+      "eh-taylor-single-barrel",
+    ],
+    faq: [
+      {
+        question: "What does sourced bourbon mean?",
+        answer:
+          "Sourced bourbon is whiskey distilled by one company and sold under another company's brand. The bottler, known as a non-distiller producer, buys mature barrels, then blends, proofs and bottles the whiskey under its own label.",
+      },
+      {
+        question: "How can I tell if a bourbon was sourced?",
+        answer:
+          "Read the back label. Distilled by names the actual maker; bottled by or produced by does not. A bourbon distilled outside Kentucky must state its state of distillation, so the phrase distilled in Indiana is a clear signal.",
+      },
+      {
+        question: "Is sourced bourbon lower quality?",
+        answer:
+          "Not inherently. Selecting and blending someone else's barrels is genuine skill, and several highly regarded bottlings are sourced. What distillery ownership adds is consistency and traceability — the ability to reproduce a profile and to say exactly which warehouse a barrel came from.",
+      },
+    ],
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // 28. Winter Cocktails — Recipes
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "winter-bourbon-cocktails",
+    title: "Five Winter Bourbon Cocktails Worth the Effort",
+    subtitle:
+      "Hot toddies done properly, a spiced old fashioned, and the milk punch you make the night before.",
+    excerpt:
+      "Cold weather asks different things of bourbon: warmth, spice, and a little richness. Five drinks that reward a good bottle instead of burying it — with the technique that actually matters in each.",
+    category: "Recipes",
+    author: "Wyatt Brennan",
+    authorTitle: "Head Bartender, The Cellar at Bourbon & Oak",
+    publishedAt: "2026-08-30",
+    readTimeMinutes: 7,
+    heroImage:
+      "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=1600&q=85",
+    heroAlt:
+      "A warm bourbon cocktail in a heatproof glass with a cinnamon stick and orange peel",
+    tags: ["winter cocktails", "hot toddy", "old fashioned", "milk punch", "mulled cider"],
+    content: [
+      {
+        type: "paragraph",
+        text: "Summer bourbon drinks are about lengthening and cooling — soda, citrus, ice. Winter drinks work in the opposite direction. You are adding warmth, weight and spice, and the risk is different too: heat and sugar will flatten a delicate whiskey far faster than a highball ever could. The five below are built so the bourbon still has something to say when it arrives.",
+      },
+      {
+        type: "paragraph",
+        text: "A note on bottle choice before you start. Do not open your best bottle for anything served hot — above roughly 60 degrees Celsius, ethanol carries the aromatics off before they reach you, and the nuance you paid for evaporates. A dependable, characterful bourbon in the 90 to 100 proof range is the right tool here. Save the [[product:pappy-van-winkle-15-year|allocated bottles]] for a Glencairn and a quiet room.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "1. A Hot Toddy That Is Not Just Hot Whiskey",
+      },
+      {
+        type: "paragraph",
+        text: "Most toddies fail for one reason: boiling water. It scalds the honey into flatness and strips the whiskey. Bring the kettle off the boil and let it stand two minutes — around 80 degrees Celsius is the target. The drink should be hot enough to warm your hands through the glass, not hot enough to sip immediately.",
+      },
+      {
+        type: "recipe",
+        name: "Proper Hot Toddy",
+        glass: "Heatproof glass mug, pre-warmed",
+        ingredients: [
+          "60 ml bourbon, 90 to 100 proof",
+          "15 ml honey syrup (2 parts honey to 1 part warm water)",
+          "10 ml fresh lemon juice",
+          "90 ml hot water, off the boil and rested 2 minutes",
+          "1 cinnamon stick",
+          "3 cloves stuck into a lemon wheel",
+        ],
+        steps: [
+          "Fill the mug with hot tap water and let it stand while you measure; discard before building.",
+          "Add honey syrup and lemon juice to the warmed mug and stir to combine.",
+          "Add the bourbon, then the hot water, and stir once.",
+          "Drop in the cinnamon stick and float the clove-studded lemon wheel.",
+        ],
+        garnish: "Clove-studded lemon wheel and a cinnamon stick",
+        notes:
+          "Honey straight from the jar will sink and never integrate. Making honey syrup first takes thirty seconds and is the difference between a balanced drink and a sweet layer at the bottom.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "2. Spiced Maple Old Fashioned",
+      },
+      {
+        type: "paragraph",
+        text: "The winter version of the classic swaps sugar for maple and adds a little baking spice. Maple is sweeter than demerara by volume and much more assertive, so use less than you think. This is a drink where a high-rye bourbon earns its keep — the pepper cuts through the syrup rather than drowning in it.",
+      },
+      {
+        type: "recipe",
+        name: "Spiced Maple Old Fashioned",
+        glass: "Rocks glass, one large cube",
+        ingredients: [
+          "60 ml high-rye bourbon",
+          "7 ml Grade A dark maple syrup",
+          "2 dashes Angostura bitters",
+          "1 dash orange bitters",
+          "1 wide orange peel",
+          "Pinch of freshly grated nutmeg",
+        ],
+        steps: [
+          "Add maple syrup and both bitters to a mixing glass and stir to loosen the syrup.",
+          "Add bourbon and fill with ice. Stir 25 to 30 seconds — longer than a summer stir, since maple needs the dilution.",
+          "Strain over one large cube in a chilled rocks glass.",
+          "Express the orange peel over the surface, rub it around the rim, and drop it in.",
+        ],
+        garnish: "Expressed orange peel and a light grating of nutmeg",
+        notes:
+          "Grade A dark has the caramel depth this needs. Grade A golden is too delicate and disappears entirely.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "3. Bourbon Milk Punch, Made the Night Before",
+      },
+      {
+        type: "paragraph",
+        text: "This is the one that looks like effort and is not. Milk punch is bourbon, sugar and dairy left to curdle deliberately, then filtered — the milk proteins pull out harshness and colour and leave behind a whiskey that is silky, clear and almost impossibly smooth. It keeps for weeks in the fridge and makes you look like you know what you are doing.",
+      },
+      {
+        type: "recipe",
+        name: "Clarified Bourbon Milk Punch",
+        glass: "Small chilled coupe",
+        ingredients: [
+          "350 ml bourbon",
+          "250 ml whole milk",
+          "120 ml fresh lemon juice",
+          "100 g caster sugar",
+          "1 vanilla pod, split, or 1 tsp vanilla extract",
+          "Zest of 1 orange",
+        ],
+        steps: [
+          "Combine bourbon, sugar, vanilla and orange zest in a jar and stir until the sugar dissolves.",
+          "Warm the milk gently to about 40 degrees Celsius and pour it into a large bowl.",
+          "Pour the bourbon mixture into the milk, then add the lemon juice. It will curdle immediately — this is correct, do not stir it back together.",
+          "Cover and refrigerate at least 6 hours, ideally overnight.",
+          "Strain through a coffee filter set in a sieve. The first pass runs cloudy; pour that back through and let it drip without pressing. Expect an hour or more.",
+          "Bottle and keep refrigerated. Serve cold in a chilled coupe, no ice.",
+        ],
+        garnish: "None — the point is the clarity",
+        notes:
+          "Do not squeeze the filter to speed it up. Pressing pushes proteins through and clouds the whole batch. Patience is the entire recipe.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "4. Mulled Bourbon Cider",
+      },
+      {
+        type: "paragraph",
+        text: "The drink for a crowd. The mistake almost everyone makes is boiling the bourbon along with the cider, which drives off the alcohol and most of the flavour. Mull the cider with the spices, take it off the heat, and add the whiskey last.",
+      },
+      {
+        type: "recipe",
+        name: "Mulled Bourbon Cider",
+        glass: "Heatproof mug",
+        ingredients: [
+          "1 litre cloudy apple cider",
+          "240 ml bourbon",
+          "2 cinnamon sticks",
+          "4 star anise",
+          "6 allspice berries",
+          "1 orange, sliced into wheels",
+          "2 tbsp dark brown sugar, to taste",
+        ],
+        steps: [
+          "Combine cider, spices, orange wheels and sugar in a saucepan.",
+          "Bring to a bare simmer and hold for 20 minutes. Do not let it boil.",
+          "Remove from the heat and let it stand 5 minutes so the temperature drops below scalding.",
+          "Stir in the bourbon off the heat and serve immediately.",
+        ],
+        garnish: "Orange wheel and a star anise floated in each mug",
+        notes:
+          "Serves six generously. If it must be held warm, keep it on the lowest possible setting and add the bourbon by the mugful rather than to the whole pot.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "5. Bourbon Hot Chocolate for Grown-Ups",
+      },
+      {
+        type: "paragraph",
+        text: "Real chocolate, not powder, and a pinch of salt. The salt is not optional — it is what keeps this from reading as a dessert and lets the bourbon come through.",
+      },
+      {
+        type: "recipe",
+        name: "Salted Bourbon Hot Chocolate",
+        glass: "Heatproof mug",
+        ingredients: [
+          "45 ml bourbon",
+          "200 ml whole milk",
+          "40 g dark chocolate, 70%, chopped",
+          "1 tsp dark brown sugar, or to taste",
+          "Generous pinch of flaky sea salt",
+          "Lightly whipped cream, unsweetened",
+        ],
+        steps: [
+          "Warm the milk in a small pan until steaming but not simmering.",
+          "Off the heat, add the chopped chocolate and sugar and whisk until fully melted and glossy.",
+          "Whisk in the salt, then the bourbon.",
+          "Pour into a warmed mug and top with a spoonful of unsweetened whipped cream.",
+        ],
+        garnish: "Flaky salt over the cream",
+        notes:
+          "Unsweetened cream matters. Sweetened cream on top of sweetened chocolate leaves no room for the whiskey at all.",
+      },
+      {
+        type: "callout",
+        title: "The one rule for hot bourbon drinks",
+        text: "Add the whiskey off the heat, always. Alcohol boils at 78 degrees Celsius — well below water — so anything added to a simmering pot loses both strength and aroma within minutes.",
+      },
+      {
+        type: "paragraph",
+        text: "A workhorse bottle like [[product:eagle-rare-10-year|Eagle Rare 10 Year]] or a bonded whiskey at 100 proof will carry all five of these comfortably. The extra proof is genuinely useful in winter drinks — it survives dilution from melting ice, hot water and cream in a way that an 80-proof bourbon simply does not.",
+      },
+    ],
+    seo: {
+      metaTitle: "5 Winter Bourbon Cocktails: Toddy, Milk Punch, Mulled Cider",
+      metaDescription:
+        "Winter bourbon cocktails that keep the whiskey audible — a proper hot toddy, spiced maple old fashioned, clarified milk punch, mulled cider and salted hot chocolate.",
+      focusKeyword: "winter bourbon cocktails",
+      primaryKeywords: [
+        "winter bourbon cocktails",
+        "hot toddy recipe",
+        "bourbon milk punch",
+        "mulled bourbon cider",
+        "spiced old fashioned",
+        "bourbon hot chocolate",
+        "warm whiskey drinks",
+      ],
+      longTailKeywords: [
+        "how to make a hot toddy with bourbon",
+        "best bourbon for winter cocktails",
+        "how to clarify milk punch at home",
+        "should you boil bourbon in mulled cider",
+        "what temperature should a hot toddy be",
+        "winter whiskey cocktails for a crowd",
+      ],
+      wordClusters: [
+        {
+          cluster: "Technique",
+          terms: ["off the boil", "honey syrup", "clarification", "coffee filter", "dilution", "expressed peel"],
+        },
+        {
+          cluster: "Spice",
+          terms: ["cinnamon", "star anise", "allspice", "clove", "nutmeg", "maple"],
+        },
+        {
+          cluster: "Serving",
+          terms: ["heatproof mug", "chilled coupe", "large cube", "warmed glass", "batch"],
+        },
+      ],
+    },
+    relatedProducts: ["eagle-rare-10-year", "eh-taylor-small-batch", "russells-reserve-13-year"],
+    faq: [
+      {
+        question: "What bourbon should I use in winter cocktails?",
+        answer:
+          "A characterful bourbon at 90 to 100 proof. The extra strength survives dilution from hot water, melting ice and cream, where an 80-proof bourbon disappears. Save allocated or delicate bottles for drinking neat — heat drives their aromatics off before you taste them.",
+      },
+      {
+        question: "How hot should the water in a hot toddy be?",
+        answer:
+          "Around 80 degrees Celsius — off the boil and rested about two minutes. Boiling water scalds the honey flat and strips the whiskey of aroma. The drink should warm your hands through the glass rather than be too hot to sip.",
+      },
+      {
+        question: "Can you make bourbon milk punch ahead of time?",
+        answer:
+          "Yes, and you should. It needs at least six hours of curdling before filtering, and it keeps refrigerated for several weeks. Filtering cannot be rushed — pressing the coffee filter pushes milk proteins through and clouds the whole batch.",
+      },
+    ],
+  },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 29. Glassware — Fundamentals
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "best-glass-for-bourbon",
+    title: "The Right Glass for Bourbon (and When It Genuinely Matters)",
+    subtitle:
+      "Glencairn, copita, rocks glass and the tulip — what each shape does to aroma, and the one you should own first.",
+    excerpt:
+      "Glassware advice is where whiskey writing gets silliest. Shape does change what you smell, measurably — but only for some purposes. Here is what each glass actually does, and when a heavy tumbler is the correct answer.",
+    category: "Fundamentals",
+    author: "Wyatt Brennan",
+    authorTitle: "Head Bartender, The Cellar at Bourbon & Oak",
+    publishedAt: "2026-08-30",
+    readTimeMinutes: 7,
+    heroImage:
+      "https://images.unsplash.com/photo-1527281400683-1aae777175f8?w=1600&q=85",
+    heroAlt:
+      "A Glencairn tasting glass and a heavy rocks glass side by side with bourbon",
+    tags: ["glassware", "Glencairn", "copita", "rocks glass", "nosing"],
+    content: [
+      {
+        type: "paragraph",
+        text: "There is a version of this conversation that is pure theatre — the collector with fourteen glass shapes and a strong opinion about each. Ignore that. There is also a real, physical effect at work, and it is worth about ten minutes of your attention, because the wrong glass genuinely does hide things you paid for.",
+      },
+      {
+        type: "paragraph",
+        text: "The mechanism is simple. Bourbon at 90 to 125 proof is releasing ethanol vapour constantly, and ethanol is aggressive: it numbs the olfactory receptors and swamps the delicate esters that carry fruit, floral and grain notes. A glass shape either concentrates that vapour at your nose or lets it disperse. Everything else is preference.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "The Four Shapes Worth Knowing",
+      },
+      {
+        type: "paragraph",
+        text: "Glencairn. A short-stemmed tulip with a wide bowl narrowing to a flared lip. It gathers vapour from a broad surface, funnels it upward, and the flare spreads it slightly at the last moment so ethanol does not hit you as a single spike. It has become the industry default for good reason, and it is the glass a distillery will hand you at a barrel pick.",
+      },
+      {
+        type: "paragraph",
+        text: "Copita. The sherry-tasting glass, taller and more slender, on a proper stem. Slightly more concentrating than a Glencairn and better at showing high-proof whiskey, because the longer chimney gives ethanol more distance to disperse. The stem keeps your hand off the bowl, which matters more than people expect.",
+      },
+      {
+        type: "paragraph",
+        text: "Rocks glass or tumbler. Wide, straight-sided, no concentration at all. Aroma disperses immediately. This is often described as the wrong glass, and for evaluating a whiskey it is — but for a bourbon with ice, or a cocktail, or a pour you simply want to enjoy without analysing, the wide opening is a feature. It lets the alcohol blow off rather than concentrating it.",
+      },
+      {
+        type: "paragraph",
+        text: "Snifter. Wide bowl, sharply tapered, designed for brandy. The taper concentrates ethanol hard, which suits a 40% spirit and punishes a 62% one. For barrel-proof bourbon like [[product:george-t-stagg|George T. Stagg]] a snifter is close to unusable — you will smell alcohol and very little else.",
+      },
+      {
+        type: "callout",
+        title: "If you buy one glass",
+        text: "Buy a Glencairn. It is inexpensive, it is what the industry uses, and it is forgiving across the whole proof range. Two of them is better than one — comparing side by side teaches you more in an evening than any single glass does in a month.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Prove It to Yourself in Ten Minutes",
+      },
+      {
+        type: "paragraph",
+        text: "Pour the same bourbon into a Glencairn and a rocks glass, equal measures, and leave both to rest two minutes. Nose the rocks glass first. Then the Glencairn. The difference is not subtle, and it is more pronounced the higher the proof — with a barrel-strength whiskey the tulip will find fruit and baking spice that the tumbler simply does not present.",
+      },
+      {
+        type: "paragraph",
+        text: "Then do it in reverse with a bourbon over ice. The tumbler will be more pleasant, because concentrated ethanol above a chilled spirit is unpleasant rather than informative. This is the whole argument in one experiment: the glass follows the purpose, not the price of the bottle.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Things That Matter More Than Shape",
+      },
+      {
+        type: "list",
+        ordered: false,
+        items: [
+          "Pour size. Two thirds of an ounce to an ounce in a Glencairn. A generous pour fills the bowl with vapour and turns any glass into a snifter.",
+          "Rest. Give a pour two to three minutes before nosing. The most volatile ethanol burns off and the whiskey settles noticeably.",
+          "Temperature. Room temperature, and keep your hand off the bowl. Warming bourbon in your palm sounds sophisticated and mostly just raises the ethanol.",
+          "Cleanliness. Detergent residue is the single most common cause of a whiskey smelling wrong. Rinse with hot water only, and air dry upside down on a rack, not on a tea towel.",
+          "Storage. Store tasting glasses upright. Stored rim-down they trap stale air, and the first thing you will smell is the cupboard.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "That list will improve your tasting more than any glass upgrade. The detergent point in particular — a faint lemon note that seems to appear across several different bourbons is almost always the dishwasher, not the whiskey.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Lids, Water and Other Refinements",
+      },
+      {
+        type: "paragraph",
+        text: "A watch glass or a simple coaster laid over the rim for a minute traps aromatics and gives a much richer first nose when you lift it. It costs nothing and works. Glass lids are sold for this purpose; a saucer does the same job.",
+      },
+      {
+        type: "paragraph",
+        text: "Water belongs in the discussion too. A few drops in a high-proof bourbon lowers the ethanol enough that a Glencairn stops being overwhelming — which means the right glass and the right dilution solve the same problem from two directions. With something like [[product:william-larue-weller|William Larue Weller]] at barrel strength, use both: a tulip glass and a little water.",
+      },
+      {
+        type: "paragraph",
+        text: "And when you are not evaluating anything — when it is a Tuesday and you want a bourbon with a large cube — reach for the heavy tumbler without apology. It is the correct glass for that job. The point of understanding the physics is knowing when it applies, and when it politely does not.",
+      },
+    ],
+    seo: {
+      metaTitle: "Best Glass for Bourbon: Glencairn vs Copita vs Rocks Glass",
+      metaDescription:
+        "What each whiskey glass shape does to aroma, why a snifter ruins barrel-proof bourbon, and the five things that matter more than which glass you own.",
+      focusKeyword: "bourbon glassware",
+      primaryKeywords: [
+        "bourbon glassware",
+        "best glass for bourbon",
+        "Glencairn glass",
+        "copita glass",
+        "rocks glass whiskey",
+        "whiskey tasting glass",
+        "snifter bourbon",
+      ],
+      longTailKeywords: [
+        "does the glass matter for drinking bourbon",
+        "Glencairn vs rocks glass",
+        "what glass for barrel proof bourbon",
+        "how much bourbon to pour in a Glencairn",
+        "why does my whiskey smell like soap",
+        "should you warm bourbon in your hand",
+      ],
+      wordClusters: [
+        {
+          cluster: "Glass types",
+          terms: ["Glencairn", "copita", "tumbler", "snifter", "tulip bowl", "stemmed glass"],
+        },
+        {
+          cluster: "Aroma",
+          terms: ["ethanol vapour", "volatiles", "esters", "nosing", "concentration", "dispersal"],
+        },
+        {
+          cluster: "Practice",
+          terms: ["pour size", "resting", "watch glass", "dilution", "detergent residue"],
+        },
+      ],
+    },
+    relatedProducts: ["george-t-stagg", "william-larue-weller", "blantons-original-single-barrel"],
+    faq: [
+      {
+        question: "Does the glass really change how bourbon tastes?",
+        answer:
+          "It changes what you smell, which is most of what you taste. A tulip-shaped glass concentrates aroma vapour toward your nose; a wide tumbler lets it disperse. The effect is larger the higher the proof, and it is easy to verify by nosing the same pour from two shapes side by side.",
+      },
+      {
+        question: "Is a Glencairn or a rocks glass better for bourbon?",
+        answer:
+          "It depends on the purpose. A Glencairn is better for evaluating a whiskey neat because it concentrates aroma. A rocks glass is better for bourbon over ice or in a cocktail, where a wide opening lets sharp ethanol blow off instead of concentrating it.",
+      },
+      {
+        question: "Why does my whiskey smell faintly of soap or lemon?",
+        answer:
+          "Almost always detergent residue in the glass rather than anything in the bottle. Rinse tasting glasses with hot water only, air dry them upside down on a rack rather than a tea towel, and store them upright so they do not trap stale air.",
+      },
+    ],
+  },
 ];
 
 // ─── Helpers ────────────────────────────────────────────────────────────────

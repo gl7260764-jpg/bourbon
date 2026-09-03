@@ -285,6 +285,80 @@ const faqs: QA[] = [
       </>
     ),
   },
+  {
+    q: "Can I send a bottle as a gift to someone else?",
+    text: "Yes, but the recipient must be 21 or older and physically present to sign for it with government-issued photo ID. Carriers cannot leave spirits on a doorstep, with a neighbour, or in a parcel locker, and they will not release the package to anyone who cannot produce ID. Send to an address where an adult will be in during business hours — a workplace is usually more reliable than a home. We do not include prices in the box, and you can add a gift message at checkout.",
+    a: (
+      <>
+        Yes — with one condition that catches people out. The recipient must be
+        21 or older and <em>physically present</em> to sign with
+        government-issued photo ID. Carriers cannot leave spirits on a
+        doorstep, with a neighbour, or in a parcel locker, and they will not
+        release the package to anyone who can&apos;t produce ID.
+        <br />
+        <br />
+        So send it somewhere an adult will actually be during business hours —
+        a workplace is often more reliable than a home address. We never
+        include prices in the box, and you can add a gift message at checkout.
+        If nobody is home, the carrier will reattempt, then hold the package
+        for collection before returning it to us.
+      </>
+    ),
+  },
+  {
+    q: "Is older bourbon always better?",
+    text: "No. Bourbon stops changing the moment it leaves the barrel, so age only refers to time in oak, and more oak is not automatically better. Kentucky's climate ages whiskey quickly because of large temperature swings, and past roughly twelve to fifteen years many bourbons become dry, tannic and bitter as wood tannins overtake the spirit. Older bottles cost more because so little liquid survives evaporation, not because age guarantees quality. Some of the best-balanced bourbons are 8 to 12 years old.",
+    a: (
+      <>
+        No — and this is the most expensive misconception in bourbon. Age
+        refers only to time in oak, and bourbon stops changing the instant
+        it&apos;s bottled. A 23 year old bottle opened today is exactly as old
+        as it was on bottling day.
+        <br />
+        <br />
+        Kentucky&apos;s climate ages whiskey fast, because big summer-to-winter
+        temperature swings drive the spirit in and out of the wood. Past
+        roughly twelve to fifteen years, many bourbons turn dry, tannic and
+        bitter as wood tannin overtakes the spirit. Very old bottles command
+        high prices mostly because evaporation leaves so little liquid behind
+        — not because age guarantees quality. Plenty of the best-balanced
+        bourbons we sell are 8 to 12 years old. See our{" "}
+        <Link
+          href="/blog/does-older-bourbon-mean-better"
+          className="text-bourbon-gold underline decoration-bourbon-gold/30 underline-offset-4 hover:decoration-bourbon-gold transition-colors"
+        >
+          guide to age statements
+        </Link>
+        .
+      </>
+    ),
+  },
+  {
+    q: "Why does my bourbon look cloudy or have floating bits?",
+    text: "Almost always because it is non-chill-filtered, which is a mark of quality rather than a fault. Fatty acids and esters that carry flavour stay in the whiskey instead of being filtered out, and they can come out of solution as a haze when the bourbon is chilled, served over ice, or stored somewhere cold. This is called chill haze and it is harmless — let the bottle return to room temperature and it clears. Small dark flecks are usually harmless barrel char. Contact us if the liquid smells wrong, the seal is damaged, or particles do not dissolve at room temperature.",
+    a: (
+      <>
+        Almost always because the bourbon is <em>non-chill-filtered</em> — and
+        that is a mark of quality, not a fault. Chill filtering removes fatty
+        acids and esters that would otherwise cloud the whiskey when cold, but
+        those compounds carry flavour and texture, so many of the best
+        bottlings deliberately leave them in.
+        <br />
+        <br />
+        When that whiskey gets cold — over ice, or stored somewhere chilly —
+        those compounds come out of solution as a faint haze. It&apos;s called
+        chill haze, it&apos;s harmless, and it clears once the bottle returns
+        to room temperature. Small dark flecks are usually barrel char, also
+        harmless.
+        <br />
+        <br />
+        Do get in touch if the liquid smells sour or solventy, the seal or
+        capsule is damaged, or particles don&apos;t dissolve at room
+        temperature — those are different problems and we&apos;ll replace the
+        bottle.
+      </>
+    ),
+  },
 ];
 
 export default function FAQPage() {

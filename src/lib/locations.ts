@@ -1468,6 +1468,363 @@ export const LOCATIONS: Location[] = [
       },
     ],
   },
+
+  {
+    slug: "bowling-green",
+    updatedAt: "2026-08-30",
+    city: "Bowling Green",
+    isPrimarySite: false,
+    cardSummary:
+      "Straight up the Bluegrass Parkway, and the easiest bourbon day trip in southern Kentucky.",
+    driveNote: "76 miles · about 1 hr 20 min via the Bluegrass Parkway",
+    title: "Bourbon Distillery Near Bowling Green",
+    h1: "A Kentucky Distillery 80 Minutes From Bowling Green",
+    subtitle:
+      "We are in Bardstown, north-east of you — an easy morning drive through the middle of bourbon country.",
+    metaTitle: "Bourbon Distillery Near Bowling Green, KY | Bourbon & Oak",
+    metaDescription:
+      "Looking for a bourbon distillery near Bowling Green? Bourbon & Oak is 76 miles north-east in Bardstown — routes, drive time and how to plan the day.",
+    keywords: [
+      "bourbon distillery near Bowling Green",
+      "Bowling Green bourbon tour",
+      "day trip from Bowling Green Kentucky",
+      "Bardstown from Bowling Green",
+      "southern Kentucky bourbon trail",
+      "distillery tour near Bowling Green KY",
+    ],
+    heroImage: "/process-rickhouse.webp",
+    heroAlt:
+      "Barrels resting in a Kentucky rickhouse at a distillery within driving distance of Bowling Green",
+    intro: [
+      "Bourbon & Oak is not in Bowling Green. Our distillery is in Bardstown, 76 miles north-east, and the drive takes about an hour and twenty minutes.",
+      "Bowling Green sits in an awkward spot for bourbon: close enough to Kentucky's distilling heartland to feel like it should be part of it, far enough south that almost nothing is on your doorstep. The good news is that the run north is genuinely simple — one parkway, very little traffic, and you arrive in the middle of the densest concentration of working distilleries anywhere.",
+    ],
+    sections: [
+      {
+        heading: "The Drive From Bowling Green",
+        paragraphs: [
+          "The straightforward route is the William H. Natcher Parkway north to Elizabethtown, then the Bluegrass Parkway east and down into Bardstown. Around 76 miles, about an hour and twenty minutes, and almost all of it is open road.",
+          "The slower alternative runs north on US-31E through Glasgow and Hodgenville. It adds roughly half an hour and passes Abraham Lincoln's birthplace, which makes it a better choice if the distillery is one stop in a longer day rather than the whole point of it.",
+        ],
+      },
+      {
+        heading: "Making a Day of It",
+        paragraphs: [
+          "Bowling Green is far enough away that a rushed afternoon does not work well. Treat it as a full day and the trip becomes considerably more enjoyable.",
+        ],
+        list: [
+          "Leave by nine. Morning tours are quieter and the parkway is empty before the Louisville commute reaches it",
+          "Book two distillery tours at most — three hours on rickhouse floors is more tiring than it sounds",
+          "Eat in Bardstown before driving back rather than starting a 90 minute drive hungry",
+          "Settle the designated driver question before the first pour, not after it",
+          "If you would rather not drive at all, several Louisville tour operators will collect from a hotel and handle the day end to end",
+        ],
+      },
+      {
+        heading: "Why the Trip Is Worth Making",
+        paragraphs: [
+          "Bowling Green has a good bar scene and a growing number of places pouring serious Kentucky whiskey, so the argument for driving 76 miles is not really about the pour at the end. It is about standing inside a working rickhouse.",
+          "A nine-storey warehouse in August is not a visitor attraction pretending to be industry — it is the industry. The heat on the upper floors is genuinely uncomfortable, the air is thick with evaporating whiskey, and the barrels creak as they expand. Nothing in a tasting room communicates what aging actually is in the way that ten minutes on the top floor does.",
+        ],
+      },
+      {
+        heading: "Shipping to Bowling Green",
+        paragraphs: [
+          "If the drive is not happening this month, we ship. Kentucky permits direct-to-consumer spirits shipping, so Bowling Green addresses are straightforward, and an adult signature with ID is required at delivery. Rules outside Kentucky vary considerably and a handful of states prohibit it altogether.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "How far is Bardstown from Bowling Green?",
+        answer:
+          "About 76 miles, or an hour and twenty minutes, via the Natcher Parkway north to Elizabethtown and then the Bluegrass Parkway east.",
+      },
+      {
+        question: "Is there a bourbon distillery in Bowling Green?",
+        answer:
+          "Bowling Green has bars and retailers with strong Kentucky whiskey selections, but the large working distilleries sit north in the Bardstown, Loretto and Frankfort corridor. Bourbon & Oak is in Bardstown, 76 miles away.",
+      },
+      {
+        question: "Can I do a bourbon day trip from Bowling Green without driving?",
+        answer:
+          "Not directly. There is no train or public bus to Bardstown. The practical options are a hire car, a private driver, or joining a coach tour that departs from Louisville about an hour north of you.",
+      },
+      {
+        question: "What is the most scenic route from Bowling Green?",
+        answer:
+          "US-31E north through Glasgow and Hodgenville. It adds roughly thirty minutes over the parkway route and passes the Abraham Lincoln Birthplace National Historical Park.",
+      },
+      {
+        question: "Do you ship bourbon to Bowling Green?",
+        answer:
+          "Yes. Kentucky allows direct-to-consumer shipping, so Bowling Green deliveries are routine. An adult aged 21 or over must sign with photo ID at the door.",
+      },
+    ],
+  },
+  {
+    slug: "owensboro",
+    updatedAt: "2026-08-30",
+    city: "Owensboro",
+    isPrimarySite: false,
+    cardSummary:
+      "Kentucky's fourth city, two hours west of us, with a bourbon history of its own worth knowing.",
+    driveNote: "92 miles · about 1 hr 45 min via the Bluegrass and Natcher parkways",
+    title: "Bourbon Distillery Near Owensboro",
+    h1: "A Kentucky Distillery Under Two Hours From Owensboro",
+    subtitle:
+      "We are in Bardstown, east along the parkways — and Owensboro has more claim to bourbon history than most visitors realise.",
+    metaTitle: "Bourbon Distillery Near Owensboro, KY | Bourbon & Oak",
+    metaDescription:
+      "Bourbon & Oak is 92 miles east of Owensboro in Bardstown. Drive times, routes, and how Owensboro's own distilling history fits the Kentucky bourbon story.",
+    keywords: [
+      "bourbon distillery near Owensboro",
+      "Owensboro Kentucky bourbon",
+      "day trip from Owensboro",
+      "Bardstown from Owensboro",
+      "western Kentucky whiskey",
+      "distillery tour near Owensboro KY",
+    ],
+    heroImage: "/process-cooperage.webp",
+    heroAlt:
+      "A cooper working on a charred oak bourbon barrel at a Kentucky distillery near Owensboro",
+    intro: [
+      "Bourbon & Oak is in Bardstown, 92 miles east of Owensboro — a drive of about an hour and forty-five minutes on good roads.",
+      "Owensboro is one of the more interesting places to write a page like this from, because unlike most cities in our catchment it is not simply near bourbon country. It was part of it. Daviess County distilled whiskey commercially through the nineteenth century, and the Ohio River that made the city a shipping hub is the same river that carried Kentucky whiskey to market.",
+    ],
+    sections: [
+      {
+        heading: "The Drive From Owensboro",
+        paragraphs: [
+          "Take the Natcher Parkway south-east toward Bowling Green, then pick up the Bluegrass Parkway heading east at Elizabethtown and follow it into Bardstown. Roughly 92 miles and an hour and forty-five minutes, almost entirely on parkway.",
+          "The alternative is US-60 east to Hardinsburg and then south, which is slower and more winding but takes you along the river country for part of the way. In poor weather the parkway route is the more sensible of the two by a wide margin.",
+        ],
+      },
+      {
+        heading: "Owensboro's Own Whiskey History",
+        paragraphs: [
+          "Before Prohibition, Daviess County was a serious distilling district — enough that the county name still appears on whiskey labels today. Prohibition closed the industry there as thoroughly as everywhere else, and unlike Nelson and Franklin counties it never fully returned at the same scale. Distilling has come back to the area in recent decades, and the Ohio River corridor is once again producing whiskey.",
+          "This is worth knowing before you visit us, because it changes the frame. Bardstown is not where bourbon happens and Owensboro is not where it does not. Both are pieces of a Kentucky industry that concentrated in a few counties after Prohibition largely for reasons of capital and surviving licences.",
+        ],
+      },
+      {
+        heading: "Planning the Day",
+        paragraphs: [
+          "At just under two hours each way, this is a full day out rather than an afternoon. It works well as an overnight if you would rather not drive home after tasting.",
+        ],
+        list: [
+          "Aim to leave by half past eight for a late-morning tour slot",
+          "Two distilleries is the honest maximum with a drive of this length at both ends",
+          "Bardstown has enough places to stay that an overnight is easy to arrange and removes the driver problem entirely",
+          "If you are combining with Louisville, that adds only 40 miles and makes an overnight considerably more worthwhile",
+        ],
+      },
+      {
+        heading: "Shipping to Owensboro",
+        paragraphs: [
+          "Kentucky permits direct-to-consumer spirits shipping, so Owensboro orders arrive without complication and an adult signature with photo ID is required at delivery. If you are sending a bottle to someone in another state, check the rules first — several states prohibit inbound spirits shipments entirely.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "How far is Bardstown from Owensboro?",
+        answer:
+          "About 92 miles, or an hour and forty-five minutes, using the Natcher Parkway south-east and then the Bluegrass Parkway east from Elizabethtown.",
+      },
+      {
+        question: "Was bourbon ever made in Owensboro?",
+        answer:
+          "Yes. Daviess County was a significant commercial distilling district in the nineteenth century, and the county name still appears on whiskey labels. Prohibition ended the industry locally, and unlike Nelson County it did not return at the same scale, though distilling has come back to the Ohio River corridor in recent decades.",
+      },
+      {
+        question: "Is the drive from Owensboro worth it for one distillery?",
+        answer:
+          "For a single tasting room, probably not. For a working rickhouse and two tours in Bardstown, where several distilleries sit close together, it is a straightforward day out — and an overnight removes the question of who drives home.",
+      },
+      {
+        question: "Do you ship bourbon to Owensboro?",
+        answer:
+          "Yes. Kentucky allows direct-to-consumer shipping, so Owensboro addresses are routine. Someone aged 21 or over must sign with photo ID at delivery.",
+      },
+    ],
+  },
+  {
+    slug: "evansville",
+    updatedAt: "2026-08-30",
+    city: "Evansville",
+    isPrimarySite: false,
+    cardSummary:
+      "Cross the Ohio and you are in bourbon country — about two hours from the rickhouse door.",
+    driveNote: "118 miles · about 2 hr via US-231 and the parkways",
+    title: "Bourbon Distillery Near Evansville",
+    h1: "A Kentucky Distillery Two Hours From Evansville",
+    subtitle:
+      "We are in Bardstown, across the river and east — the closest real bourbon country to southern Indiana.",
+    metaTitle: "Bourbon Distillery Near Evansville, IN | Bourbon & Oak",
+    metaDescription:
+      "Bourbon & Oak is 118 miles from Evansville in Bardstown, Kentucky. Routes across the Ohio, drive time, and what Indiana visitors should know about shipping.",
+    keywords: [
+      "bourbon distillery near Evansville",
+      "Evansville Indiana bourbon trail",
+      "day trip from Evansville",
+      "Kentucky distillery from southern Indiana",
+      "Bardstown from Evansville",
+      "bourbon tour near Evansville IN",
+    ],
+    heroImage: "/image4.webp",
+    heroAlt:
+      "Kentucky bourbon bottles on a distillery shelf within driving distance of Evansville, Indiana",
+    intro: [
+      "Bourbon & Oak is in Bardstown, Kentucky — 118 miles from Evansville, or about two hours once you are across the Ohio River.",
+      "Southern Indiana has an unusual relationship with bourbon. Indiana distils a great deal of American whiskey, much of it in Lawrenceburg on the other side of the state, and a good deal of what is sold as bourbon nationally was made there. What Indiana does not have is Kentucky's density of visitable working distilleries, which is why the drive south-east is the one worth making.",
+    ],
+    sections: [
+      {
+        heading: "The Drive From Evansville",
+        paragraphs: [
+          "Cross at Henderson and take US-60 east, or run the Audubon and Natcher parkways to Bowling Green and cut back north-east on the Bluegrass Parkway. Both come in around 118 to 130 miles and roughly two hours; the parkway route is longer in distance and usually quicker in practice.",
+          "Bear in mind the time zone. Evansville sits in Central Time and Bardstown is in Eastern, so you lose an hour heading east. A ten o'clock departure puts you at a distillery door at one in the afternoon, not noon — the single most common planning mistake visitors from this direction make.",
+        ],
+      },
+      {
+        heading: "What Indiana Visitors Should Know About Shipping",
+        paragraphs: [
+          "This is the practical difference between an Indiana address and a Kentucky one, and it is worth stating plainly. Kentucky permits direct-to-consumer spirits shipping. Rules elsewhere vary by state, and a handful prohibit inbound spirits shipments outright, so check your own state's position before ordering rather than after.",
+          "Where shipping is permitted, an adult aged 21 or over must sign with photo ID at delivery. Carriers will not leave spirits on a doorstep, and they will not release a package to anyone who cannot produce identification.",
+        ],
+      },
+      {
+        heading: "Making the Day Work",
+        paragraphs: [
+          "Two hours each way plus the time change makes this a committed day. It rewards a little planning.",
+        ],
+        list: [
+          "Set out early and remember you lose an hour crossing into Eastern Time",
+          "Book tour slots in advance — arriving unannounced at two in the afternoon usually means the last tour has gone",
+          "Two distilleries, not four. Bardstown's cluster means you can walk between some of them",
+          "Consider staying over. A two hour drive after a tasting flight is a poor end to a good day",
+        ],
+      },
+      {
+        heading: "Why Bardstown Rather Than a Closer Stop",
+        paragraphs: [
+          "There are perfectly good places to drink whiskey much closer to Evansville, and if the goal is a nice pour you should use them. The reason to drive is the rickhouse — a working nine-storey warehouse holding tens of thousands of barrels, with the heat and the smell and the sound of the wood moving.",
+          "That is the part of bourbon that cannot be shipped, photographed or explained. It is why the drive exists.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "How far is Bardstown, Kentucky from Evansville, Indiana?",
+        answer:
+          "About 118 miles by the direct route and roughly two hours' driving. Remember that Evansville is on Central Time and Bardstown is on Eastern, so you lose an hour travelling east.",
+      },
+      {
+        question: "Can bourbon be shipped to an Indiana address?",
+        answer:
+          "Shipping rules for distilled spirits are set state by state and change periodically, so check the current position for your address before ordering. Where shipping is permitted, an adult aged 21 or over must sign with photo ID at delivery and carriers will not leave the package unattended.",
+      },
+      {
+        question: "What is the best route from Evansville to bourbon country?",
+        answer:
+          "Either US-60 east after crossing at Henderson, or the Audubon and Natcher parkways to Bowling Green then the Bluegrass Parkway north-east. The parkway option is farther on the map and usually faster in practice.",
+      },
+      {
+        question: "Is there a distillery closer to Evansville than Bardstown?",
+        answer:
+          "There is whiskey production nearer, including along the Ohio River corridor in western Kentucky, but the concentration of visitable working distilleries is in the Bardstown, Loretto and Frankfort area, roughly two hours east.",
+      },
+    ],
+  },
+  {
+    slug: "knoxville",
+    updatedAt: "2026-08-30",
+    city: "Knoxville",
+    isPrimarySite: false,
+    cardSummary:
+      "A morning north through the Cumberland Gap and you are in Kentucky bourbon country by lunch.",
+    driveNote: "235 miles · about 3 hr 45 min via I-75 north",
+    title: "Bourbon Distillery Near Knoxville",
+    h1: "Kentucky Bourbon Country, Under Four Hours From Knoxville",
+    subtitle:
+      "We are in Bardstown — straight up I-75 and west, and a very different proposition from Tennessee whiskey.",
+    metaTitle: "Kentucky Bourbon Distillery Near Knoxville, TN | Bourbon & Oak",
+    metaDescription:
+      "Bourbon & Oak is 235 miles north of Knoxville in Bardstown, Kentucky. Drive time, the I-75 route, and how Kentucky bourbon differs from Tennessee whiskey.",
+    keywords: [
+      "bourbon distillery near Knoxville",
+      "Kentucky bourbon trail from Knoxville",
+      "road trip from Knoxville to Kentucky",
+      "Bardstown from Knoxville",
+      "Tennessee whiskey vs Kentucky bourbon",
+      "weekend bourbon trip from Knoxville",
+    ],
+    heroImage: "/image2.webp",
+    heroAlt:
+      "A Kentucky distillery tasting room set for a bourbon flight, a weekend drive from Knoxville",
+    intro: [
+      "Bourbon & Oak is in Bardstown, Kentucky, 235 miles north of Knoxville — a shade under four hours up I-75.",
+      "That is a weekend, not a day trip, and it is worth being honest about that up front. What makes the drive worthwhile for Knoxville visitors is not that Kentucky has whiskey and Tennessee does not. It is that the two states make it differently, and tasting them a few hours apart is the clearest way to understand what separates them.",
+    ],
+    sections: [
+      {
+        heading: "The Drive From Knoxville",
+        paragraphs: [
+          "I-75 north through the Cumberland Gap country to Lexington, then west on the Bluegrass Parkway to Bardstown. Around 235 miles and three hours forty-five without stops. The northern half through the Kentucky bluegrass is genuinely handsome driving.",
+          "If you have the time, breaking the trip at Lexington is the better plan. It puts you in horse country for an afternoon, and it means arriving at a distillery rested rather than four hours into a windscreen.",
+        ],
+      },
+      {
+        heading: "Kentucky Bourbon and Tennessee Whiskey Are Not the Same Thing",
+        paragraphs: [
+          "Both are made from a mash of at least 51% corn and aged in new charred oak. The legal difference that matters is a step Tennessee producers apply and Kentucky ones generally do not: filtering the new spirit through sugar maple charcoal before barrelling, known as the Lincoln County Process.",
+          "That step strips some of the heavier congeners and produces a softer, sweeter, slightly sootier spirit. It is not a lesser process, and Tennessee whiskey that has been through it is still, by federal definition, capable of meeting the bourbon standard. It simply tastes different, and the difference is easiest to hear when you try them close together rather than months apart.",
+        ],
+      },
+      {
+        heading: "Building a Weekend",
+        paragraphs: [
+          "Four hours each way means an overnight at minimum, and two nights makes the trip considerably better value for the driving.",
+        ],
+        list: [
+          "Drive up Friday afternoon and stay in Bardstown or Lexington rather than starting at dawn on Saturday",
+          "Saturday: two distillery tours, spaced with lunch, in the Bardstown cluster",
+          "Sunday morning: one more stop or the Bardstown square, then home by mid-afternoon",
+          "Book tours before you leave Tennessee. Weekend slots at the better-known distilleries go early",
+          "Check what you can legally carry home across state lines before buying more than a bottle or two",
+        ],
+      },
+      {
+        heading: "Shipping to Tennessee",
+        paragraphs: [
+          "If the drive is not happening this season, shipping may be. Rules for inbound spirits shipments are set state by state and change from time to time, so check the current position for your address before ordering. Where it is permitted, an adult aged 21 or over must sign with photo identification at delivery.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "How far is Kentucky bourbon country from Knoxville?",
+        answer:
+          "Bardstown is about 235 miles north of Knoxville, roughly three hours forty-five minutes via I-75 to Lexington and then the Bluegrass Parkway west. It is a weekend trip rather than a day trip.",
+      },
+      {
+        question: "What is the difference between Tennessee whiskey and Kentucky bourbon?",
+        answer:
+          "Both use a mash of at least 51% corn aged in new charred oak. Tennessee producers additionally filter the new spirit through sugar maple charcoal before barrelling — the Lincoln County Process — which removes some heavier congeners and gives a softer, sweeter, slightly sootier character.",
+      },
+      {
+        question: "Should I break the drive from Knoxville?",
+        answer:
+          "Lexington is the natural stop, roughly three hours in and about an hour from Bardstown. Staying there puts you in horse country for an afternoon and means arriving at a distillery rested rather than straight off four hours of interstate.",
+      },
+      {
+        question: "Can I bring bourbon home to Tennessee from Kentucky?",
+        answer:
+          "Personal transport of alcohol across state lines is governed by state law and quantity limits vary, so check Tennessee's current allowance before buying in volume. For anything beyond a bottle or two it is worth confirming in advance.",
+      },
+    ],
+  },
 ];
 
 export function getLocationBySlug(slug: string): Location | undefined {
