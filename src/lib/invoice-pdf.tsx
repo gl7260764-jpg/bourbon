@@ -13,6 +13,7 @@ import {
   STATUS_LABEL,
   formatIssueDate,
   money,
+  paymentNote,
 } from "@/lib/invoice";
 
 /**
@@ -152,6 +153,7 @@ function InvoiceDoc({ inv }: { inv: InvoiceSnapshot }) {
   const t = inv.totals;
   const paid = inv.status === "PAID";
   const pc = pillColors(inv.status);
+  const note = paymentNote(inv);
 
   return (
     <Document
@@ -248,14 +250,8 @@ function InvoiceDoc({ inv }: { inv: InvoiceSnapshot }) {
           {/* pay + totals */}
           <View style={s.lower}>
             <View style={s.payBox}>
-              <Text style={s.payTitle}>{paid ? "PAYMENT RECEIVED" : "HOW TO PAY"}</Text>
-              <Text style={s.payText}>
-                {paid
-                  ? `Paid by ${inv.paymentLabel}. Thank you — nothing further is owed on this order.`
-                  : inv.payInstructions
-                    ? inv.payInstructions
-                    : `Payment by ${inv.paymentLabel}. Quote reference ${inv.orderNumber} so we can match your payment. Your order ships once payment clears.`}
-              </Text>
+              <Text style={s.payTitle}>{note.title}</Text>
+              <Text style={s.payText}>{note.body}</Text>
             </View>
 
             <View style={s.totals}>

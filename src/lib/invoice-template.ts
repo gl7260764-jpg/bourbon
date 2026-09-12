@@ -3,6 +3,7 @@ import {
   STATUS_LABEL,
   formatIssueDate,
   money,
+  paymentNote,
 } from "@/lib/invoice";
 
 /**
@@ -96,6 +97,7 @@ export function renderInvoiceHtml(
   opts: InvoiceHtmlOptions = {},
 ): string {
   const t = inv.totals;
+  const note = paymentNote(inv);
 
   const doc = `
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:794px;margin:0 auto;background:${CREAM};border-collapse:collapse">
@@ -182,16 +184,8 @@ export function renderInvoiceHtml(
         <td style="vertical-align:top;padding-right:34px">
           <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#ffffff;border:1px solid ${RULE};border-left:3px solid ${GOLD}">
             <tr><td style="padding:16px 18px">
-              <div style="font:700 8px/1 Inter,Arial,sans-serif;letter-spacing:.2em;color:${MUTED};margin-bottom:9px">${inv.status === "PAID" ? "PAYMENT RECEIVED" : "HOW TO PAY"}</div>
-              <div style="font:400 10.5px/1.75 Inter,Arial,sans-serif;color:${STONE}">
-                ${
-                  inv.status === "PAID"
-                    ? `Paid by <b style="color:${DEEP}">${esc(inv.paymentLabel)}</b>. Thank you — nothing further is owed on this order.`
-                    : inv.payInstructions
-                      ? esc(inv.payInstructions).replace(/\n/g, "<br>")
-                      : `Payment by <b style="color:${DEEP}">${esc(inv.paymentLabel)}</b>. Quote reference <span style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:${DEEP};background:${CREAM};padding:2px 6px;border:1px solid ${RULE}">${esc(inv.orderNumber)}</span> so we can match your payment. Your order ships once payment clears.`
-                }
-              </div>
+              <div style="font:700 8px/1 Inter,Arial,sans-serif;letter-spacing:.2em;color:${MUTED};margin-bottom:9px">${esc(note.title)}</div>
+              <div style="font:400 10.5px/1.75 Inter,Arial,sans-serif;color:${STONE}">${esc(note.body)}</div>
             </td></tr>
           </table>
         </td>

@@ -43,9 +43,13 @@ export interface InvoiceSnapshot {
   billedTo: InvoiceParty;
   shippedTo: InvoiceParty;
   shippingLabel: string;
-  paymentLabel: string;
-  /** Per-order details the operator issued, when they exist. */
-  payInstructions: string | null;
+  /* The payment RAIL only — "Zelle", "Cash App" — never the account behind it,
+     and null when the order does not name one. The issued details themselves
+     are deliberately absent: this document gets emailed, and the site tells
+     every customer we never send payment details by email. Printing them here
+     would make that promise false and turn a forwarded invoice into a way to
+     redirect someone's money. They live on the dashboard, behind a login. */
+  paymentLabel: string | null;
   lines: InvoiceLine[];
   totals: {
     subtotal: number;
@@ -142,6 +146,9 @@ export function buildInvoiceSnapshot(
 
   const discount = Number(order.discount);
   const rate = Number(order.discountRate);
+  const paymentLabel =
+    order.paymentLabel?.trim() ||
+    (order.paymentMethod === "OTHER" ? null : s.payment.label);
 
   return {
     invoiceNumber,
@@ -161,8 +168,9 @@ export function buildInvoiceSnapshot(
       email: "",
     },
     shippingLabel: s.shipping.label,
-    paymentLabel: s.payment.label,
-    payInstructions: order.paymentDetailsBody,
+    /* An operator-named rail wins; a bare OTHER names nothing useful, so the
+       invoice says nothing rather than printing a meaningless "Other". */
+    paymentLabel,
     lines,
     totals: {
       subtotal: Number(order.subtotal),
@@ -171,7 +179,7 @@ export function buildInvoiceSnapshot(
       // not carry a meaningless "0% off" line.
       discountLabel:
         discount > 0
-          ? `Discount · ${s.payment.label}${rate > 0 ? ` (${Math.round(rate * 100)}%)` : ""}`
+          ? `Discount${paymentLabel ? ` · ${paymentLabel}` : ""}${rate > 0 ? ` (${Math.round(rate * 100)}%)` : ""}`
           : null,
       shipping: Number(order.shippingCost),
       tax: Number(order.tax),
@@ -255,6 +263,36 @@ export async function issueInvoice(
   throw new InvoiceError(
     "Could not allocate an invoice number. Please try again.",
   );
+}
+
+/**
+ * What the invoice says about payment.
+ *
+ * Shared by the HTML and PDF renderers so the two cannot drift, and
+ * deliberately free of account numbers: an invoice is emailed and forwarded,
+ * and the details belong behind the dashboard login instead.
+ */
+export function paymentNote(inv: InvoiceSnapshot): { title: string; body: string } {
+  if (inv.status === "PAID") {
+    return {
+      title: "PAYMENT RECEIVED",
+      body: inv.paymentLabel
+        ? `Paid by ${inv.paymentLabel}. Thank you — nothing further is owed on this order.`
+        : "Paid in full. Thank you — nothing further is owed on this order.",
+    };
+  }
+  if (inv.status === "VOID") {
+    return {
+      title: "VOID",
+      body: "This invoice has been withdrawn and nothing is payable against it.",
+    };
+  }
+  return {
+    title: "HOW TO PAY",
+    body:
+      (inv.paymentLabel ? `Payment by ${inv.paymentLabel}. ` : "") +
+      `Sign in to your account to see where to send it — for your security we never send payment details by email. Quote reference ${inv.orderNumber} so we can match your payment.`,
+  };
 }
 
 /** Read the frozen document back off a row. */
