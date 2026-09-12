@@ -662,7 +662,10 @@ function Thread({
               {m.kind === "VOICE" && m.mediaUrl && (
                 <audio src={m.mediaUrl} controls className="mb-1 w-56 max-w-full" />
               )}
-              {m.invoice && <InvoiceCard invoice={m.invoice} tone="dark" />}
+              {/* Light tone: both bubbles on this surface are light (#FBEFC8
+                  and white). The dark tone paints bourbon-cream text, which is
+                  #FAFAF9 — white on pale yellow, about 1.1:1. */}
+              {m.invoice && <InvoiceCard invoice={m.invoice} />}
 
               {m.body && <span className="whitespace-pre-wrap">{m.body}</span>}
               <span className="mt-0.5 flex items-center justify-end gap-1 text-[10px] tabular-nums text-bourbon-deep/50">

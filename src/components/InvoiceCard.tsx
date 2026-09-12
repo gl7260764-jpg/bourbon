@@ -35,7 +35,9 @@ export default function InvoiceCard({
     tone === "dark"
       ? "border-bourbon-cream/20 bg-bourbon-cream/5"
       : "border-bourbon-deep/12 bg-white";
-  const label = tone === "dark" ? "text-bourbon-cream/55" : "text-bourbon-stone/70";
+  /* /80 rather than /70: the label is 10px uppercase, so it needs 4.5:1, and
+     stone at 70% over white lands at 4.2. */
+  const label = tone === "dark" ? "text-bourbon-cream/55" : "text-bourbon-stone/80";
   const value = tone === "dark" ? "text-bourbon-cream" : "text-bourbon-deep";
 
   return (
@@ -73,7 +75,11 @@ export default function InvoiceCard({
           href={`/api/invoices/${invoice.number}/pdf`}
           target="_blank"
           rel="noopener"
-          className="block px-3 py-2 border-t border-bourbon-gold/30 bg-bourbon-gold/10 text-bourbon-gold text-[10px] font-semibold tracking-[0.15em] uppercase text-center hover:bg-bourbon-gold/20 transition-colors"
+          /* Solid gold rather than a 10% tint: gold text on that tint is about
+             2.7:1, and at 10px uppercase it needs 4.5:1. Near-black on solid
+             gold is 6.6:1 and reads as the button it already was. Opaque, so
+             it holds up on the dark tone too. */
+          className="block px-3 py-2 bg-bourbon-gold text-bourbon-deep text-[10px] font-semibold tracking-[0.15em] uppercase text-center hover:bg-bourbon-gold/85 transition-colors"
         >
           Download PDF
         </a>
