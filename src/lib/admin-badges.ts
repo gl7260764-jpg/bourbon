@@ -27,8 +27,13 @@ export async function getAdminBadgeCounts(): Promise<AdminBadgeCounts> {
       where: { orderId: { not: null } },
       _sum: { adminUnread: true },
     }),
+    /* OPEN only, because /admin/chat lists OPEN only. Counting a closed
+       thread here would put a number on the rail that the page it points at
+       cannot show, and so cannot be cleared. The clients-chat count above
+       needs no such filter — that page lists order threads whatever their
+       status. */
     prisma.conversation.aggregate({
-      where: { orderId: null },
+      where: { orderId: null, status: "OPEN" },
       _sum: { adminUnread: true },
     }),
     prisma.contactMessage.count({ where: { status: "UNREAD" } }),
