@@ -22,7 +22,14 @@ export default function ChatWidget() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [draft, setDraft] = useState("");
   const [sending, setSending] = useState(false);
-  const [hasNew, setHasNew] = useState(false);
+  /* Replies that arrived while the bubble was shut. A count rather than a
+     flag: "3" tells the visitor there is a conversation waiting, where a bare
+     dot reads as the same nudge the widget already shows on first load. */
+  const [unseen, setUnseen] = useState(0);
+  /* Whether someone is actually at the other end, and whether they are typing
+     right now. Polled stamps, same as everywhere else — see lib/chat-presence. */
+  const [adminOnline, setAdminOnline] = useState(false);
+  const [adminTyping, setAdminTyping] = useState(false);
   // The greeting types itself out on first open. "" = still showing the
   // typing-dots indicator; fills up to the full GREETING as it "types".
   /* Now the supporting line under the empty-state heading rather than a
@@ -72,10 +79,16 @@ export default function ChatWidget() {
         const url = after ? `/api/chat/poll?after=${after}` : "/api/chat/poll";
         const res = await fetch(url, { cache: "no-store" });
         if (!res.ok || cancelled) return;
-        const data = (await res.json()) as { messages: ChatMessage[] };
+        const data = (await res.json()) as {
+          messages: ChatMessage[];
+          adminTyping?: boolean;
+          adminOnline?: boolean;
+        };
+        setAdminTyping(Boolean(data.adminTyping));
+        setAdminOnline(Boolean(data.adminOnline));
         if (data.messages?.length) {
           mergeMessages(data.messages);
-          if (data.messages.some((m) => m.sender === "ADMIN")) setHasNew(false);
+          if (data.messages.some((m) => m.sender === "ADMIN")) setUnseen(0);
         }
       } catch {
         // network blip — try again next tick
@@ -104,7 +117,8 @@ export default function ChatWidget() {
         const data = (await res.json()) as { messages: ChatMessage[] };
         if (data.messages?.length) {
           mergeMessages(data.messages);
-          if (data.messages.some((m) => m.sender === "ADMIN")) setHasNew(true);
+          const fromAdmin = data.messages.filter((m) => m.sender === "ADMIN").length;
+          if (fromAdmin) setUnseen((n) => n + fromAdmin);
         }
       } catch {
         /* ignore */
@@ -136,7 +150,7 @@ export default function ChatWidget() {
         /* ignore */
       }
       setOpen(true);
-      setHasNew(false);
+      setUnseen(0);
     }, 5000);
     return () => clearTimeout(timer);
   }, []);
@@ -272,7 +286,7 @@ export default function ChatWidget() {
   const openWidget = () => {
     userInteractedRef.current = true;
     setOpen(true);
-    setHasNew(false);
+    setUnseen(0);
   };
 
   const closeWidget = () => {
@@ -289,7 +303,11 @@ export default function ChatWidget() {
       {!open && (
         <button
           onClick={openWidget}
-          aria-label="Open chat"
+          aria-label={
+            unseen > 0
+              ? `Open chat, ${unseen} new ${unseen === 1 ? "message" : "messages"}`
+              : "Open chat"
+          }
           className="fixed bottom-5 right-5 z-[90] flex h-14 w-14 items-center justify-center rounded-full bg-bourbon-gold text-bourbon-deep shadow-lg shadow-black/30 transition-transform hover:scale-105 cursor-pointer"
         >
           <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -300,8 +318,10 @@ export default function ChatWidget() {
               d="M8 10h.01M12 10h.01M16 10h.01M21 12a9 9 0 11-3.6-7.2L21 3l-1.2 3.4A8.96 8.96 0 0121 12z"
             />
           </svg>
-          {hasNew && (
-            <span className="absolute -top-0.5 -right-0.5 h-3.5 w-3.5 rounded-full bg-red-500 ring-2 ring-bourbon-deep" />
+          {unseen > 0 && (
+            <span className="absolute -top-1 -right-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 text-[11px] font-bold tabular-nums text-white ring-2 ring-bourbon-deep animate-pulse-badge">
+              {unseen > 9 ? "9+" : unseen}
+            </span>
           )}
         </button>
       )}
@@ -315,10 +335,30 @@ export default function ChatWidget() {
               <p className="font-[family-name:var(--font-playfair)] text-base font-bold text-bourbon-cream">
                 Bourbon & Oak
               </p>
-              <p className="flex items-center gap-1.5 text-[11px] text-bourbon-cream/60">
-                <span className="h-1.5 w-1.5 rounded-full bg-green-400" />
-                We typically reply in a few minutes
-              </p>
+              {/* Was a fixed green dot and "we reply in a few minutes", which
+                  claimed the same thing at 3am as at noon. Now it says what is
+                  actually true, and falls back to the promise when nobody is
+                  at the desk. */}
+              {adminTyping ? (
+                <p className="flex items-center gap-1.5 text-[11px] text-bourbon-gold">
+                  <span className="flex items-end gap-0.5" aria-hidden="true">
+                    <WidgetDot delay="0ms" />
+                    <WidgetDot delay="150ms" />
+                    <WidgetDot delay="300ms" />
+                  </span>
+                  Typing…
+                </p>
+              ) : adminOnline ? (
+                <p className="flex items-center gap-1.5 text-[11px] text-bourbon-cream/60">
+                  <span className="h-1.5 w-1.5 rounded-full bg-green-400" />
+                  We&apos;re online right now
+                </p>
+              ) : (
+                <p className="flex items-center gap-1.5 text-[11px] text-bourbon-cream/60">
+                  <span className="h-1.5 w-1.5 rounded-full bg-bourbon-cream/40" />
+                  We typically reply in a few minutes
+                </p>
+              )}
             </div>
             <button
               onClick={closeWidget}
@@ -456,5 +496,15 @@ function Bubble({ sender, body }: { sender: "VISITOR" | "ADMIN"; body: string })
         {body}
       </div>
     </div>
+  );
+}
+
+/** One bouncing dot of the typing indicator, on the widget's dark header. */
+function WidgetDot({ delay }: { delay: string }) {
+  return (
+    <span
+      className="h-1.5 w-1.5 rounded-full bg-bourbon-gold animate-typing-dot"
+      style={{ animationDelay: delay }}
+    />
   );
 }

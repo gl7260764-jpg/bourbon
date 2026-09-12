@@ -1,4 +1,4 @@
-import type { ChatMessageKind, ChatSender } from "@prisma/client";
+import type { ChatMessageKind, ChatSender, Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { signedChatMediaUrl } from "@/lib/cloudinary";
 
@@ -24,6 +24,10 @@ export type ChatMessageView = {
   mediaDurationMs: number | null;
   /** Order this message is about, when it is about one. Rendered as a chip. */
   contextOrderNumber: string | null;
+  /* An invoice delivered into the thread, rendered as a card with a download
+     link. Deliberately not a ChatMessageKind — see the schema comment on
+     ChatMessage.invoiceId for why that enum is left alone. */
+  invoice: { number: string; total: string; status: string } | null;
 };
 
 /**
@@ -80,6 +84,12 @@ export function toView(m: {
   mediaPublicId: string | null;
   mediaDurationMs: number | null;
   contextOrderNumber?: string | null;
+  invoice?: {
+    invoiceNumber: string;
+    total: Prisma.Decimal;
+    voidedAt: Date | null;
+    snapshot: Prisma.JsonValue;
+  } | null;
 }): ChatMessageView {
   return {
     id: m.id,
@@ -92,6 +102,15 @@ export function toView(m: {
       : null,
     mediaDurationMs: m.mediaDurationMs,
     contextOrderNumber: m.contextOrderNumber ?? null,
+    invoice: m.invoice
+      ? {
+          number: m.invoice.invoiceNumber,
+          total: String(m.invoice.total),
+          status: m.invoice.voidedAt
+            ? "VOID"
+            : ((m.invoice.snapshot as { status?: string } | null)?.status ?? "DUE"),
+        }
+      : null,
   };
 }
 
@@ -102,6 +121,9 @@ export async function listMessages(conversationId: string): Promise<ChatMessageV
     select: {
       id: true, sender: true, kind: true, body: true, createdAt: true,
       mediaPublicId: true, mediaDurationMs: true, contextOrderNumber: true,
+      invoice: {
+        select: { invoiceNumber: true, total: true, voidedAt: true, snapshot: true },
+      },
     },
   });
   return rows.map(toView);
@@ -122,6 +144,8 @@ export async function appendMessage(input: {
   mediaBytes?: number | null;
   /** Which order this message is about, when it is about one. Label only. */
   contextOrderNumber?: string | null;
+  /** Invoice delivered by this message, when it carries one. */
+  invoiceId?: string | null;
 }): Promise<ChatMessageView> {
   const fromCustomer = input.sender === "VISITOR";
 
@@ -137,10 +161,14 @@ export async function appendMessage(input: {
         mediaDurationMs: input.mediaDurationMs ?? null,
         mediaBytes: input.mediaBytes ?? null,
         contextOrderNumber: input.contextOrderNumber ?? null,
+        invoiceId: input.invoiceId ?? null,
       },
       select: {
         id: true, sender: true, kind: true, body: true, createdAt: true,
         mediaPublicId: true, mediaDurationMs: true, contextOrderNumber: true,
+        invoice: {
+          select: { invoiceNumber: true, total: true, voidedAt: true, snapshot: true },
+        },
       },
     }),
     prisma.conversation.update({

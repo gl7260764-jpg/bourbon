@@ -20,6 +20,15 @@ import {
   uploadChatImage,
 } from "@/lib/cloudinary";
 
+import {
+  TYPING_WINDOW_MS,
+  clearTyping,
+  isCustomerOnline,
+  isFresh,
+  setTyping,
+  touchAdminPresence,
+} from "@/lib/chat-presence";
+
 export const dynamic = "force-dynamic";
 
 /* Authorisation is the middleware's job: src/middleware.ts guards
@@ -39,15 +48,49 @@ export async function GET(_req: NextRequest, ctx: Ctx) {
   const order = await findOrder(orderNumber);
   if (!order) return NextResponse.json({ error: "Order not found." }, { status: 404 });
 
+  // Reading an order's thread is the operator at work, so it counts as
+  // presence the same way the storefront inbox does.
+  await touchAdminPresence().catch(() => {});
+
   const thread = await prisma.conversation.findUnique({
     where: { orderId: order.id },
-    select: { id: true },
+    select: { id: true, visitorTypingAt: true, customerLastReadAt: true },
   });
   if (!thread) return NextResponse.json({ messages: [] });
 
   const messages = await listMessages(thread.id);
   await markRead(thread.id, "admin");
-  return NextResponse.json({ messages });
+  return NextResponse.json({
+    messages,
+    peerTyping: isFresh(thread.visitorTypingAt, TYPING_WINDOW_MS),
+    peerOnline: order.customerId ? await isCustomerOnline(order.customerId) : false,
+    customerLastReadAt: thread.customerLastReadAt?.toISOString() ?? null,
+  });
+}
+
+/**
+ * Typing ping from the operator, plus a presence stamp.
+ *
+ * OrderChat PATCHes whatever endpoint it is given as the operator types; this
+ * route had no PATCH, so on the clients-chat surface the three dots never
+ * reached the customer and every ping 405'd. Creating the thread here would be
+ * wrong — a stray keystroke should not open a conversation — so a thread that
+ * does not exist yet is a silent no-op.
+ */
+export async function PATCH(_req: NextRequest, ctx: Ctx) {
+  const { orderNumber } = await ctx.params;
+  const order = await findOrder(orderNumber);
+  if (!order) return NextResponse.json({ error: "Order not found." }, { status: 404 });
+
+  const thread = await prisma.conversation.findUnique({
+    where: { orderId: order.id },
+    select: { id: true },
+  });
+  await Promise.all([
+    thread ? setTyping(thread.id, "admin") : Promise.resolve(),
+    touchAdminPresence(),
+  ]);
+  return NextResponse.json({ ok: true });
 }
 
 export async function POST(req: NextRequest, ctx: Ctx) {
@@ -74,6 +117,10 @@ export async function POST(req: NextRequest, ctx: Ctx) {
     orderId: order.id,
     customerId: order.customerId,
   });
+
+  // The message landing is the end of typing — drop our own stamp so the
+  // customer's dots go out with the reply instead of lingering for the window.
+  await clearTyping(thread.id, "admin");
 
   /* Ping the buyer that we replied. Never blocks the send: a failed push must
      not cost the operator their message. */

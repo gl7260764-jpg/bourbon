@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import InvoiceCard from "@/components/InvoiceCard";
 
 /* WhatsApp-shaped thread for one order. Text, images and voice notes; no
    calls. Used by both the customer dashboard and the admin order page — the
@@ -15,6 +16,8 @@ export type ChatMessage = {
   createdAt: string;
   mediaUrl: string | null;
   mediaDurationMs: number | null;
+  /** Present when this message delivered an invoice. Rendered as a card. */
+  invoice?: { number: string; total: string; status: string } | null;
 };
 
 /* Realtime is the delivery path; this interval is only the safety net for a
@@ -418,6 +421,8 @@ export default function OrderChat({
                         )}
                       </div>
                     )}
+
+                    {m.invoice && <InvoiceCard invoice={m.invoice} />}
 
                     {m.body && (
                       <p className="text-bourbon-deep text-sm leading-relaxed whitespace-pre-wrap break-words">

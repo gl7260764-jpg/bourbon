@@ -121,6 +121,17 @@ textarea,
   50%      { color: #CA8A04; }
 }
 
+/* Unread badge. A waiting message is the one thing in the panel that is
+   someone else's time being spent, so the count breathes instead of sitting
+   still — enough to catch the eye mid-scan without the strobe of a fast pulse.
+   Same 2.8s cycle as the attention loop above, so when both are on screen they
+   beat together rather than fighting. */
+@keyframes bourbon-badge-pulse {
+  0%, 100% { transform: scale(1);    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
+  50%      { transform: scale(1.08); box-shadow: 0 0 0 4px rgba(239, 68, 68, 0); }
+}
+.animate-pulse-badge { animation: bourbon-badge-pulse 2.8s ease-in-out infinite; }
+
 .animate-attention-ring { animation: bourbon-attention-ring 2.8s cubic-bezier(0, 0, 0.2, 1) infinite; }
 .animate-attention-dot  { animation: bourbon-attention-dot  2.8s ease-in-out infinite; }
 .animate-attention-icon { animation: bourbon-attention-icon 2.8s ease-in-out infinite; }
@@ -245,6 +256,9 @@ textarea,
 }
 @media (prefers-reduced-motion: reduce) {
   .animate-typing-dot { animation: none; opacity: 0.7; }
+  /* The badge carries a count, so it stays put and fully visible — only the
+     motion goes. */
+  .animate-pulse-badge { animation: none; }
 }
 
 /* Chat canvas. A warm paper ground with a faint oak-grain tick, so a thread

@@ -19,6 +19,7 @@ import {
   clearTyping,
   isFresh,
   setTyping,
+  isCustomerOnline,
   touchAdminPresence,
 } from "@/lib/chat-presence";
 
@@ -43,6 +44,7 @@ export async function GET(
       visitorTypingAt: true,
       customerLastReadAt: true,
       customer: { select: { email: true, fullName: true } },
+      customerId: true,
       visitorId: true,
     },
   });
@@ -73,6 +75,11 @@ export async function GET(
       // Attachments are Cloudinary `authenticated` assets, so they are signed
       // per read rather than stored as a permanent URL.
       mediaPublicId: true, mediaDurationMs: true, contextOrderNumber: true,
+      // Same reason: an invoice delivered into the thread renders as a card,
+      // and without the relation here it would send fine and never appear.
+      invoice: {
+        select: { invoiceNumber: true, total: true, voidedAt: true, snapshot: true },
+      },
     },
   });
   const messages = rows.map(toView);
@@ -92,8 +99,12 @@ export async function GET(
     name: convo.customer?.fullName || null,
     codename: visitorLabel(convo.visitorId),
     messages,
-    // Only the operator sees these two.
+    // Only the operator sees these three.
     peerTyping: isFresh(convo.visitorTypingAt, TYPING_WINDOW_MS),
+    /* An anonymous storefront thread has no customer behind it, so there is
+       no session to read presence from — those stay false rather than
+       guessing from the device cookie. */
+    peerOnline: convo.customerId ? await isCustomerOnline(convo.customerId) : false,
     customerLastReadAt: convo.customerLastReadAt?.toISOString() ?? null,
   });
 }

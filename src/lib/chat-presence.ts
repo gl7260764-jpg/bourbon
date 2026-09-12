@@ -72,3 +72,34 @@ export async function markCustomerRead(conversationId: string): Promise<void> {
     data: { customerLastReadAt: new Date(), customerUnread: 0 },
   });
 }
+
+/**
+ * Customer presence.
+ *
+ * Rides on CustomerSession.lastUsedAt, which already exists and was written
+ * only at session creation — nothing read it. A heartbeat endpoint bumps it,
+ * so "online" needs no new column and survives the customer moving between
+ * dashboard tabs on the same session.
+ */
+export const CUSTOMER_ONLINE_WINDOW_MS = 90_000;
+
+/** Bump every live session for this customer. Cheap: one indexed update. */
+export async function touchCustomerPresence(customerId: string): Promise<void> {
+  await prisma.customerSession
+    .updateMany({
+      where: { customerId, expiresAt: { gt: new Date() } },
+      data: { lastUsedAt: new Date() },
+    })
+    .catch(() => {
+      /* presence is cosmetic — never fail the caller over it */
+    });
+}
+
+export async function isCustomerOnline(customerId: string): Promise<boolean> {
+  const since = new Date(Date.now() - CUSTOMER_ONLINE_WINDOW_MS);
+  const seen = await prisma.customerSession.findFirst({
+    where: { customerId, lastUsedAt: { gt: since } },
+    select: { id: true },
+  });
+  return Boolean(seen);
+}

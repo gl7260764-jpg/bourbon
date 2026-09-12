@@ -10,6 +10,11 @@ import PushSettingRow from "@/components/PushSettingRow";
 import PaymentProofUpload from "@/app/checkout/confirmation/PaymentProofUpload";
 import { updateAccountDetails } from "./actions";
 import { setDashboardChatOpen } from "@/lib/dashboard-chat-signal";
+import {
+  UNREAD_EVENT,
+  peekUnreadCount,
+  publishUnreadCount,
+} from "@/lib/unread-signal";
 
 export interface AccountOrder {
   orderNumber: string;
@@ -33,6 +38,9 @@ export interface AccountOrder {
   /** Pending AND details issued — see page.tsx for why both are required. */
   canUploadProof: boolean;
   hasProof: boolean;
+  /* Invoices issued for this order, newest first. Voided ones are filtered out
+     server-side — a customer has no use for a document we have withdrawn. */
+  invoices: { number: string; total: number; issuedAt: string; status: string }[];
 }
 
 export interface AccountDetails {
@@ -131,6 +139,29 @@ export default function AccountClient({
   );
   const [chatAbout, setChatAbout] = useState<string | null>(null);
   const chatRef = useRef<HTMLDivElement>(null);
+  /* Seeded from whatever the navbar last polled, falling back to the server
+     render — which is already stale by the time this mounts. Read in the
+     initialiser rather than an effect so there is no first paint showing the
+     old number. On the server peekUnreadCount is null, so SSR and hydration
+     both start from the prop and match. */
+  const [liveUnread, setLiveUnread] = useState(() => peekUnreadCount() ?? unread);
+
+  useEffect(() => {
+    const onUnread = (e: Event) => {
+      const n = (e as CustomEvent<number>).detail;
+      if (typeof n === "number") setLiveUnread(n);
+    };
+    window.addEventListener(UNREAD_EVENT, onUnread);
+    return () => window.removeEventListener(UNREAD_EVENT, onUnread);
+  }, []);
+
+  /* Opening the thread marks it read server-side, so the navbar badge has to
+     drop at the same moment rather than lingering until its next poll. The
+     dashboard's own badge needs no state change — it is derived below. */
+  useEffect(() => {
+    if (tab !== "messages") return;
+    publishUnreadCount(0);
+  }, [tab]);
   /* Drives the opt-in prompt: an order that is still pending with no details
      issued is exactly the case a push notification is useful for. */
   const waitingOnDetails = orders.filter(
@@ -308,7 +339,10 @@ export default function AccountClient({
             <div className="flex lg:flex-col gap-1.5 min-w-max lg:min-w-0 lg:sticky lg:top-28">
               {TABS.map((t) => {
                 const active = tab === t.id;
-                const badge = t.id === "messages" ? unread : 0;
+                /* No badge on the tab you are already looking at — opening
+                   it is what marks the thread read. */
+                const badge =
+                  t.id === "messages" && tab !== "messages" ? liveUnread : 0;
                 return (
                   <button
                     key={t.id}
@@ -578,6 +612,61 @@ export default function AccountClient({
                               these details or ask you to send payment anywhere
                               else.
                             </p>
+                          </div>
+                        )}
+
+                        {o.invoices.length > 0 && (
+                          <div className="mb-5 border border-bourbon-deep/12 bg-white">
+                            <p className="text-bourbon-stone/80 text-[10px] tracking-[0.18em] uppercase px-4 pt-3.5 pb-2">
+                              {o.invoices.length === 1 ? "Invoice" : "Invoices"}
+                            </p>
+                            <ul>
+                              {o.invoices.map((inv) => (
+                                <li
+                                  key={inv.number}
+                                  className="flex items-center gap-3 px-4 py-3 border-t border-bourbon-deep/8"
+                                >
+                                  <span
+                                    className="shrink-0 w-8 h-8 flex items-center justify-center border border-bourbon-gold/50 text-bourbon-gold"
+                                    aria-hidden="true"
+                                  >
+                                    <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+                                      <path d="M14.5 2.5H7a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7l-4.5-4.5Z" />
+                                      <path d="M14 2.5V8h5" />
+                                      <path d="M9 13h6M9 16.5h4" />
+                                    </svg>
+                                  </span>
+                                  <div className="min-w-0 flex-1">
+                                    <p className="text-bourbon-deep text-sm font-semibold tabular-nums truncate">
+                                      {inv.number}
+                                    </p>
+                                    <p className="text-bourbon-stone text-[11px] tabular-nums">
+                                      {money(inv.total)} ·{" "}
+                                      {new Date(inv.issuedAt).toLocaleDateString(undefined, {
+                                        month: "short",
+                                        day: "numeric",
+                                        year: "numeric",
+                                      })}
+                                      {inv.status === "PAID" ? " · Paid" : ""}
+                                    </p>
+                                  </div>
+                                  <a
+                                    href={`/invoice/${inv.number}`}
+                                    className="shrink-0 px-3 py-1.5 text-bourbon-stone text-[10px] font-semibold tracking-widest uppercase hover:text-bourbon-deep transition-colors"
+                                  >
+                                    View
+                                  </a>
+                                  <a
+                                    href={`/api/invoices/${inv.number}/pdf`}
+                                    target="_blank"
+                                    rel="noopener"
+                                    className="shrink-0 px-3 py-1.5 border border-bourbon-deep/20 text-bourbon-deep text-[10px] font-semibold tracking-widest uppercase hover:border-bourbon-gold hover:text-bourbon-gold transition-colors"
+                                  >
+                                    PDF
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
                           </div>
                         )}
 

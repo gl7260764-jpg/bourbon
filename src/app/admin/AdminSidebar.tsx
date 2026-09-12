@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { logout } from "./login/actions";
+import type { AdminBadgeCounts } from "@/lib/admin-badges";
 
 const NAV = [
   {
@@ -79,9 +80,62 @@ const NAV = [
   },
 ] as const;
 
+/* Which count sits on which nav row. Kept beside NAV rather than inside it so
+   NAV stays a flat `as const` — folding an optional field into it would make
+   every item a union and force a null on the ten rows that never badge. */
+const BADGE_BY_HREF: Record<string, keyof AdminBadgeCounts> = {
+  "/admin/messages": "contactMessages",
+  "/admin/clients-chat": "clientsChat",
+  "/admin/chat": "storefrontChat",
+};
+
+const BADGE_POLL_MS = 10_000;
+
+const EMPTY_COUNTS: AdminBadgeCounts = {
+  clientsChat: 0,
+  storefrontChat: 0,
+  contactMessages: 0,
+  total: 0,
+};
+
 export default function AdminSidebar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  /* Unread counts for the message rows. Polled, not pushed — Pusher is
+     answering 401, and a socket held open on every admin page is far more
+     than three numbers are worth. The same request stamps operator presence,
+     so "online" tracks the whole panel rather than one open thread. */
+  const [counts, setCounts] = useState<AdminBadgeCounts>(EMPTY_COUNTS);
+
+  useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      // A backgrounded tab is not someone at the desk: skipping the poll keeps
+      // it out of the presence stamp as well as saving the query.
+      if (document.visibilityState === "hidden") return;
+      try {
+        const res = await fetch("/api/admin/badges", { cache: "no-store" });
+        if (!res.ok) return;
+        const data = (await res.json()) as AdminBadgeCounts;
+        if (!cancelled) setCounts(data);
+      } catch {
+        /* offline — leave the last known counts up rather than flashing zero */
+      }
+    };
+    load();
+    const timer = window.setInterval(load, BADGE_POLL_MS);
+    // Returning to the tab is exactly when a stale count is most obvious.
+    const onVisible = () => {
+      if (document.visibilityState === "visible") load();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      cancelled = true;
+      window.clearInterval(timer);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+    // Re-read on navigation: opening an inbox clears its badge server-side.
+  }, [pathname]);
 
   const isActive = (href: string) => {
     if (href === "/admin") return pathname === "/admin";
@@ -98,9 +152,20 @@ export default function AdminSidebar() {
         </Link>
         <button
           onClick={() => setMobileOpen((v) => !v)}
-          aria-label="Toggle menu"
-          className="text-bourbon-cream/80 hover:text-bourbon-gold cursor-pointer"
+          aria-label={
+            counts.total > 0
+              ? `Toggle menu, ${counts.total} unread ${counts.total === 1 ? "message" : "messages"}`
+              : "Toggle menu"
+          }
+          className="relative text-bourbon-cream/80 hover:text-bourbon-gold cursor-pointer"
         >
+          {/* The sidebar is closed by default on a phone, so the row badges are
+              invisible there. The total rides on the hamburger instead. */}
+          {counts.total > 0 && !mobileOpen && (
+            <span className="absolute -top-1.5 -right-1.5 z-10 inline-flex items-center justify-center min-w-[1.125rem] h-[1.125rem] px-1 bg-red-500 text-white text-[10px] font-bold rounded-full tabular-nums ring-2 ring-bourbon-deep">
+              {counts.total > 9 ? "9+" : counts.total}
+            </span>
+          )}
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             {mobileOpen ? (
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
@@ -131,21 +196,41 @@ export default function AdminSidebar() {
         <nav className="px-3 py-4 space-y-1">
           {NAV.map((item) => {
             const active = isActive(item.href);
+            const badgeKey = BADGE_BY_HREF[item.href];
+            const count = badgeKey ? counts[badgeKey] : 0;
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileOpen(false)}
+                aria-label={
+                  count > 0
+                    ? `${item.label}, ${count} unread ${count === 1 ? "message" : "messages"}`
+                    : undefined
+                }
                 className={`flex items-center gap-3 px-3 py-2.5 text-sm font-medium tracking-wide transition-colors ${
                   active
                     ? "bg-bourbon-gold/15 text-bourbon-gold"
                     : "text-bourbon-cream/70 hover:bg-bourbon-cream/5 hover:text-bourbon-cream"
                 }`}
               >
-                <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={item.iconPath} />
-                </svg>
+                <span className="relative shrink-0">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={item.iconPath} />
+                  </svg>
+                  {/* Dot on the icon as well as the count on the right: the
+                      sidebar collapses to icons on nothing yet, but the dot is
+                      what the eye catches when scanning the rail. */}
+                  {count > 0 && (
+                    <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-red-500 ring-2 ring-bourbon-deep" />
+                  )}
+                </span>
                 {item.label}
+                {count > 0 && (
+                  <span className="ml-auto inline-flex items-center justify-center min-w-5 h-5 px-1.5 bg-red-500 text-white text-[10px] font-bold rounded-full tabular-nums animate-pulse-badge">
+                    {count > 99 ? "99+" : count}
+                  </span>
+                )}
               </Link>
             );
           })}

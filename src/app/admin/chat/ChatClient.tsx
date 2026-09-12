@@ -3,9 +3,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { countryFlag } from "@/lib/geo";
 import { useRouter, useSearchParams } from "next/navigation";
+import InvoiceCard from "@/components/InvoiceCard";
 
 const LIST_POLL_MS = 4000;
 const THREAD_POLL_MS = 3000;
+/** Matches TYPING_PING_THROTTLE_MS on the server side. */
+const TYPING_PING_MS = 2500;
 
 interface ConversationSummary {
   id: string;
@@ -30,6 +33,8 @@ interface ChatMessage {
   /** Signed and short-lived — never a permanent URL. */
   mediaUrl?: string | null;
   mediaDurationMs?: number | null;
+  /** Present when this message delivered an invoice. Rendered as a card. */
+  invoice?: { number: string; total: string; status: string } | null;
 }
 
 function urlBase64ToUint8Array(base64String: string): Uint8Array<ArrayBuffer> {
@@ -397,7 +402,15 @@ function Thread({
   /* When the customer last opened this thread. Anything you sent before it
      has been read — that is the second tick. */
   const [readAt, setReadAt] = useState<string | null>(null);
+  /* Is the customer at their screen, and are they typing right now. Both are
+     polled stamps, not a socket — see lib/chat-presence. Only ever shown to
+     the operator. */
+  const [peerOnline, setPeerOnline] = useState(false);
+  const [peerTyping, setPeerTyping] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  /* Throttles the typing ping. One write per keystroke would be absurd, so a
+     stamp is refreshed at most this often and read against a wider window. */
+  const lastTypingPingRef = useRef(0);
   const fileRef = useRef<HTMLInputElement>(null);
   const [draft, setDraft] = useState("");
   const [sending, setSending] = useState(false);
@@ -417,8 +430,12 @@ function Thread({
           name?: string | null;
           codename?: string | null;
           customerLastReadAt?: string | null;
+          peerOnline?: boolean;
+          peerTyping?: boolean;
         };
         setMessages(data.messages);
+        setPeerOnline(Boolean(data.peerOnline));
+        setPeerTyping(Boolean(data.peerTyping));
         setWho({
           email: data.email ?? null,
           name: data.name ?? null,
@@ -448,7 +465,20 @@ function Thread({
           : `/api/admin/chat/${conversationId}`;
         const res = await fetch(url, { cache: "no-store" });
         if (!res.ok) return;
-        const data = (await res.json()) as { messages: ChatMessage[] };
+        const data = (await res.json()) as {
+          messages: ChatMessage[];
+          peerOnline?: boolean;
+          peerTyping?: boolean;
+          customerLastReadAt?: string | null;
+        };
+        /* Presence rides the message poll rather than a timer of its own —
+           it is the same 3s tick and the same row, so a second request would
+           buy nothing. */
+        setPeerOnline(Boolean(data.peerOnline));
+        setPeerTyping(Boolean(data.peerTyping));
+        if (data.customerLastReadAt !== undefined) {
+          setReadAt(data.customerLastReadAt);
+        }
         if (data.messages?.length) {
           setMessages((prev) => {
             const seen = new Set(prev.map((m) => m.id));
@@ -469,6 +499,20 @@ function Thread({
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [messages]);
+
+  /* Tell the customer we are typing. Fire-and-forget and throttled — the
+     stamp is read against a window wide enough that one ping every couple of
+     seconds keeps the dots up without a write per keystroke. */
+  const pingTyping = () => {
+    const now = Date.now();
+    if (now - lastTypingPingRef.current < TYPING_PING_MS) return;
+    lastTypingPingRef.current = now;
+    void fetch(`/api/admin/chat/${conversationId}`, { method: "PATCH" }).catch(
+      () => {
+        /* cosmetic — a dropped ping just means no dots for a beat */
+      },
+    );
+  };
 
   const sendFile = async (file: File) => {
     if (sending) return;
@@ -555,7 +599,19 @@ function Thread({
         <p className="truncate text-sm font-semibold text-bourbon-deep">
           {who.name || who.email || who.codename || "Unidentified visitor"}
         </p>
-        {who.email ? (
+        {/* Typing outranks the address: while it is up it is the only thing
+            on this line that is changing, and it is the reason to wait before
+            sending. The email comes back the moment they stop. */}
+        {peerTyping ? (
+          <p className="flex items-center gap-1.5 text-xs text-bourbon-gold">
+            <span className="flex items-end gap-0.5" aria-hidden="true">
+              <Dot delay="0ms" />
+              <Dot delay="150ms" />
+              <Dot delay="300ms" />
+            </span>
+            typing…
+          </p>
+        ) : who.email ? (
           <a
             href={`mailto:${who.email}`}
             className="truncate text-xs text-bourbon-deep/55 hover:text-bourbon-gold transition-colors"
@@ -568,6 +624,16 @@ function Thread({
           </p>
         )}
         </div>
+        {/* Online is a property of the person, not of the thread, so it sits
+            beside the name rather than replacing a line. Only signed-in
+            customers have a session to read, so an anonymous visitor simply
+            never lights up. */}
+        {peerOnline && (
+          <span className="flex shrink-0 items-center gap-1.5 text-[11px] text-emerald-700">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" aria-hidden="true" />
+            Online
+          </span>
+        )}
       </div>
 
       <div ref={scrollRef} className="chat-canvas flex-1 space-y-1.5 overflow-y-auto p-4">
@@ -596,6 +662,8 @@ function Thread({
               {m.kind === "VOICE" && m.mediaUrl && (
                 <audio src={m.mediaUrl} controls className="mb-1 w-56 max-w-full" />
               )}
+              {m.invoice && <InvoiceCard invoice={m.invoice} tone="dark" />}
+
               {m.body && <span className="whitespace-pre-wrap">{m.body}</span>}
               <span className="mt-0.5 flex items-center justify-end gap-1 text-[10px] tabular-nums text-bourbon-deep/50">
                 {new Date(m.createdAt).toLocaleTimeString(undefined, {
@@ -653,7 +721,10 @@ function Thread({
           </button>
           <textarea
             value={draft}
-            onChange={(e) => setDraft(e.target.value)}
+            onChange={(e) => {
+              setDraft(e.target.value);
+              pingTyping();
+            }}
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
@@ -694,5 +765,15 @@ function Ticks({ read }: { read: boolean }) {
         {read && <path strokeLinecap="round" strokeLinejoin="round" d="M7.6 10.6l1 1L18.5 2" />}
       </svg>
     </span>
+  );
+}
+
+/** One bouncing dot of the typing indicator. Mirrors the one in OrderChat. */
+function Dot({ delay }: { delay: string }) {
+  return (
+    <span
+      className="h-1.5 w-1.5 rounded-full bg-bourbon-gold/70 animate-typing-dot"
+      style={{ animationDelay: delay }}
+    />
   );
 }

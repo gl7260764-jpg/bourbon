@@ -46,6 +46,32 @@ export default async function AccountPage({
     include: { items: true },
   });
 
+  /* One query for every order's invoices rather than one per order. Voided
+     invoices are excluded here: the customer keeps any copy already emailed to
+     them, but we do not keep offering a document we have withdrawn. */
+  const invoiceRows = await prisma.invoice.findMany({
+    where: { orderId: { in: orders.map((o) => o.id) }, voidedAt: null },
+    orderBy: { issuedAt: "desc" },
+    select: {
+      orderId: true,
+      invoiceNumber: true,
+      total: true,
+      issuedAt: true,
+      snapshot: true,
+    },
+  });
+  const invoicesByOrder = new Map<string, AccountOrder["invoices"]>();
+  for (const i of invoiceRows) {
+    const list = invoicesByOrder.get(i.orderId) ?? [];
+    list.push({
+      number: i.invoiceNumber,
+      total: Number(i.total),
+      issuedAt: i.issuedAt.toISOString(),
+      status: (i.snapshot as { status?: string } | null)?.status ?? "DUE",
+    });
+    invoicesByOrder.set(i.orderId, list);
+  }
+
   const mapped: AccountOrder[] = orders.map((o) => ({
     orderNumber: o.orderNumber,
     placedAt: o.createdAt.toISOString(),
@@ -71,6 +97,7 @@ export default async function AccountPage({
     canUploadProof:
       o.status === "PENDING" && o.paymentDetailsIssuedAt !== null,
     hasProof: o.paymentProofPublicId !== null,
+    invoices: invoicesByOrder.get(o.id) ?? [],
   }));
 
   const details: AccountDetails = {

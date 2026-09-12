@@ -8,6 +8,8 @@ import { updateOrderNotes, updateOrderStatus } from "./actions";
 import SettlementPanel, { type SettlementData } from "./SettlementPanel";
 import PaymentDetailsPanel, { type PaymentDetailsData } from "./PaymentDetailsPanel";
 import OrderChatPanel from "./OrderChatPanel";
+import InvoicePanel, { type InvoicePanelData } from "./InvoicePanel";
+import { snapshotOf } from "@/lib/invoice";
 import {
   actionsFor,
   ORDER_STATUS_BADGE,
@@ -62,6 +64,28 @@ export default async function AdminOrderDetailPage({
   });
 
   if (!order) notFound();
+
+  const invoiceRows = await prisma.invoice.findMany({
+    where: { orderId: order.id },
+    orderBy: { issuedAt: "desc" },
+  });
+  const invoicePanel: InvoicePanelData = {
+    orderId: order.id,
+    orderNumber: order.orderNumber,
+    customerEmail: order.email,
+    invoices: invoiceRows.map((i) => ({
+      id: i.id,
+      invoiceNumber: i.invoiceNumber,
+      total: String(i.total),
+      issuedAt: i.issuedAt.toISOString(),
+      emailSentAt: i.emailSentAt?.toISOString() ?? null,
+      emailSentTo: i.emailSentTo,
+      chatSentAt: i.chatSentAt?.toISOString() ?? null,
+      voidedAt: i.voidedAt?.toISOString() ?? null,
+      voidReason: i.voidReason,
+      status: snapshotOf(i).status,
+    })),
+  };
 
   // Customer context. Lifetime counts only money actually confirmed — orders
   // sitting in PENDING are not revenue yet, and showing them as such would
@@ -285,6 +309,8 @@ export default async function AdminOrderDetailPage({
             {/* Settlement replaces the old read-only payment card: same
                 information, plus the controls to actually confirm the money. */}
             <PaymentDetailsPanel data={paymentDetails} />
+
+            <InvoicePanel data={invoicePanel} />
 
             <OrderChatPanel
               orderNumber={order.orderNumber}

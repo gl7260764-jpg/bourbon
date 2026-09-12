@@ -7,6 +7,7 @@ import { useCart } from "./CartContext";
 import SearchOverlay from "./SearchOverlay";
 import ShippingTermsBar from "./ShippingTermsBar";
 import InstallButton from "./InstallButton";
+import { UNREAD_EVENT, publishUnreadCount } from "@/lib/unread-signal";
 
 const navLinks = [
   { name: "Home", href: "/" },
@@ -42,17 +43,29 @@ export default function Navbar() {
   useEffect(() => {
     let cancelled = false;
     const load = async () => {
+      /* Hidden tab: skip. Beyond saving the query, this endpoint doubles as
+         the presence heartbeat the operator reads as "Customer online", and a
+         tab left open behind a laptop lid is not someone at the screen. */
+      if (document.visibilityState === "hidden") return;
       try {
         const res = await fetch("/api/account/unread", { cache: "no-store" });
         if (!res.ok) return;
         const data = (await res.json()) as { unread?: number };
-        if (!cancelled) setUnread(Number(data.unread) || 0);
+        if (cancelled) return;
+        const n = Number(data.unread) || 0;
+        setUnread(n);
+        // The dashboard renders the same number; it listens rather than
+        // running a second poll of its own.
+        publishUnreadCount(n);
       } catch {
         /* offline or signed out — leave the badge as it is */
       }
     };
     load();
-    const timer = window.setInterval(load, 60_000);
+    /* 20s, down from 60s. A reply that takes a minute to show up reads as a
+       broken badge, and this is the only thing telling a customer they have
+       one while they sit on a page. */
+    const timer = window.setInterval(load, 20_000);
     // Coming back to the tab is the moment a stale badge is most obvious.
     const onVisible = () => {
       if (document.visibilityState === "visible") load();
@@ -64,6 +77,18 @@ export default function Navbar() {
       document.removeEventListener("visibilitychange", onVisible);
     };
   }, [pathname]);
+
+  /* The dashboard clears the thread the moment it opens it, which zeroes the
+     count server-side. It says so here so the navbar badge drops with it
+     instead of hanging around until the next poll. */
+  useEffect(() => {
+    const onUnread = (e: Event) => {
+      const n = (e as CustomEvent<number>).detail;
+      if (typeof n === "number") setUnread(n);
+    };
+    window.addEventListener(UNREAD_EVENT, onUnread);
+    return () => window.removeEventListener(UNREAD_EVENT, onUnread);
+  }, []);
 
   return (
     <header
