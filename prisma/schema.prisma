@@ -43,12 +43,12 @@ model Category {
 }
 
 model Product {
-  id          String   @id @default(cuid())
-  slug        String   @unique
+  id          String  @id @default(cuid())
+  slug        String  @unique
   name        String
   subtitle    String?
-  description String   @db.Text
-  story       String?  @db.Text
+  description String  @db.Text
+  story       String? @db.Text
 
   // Pricing — single bottle, optional case-of-N (null = bottle-only allocation)
   bottlePrice    Decimal  @db.Decimal(10, 2)
@@ -57,11 +57,11 @@ model Product {
   compareAtPrice Decimal? @db.Decimal(10, 2)
 
   // Whiskey specs
-  ageYears        Int?
-  isNAS           Boolean @default(false)
-  proof           Decimal @db.Decimal(5, 2)
-  abv             Decimal @db.Decimal(5, 2)
-  bottleSizeMl    Int     @default(750)
+  ageYears     Int?
+  isNAS        Boolean @default(false)
+  proof        Decimal @db.Decimal(5, 2)
+  abv          Decimal @db.Decimal(5, 2)
+  bottleSizeMl Int     @default(750)
 
   // Mash bill (percentages — should sum to ~100)
   cornPercent     Int?
@@ -70,42 +70,42 @@ model Product {
   maltedBarleyPct Int?
 
   // Provenance
-  distillery     String
-  region         String
-  state          String?
+  distillery      String
+  region          String
+  state           String?
   masterDistiller String?
-  caskType       String?  // e.g. "New American White Oak"
-  charLevel      Int?     // 1-4
-  finishCask     String?  // e.g. "Sherry", "Port" — null if none
-  batchNumber    String?
-  barrelNumber   String?
-  releaseYear    Int?
+  caskType        String? // e.g. "New American White Oak"
+  charLevel       Int? // 1-4
+  finishCask      String? // e.g. "Sherry", "Port" — null if none
+  batchNumber     String?
+  barrelNumber    String?
+  releaseYear     Int?
 
   // Production flags
-  productionStyle ProductionStyle @default(STANDARD)
-  isChillFiltered Boolean         @default(true)
-  isLimitedEdition Boolean        @default(false)
-  isAllocated      Boolean        @default(false)
+  productionStyle      ProductionStyle @default(STANDARD)
+  isChillFiltered      Boolean         @default(true)
+  isLimitedEdition     Boolean         @default(false)
+  isAllocated          Boolean         @default(false)
   totalBottlesProduced Int?
 
   // Tasting profile
-  nose            String?  @db.Text
-  palate          String?  @db.Text
-  finish          String?  @db.Text
-  flavorTags      String[] @default([])
+  nose              String?  @db.Text
+  palate            String?  @db.Text
+  finish            String?  @db.Text
+  flavorTags        String[] @default([])
   servingSuggestion String?
-  foodPairings    String?  @db.Text
-  videoUrl        String?
+  foodPairings      String?  @db.Text
+  videoUrl          String?
 
   // Commerce
-  sku           String       @unique
-  stockBottles  Int          @default(0)
-  stockCases    Int          @default(0)
-  availability  Availability @default(IN_STOCK)
-  rating        Decimal?     @db.Decimal(2, 1)
-  reviewCount   Int          @default(0)
-  isFeatured    Boolean      @default(false)
-  badge         String?      // e.g. "Best Seller", "New Arrival"
+  sku          String       @unique
+  stockBottles Int          @default(0)
+  stockCases   Int          @default(0)
+  availability Availability @default(IN_STOCK)
+  rating       Decimal?     @db.Decimal(2, 1)
+  reviewCount  Int          @default(0)
+  isFeatured   Boolean      @default(false)
+  badge        String? // e.g. "Best Seller", "New Arrival"
 
   categoryId String
   category   Category       @relation(fields: [categoryId], references: [id])
@@ -202,17 +202,17 @@ enum PaymentMethod {
 // handle, the wallet address, the bank details. It is sent to the customer in
 // the order email and rendered on the confirmation page.
 model PaymentOption {
-  id    String @id @default(cuid())
+  id           String         @id @default(cuid())
   // Stable slug used by the checkout form and stored on the order.
-  key   String @unique
-  label String
+  key          String         @unique
+  label        String
   // Short line under the label at checkout, e.g. "Pay from your Chime account".
-  detail String?
+  detail       String?
   // The account details / how-to-pay text handed to the customer.
-  instructions String? @db.Text
+  instructions String?        @db.Text
   // Fractional discount for choosing this rail (0.1 = 10% off). Resolved
   // server-side at order time — never trusted from the client.
-  discountRate Decimal @default(0) @db.Decimal(4, 3)
+  discountRate Decimal        @default(0) @db.Decimal(4, 3)
   // Maps to the legacy enum so existing reporting keeps working. Null for
   // operator-created rails, which record OTHER on the order.
   legacyMethod PaymentMethod?
@@ -260,7 +260,7 @@ model Order {
   shippingMethod ShippingMethod
   shippingCost   Decimal        @db.Decimal(10, 2)
   paymentMethod  PaymentMethod
-  discountRate   Decimal        @db.Decimal(4, 3) @default(0)
+  discountRate   Decimal        @default(0) @db.Decimal(4, 3)
 
   // Snapshot of the payment rail as it was when the order was placed. Kept
   // separate from PaymentOption so that editing a wallet address later can
@@ -272,26 +272,28 @@ model Order {
   // --- Manual settlement (P12) -------------------------------------------
   settlementState SettlementState @default(AWAITING_DETAILS)
 
-  /* Payment details the admin issues for THIS order — an account number, a
-     wallet address, a reference to quote. Deliberately separate from
-     `paymentInstructions` above: that is an immutable snapshot of the rail as
-     it was at checkout, while this is written once per order by a human and is
-     what the buyer actually pays against. Until `paymentDetailsIssuedAt` is
-     set, the customer sees "details on the way" rather than a payment form. */
-  paymentDetailsBody      String?   @db.Text
-  paymentDetailsIssuedAt  DateTime?
-  paymentDetailsIssuedBy  String?
+  /**
+   * Payment details the admin issues for THIS order — an account number, a
+   * wallet address, a reference to quote. Deliberately separate from
+   * `paymentInstructions` above: that is an immutable snapshot of the rail as
+   * it was at checkout, while this is written once per order by a human and is
+   * what the buyer actually pays against. Until `paymentDetailsIssuedAt` is
+   * set, the customer sees "details on the way" rather than a payment form.
+   */
+  paymentDetailsBody     String?   @db.Text
+  paymentDetailsIssuedAt DateTime?
+  paymentDetailsIssuedBy String?
   // What the buyer sent us: txid, Chime confirmation, Zelle reference.
   // Without this, "PAID" is an assertion with nothing behind it.
-  paymentReference String?
+  paymentReference       String?
   // What actually landed, which is not always what was owed.
-  amountReceived   Decimal? @db.Decimal(10, 2)
+  amountReceived         Decimal?  @db.Decimal(10, 2)
   // Rejection reason, or any operator note about the payment.
-  settlementNote   String?  @db.Text
+  settlementNote         String?   @db.Text
   // Who confirmed and when. Until admin accounts exist (P01) this records a
   // constant, but the columns are here so history is not lost in the meantime.
-  settlementUpdatedAt DateTime?
-  settlementUpdatedBy String?
+  settlementUpdatedAt    DateTime?
+  settlementUpdatedBy    String?
 
   // Buyer-uploaded proof of payment. Only the Cloudinary public id is stored:
   // the asset is uploaded as `authenticated`, so it has no public URL and the
@@ -303,14 +305,15 @@ model Order {
 
   // Totals snapshot
   subtotal Decimal @db.Decimal(10, 2)
-  discount Decimal @db.Decimal(10, 2) @default(0)
+  discount Decimal @default(0) @db.Decimal(10, 2)
   tax      Decimal @db.Decimal(10, 2)
   total    Decimal @db.Decimal(10, 2)
 
   notes String? @db.Text
 
-  items OrderItem[]
+  items        OrderItem[]
   conversation Conversation?
+  invoices     Invoice[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -321,10 +324,75 @@ model Order {
   @@index([customerId])
 }
 
+/**
+ * An issued invoice.
+ * The whole point of this table is `snapshot`. An invoice is a document that
+ * was sent to someone on a date, and it must keep saying what it said then —
+ * so every figure, line item and address is frozen into JSON at issue time
+ * rather than re-read from the order. Change the order afterwards and the
+ * invoice is untouched, which is the same reasoning as Order.paymentInstructions.
+ * An order can have several: a revision gets a new number and the previous one
+ * is voided rather than edited, because an invoice that silently changes after
+ * it reached a customer's inbox is worse than no invoice at all.
+ */
+model Invoice {
+  id            String @id @default(cuid())
+  /**
+   * Human-facing, sequential per calendar year: INV-2026-0001.
+   */
+  invoiceNumber String @unique
+
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  /**
+   * Frozen render data — seller, buyer, lines, totals, payment terms.
+   */
+  snapshot Json
+
+  // Totals duplicated out of the snapshot so the admin list can sort and sum
+  // without parsing JSON on every row.
+  currency String  @default("USD")
+  subtotal Decimal @db.Decimal(10, 2)
+  discount Decimal @default(0) @db.Decimal(10, 2)
+  shipping Decimal @default(0) @db.Decimal(10, 2)
+  tax      Decimal @default(0) @db.Decimal(10, 2)
+  total    Decimal @db.Decimal(10, 2)
+
+  issuedAt DateTime @default(now())
+  issuedBy String?
+
+  // Delivery timestamps. Null means never sent by that channel.
+  emailSentAt DateTime?
+  emailSentTo String?
+  chatSentAt  DateTime?
+
+  /**
+   * Rendered PDF, stored in Cloudinary as an `authenticated` asset and signed
+   * at view time. An invoice names a customer, their address and what they
+   * bought, so it must not sit on a guessable public URL.
+   */
+  pdfPublicId String?
+  pdfBytes    Int?
+
+  // Voided rather than deleted: the number stays spent and the history stands.
+  voidedAt   DateTime?
+  voidedBy   String?
+  voidReason String?   @db.Text
+
+  messages ChatMessage[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([orderId])
+  @@index([issuedAt])
+}
+
 model OrderItem {
-  id           String  @id @default(cuid())
-  orderId      String
-  order        Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  id      String @id @default(cuid())
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   // Snapshot at order time
   productId    String?
@@ -383,24 +451,26 @@ model ContactMessage {
 }
 
 model PushSubscription {
-  id        String   @id @default(cuid())
-  endpoint  String   @unique @db.Text
-  p256dh    String   @db.Text
-  auth      String   @db.Text
-  userAgent String?  @db.Text
+  id        String  @id @default(cuid())
+  endpoint  String  @unique @db.Text
+  p256dh    String  @db.Text
+  auth      String  @db.Text
+  userAgent String? @db.Text
   // true = a logged-in admin device that should receive live-chat pings.
   // false = a storefront visitor who opted into product announcements.
-  isAdmin   Boolean  @default(false)
+  isAdmin   Boolean @default(false)
 
-  /* Set when the device was subscribed while signed in to a customer account.
-     Without it there is no way to notify ONE person — only "all admins" or
-     "everyone" — so per-order alerts about payment details or a reply would
-     have to be broadcast, which is obviously unacceptable. Nullable because
-     anonymous storefront subscribers still exist and still get announcements. */
+  /**
+   * Set when the device was subscribed while signed in to a customer account.
+   * Without it there is no way to notify ONE person — only "all admins" or
+   * "everyone" — so per-order alerts about payment details or a reply would
+   * have to be broadcast, which is obviously unacceptable. Nullable because
+   * anonymous storefront subscribers still exist and still get announcements.
+   */
   customerId String?
   customer   Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
 
   @@index([createdAt])
   @@index([isAdmin])
@@ -430,19 +500,21 @@ model Conversation {
   visitorId String
   status    ConversationStatus @default(OPEN)
 
-  /* Order-scoped threads. `orderId` is unique, so an order has at most one
-     conversation and "open the chat for this order" is a single lookup rather
-     than a scan. Null for the storefront widget threads, which are keyed to a
-     device cookie instead — the two kinds coexist in one table because they
-     are the same shape and share the admin inbox. */
-  orderId    String?  @unique
-  order      Order?   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  /**
+   * Order-scoped threads. `orderId` is unique, so an order has at most one
+   * conversation and "open the chat for this order" is a single lookup rather
+   * than a scan. Null for the storefront widget threads, which are keyed to a
+   * device cookie instead — the two kinds coexist in one table because they
+   * are the same shape and share the admin inbox.
+   */
+  orderId        String?   @unique
+  order          Order?    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   // Who the thread belongs to, so a signed-in customer can be authorised
   // against it without trusting a cookie that was minted on another device.
-  customerId String?
-  customer   Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  customerId     String?
+  customer       Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
   // Messages from us the customer has not opened yet — drives their badge.
-  customerUnread Int @default(0)
+  customerUnread Int       @default(0)
 
   /// Live-ish presence, polled rather than pushed — Pusher is returning 401
   /// so realtime is unavailable. Each side stamps the moment it was last
@@ -463,10 +535,10 @@ model Conversation {
   isPrimary Boolean @default(false)
 
   // Denormalized for fast inbox sorting + unread badges without scanning messages.
-  lastMessageAt   DateTime @default(now())
+  lastMessageAt   DateTime   @default(now())
   lastMessageFrom ChatSender @default(VISITOR)
   // Count of visitor messages the admin hasn't opened yet.
-  adminUnread     Int      @default(0)
+  adminUnread     Int        @default(0)
   // Last time we emailed the admin about this thread — throttles the email
   // fallback so rapid-fire messages don't flood the inbox.
   lastNotifiedAt  DateTime?
@@ -483,20 +555,22 @@ model Conversation {
 }
 
 model ChatMessage {
-  id             String       @id @default(cuid())
+  id             String          @id @default(cuid())
   conversationId String
-  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversation   Conversation    @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   sender         ChatSender
   kind           ChatMessageKind @default(TEXT)
   // Text body, or the caption on an attachment. Empty string for a bare
   // image or voice note — never null, so readers never branch on it.
-  body           String       @db.Text
+  body           String          @db.Text
 
-  /* Attachments live in Cloudinary as `authenticated` assets and only the
-     public id is stored. Chat carries payment screenshots, so the same rule as
-     payment proofs applies: no permanent public URL, signed at view time.
-     `mediaDurationMs` lets a voice note render its length without the client
-     downloading the audio first. */
+  /**
+   * Attachments live in Cloudinary as `authenticated` assets and only the
+   * public id is stored. Chat carries payment screenshots, so the same rule as
+   * payment proofs applies: no permanent public URL, signed at view time.
+   * `mediaDurationMs` lets a voice note render its length without the client
+   * downloading the audio first.
+   */
   mediaPublicId   String?
   mediaMimeType   String?
   mediaDurationMs Int?
@@ -507,7 +581,18 @@ model ChatMessage {
   /// context, so a single merged conversation still reads in context.
   contextOrderNumber String?
 
-  createdAt      DateTime     @default(now())
+  /**
+   * An invoice delivered into the thread. Deliberately a nullable column
+   * rather than a new ChatMessageKind value: adding to that enum would break
+   * every deployed Prisma Client that has not shipped yet, which is exactly
+   * how this project took production down once already. `kind` stays TEXT, so
+   * an old client reads one of these as an ordinary message with a body
+   * instead of throwing on an unknown enum value.
+   */
+  invoiceId String?
+  invoice   Invoice? @relation(fields: [invoiceId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
 
   @@index([conversationId])
   @@index([createdAt])
@@ -577,7 +662,7 @@ model Visitor {
   // someone "one unique" across visits even if their IP changes.
   id          String   @id
   country     String?
-  countryCode String?  // ISO-3166-1 alpha-2
+  countryCode String? // ISO-3166-1 alpha-2
   region      String?
   city        String?
   userAgent   String?  @db.Text
@@ -587,7 +672,7 @@ model Visitor {
   // Set once the anonymous device behind `id` hands over an email (newsletter
   // popup, footer form). This is what turns "visitor 4F2A" into a real person
   // whose earlier, pre-signup browsing is already on record.
-  email          String?
+  email           String?
   emailCapturedAt DateTime?
 
   visitDays   VisitDay[]
@@ -691,11 +776,12 @@ model VisitSession {
   @@index([startedAt])
 }
 
-
-/* One-time login codes for the customer account.
-   Only a hash is stored: a leaked database row must not be a working login.
-   `attempts` caps brute force on a 6-digit space, and a consumed or expired
-   row is never accepted again. */
+/**
+ * One-time login codes for the customer account.
+ * Only a hash is stored: a leaked database row must not be a working login.
+ * `attempts` caps brute force on a 6-digit space, and a consumed or expired
+ * row is never accepted again.
+ */
 /// One-click sign-in links. Same single-use / expiring discipline as
 /// LoginCode, but the token is long and random rather than six digits, so the
 /// keyspace itself is the protection and no attempt cap is needed. Possession
@@ -714,14 +800,14 @@ model LoginLink {
 }
 
 model LoginCode {
-  id        String   @id @default(cuid())
+  id         String    @id @default(cuid())
   // Lowercased, matching Customer.email normalisation.
-  email     String
-  codeHash  String
-  expiresAt DateTime
-  attempts  Int      @default(0)
+  email      String
+  codeHash   String
+  expiresAt  DateTime
+  attempts   Int       @default(0)
   consumedAt DateTime?
-  createdAt DateTime @default(now())
+  createdAt  DateTime  @default(now())
 
   @@index([email, createdAt])
   @@index([expiresAt])

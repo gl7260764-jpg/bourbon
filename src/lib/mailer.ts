@@ -63,12 +63,20 @@ function getTransporter(): Transporter | null {
   return cachedTransporter;
 }
 
+/** A file to send with the message — an invoice PDF, in practice. */
+export interface EmailAttachment {
+  filename: string;
+  content: Buffer;
+  contentType: string;
+}
+
 export interface SendEmailInput {
   to: string;
   subject: string;
   html: string;
   text?: string;
   replyTo?: string;
+  attachments?: EmailAttachment[];
 }
 
 export async function sendEmail(input: SendEmailInput): Promise<boolean> {
@@ -85,10 +93,12 @@ export async function sendEmail(input: SendEmailInput): Promise<boolean> {
       html: input.html,
       text: input.text,
       replyTo: input.replyTo,
+      attachments: input.attachments,
     });
     console.log("[mailer] sent:", {
       to: input.to,
       subject: input.subject,
+      attachments: input.attachments?.map((a) => a.filename) ?? [],
       messageId: info.messageId,
       accepted: info.accepted,
       rejected: info.rejected,
