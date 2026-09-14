@@ -21,7 +21,6 @@ import {
  */
 
 const GOLD = "#CA8A04";
-const AMBER = "#D97706";
 const DEEP = "#0C0A09";
 const CREAM = "#FAFAF9";
 const STONE = "#57534E";
@@ -252,66 +251,109 @@ export function renderInvoiceHtml(
 }
 
 /** Covering email. The document itself is embedded beneath this. */
+/**
+ * The email that carries an invoice.
+ *
+ * Deliberately short. This used to inline the whole invoice document into the
+ * body — renderInvoiceHtml is drawn for a 794px A4 page, and dropped into an
+ * inbox it came out as a wall of table that reflowed badly on a phone and worse
+ * in Outlook. The document is the PDF attachment and the web view; the email's
+ * job is only to say what arrived, what is owed, and where to open it.
+ *
+ * The plain-text alternative says the same things in the same order, so a
+ * client that blocks HTML loses nothing.
+ */
 export function renderInvoiceEmail(
   inv: InvoiceSnapshot,
   opts: { viewUrl?: string; hasPdf: boolean },
 ): { subject: string; html: string; text: string } {
   const paid = inv.status === "PAID";
+  const voided = inv.status === "VOID";
   const subject = paid
     ? `Receipt ${inv.invoiceNumber} — order ${inv.orderNumber}`
     : `Invoice ${inv.invoiceNumber} — order ${inv.orderNumber}`;
 
+  const firstName = inv.billedTo.name.split(" ")[0] || "there";
+  const total = money(inv.totals.total, inv.currency);
+
   const intro = paid
     ? `Your payment has been received in full. This is your receipt for order ${esc(inv.orderNumber)} — keep it for your records.`
-    : `Here is your invoice for order ${esc(inv.orderNumber)}. Payment details are below, and nothing is owed beyond the total shown.`;
+    : voided
+      ? `Invoice ${esc(inv.invoiceNumber)} for order ${esc(inv.orderNumber)} has been withdrawn. Nothing is payable against it.`
+      : `Here is your invoice for order ${esc(inv.orderNumber)}. The full breakdown is on the invoice itself.`;
+
+  const totalLabel = paid ? "Total paid" : voided ? "Invoice total" : "Total due";
+  const pdfLine = opts.hasPdf
+    ? `<p style="margin:0 0 4px">A PDF copy is attached to this email.</p>`
+    : "";
+
+  const button = opts.viewUrl
+    ? `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:22px 0 0">
+         <tr><td style="background:${GOLD}">
+           <a href="${esc(opts.viewUrl)}" style="display:block;padding:11px 26px;font:700 11px/1 Inter,Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:${DEEP};text-decoration:none">View invoice online</a>
+         </td></tr>
+       </table>`
+    : "";
 
   const html = `<!doctype html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;background:#e8e6e1;padding:20px 10px;font-family:Inter,Arial,sans-serif">
-  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:794px;margin:0 auto">
-    <tr><td style="padding:0 0 18px;font:400 13px/1.7 Inter,Arial,sans-serif;color:${STONE}">
-      <p style="margin:0 0 10px">Hello ${esc(inv.billedTo.name.split(" ")[0] || "there")},</p>
-      <p style="margin:0">${intro}${hasPdfLine(opts.hasPdf)}</p>
+<body style="margin:0;background:#f4f1ec;padding:28px 14px;font-family:Inter,Arial,sans-serif">
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:560px;margin:0 auto">
+    <tr><td style="padding:0 0 16px;text-align:center">
+      <div style="font:700 17px/1 Georgia,serif;color:${DEEP};letter-spacing:.02em">Bourbon &amp; Oak</div>
+      <div style="font:700 8px/1 Inter,Arial,sans-serif;letter-spacing:.34em;color:${MUTED};margin-top:6px;text-transform:uppercase">Distillery</div>
     </td></tr>
-  </table>
-  ${renderInvoiceHtml(inv, { viewUrl: opts.viewUrl })}
-  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:794px;margin:0 auto">
-    <tr><td style="padding:18px 0 0;font:400 11px/1.7 Inter,Arial,sans-serif;color:${MUTED};text-align:center">
-      Questions about this invoice? Reply to this email or message us from your
-      <a href="${esc(opts.viewUrl ? new URL("/account", opts.viewUrl).toString() : "https://bourbonoaklover.com/account")}" style="color:${AMBER}">account dashboard</a>.
+
+    <tr><td style="background:#ffffff;border:1px solid ${RULE};padding:26px 24px">
+      <p style="margin:0 0 12px;font:400 14px/1.65 Inter,Arial,sans-serif;color:${DEEP}">Hello ${esc(firstName)},</p>
+      <p style="margin:0 0 18px;font:400 13.5px/1.7 Inter,Arial,sans-serif;color:${STONE}">${intro}</p>
+
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-top:1px solid ${RULE};border-bottom:1px solid ${RULE};margin:0 0 18px">
+        <tr><td style="padding:14px 0">
+          <div style="font:700 8px/1 Inter,Arial,sans-serif;letter-spacing:.2em;color:${MUTED};text-transform:uppercase">${esc(totalLabel)}</div>
+          <div style="font:700 26px/1.2 Inter,Arial,sans-serif;color:${DEEP};margin-top:7px${voided ? ";text-decoration:line-through" : ""}">${esc(total)}</div>
+          <div style="font:400 11.5px/1.6 Inter,Arial,sans-serif;color:${STONE};margin-top:8px">
+            ${esc(inv.invoiceNumber)} &middot; Order ${esc(inv.orderNumber)}<br>Issued ${esc(formatIssueDate(inv.issuedAt))}
+          </div>
+        </td></tr>
+      </table>
+
+      <div style="font:400 12.5px/1.7 Inter,Arial,sans-serif;color:${STONE}">${pdfLine}</div>
+      ${button}
+    </td></tr>
+
+    <tr><td style="padding:16px 4px 0;font:400 11px/1.7 Inter,Arial,sans-serif;color:${MUTED};text-align:center">
+      Questions about this invoice? Just reply to this email.<br>
+      Bourbon &amp; Oak Distillery, Bardstown, Kentucky
     </td></tr>
   </table>
 </body></html>`;
 
   const text = [
-    `${paid ? "Receipt" : "Invoice"} ${inv.invoiceNumber}`,
+    paid ? `Receipt ${inv.invoiceNumber}` : `Invoice ${inv.invoiceNumber}`,
+    "",
+    `Hello ${firstName},`,
+    "",
+    paid
+      ? `Your payment has been received in full. This is your receipt for order ${inv.orderNumber} — keep it for your records.`
+      : voided
+        ? `Invoice ${inv.invoiceNumber} for order ${inv.orderNumber} has been withdrawn. Nothing is payable against it.`
+        : `Here is your invoice for order ${inv.orderNumber}. The full breakdown is on the invoice itself.`,
+    "",
+    `${totalLabel}: ${total}`,
     `Order ${inv.orderNumber}`,
     `Issued ${formatIssueDate(inv.issuedAt)}`,
     "",
-    ...inv.lines.map(
-      (l) => `${l.quantity} x ${l.description} — ${money(l.amount, inv.currency)}`,
-    ),
+    opts.hasPdf ? "A PDF copy is attached to this email." : null,
+    opts.viewUrl ? `View online: ${opts.viewUrl}` : null,
     "",
-    `Subtotal: ${money(inv.totals.subtotal, inv.currency)}`,
-    inv.totals.discountLabel
-      ? `${inv.totals.discountLabel}: -${money(inv.totals.discount, inv.currency)}`
-      : "",
-    `Shipping: ${money(inv.totals.shipping, inv.currency)}`,
-    `Tax: ${money(inv.totals.tax, inv.currency)}`,
-    `${paid ? "TOTAL PAID" : "TOTAL DUE"}: ${money(inv.totals.total, inv.currency)}`,
-    "",
-    opts.viewUrl ? `View online: ${opts.viewUrl}` : "",
-    "",
+    "Questions about this invoice? Just reply to this email.",
     "Bourbon & Oak Distillery, Bardstown, Kentucky",
   ]
-    .filter((l) => l !== "")
+    /* null is a line that did not apply; "" is a deliberate blank one. The
+       old filter dropped both, which ran every paragraph together. */
+    .filter((l): l is string => l !== null)
     .join("\n");
 
   return { subject, html, text };
-}
-
-function hasPdfLine(hasPdf: boolean): string {
-  return hasPdf
-    ? " A PDF copy is attached to this email."
-    : "";
 }

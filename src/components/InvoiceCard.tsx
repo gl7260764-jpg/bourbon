@@ -23,13 +23,30 @@ const money = (v: string) =>
 export default function InvoiceCard({
   invoice,
   tone = "light",
+  variant = "card",
 }: {
   invoice: ChatInvoice;
   /** Bubbles differ between surfaces; the card borrows the surrounding tone. */
   tone?: "light" | "dark";
+  /**
+   * "card" is the standalone summary — number, total, download — used by
+   * messages delivered before invoices were sent as images, and as the
+   * fallback when rasterising fails.
+   *
+   * "link" is just the download bar, for a message that already shows the
+   * invoice as a picture: repeating the number and total under it would say
+   * the same thing three times.
+   */
+  variant?: "card" | "link";
 }) {
   const voided = invoice.status === "VOID";
   const paid = invoice.status === "PAID";
+
+  /* Nothing to download for a void invoice, so the link variant renders
+     nothing at all rather than an empty bar. */
+  if (variant === "link") {
+    return voided ? null : <DownloadBar number={invoice.number} />;
+  }
 
   const shell =
     tone === "dark"
@@ -70,20 +87,27 @@ export default function InvoiceCard({
         </span>
       </div>
 
-      {!voided && (
-        <a
-          href={`/api/invoices/${invoice.number}/pdf`}
-          target="_blank"
-          rel="noopener"
-          /* Solid gold rather than a 10% tint: gold text on that tint is about
-             2.7:1, and at 10px uppercase it needs 4.5:1. Near-black on solid
-             gold is 6.6:1 and reads as the button it already was. Opaque, so
-             it holds up on the dark tone too. */
-          className="block px-3 py-2 bg-bourbon-gold text-bourbon-deep text-[10px] font-semibold tracking-[0.15em] uppercase text-center hover:bg-bourbon-gold/85 transition-colors"
-        >
-          Download PDF
-        </a>
-      )}
+      {!voided && <DownloadBar number={invoice.number} />}
     </div>
+  );
+}
+
+/**
+ * The download action, shared by both variants.
+ *
+ * Solid gold rather than a 10% tint: gold text on that tint is about 2.7:1, and
+ * at 10px uppercase it needs 4.5:1. Near-black on solid gold is 6.6:1 and reads
+ * as the button it already was. Opaque, so it holds up on the dark tone too.
+ */
+function DownloadBar({ number }: { number: string }) {
+  return (
+    <a
+      href={`/api/invoices/${number}/pdf`}
+      target="_blank"
+      rel="noopener"
+      className="block px-3 py-2 bg-bourbon-gold text-bourbon-deep text-[10px] font-semibold tracking-[0.15em] uppercase text-center hover:bg-bourbon-gold/85 transition-colors"
+    >
+      Download PDF
+    </a>
   );
 }

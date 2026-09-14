@@ -652,12 +652,21 @@ function Thread({
               {m.kind === "IMAGE" && m.mediaUrl && (
                 /* Plain <img>: the source is a signed, short-lived Cloudinary
                    URL, which next/image cannot cache or re-sign. */
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={m.mediaUrl}
-                  alt={m.body || "Attachment"}
-                  className="mb-1 max-h-56 w-full rounded-lg object-cover"
-                />
+                <a href={m.mediaUrl} target="_blank" rel="noreferrer">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={m.mediaUrl}
+                    alt={m.invoice ? `Invoice ${m.invoice.number}` : m.body || "Attachment"}
+                    /* object-cover crops to fill, which beheads a portrait
+                       invoice. Documents are shown whole and taller; snapshots
+                       keep the old crop. */
+                    className={
+                      m.invoice
+                        ? "mb-1 max-h-96 w-auto rounded-lg"
+                        : "mb-1 max-h-56 w-full rounded-lg object-cover"
+                    }
+                  />
+                </a>
               )}
               {m.kind === "VOICE" && m.mediaUrl && (
                 <audio src={m.mediaUrl} controls className="mb-1 w-56 max-w-full" />
@@ -665,9 +674,13 @@ function Thread({
               {/* Light tone: both bubbles on this surface are light (#FBEFC8
                   and white). The dark tone paints bourbon-cream text, which is
                   #FAFAF9 — white on pale yellow, about 1.1:1. */}
-              {m.invoice && <InvoiceCard invoice={m.invoice} />}
+              {m.invoice && m.kind !== "IMAGE" && <InvoiceCard invoice={m.invoice} />}
 
               {m.body && <span className="whitespace-pre-wrap">{m.body}</span>}
+
+              {m.invoice && m.kind === "IMAGE" && (
+                <InvoiceCard invoice={m.invoice} variant="link" />
+              )}
               <span className="mt-0.5 flex items-center justify-end gap-1 text-[10px] tabular-nums text-bourbon-deep/50">
                 {new Date(m.createdAt).toLocaleTimeString(undefined, {
                   hour: "numeric",

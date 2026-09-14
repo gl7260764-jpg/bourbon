@@ -405,8 +405,11 @@ export default function OrderChat({
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={m.mediaUrl}
-                          alt={m.body || "Attachment"}
-                          className="max-h-64 w-auto mb-1"
+                          alt={m.invoice ? `Invoice ${m.invoice.number}` : m.body || "Attachment"}
+                          /* An invoice is a page of text, not a snapshot: at
+                             the 16rem cap a portrait A4 comes out ~180px wide
+                             and nothing on it can be read. */
+                          className={`w-auto mb-1 ${m.invoice ? "max-h-96" : "max-h-64"}`}
                         />
                       </a>
                     )}
@@ -422,12 +425,22 @@ export default function OrderChat({
                       </div>
                     )}
 
-                    {m.invoice && <InvoiceCard invoice={m.invoice} />}
+                    {/* Delivered before invoices were sent as pictures, or the
+                        rasteriser failed: the card is the whole message. */}
+                    {m.invoice && m.kind !== "IMAGE" && (
+                      <InvoiceCard invoice={m.invoice} />
+                    )}
 
                     {m.body && (
                       <p className="text-bourbon-deep text-sm leading-relaxed whitespace-pre-wrap break-words">
                         {m.body}
                       </p>
+                    )}
+
+                    {/* Picture above, caption just read — all that is left to
+                        offer is the file itself. */}
+                    {m.invoice && m.kind === "IMAGE" && (
+                      <InvoiceCard invoice={m.invoice} variant="link" />
                     )}
 
                     <p className="text-bourbon-stone/70 text-[10px] text-right mt-0.5 tabular-nums flex items-center justify-end gap-1">

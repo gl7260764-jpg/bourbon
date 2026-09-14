@@ -204,6 +204,55 @@ export async function uploadChatImage(buffer: Buffer): Promise<UploadResult> {
   };
 }
 
+/**
+ * A rendered invoice PDF, stored as a picture of its first page.
+ *
+ * Chat shows the invoice as an image so the customer sees the document itself
+ * rather than a summary card. Rasterising is Cloudinary's job: `format: "jpg"`
+ * converts at upload time, so what lands in the bucket is an ordinary JPEG and
+ * every reader downstream — signedChatMediaUrl, the <img> in the thread — needs
+ * no special case for it.
+ *
+ * Deriving the picture from the same PDF we attach to the email is the point:
+ * a second invoice layout drawn for the screen would be a third template to
+ * keep in step with the other two, and it would drift.
+ *
+ * `page: 1` because a long order runs to several pages and only the first is
+ * wanted as the preview; the PDF link beside it carries the rest.
+ */
+export async function uploadInvoiceImage(pdf: Buffer): Promise<UploadResult> {
+  if (!process.env.CLOUDINARY_URL) {
+    throw new Error("Cloudinary is not configured (missing CLOUDINARY_URL).");
+  }
+  const result = await new Promise<UploadApiResponse>((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder: "bourbon/invoices",
+        resource_type: "image",
+        type: "authenticated",
+        format: "jpg",
+        // A4 at ~150dpi: sharp enough to read the line items when tapped open,
+        // small enough not to punish a phone on mobile data.
+        transformation: [{ page: 1, width: 1400, crop: "limit", quality: "auto:good" }],
+      },
+      (error, uploaded) => {
+        if (error) return reject(error);
+        if (!uploaded) return reject(new Error("Cloudinary returned an empty response."));
+        resolve(uploaded);
+      },
+    );
+    stream.end(pdf);
+  });
+  return {
+    url: result.secure_url,
+    publicId: result.public_id,
+    width: result.width,
+    height: result.height,
+    format: result.format,
+    bytes: result.bytes,
+  };
+}
+
 export type AudioUploadResult = {
   publicId: string;
   bytes: number;

@@ -9,6 +9,7 @@ import { customerChannel, publishChatMessage } from "@/lib/realtime";
 import { snapshotOf, money } from "@/lib/invoice";
 import { renderInvoiceEmail } from "@/lib/invoice-template";
 import { invoiceFileName, renderInvoicePdf } from "@/lib/invoice-pdf";
+import { uploadInvoiceImage } from "@/lib/cloudinary";
 
 /**
  * Getting an issued invoice to the customer.
@@ -129,13 +130,41 @@ export async function chatInvoice(invoice: Invoice): Promise<{ ok: boolean; erro
         ? `Here is your receipt for order ${order.orderNumber} — ${invoice.invoiceNumber}, ${money(Number(invoice.total))} paid in full.`
         : `Here is your invoice for order ${order.orderNumber} — ${invoice.invoiceNumber}, ${money(Number(invoice.total))} due.`;
 
+    /* A picture of the invoice, so the thread shows the document rather than a
+       card describing it. Rendered from the same PDF that goes out by email,
+       then rasterised by Cloudinary.
+
+       Best-effort on purpose: if either step fails the message still goes as
+       TEXT and the old card renders it. An invoice that arrives as a card is a
+       far better outcome than an invoice that does not arrive. */
+    let media: { publicId: string; bytes: number } | null = null;
+    try {
+      const pdf = await renderInvoicePdf(snap);
+      const up = await uploadInvoiceImage(pdf);
+      media = { publicId: up.publicId, bytes: up.bytes };
+    } catch (err) {
+      console.error(
+        `[invoice] chat image failed for ${invoice.invoiceNumber}, falling back to the card:`,
+        err,
+      );
+    }
+
     const message = await appendMessage({
       conversationId: thread.id,
       sender: "ADMIN",
-      kind: "TEXT",
+      // The caption carries the same sentence either way, so the two shapes
+      // read identically in a notification preview.
+      kind: media ? "IMAGE" : "TEXT",
       body,
       contextOrderNumber: order.orderNumber,
       invoiceId: invoice.id,
+      ...(media
+        ? {
+            mediaPublicId: media.publicId,
+            mediaMimeType: "image/jpeg",
+            mediaBytes: media.bytes,
+          }
+        : {}),
     });
 
     await publishChatMessage(customerChannel(customerId), message);
