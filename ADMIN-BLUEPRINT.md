@@ -471,6 +471,55 @@ Follow these exactly. Do not introduce a parallel stack.
       inserting 20 throwaway orders, since 12 fit on one page); chip counts
       correct; no raw enum in visible text; detail page showed "6 orders from
       this customer".
+- [x] **P22 Campaign composer** — built 2026-09-14 (pulled forward from SKIP/Phase 3
+      at the operator's request). Sends through **Brevo's SMTP relay**, on a transport
+      separate from the Hostinger mailbox that carries invoices and order email.
+      Files: `prisma/schema.prisma` (`Campaign`, `CampaignSend`,
+      `Subscriber.unsubscribeToken`), `src/lib/campaign-constants.ts`,
+      `src/lib/campaign-template.ts`, `src/lib/campaign-mailer.ts`, `src/lib/campaigns.ts`,
+      `src/app/api/admin/campaigns/{route,products/route,[id]/route}.ts`,
+      `src/app/admin/campaigns/{page,NewCampaignButton}.tsx`,
+      `src/app/admin/campaigns/[id]/{page,CampaignComposer,SendProgress,SentCampaign}.tsx`,
+      `src/app/api/unsubscribe/route.ts`, `src/app/unsubscribe/page.tsx`,
+      `src/components/SiteChrome.tsx`, `src/app/admin/AdminSidebar.tsx`.
+      Env: `BREVO_SMTP_USER`, `BREVO_SMTP_KEY`, `CAMPAIGN_FROM` (required);
+      `CAMPAIGN_REPLY_TO`, `BREVO_SMTP_HOST`, `BREVO_SMTP_PORT` (optional).
+      **Adaptations from the reference prompt, and why:**
+      - No "hide the unsubscribe link" toggle. Every campaign here is commercial
+        alcohol marketing, and CAN-SPAM requires a visible opt-out; the footer also
+        carries the postal address and a 21+ line.
+      - One `action`-discriminated API route instead of server actions: sends are
+        long-running and batched, and `/api/admin/*` is covered by middleware
+        without per-action auth checks.
+      - No job queue exists, so sending is **browser-driven and resumable**: each
+        request sends a batch of 25 (4 concurrent SMTP connections) and the admin
+        page calls again until done. A recipient is claimed with a single
+        `INSERT … ON CONFLICT DO NOTHING RETURNING` before their message goes out,
+        so parallel tabs, double clicks and retries cannot double-send. Rows left
+        at SENDING by a crash are reported as "unconfirmed", never auto-retried.
+      - Content is frozen into `Campaign.snapshot` when a send starts, and "All
+        subscribers" is bounded by `sendStartedAt`, so the list and the price the
+        operator confirmed are what go out.
+      - Status/audience are Strings, not enums (see `ChatMessage.invoiceId`).
+      - The typed confirmation also requires the count to still match server-side
+        (409 if the list moved), and appears above 50 recipients.
+      - `/unsubscribe` renders without storefront chrome (no age gate, popup or
+        chat). GET never unsubscribes — scanners fetch links; only POST does.
+      **Verified** against a throwaway Postgres 16 + Mailpit in Docker (never Neon
+      or Brevo): 58/58 end-to-end checks — preview/test/live HTML identical except
+      the per-recipient token (after the CRLF line endings SMTP adds); per-recipient
+      List-Unsubscribe + one-click POST unsubscribes only that person; one rejected
+      address did not stop the other 59; parallel batches produced zero duplicates;
+      mid-send joiners excluded; retry-failed resends only failures; SELECTED audience
+      skips unsubscribed picks; a stuck claim is reported and not resent. Then a real
+      send through the composer in headless Chrome: typed confirm, progress, 59
+      delivered, page swapped to the sent view. Screenshots checked at 1440px and
+      390px (no horizontal overflow).
+      **Not done:** schema not yet pushed to production (awaiting operator), and not
+      tested against Brevo itself — needs the operator's Brevo account.
+      **Deploy order matters:** push the schema BEFORE deploying this code. The new
+      Prisma client selects `Subscriber.unsubscribeToken` on every subscriber query,
+      so deploying first would break newsletter signup and `/admin/subscribers`.
 - [ ] P30 Audit log *(Phase 1)*
 - [ ] P01 Auth hardening — admin users, roles, rate limiting *(Phase 1)*
 - [ ] Stock decrement + oversell protection *(Phase 2)*

@@ -425,9 +425,94 @@ model Subscriber {
   visitorId String?
   visitor   Visitor? @relation(fields: [visitorId], references: [id], onDelete: SetNull)
 
+  /// Secret in this subscriber's unsubscribe link. Random rather than derived
+  /// from the email, so a link cannot be forged for someone else's address,
+  /// and per subscriber, so one forwarded email unsubscribes only its
+  /// recipient. Minted the first time a campaign goes to them.
+  unsubscribeToken String? @unique
+
   @@index([status])
   @@index([createdAt])
   @@index([visitorId])
+}
+
+/**
+ * An email campaign sent to the mailing list through Brevo.
+ *
+ * `status` and `audience` are Strings, not enums, for the reason given on
+ * ChatMessage.invoiceId: a new enum value breaks every deployed Prisma Client
+ * that has not shipped yet. Values: status DRAFT | SENDING | SENT, audience
+ * ALL | SELECTED.
+ */
+model Campaign {
+  id String @id @default(cuid())
+
+  subject   String @default("")
+  /// Inbox preview line shown after the subject. Hidden in the body.
+  preheader String @default("")
+  eyebrow   String @default("")
+  heading   String @default("")
+  body      String @default("") @db.Text
+  ctaLabel  String @default("")
+  ctaUrl    String @default("")
+  urgency   String @default("")
+
+  /// Featured bottle. Its name, image, price and link fill any field above
+  /// left blank; a filled field always wins.
+  productId         String?
+  priceOverride     String  @default("")
+  compareAtOverride String  @default("")
+
+  audience       String   @default("ALL")
+  /// Only read when audience is SELECTED. Intersected with SUBSCRIBED at send
+  /// time, so someone who unsubscribes after being ticked is still skipped.
+  selectedEmails String[] @default([])
+
+  status String @default("DRAFT")
+
+  /// The resolved content every recipient is rendered from, frozen when
+  /// sending starts. Without it a bottle repriced halfway through a send would
+  /// reach half the list at one price and half at another.
+  snapshot      Json?
+  /// Subscribers who join after this moment are not added to a send already
+  /// under way — the list a campaign goes to is the list when it started.
+  sendStartedAt DateTime?
+  sentAt        DateTime?
+
+  sends CampaignSend[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([createdAt])
+}
+
+/**
+ * One recipient of one campaign. The unique (campaignId, email) pair is the
+ * double-send guard: a batch claims a recipient by inserting this row before
+ * sending, so a second tab, a retry or a resumed send cannot claim them again.
+ *
+ * `status` SENDING | SENT | FAILED. A row left at SENDING means the process
+ * died between claiming and hearing back from Brevo — it may or may not have
+ * gone out, so it is reported, never retried automatically.
+ *
+ * Email is stored, not a subscriber id: deleting a subscriber must not rewrite
+ * who a past campaign reached.
+ */
+model CampaignSend {
+  id         String   @id @default(cuid())
+  campaignId String
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  email      String
+  status     String
+  error      String?
+  messageId  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([campaignId, email])
+  @@index([campaignId, status])
 }
 
 enum MessageStatus {

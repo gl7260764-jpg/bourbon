@@ -21,7 +21,13 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
      and would lose its first 28px to the terms strip without one. */
   const isHome = pathname === "/";
 
-  if (isAdmin) {
+  /* The unsubscribe page is reached from an email and must be one page and one
+     click. The storefront chrome would put an age-gate modal in front of it,
+     then a newsletter signup popup and a self-opening chat bubble on top of
+     someone who is trying to leave the list. */
+  const isBare = isAdmin || pathname?.startsWith("/unsubscribe");
+
+  if (isBare) {
     return <>{children}</>;
   }
 
