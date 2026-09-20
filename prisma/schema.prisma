@@ -438,7 +438,6 @@ model Subscriber {
 
 /**
  * An email campaign sent to the mailing list through Brevo.
- *
  * `status` and `audience` are Strings, not enums, for the reason given on
  * ChatMessage.invoiceId: a new enum value breaks every deployed Prisma Client
  * that has not shipped yet. Values: status DRAFT | SENDING | SENT, audience
@@ -491,11 +490,9 @@ model Campaign {
  * One recipient of one campaign. The unique (campaignId, email) pair is the
  * double-send guard: a batch claims a recipient by inserting this row before
  * sending, so a second tab, a retry or a resumed send cannot claim them again.
- *
  * `status` SENDING | SENT | FAILED. A row left at SENDING means the process
  * died between claiming and hearing back from Brevo — it may or may not have
  * gone out, so it is reported, never retried automatically.
- *
  * Email is stored, not a subscriber id: deleting a subscriber must not rewrite
  * who a past campaign reached.
  */
@@ -677,10 +674,30 @@ model ChatMessage {
   invoiceId String?
   invoice   Invoice? @relation(fields: [invoiceId], references: [id], onDelete: SetNull)
 
+  /**
+   * Operator moderation.
+   * Soft delete rather than a hard one: the row survives so a mistaken delete
+   * is recoverable and so a payment dispute keeps its evidence, while every
+   * read path filters it out. The customer's client full-replaces its message
+   * list on each poll, so a deleted message simply stops being there — no
+   * "message was deleted" tombstone, which is the point.
+   */
+  deletedAt DateTime?
+  deletedBy String?
+
+  /**
+   * Set when an operator edits their own message. Not shown to the customer,
+   * who just sees the current text. originalBody keeps what it said before the
+   * FIRST edit, so the original wording is never lost to a later one.
+   */
+  editedAt     DateTime?
+  originalBody String?   @db.Text
+
   createdAt DateTime @default(now())
 
   @@index([conversationId])
   @@index([createdAt])
+  @@index([conversationId, deletedAt])
 }
 
 // Small key-value store for admin-editable config (e.g. the live-chat greeting).

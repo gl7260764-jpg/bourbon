@@ -116,7 +116,9 @@ export function toView(m: {
 
 export async function listMessages(conversationId: string): Promise<ChatMessageView[]> {
   const rows = await prisma.chatMessage.findMany({
-    where: { conversationId },
+    // Deleted messages are filtered here rather than at the component, so a
+    // new caller cannot accidentally surface one.
+    where: { conversationId, deletedAt: null },
     orderBy: { createdAt: "asc" },
     select: {
       id: true, sender: true, kind: true, body: true, createdAt: true,

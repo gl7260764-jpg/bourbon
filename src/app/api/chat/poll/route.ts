@@ -42,6 +42,7 @@ export async function GET(req: NextRequest) {
     prisma.chatMessage.findMany({
       where: {
         conversationId,
+        deletedAt: null,
         ...(afterDate ? { createdAt: { gt: afterDate } } : {}),
       },
       orderBy: { createdAt: "asc" },

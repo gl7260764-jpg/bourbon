@@ -414,6 +414,13 @@ function Thread({
   const fileRef = useRef<HTMLInputElement>(null);
   const [draft, setDraft] = useState("");
   const [sending, setSending] = useState(false);
+  /* Moderation. `menuFor` is the message whose actions are open; only one at a
+     time, so a stray tap elsewhere closes it rather than stacking menus. */
+  const [menuFor, setMenuFor] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editDraft, setEditDraft] = useState("");
+  const [modBusy, setModBusy] = useState<string | null>(null);
+  const [modError, setModError] = useState<string | null>(null);
   const lastIdRef = useRef<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -580,6 +587,56 @@ function Thread({
     }
   };
 
+  /* Soft delete. The row is removed from local state at once so the operator
+     sees the result immediately; the customer's next poll drops it too, with
+     no tombstone. */
+  const deleteMessage = async (messageId: string) => {
+    if (!window.confirm("Delete this message? The customer will not be told — it simply disappears from their thread.")) return;
+    setModBusy(messageId);
+    setModError(null);
+    try {
+      const res = await fetch(`/api/admin/chat/${conversationId}/messages/${messageId}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) {
+        const j = (await res.json().catch(() => ({}))) as { error?: string };
+        throw new Error(j.error ?? "Could not delete that message.");
+      }
+      setMessages((prev) => prev.filter((m) => m.id !== messageId));
+      setMenuFor(null);
+    } catch (e) {
+      setModError(e instanceof Error ? e.message : "Could not delete that message.");
+    } finally {
+      setModBusy(null);
+    }
+  };
+
+  const saveEdit = async (messageId: string) => {
+    const body = editDraft.trim();
+    if (!body) {
+      setModError("A message cannot be empty. Delete it instead.");
+      return;
+    }
+    setModBusy(messageId);
+    setModError(null);
+    try {
+      const res = await fetch(`/api/admin/chat/${conversationId}/messages/${messageId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ body }),
+      });
+      const j = (await res.json().catch(() => ({}))) as { message?: ChatMessage; error?: string };
+      if (!res.ok || !j.message) throw new Error(j.error ?? "Could not save that edit.");
+      setMessages((prev) => prev.map((m) => (m.id === messageId ? j.message! : m)));
+      setEditingId(null);
+      setMenuFor(null);
+    } catch (e) {
+      setModError(e instanceof Error ? e.message : "Could not save that edit.");
+    } finally {
+      setModBusy(null);
+    }
+  };
+
   return (
     <>
       {/* Identity bar. An email is a mailto so you can reply outside the chat
@@ -643,7 +700,22 @@ function Thread({
             className={`flex ${m.sender === "ADMIN" ? "justify-end" : "justify-start"}`}
           >
             <div
-              className={`max-w-[75%] rounded-lg px-3 py-2 text-sm leading-relaxed shadow-[0_1px_1px_rgba(12,10,9,0.12)] ${
+              /* Click to moderate. A plain div rather than a button: bubbles
+                 contain links, images and audio controls, and nesting those in
+                 a button is invalid and breaks their own clicks. */
+              role="button"
+              tabIndex={0}
+              onClick={() => { if (editingId !== m.id) { setMenuFor((cur) => (cur === m.id ? null : m.id)); setModError(null); } }}
+              onKeyDown={(e) => {
+                if (editingId === m.id) return;
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setMenuFor((cur) => (cur === m.id ? null : m.id));
+                }
+              }}
+              className={`max-w-[75%] cursor-pointer rounded-lg px-3 py-2 text-sm leading-relaxed shadow-[0_1px_1px_rgba(12,10,9,0.12)] transition-shadow ${
+                menuFor === m.id ? "ring-2 ring-bourbon-gold/70" : ""
+              } ${
                 m.sender === "ADMIN"
                   ? "rounded-br-none bg-[#FBEFC8] text-bourbon-deep"
                   : "rounded-bl-none bg-white text-bourbon-deep"
@@ -676,7 +748,36 @@ function Thread({
                   #FAFAF9 — white on pale yellow, about 1.1:1. */}
               {m.invoice && m.kind !== "IMAGE" && <InvoiceCard invoice={m.invoice} />}
 
-              {m.body && <span className="whitespace-pre-wrap">{m.body}</span>}
+              {editingId === m.id ? (
+                <div onClick={(e) => e.stopPropagation()}>
+                  <textarea
+                    value={editDraft}
+                    onChange={(e) => setEditDraft(e.target.value)}
+                    rows={Math.min(8, Math.max(2, editDraft.split("\n").length))}
+                    autoFocus
+                    className="w-full min-w-[15rem] resize-y rounded border border-bourbon-deep/25 bg-white p-2 text-sm text-bourbon-deep outline-none focus:border-bourbon-gold"
+                  />
+                  <div className="mt-1.5 flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => void saveEdit(m.id)}
+                      disabled={modBusy === m.id}
+                      className="rounded bg-bourbon-gold px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-bourbon-deep hover:bg-bourbon-amber disabled:opacity-50 cursor-pointer"
+                    >
+                      {modBusy === m.id ? "Saving…" : "Save"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { setEditingId(null); setModError(null); }}
+                      className="rounded px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-bourbon-deep/60 hover:text-bourbon-deep cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                m.body && <span className="whitespace-pre-wrap">{m.body}</span>
+              )}
 
               {m.invoice && m.kind === "IMAGE" && (
                 <InvoiceCard invoice={m.invoice} variant="link" />
@@ -697,6 +798,44 @@ function Thread({
                   />
                 )}
               </span>
+
+              {menuFor === m.id && editingId !== m.id && (
+                <div
+                  onClick={(e) => e.stopPropagation()}
+                  className="mt-2 flex items-center gap-1 border-t border-bourbon-deep/10 pt-2"
+                >
+                  {/* Only our own words are editable — see the API route for
+                      why the customer's are not. */}
+                  {m.sender === "ADMIN" && m.body && (
+                    <button
+                      type="button"
+                      onClick={() => { setEditingId(m.id); setEditDraft(m.body); }}
+                      className="rounded px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-bourbon-deep/70 hover:bg-bourbon-deep/5 hover:text-bourbon-deep cursor-pointer"
+                    >
+                      Edit
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => void deleteMessage(m.id)}
+                    disabled={modBusy === m.id}
+                    className="rounded px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-red-600/80 hover:bg-red-50 hover:text-red-700 disabled:opacity-50 cursor-pointer"
+                  >
+                    {modBusy === m.id ? "Deleting…" : "Delete"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setMenuFor(null)}
+                    className="ml-auto rounded px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-bourbon-deep/40 hover:text-bourbon-deep cursor-pointer"
+                  >
+                    Close
+                  </button>
+                </div>
+              )}
+
+              {modError && menuFor === m.id && (
+                <p className="mt-1.5 text-[11px] text-red-600" role="alert">{modError}</p>
+              )}
             </div>
           </div>
         ))}

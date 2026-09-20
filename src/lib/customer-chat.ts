@@ -93,7 +93,7 @@ export async function mergeIntoPrimaryThread(customerId: string): Promise<{
   const carriedCustomerUnread = orderThreads.reduce((n, t) => n + t.customerUnread, 0);
   const carriedAdminUnread = orderThreads.reduce((n, t) => n + t.adminUnread, 0);
   const newest = await prisma.chatMessage.findFirst({
-    where: { conversationId: primary.id },
+    where: { conversationId: primary.id, deletedAt: null },
     orderBy: { createdAt: "desc" },
     select: { createdAt: true },
   });
