@@ -28,11 +28,9 @@ export default function OrderWelcomeForm({
   const [message, setMessage] = useState("");
 
   const vars = { firstName: "Marcus", orderNumber: "BO-7K2M9X4Q" };
-  const preview = [
-    fillWelcome(greeting, vars),
-    fillWelcome(promise, vars),
-    suggestInstall ? initial.installLine : "",
-  ].filter(Boolean);
+  const preview = [fillWelcome(greeting, vars), fillWelcome(promise, vars)].filter(
+    Boolean,
+  );
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -123,11 +121,13 @@ export default function OrderWelcomeForm({
         />
         <span className="min-w-0">
           <span className="block text-bourbon-deep text-sm font-semibold">
-            Suggest installing the app
+            Offer the app in the chat
           </span>
           <span className="block text-bourbon-stone text-xs mt-0.5">
-            Adds a line about installing, so a reply still reaches them once
-            they close the site.
+            Shows an install button under the conversation, so a reply still
+            reaches them once they close the site. It is a live button rather
+            than a line of text, so it disappears by itself once they have
+            installed — and never appears on a device that cannot install.
           </span>
         </span>
       </label>
@@ -146,6 +146,22 @@ export default function OrderWelcomeForm({
             </p>
           ))}
         </div>
+        {suggestInstall && (
+          <div className="mt-2 max-w-xs border border-bourbon-gold/40 bg-white p-3 rounded-lg rounded-bl-none">
+            <p className="text-bourbon-deep text-sm font-semibold">
+              Don&apos;t miss our reply
+            </p>
+            <p className="text-bourbon-stone text-xs mt-0.5">
+              Install the app and we can reach you even with the site closed.
+            </p>
+            <span className="mt-2.5 block bg-bourbon-gold py-2 text-center text-[10px] font-semibold uppercase tracking-[0.15em] text-bourbon-deep">
+              Install the app
+            </span>
+            <p className="text-bourbon-stone/70 text-[11px] mt-2">
+              Only shown while they can actually install.
+            </p>
+          </div>
+        )}
       </div>
 
       <div className="flex items-center gap-3">

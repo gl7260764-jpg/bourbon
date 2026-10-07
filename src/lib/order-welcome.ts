@@ -18,8 +18,9 @@ export const DEFAULTS = {
   greeting: "Hi {firstName}, thank you for your order.",
   promise:
     "We have {orderNumber} and someone will be with you right here within 5 minutes. No need to do anything — your order summary is above.",
-  suggestInstall:
-    "Keep this page open, or install the app so a reply reaches you even when the site is closed.",
+  /* Kept only so an existing stored value has something to fall back to.
+     The install ask is a live button now, not a line of text. */
+  suggestInstall: "",
 } as const;
 
 export interface OrderWelcomeSettings {

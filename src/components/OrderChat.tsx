@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import InvoiceCard from "@/components/InvoiceCard";
+import ChatInstallCta from "@/components/ChatInstallCta";
 
 /* WhatsApp-shaped thread for one order. Text, images and voice notes; no
    calls. Used by both the customer dashboard and the admin order page — the
@@ -61,6 +62,7 @@ export default function OrderChat({
   channel,
   contextOrderNumber,
   emptyHint,
+  showInstallCta = false,
 }: {
   endpoint: string;
   me: "VISITOR" | "ADMIN";
@@ -71,6 +73,8 @@ export default function OrderChat({
   /** Tags outgoing messages with the order they are about. */
   contextOrderNumber?: string | null;
   emptyHint?: string;
+  /** Operator switch from Admin > Settings. Off hides it everywhere. */
+  showInstallCta?: boolean;
 }) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [text, setText] = useState("");
@@ -464,6 +468,12 @@ export default function OrderChat({
             );
           })
         )}
+
+        {/* Sits after the last message, so on a fresh order it lands directly
+            under the welcome note. Renders nothing once the app is installed,
+            and nothing on a platform that cannot install at all. Customers
+            only — the operator has no use for it. */}
+        {me === "VISITOR" && loaded && showInstallCta && <ChatInstallCta />}
       </div>
 
       {error && (

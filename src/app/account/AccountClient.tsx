@@ -117,6 +117,7 @@ export default function AccountClient({
   unread,
   customerChannelName,
   openChatOnLoad = false,
+  showInstallCta = false,
 }: {
   orders: AccountOrder[];
   details: AccountDetails;
@@ -126,6 +127,7 @@ export default function AccountClient({
   customerChannelName: string;
   /** ?chat=1 — arriving from the storefront widget or a push notification. */
   openChatOnLoad?: boolean;
+  showInstallCta?: boolean;
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -421,6 +423,7 @@ export default function AccountClient({
               channel={customerChannelName}
               contextOrderNumber={chatAbout}
               emptyHint="Ask us anything — an order, a bottle, delivery. Send photos and voice notes too. A real person reads every message and usually replies within a few hours."
+              showInstallCta={showInstallCta}
             />
           </section>
         </div>

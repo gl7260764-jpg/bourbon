@@ -79,10 +79,13 @@ export async function openOrderChat(
 
     /* Greeting and promise as one message rather than two: two bubbles landing
        in the same instant reads as a bot talking to itself. */
+    /* The install ask is deliberately NOT in here. Stored text is frozen at
+       the moment it is sent, so a customer who installs the app would still
+       be reading "install the app" in their history forever. It is a live
+       button in the thread instead — see ChatInstallCta. */
     const lines = [
       fillWelcome(welcome.greeting, vars),
       fillWelcome(welcome.promise, vars),
-      welcome.suggestInstall ? welcome.installLine : "",
     ].filter((l) => l.length > 0);
 
     await appendMessage({

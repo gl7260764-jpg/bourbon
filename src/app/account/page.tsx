@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getCurrentCustomer } from "@/lib/customer-auth";
 import { customerUnreadCount, mergeIntoPrimaryThread } from "@/lib/customer-chat";
 import { customerChannel } from "@/lib/realtime";
+import { getOrderWelcome } from "@/lib/order-welcome";
 import {
   ORDER_STATUS_BADGE,
   ORDER_STATUS_LABEL,
@@ -113,6 +114,10 @@ export default async function AccountPage({
   };
 
   const { chat } = await searchParams;
+  /* Whether the in-chat install button is offered at all. The button hides
+     itself once the app is installed; this is the operator's switch for
+     whether it is ever shown. */
+  const { suggestInstall } = await getOrderWelcome();
 
   return (
     <AccountClient
@@ -121,6 +126,7 @@ export default async function AccountPage({
       unread={unread}
       customerChannelName={customerChannel(customer.id)}
       openChatOnLoad={chat === "1"}
+      showInstallCta={suggestInstall}
     />
   );
 }

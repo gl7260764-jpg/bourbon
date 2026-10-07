@@ -16,6 +16,10 @@ import {
   markInstalled,
   wasRecentlyDismissed,
 } from "@/lib/pwa";
+import {
+  DASHBOARD_CHAT_EVENT,
+  isDashboardChatOpen,
+} from "@/lib/dashboard-chat-signal";
 
 const DELAY_MS = 10_000;
 
@@ -30,6 +34,7 @@ export default function InstallPrompt() {
   const [deferredEvent, setDeferredEvent] =
     useState<BeforeInstallPromptEvent | null>(null);
   const [expanded, setExpanded] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -58,6 +63,17 @@ export default function InstallPrompt() {
       setVisible(true);
     };
 
+    /* Read the flag first: AccountClient sets it on its own mount, which
+       happens before this listener is attached, so the event alone would be
+       missed on a direct load of /account?chat=1. */
+    const chatFlagTimer = window.setTimeout(
+      () => setChatOpen(isDashboardChatOpen()),
+      0,
+    );
+    const handleChat = (e: Event) =>
+      setChatOpen(Boolean((e as CustomEvent<boolean>).detail));
+    window.addEventListener(DASHBOARD_CHAT_EVENT, handleChat);
+
     window.addEventListener(READY_EVENT, handleReady);
     window.addEventListener(INSTALLED_EVENT, handleInstalled);
     window.addEventListener("appinstalled", handleInstalled);
@@ -72,6 +88,8 @@ export default function InstallPrompt() {
     }, DELAY_MS);
 
     return () => {
+      window.clearTimeout(chatFlagTimer);
+      window.removeEventListener(DASHBOARD_CHAT_EVENT, handleChat);
       window.removeEventListener(READY_EVENT, handleReady);
       window.removeEventListener(INSTALLED_EVENT, handleInstalled);
       window.removeEventListener("appinstalled", handleInstalled);
@@ -112,7 +130,11 @@ export default function InstallPrompt() {
     setExpanded(true);
   };
 
-  if (!visible || pathname?.startsWith("/admin")) return null;
+  /* The dashboard chat carries its own install button inside the thread, so
+     the timed banner would be a second ask stacked on the first — and it
+     covers the composer and the order receipt the buyer was just sent here to
+     read. Same signal the floating chat widget uses to get out of the way. */
+  if (!visible || pathname?.startsWith("/admin") || chatOpen) return null;
 
   const isMac = typeof navigator !== "undefined" && /Mac/i.test(navigator.platform);
   const bookmarkKey = isMac ? "⌘ + D" : "Ctrl + D";
