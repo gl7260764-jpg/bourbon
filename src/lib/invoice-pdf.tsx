@@ -76,6 +76,9 @@ const s = StyleSheet.create({
   wordmark: { fontFamily: "Playfair", fontWeight: 700, fontSize: 17, color: CREAM },
   est: { fontSize: 6, fontWeight: 600, letterSpacing: 1.7, color: GOLD, marginTop: 3 },
   invoiceWord: { fontSize: 26, fontWeight: 700, letterSpacing: 3.6, color: CREAM, textAlign: "right" },
+  /* "ORDER RECEIVED" is more than twice the characters of "INVOICE", so it
+     cannot carry the same size and tracking without running off the page. */
+  receiptWord: { fontSize: 15, fontWeight: 700, letterSpacing: 2.2, color: CREAM, textAlign: "right" },
   invoiceNo: { fontSize: 8, letterSpacing: 0.8, color: "#8C8885", marginTop: 5, textAlign: "right" },
 
   bandRule: { borderTopWidth: 1, borderTopColor: "#2A2724", marginTop: 22, paddingTop: 14 },
@@ -149,17 +152,42 @@ function pillColors(status: InvoiceSnapshot["status"]) {
   return { backgroundColor: "#FEF3C7", borderColor: "#E4BE6A", color: "#92400E" };
 }
 
-function InvoiceDoc({ inv }: { inv: InvoiceSnapshot }) {
+/**
+ * "invoice" is the numbered, payable document an operator issues.
+ * "receipt" is the acknowledgement a buyer gets the moment they order: the same
+ * letterhead and line items, but no invoice number and nothing owed-sounding,
+ * because no invoice has been issued yet. Keeping them in one renderer means a
+ * change to the brand never lands on only one of the two.
+ */
+export type DocVariant = "invoice" | "receipt";
+
+function InvoiceDoc({
+  inv,
+  variant = "invoice",
+}: {
+  inv: InvoiceSnapshot;
+  variant?: DocVariant;
+}) {
   const t = inv.totals;
+  const receipt = variant === "receipt";
   const paid = inv.status === "PAID";
-  const pc = pillColors(inv.status);
-  const note = paymentNote(inv);
+  const pc = receipt
+    ? { backgroundColor: "#FEF3C7", borderColor: "#E4BE6A", color: "#92400E" }
+    : pillColors(inv.status);
+  const note = receipt
+    ? {
+        title: "WHAT HAPPENS NEXT",
+        body: "We have your order and are preparing it now. Payment details come separately — sign in to your account to see them, and reply in your messages if anything needs changing.",
+      }
+    : paymentNote(inv);
 
   return (
     <Document
-      title={`Invoice ${inv.invoiceNumber}`}
+      title={receipt ? `Order ${inv.orderNumber}` : `Invoice ${inv.invoiceNumber}`}
       author="Bourbon & Oak Distillery"
-      subject={`Invoice for order ${inv.orderNumber}`}
+      subject={
+        receipt ? `Order confirmation ${inv.orderNumber}` : `Invoice for order ${inv.orderNumber}`
+      }
     >
       <Page size="A4" style={s.page}>
         {/* letterhead */}
@@ -173,8 +201,12 @@ function InvoiceDoc({ inv }: { inv: InvoiceSnapshot }) {
               </View>
             </View>
             <View>
-              <Text style={s.invoiceWord}>INVOICE</Text>
-              <Text style={s.invoiceNo}>{inv.invoiceNumber}</Text>
+              <Text style={receipt ? s.receiptWord : s.invoiceWord}>
+                {receipt ? "ORDER RECEIVED" : "INVOICE"}
+              </Text>
+              <Text style={s.invoiceNo}>
+                {receipt ? inv.orderNumber : inv.invoiceNumber}
+              </Text>
             </View>
           </View>
 
@@ -191,13 +223,15 @@ function InvoiceDoc({ inv }: { inv: InvoiceSnapshot }) {
                   <Text style={s.metaValue}>{inv.orderNumber}</Text>
                 </View>
                 <View style={s.metaCell}>
-                  <Text style={s.metaLabel}>ISSUED</Text>
+                  <Text style={s.metaLabel}>{receipt ? "PLACED" : "ISSUED"}</Text>
                   <Text style={s.metaValue}>{formatIssueDate(inv.issuedAt)}</Text>
                 </View>
-                <View style={s.metaCell}>
-                  <Text style={s.metaLabel}>TERMS</Text>
-                  <Text style={s.metaValue}>{inv.terms}</Text>
-                </View>
+                {!receipt && (
+                  <View style={s.metaCell}>
+                    <Text style={s.metaLabel}>TERMS</Text>
+                    <Text style={s.metaValue}>{inv.terms}</Text>
+                  </View>
+                )}
               </View>
             </View>
           </View>
@@ -208,13 +242,20 @@ function InvoiceDoc({ inv }: { inv: InvoiceSnapshot }) {
           {/* parties */}
           <View style={s.parties}>
             <View style={s.party}>
-              <Text style={s.lbl}>BILLED TO</Text>
+              <Text style={s.lbl}>{receipt ? "DELIVER TO" : "BILLED TO"}</Text>
               <Text style={s.who}>{inv.billedTo.name}</Text>
               <Text style={s.addr}>
                 {inv.billedTo.lines.join("\n")}
                 {inv.billedTo.email ? `\n${inv.billedTo.email}` : ""}
+                {/* On a receipt this block is the only address, so the
+                    delivery terms belong under it. */}
+                {receipt ? `\n${inv.shippingLabel}\nAdult signature required` : ""}
               </Text>
             </View>
+            {/* Billing and delivery can differ on an invoice. On a
+                receipt they never do — it is one address, and printing it
+                twice just reads as a mistake. */}
+            {!receipt && (
             <View style={s.party}>
               <Text style={s.lbl}>SHIPPED TO</Text>
               <Text style={s.who}>{inv.shippedTo.name}</Text>
@@ -223,8 +264,11 @@ function InvoiceDoc({ inv }: { inv: InvoiceSnapshot }) {
                 {`\n${inv.shippingLabel}\nAdult signature required`}
               </Text>
             </View>
+            )}
             <View style={[s.pill, { backgroundColor: pc.backgroundColor, borderColor: pc.borderColor }]}>
-              <Text style={[s.pillText, { color: pc.color }]}>{STATUS_LABEL[inv.status]}</Text>
+              <Text style={[s.pillText, { color: pc.color }]}>
+                {receipt ? "ORDER RECEIVED" : STATUS_LABEL[inv.status]}
+              </Text>
             </View>
           </View>
 
@@ -276,7 +320,9 @@ function InvoiceDoc({ inv }: { inv: InvoiceSnapshot }) {
                 <Text style={s.totalValue}>{money(t.tax, inv.currency)}</Text>
               </View>
               <View style={s.grand}>
-                <Text style={s.grandLabel}>{paid ? "TOTAL PAID" : "TOTAL DUE"}</Text>
+                <Text style={s.grandLabel}>
+                  {receipt ? "ORDER TOTAL" : paid ? "TOTAL PAID" : "TOTAL DUE"}
+                </Text>
                 <Text style={s.grandValue}>{money(t.total, inv.currency)}</Text>
               </View>
             </View>
@@ -299,9 +345,12 @@ function InvoiceDoc({ inv }: { inv: InvoiceSnapshot }) {
 }
 
 /** Render to a Buffer, ready to attach to an email or upload. */
-export async function renderInvoicePdf(inv: InvoiceSnapshot): Promise<Buffer> {
+export async function renderInvoicePdf(
+  inv: InvoiceSnapshot,
+  variant: DocVariant = "invoice",
+): Promise<Buffer> {
   registerFonts();
-  return renderToBuffer(<InvoiceDoc inv={inv} />);
+  return renderToBuffer(<InvoiceDoc inv={inv} variant={variant} />);
 }
 
 /** Filename used for the attachment and the download. */

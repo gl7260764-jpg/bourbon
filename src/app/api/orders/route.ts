@@ -10,7 +10,9 @@ import { issueLoginLink } from "@/lib/login-link";
 import { notifyAsync } from "@/lib/ntfy";
 import { signInLinkUrl } from "@/lib/emails/signInLinkEmail";
 import { prisma } from "@/lib/prisma";
-import { findOrCreateCustomer } from "@/lib/customer-auth";
+import { createSession, findOrCreateCustomer } from "@/lib/customer-auth";
+import { getAuthMode } from "@/lib/settings";
+import { openOrderChat } from "@/lib/order-chat-opener";
 import { sendEmail } from "@/lib/mailer";
 import { ageLabel } from "@/lib/product-format";
 import {
@@ -319,6 +321,9 @@ export async function POST(req: NextRequest) {
           })),
         },
       },
+      // The chat opener draws a receipt from these, so fetch them with the
+      // order rather than making a second round trip for rows we just wrote.
+      include: { items: true },
     });
 
     /* Straight to the operator's phone. Fire and forget: the order is already
@@ -424,7 +429,50 @@ export async function POST(req: NextRequest) {
       console.error("[POST /api/orders] email dispatch failed:", mailErr);
     }
 
-    return NextResponse.json({ orderNumber }, { status: 201 });
+    /* Checkout now lands in the buyer's messages rather than on a confirmation
+       page, so the thread has to be worth landing in: a picture of the order
+       and a line saying a person is coming. */
+    let chatOpened = false;
+    if (customerId) {
+      const opened = await openOrderChat(createdOrder, customerId);
+      chatOpened = opened.ok;
+    }
+
+    /* Signing them in is what makes that redirect possible, and it is gated on
+       the operator's own site-wide choice rather than assumed here.
+       EMAIL_ONLY means they have already accepted sign-in on a typed address
+       without a mailbox round-trip; under CODE or LINK that trade is not on,
+       and the buyer gets the emailed link instead. Worth being precise about:
+       a typed email is not proof of owning it, so auto-signing in under the
+       stricter modes would hand a stranger the account's past orders. */
+    let signedIn = false;
+    if (customerId) {
+      try {
+        const mode = await getAuthMode();
+        if (mode === "EMAIL_ONLY") {
+          await createSession(customerId);
+          await prisma.customer.update({
+            where: { id: customerId },
+            data: { lastLoginAt: new Date() },
+          });
+          signedIn = true;
+        }
+      } catch (err) {
+        console.error("[orders] could not start a session:", err);
+      }
+    }
+
+    return NextResponse.json(
+      {
+        orderNumber,
+        /* Where the client should go next. Only "chat" when they can actually
+           see it — otherwise the browser would bounce off the dashboard into a
+           sign-in page, which is a worse ending than the confirmation page. */
+        next: signedIn && chatOpened ? "chat" : "confirmation",
+        dashboardUrl,
+      },
+      { status: 201 },
+    );
   } catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002") {
       return NextResponse.json(

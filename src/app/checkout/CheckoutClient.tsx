@@ -325,6 +325,8 @@ export default function CheckoutClient() {
       // sessionStorage may be unavailable (private mode); proceed anyway
     }
 
+    let nextStop: "chat" | "confirmation" = "confirmation";
+
     try {
       const res = await fetch("/api/orders", {
         method: "POST",
@@ -344,6 +346,17 @@ export default function CheckoutClient() {
         setPlacing(false);
         return;
       }
+
+      /* The server decides where this ends. It only says "chat" when the buyer
+         is actually signed in AND the thread was opened — otherwise the
+         dashboard would bounce them to a sign-in page, which is a worse ending
+         than the confirmation page they used to get. */
+      try {
+        const data = (await res.json()) as { next?: string };
+        if (data?.next === "chat") nextStop = "chat";
+      } catch {
+        /* a body we cannot read is not worth failing a placed order over */
+      }
     } catch {
       setPlaceError(
         "Network error while placing your order. Please check your connection and try again."
@@ -360,7 +373,13 @@ export default function CheckoutClient() {
     }
 
     clearCart();
-    router.push(`/checkout/confirmation?order=${encodeURIComponent(orderNumber)}`);
+    /* Straight into their messages, where a receipt and a greeting are already
+       waiting. The confirmation route still works for older email links. */
+    router.push(
+      nextStop === "chat"
+        ? "/account?chat=1"
+        : `/checkout/confirmation?order=${encodeURIComponent(orderNumber)}`,
+    );
   };
 
   if (items.length === 0) {
