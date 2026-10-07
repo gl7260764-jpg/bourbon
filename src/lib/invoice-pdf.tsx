@@ -13,7 +13,6 @@ import {
   STATUS_LABEL,
   formatIssueDate,
   money,
-  paymentNote,
 } from "@/lib/invoice";
 
 /**
@@ -114,7 +113,10 @@ const s = StyleSheet.create({
   itemDetail: { fontSize: 7.2, color: "#8A8580", marginTop: 2.5 },
   cell: { fontSize: 9, color: DEEP },
 
-  lower: { flexDirection: "row", marginTop: 22, alignItems: "flex-start" },
+  /* justifyContent matters only on an invoice, where the totals are now the
+     row's only child: without it they collapse to the left edge. On a receipt
+     the next-steps box grows to fill, so this changes nothing there. */
+  lower: { flexDirection: "row", marginTop: 22, alignItems: "flex-start", justifyContent: "flex-end" },
   payBox: {
     /* flexBasis 0 is load-bearing: react-pdf sizes a flexGrow item from its
        CONTENT when no basis is given, so a long payment instruction widened
@@ -174,12 +176,13 @@ function InvoiceDoc({
   const pc = receipt
     ? { backgroundColor: "#FEF3C7", borderColor: "#E4BE6A", color: "#92400E" }
     : pillColors(inv.status);
+  /* Null on an invoice — the document says nothing about paying at all. */
   const note = receipt
     ? {
         title: "WHAT HAPPENS NEXT",
         body: "We have your order and are preparing it now. Payment details come separately — sign in to your account to see them, and reply in your messages if anything needs changing.",
       }
-    : paymentNote(inv);
+    : null;
 
   return (
     <Document
@@ -291,12 +294,18 @@ function InvoiceDoc({
             </View>
           ))}
 
-          {/* pay + totals */}
+          {/* totals, and on a receipt the next-steps note beside them.
+              An invoice carries no payment block at all: what someone pays
+              against is issued per order and lives behind the dashboard
+              login, so repeating anything about it on a document that gets
+              emailed and forwarded only invites a forged copy. */}
           <View style={s.lower}>
-            <View style={s.payBox}>
-              <Text style={s.payTitle}>{note.title}</Text>
-              <Text style={s.payText}>{note.body}</Text>
-            </View>
+            {note && (
+              <View style={s.payBox}>
+                <Text style={s.payTitle}>{note.title}</Text>
+                <Text style={s.payText}>{note.body}</Text>
+              </View>
+            )}
 
             <View style={s.totals}>
               <View style={s.totalRow}>

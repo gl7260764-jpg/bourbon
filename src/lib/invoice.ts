@@ -265,36 +265,6 @@ export async function issueInvoice(
   );
 }
 
-/**
- * What the invoice says about payment.
- *
- * Shared by the HTML and PDF renderers so the two cannot drift, and
- * deliberately free of account numbers: an invoice is emailed and forwarded,
- * and the details belong behind the dashboard login instead.
- */
-export function paymentNote(inv: InvoiceSnapshot): { title: string; body: string } {
-  if (inv.status === "PAID") {
-    return {
-      title: "PAYMENT RECEIVED",
-      body: inv.paymentLabel
-        ? `Paid by ${inv.paymentLabel}. Thank you — nothing further is owed on this order.`
-        : "Paid in full. Thank you — nothing further is owed on this order.",
-    };
-  }
-  if (inv.status === "VOID") {
-    return {
-      title: "VOID",
-      body: "This invoice has been withdrawn and nothing is payable against it.",
-    };
-  }
-  return {
-    title: "HOW TO PAY",
-    body:
-      (inv.paymentLabel ? `Payment by ${inv.paymentLabel}. ` : "") +
-      `Sign in to your account to see where to send it — for your security we never send payment details by email. Quote reference ${inv.orderNumber} so we can match your payment.`,
-  };
-}
-
 /** Read the frozen document back off a row. */
 export function snapshotOf(invoice: Invoice): InvoiceSnapshot {
   const snap = invoice.snapshot as unknown as InvoiceSnapshot;

@@ -3,7 +3,6 @@ import {
   STATUS_LABEL,
   formatIssueDate,
   money,
-  paymentNote,
 } from "@/lib/invoice";
 
 /**
@@ -96,7 +95,6 @@ export function renderInvoiceHtml(
   opts: InvoiceHtmlOptions = {},
 ): string {
   const t = inv.totals;
-  const note = paymentNote(inv);
 
   const doc = `
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:794px;margin:0 auto;background:${CREAM};border-collapse:collapse">
@@ -180,14 +178,11 @@ export function renderInvoiceHtml(
   <tr><td style="padding:26px 40px 0">
     <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
       <tr>
-        <td style="vertical-align:top;padding-right:34px">
-          <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#ffffff;border:1px solid ${RULE};border-left:3px solid ${GOLD}">
-            <tr><td style="padding:16px 18px">
-              <div style="font:700 8px/1 Inter,Arial,sans-serif;letter-spacing:.2em;color:${MUTED};margin-bottom:9px">${esc(note.title)}</div>
-              <div style="font:400 10.5px/1.75 Inter,Arial,sans-serif;color:${STONE}">${esc(note.body)}</div>
-            </td></tr>
-          </table>
-        </td>
+        <!-- No payment block. What someone pays against is issued per order
+             and lives behind the dashboard login; printing anything about it
+             on a document that gets emailed and forwarded only invites a
+             forged copy. The totals stand alone. -->
+        <td></td>
         <td style="width:300px;vertical-align:top">
           <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
             ${totalRow("Subtotal", money(t.subtotal, inv.currency), DEEP)}
