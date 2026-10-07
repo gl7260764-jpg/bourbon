@@ -46,15 +46,14 @@ type QA = {
 const faqs: QA[] = [
   {
     q: "Can you ship bourbon to my state?",
-    text: "We ship bourbon to every U.S. state where it is legal to receive distilled spirits by mail. As of 2026 we do not ship to AL, AR, DE, KY, MS, RI, SD or UT — those states either prohibit direct-to-consumer alcohol shipping or require an in-state license we don't hold. Every shipment requires an adult signature with ID verification at delivery.",
+    text: "We ship bourbon to every U.S. state where it is legal to receive distilled spirits by mail. As of 2026 we do not ship to AL, AR, DE, KY, MS, RI, SD or UT — those states either prohibit direct-to-consumer alcohol shipping or require an in-state license we don't hold.",
     a: (
       <>
         We ship Kentucky bourbon to every U.S. state where it&apos;s legal to
         receive distilled spirits by mail. As of 2026 we do <em>not</em> ship
         to AL, AR, DE, KY, MS, RI, SD or UT — those states either prohibit
         direct-to-consumer alcohol shipping or require an in-state license we
-        don&apos;t hold. Every shipment requires an adult signature with ID
-        verification at delivery. See the full state-by-state breakdown on our{" "}
+        don&apos;t hold. See the full state-by-state breakdown on our{" "}
         <Link
           href="/shipping"
           className="text-bourbon-gold underline decoration-bourbon-gold/30 underline-offset-4 hover:decoration-bourbon-gold transition-colors"

@@ -45,7 +45,13 @@ function statusStyle(status: InvoiceSnapshot["status"]): string {
   return "background:#FEF3C7;border:1px solid rgba(202,138,4,.45);color:#92400E";
 }
 
-function partyBlock(label: string, name: string, lines: string[], email: string): string {
+function partyBlock(
+  label: string,
+  name: string,
+  lines: string[],
+  email: string,
+  phone = "",
+): string {
   const rest = lines
     .map((l) => `<div style="margin-bottom:2px">${esc(l)}</div>`)
     .join("");
@@ -55,6 +61,7 @@ function partyBlock(label: string, name: string, lines: string[], email: string)
     <div style="font:400 10.5px/1.7 Inter,Arial,sans-serif;color:${STONE}">
       ${rest}
       ${email ? `<div style="margin-top:2px">${esc(email)}</div>` : ""}
+      ${phone ? `<div>${esc(phone)}</div>` : ""}
     </div>`;
 }
 
@@ -150,9 +157,9 @@ export function renderInvoiceHtml(
   <tr><td style="padding:32px 40px 0">
     <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
       <tr>
-        <td style="width:38%;vertical-align:top">${partyBlock("BILLED TO", inv.billedTo.name, inv.billedTo.lines, inv.billedTo.email)}</td>
+        <td style="width:38%;vertical-align:top">${partyBlock("BILLED TO", inv.billedTo.name, inv.billedTo.lines, inv.billedTo.email, inv.billedTo.phone ?? "")}</td>
         <td style="width:38%;vertical-align:top">${partyBlock("SHIPPED TO", inv.shippedTo.name, inv.shippedTo.lines, "")}
-          <div style="font:400 10.5px/1.7 Inter,Arial,sans-serif;color:${STONE};margin-top:6px">${esc(inv.shippingLabel)}<br>Adult signature required</div>
+          <div style="font:400 10.5px/1.7 Inter,Arial,sans-serif;color:${STONE};margin-top:6px">${esc(inv.shippingLabel)}</div>
         </td>
         <td style="vertical-align:top;text-align:right">
           <span style="display:inline-block;padding:6px 13px;font:700 9px/1 Inter,Arial,sans-serif;letter-spacing:.13em;${statusStyle(inv.status)}">${STATUS_LABEL[inv.status]}</span>
@@ -217,7 +224,7 @@ export function renderInvoiceHtml(
           ${esc(inv.seller.name)} &middot; ${esc(inv.seller.lines[1])}<br>Six generations of Kentucky bourbon since 1876
         </td>
         <td style="padding-top:22px;font:400 9px/1.6 Inter,Arial,sans-serif;color:${MUTED};text-align:right;vertical-align:top">
-          You must be 21+ to purchase.<br>Adult signature required at delivery.
+          You must be 21+ to purchase.
         </td>
       </tr>
     </table>

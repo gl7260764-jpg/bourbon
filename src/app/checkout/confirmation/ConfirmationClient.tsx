@@ -382,7 +382,7 @@ export default function ConfirmationClient({
               </Link>
 
               <p className="mt-5 text-bourbon-stone/70 text-[11px] leading-relaxed">
-                Adult signature (21+) required upon delivery. Questions? Reply to your confirmation email.
+                Questions? Reply to your confirmation email.
               </p>
             </div>
           </aside>

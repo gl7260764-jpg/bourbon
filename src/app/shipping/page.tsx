@@ -4,12 +4,12 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Bourbon Shipping & Delivery — State Restrictions | Bourbon & Oak",
   description:
-    "How we ship Kentucky bourbon — adult signature required, state-by-state shipping rules, transit times, a $100 order minimum and free shipping over $500.",
+    "How we ship Kentucky bourbon — state-by-state shipping rules, transit times, a $100 order minimum and free shipping over $500.",
   alternates: { canonical: "/shipping" },
   openGraph: {
     title: "Bourbon Shipping & Delivery — State Restrictions",
     description:
-      "How we ship Kentucky bourbon — adult signature required, state-by-state rules, transit times, $100 minimum order and free shipping over $500.",
+      "How we ship Kentucky bourbon — state-by-state rules, transit times, $100 minimum order and free shipping over $500.",
     type: "website",
     url: "/shipping",
   },
@@ -56,8 +56,7 @@ export default function ShippingPage() {
         <div className="w-20 h-0.5 bg-bourbon-gold mb-5" />
         <p className="text-bourbon-stone max-w-2xl text-base sm:text-lg leading-relaxed">
           Bourbon &amp; Oak ships Kentucky bourbon to every U.S. state where
-          direct-to-consumer distilled-spirits shipping is legal. Every
-          package requires an adult signature with photo ID at delivery. Orders
+          direct-to-consumer distilled-spirits shipping is legal. Orders
           start at $100, shipping is a flat $9.99, and anything over $500 ships
           free within the continental U.S.
         </p>
@@ -97,7 +96,6 @@ export default function ShippingPage() {
               to the continental U.S. (excluding states listed below).
               Everything below that is a flat $9.99 however many bottles you
               order, so a full case costs the same to ship as a single bottle.
-              We use UPS Adult Signature Required service on every shipment.
             </p>
           </div>
         </div>

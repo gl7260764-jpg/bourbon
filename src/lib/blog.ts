@@ -3877,7 +3877,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         type: "paragraph",
-        text: "More bourbon gifts are wrecked by delivery than by bad taste. Spirits shipments require an adult signature on arrival, so a bottle sent to somebody who is at work all week will be attempted three times and returned. Never ship to an office unless you have asked first. Several states restrict direct spirits shipping entirely, and a handful of counties within otherwise permissive states are dry, so confirm the destination before you order rather than after.",
+        text: "More bourbon gifts are wrecked by delivery than by bad taste. A bottle sent to somebody who is at work all week will be attempted three times and returned. Never ship to an office unless you have asked first. Several states restrict direct spirits shipping entirely, and a handful of counties within otherwise permissive states are dry, so confirm the destination before you order rather than after.",
       },
       {
         type: "paragraph",
@@ -3952,7 +3952,6 @@ export const BLOG_POSTS: BlogPost[] = [
         {
           cluster: "Delivery & Care",
           terms: [
-            "adult signature",
             "dry county",
             "state shipping restrictions",
             "heat damage",
@@ -3990,7 +3989,7 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         question: "Can you ship bourbon as a gift?",
         answer:
-          "In many places yes, but an adult signature is required on delivery, several states prohibit direct spirits shipping, and some counties are dry. Confirm the destination before ordering, never send to an office without asking, and avoid leaving a summer delivery sitting on a porch.",
+          "In many places yes, but several states prohibit direct spirits shipping, and some counties are dry. Confirm the destination before ordering, never send to an office without asking, and avoid leaving a summer delivery sitting on a porch.",
       },
       {
         question: "Is a $500 bourbon a better gift than a $100 one?",

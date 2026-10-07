@@ -819,7 +819,7 @@ export default function CheckoutClient() {
               </Link>
 
               <p className="mt-5 text-bourbon-stone/70 text-[11px] leading-relaxed">
-                By placing this order you confirm you are 21 years of age or older. An adult signature is required upon delivery.
+                By placing this order you confirm you are 21 years of age or older.
               </p>
             </div>
           </aside>

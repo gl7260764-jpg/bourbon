@@ -21,6 +21,8 @@ export interface InvoiceParty {
   name: string;
   lines: string[];
   email: string;
+  /** Buyer's contact number. Empty for the seller block, which has none. */
+  phone?: string;
 }
 
 export interface InvoiceLine {
@@ -83,6 +85,19 @@ export function money(n: number, currency = "USD"): string {
     currency,
     minimumFractionDigits: 2,
   }).format(n);
+}
+
+/**
+ * "+15025550142" is how it is stored; "(502) 555-0142" is how it is read.
+ * Anything that is not a plain 10-digit US number is printed as given rather
+ * than mangled — an international number must not be reshaped into a US one.
+ */
+export function formatUsPhone(raw: string | null | undefined): string {
+  if (!raw) return "";
+  const digits = raw.replace(/\D/g, "");
+  const ten = digits.length === 11 && digits.startsWith("1") ? digits.slice(1) : digits;
+  if (ten.length !== 10) return raw.trim();
+  return `(${ten.slice(0, 3)}) ${ten.slice(3, 6)}-${ten.slice(6)}`;
 }
 
 export function formatIssueDate(iso: string): string {
@@ -161,6 +176,9 @@ export function buildInvoiceSnapshot(
       name: s.address.fullName,
       lines: addressLines,
       email: order.email,
+      /* Formatted for a human to read off and dial, not stored form. A courier
+         with a delivery problem is the reason this is on the document. */
+      phone: formatUsPhone(order.phone),
     },
     shippedTo: {
       name: s.address.fullName,

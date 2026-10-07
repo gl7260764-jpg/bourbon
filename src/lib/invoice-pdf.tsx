@@ -250,9 +250,10 @@ function InvoiceDoc({
               <Text style={s.addr}>
                 {inv.billedTo.lines.join("\n")}
                 {inv.billedTo.email ? `\n${inv.billedTo.email}` : ""}
+                {inv.billedTo.phone ? `\n${inv.billedTo.phone}` : ""}
                 {/* On a receipt this block is the only address, so the
-                    delivery terms belong under it. */}
-                {receipt ? `\n${inv.shippingLabel}\nAdult signature required` : ""}
+                    delivery method belongs under it. */}
+                {receipt ? `\n${inv.shippingLabel}` : ""}
               </Text>
             </View>
             {/* Billing and delivery can differ on an invoice. On a
@@ -264,7 +265,7 @@ function InvoiceDoc({
               <Text style={s.who}>{inv.shippedTo.name}</Text>
               <Text style={s.addr}>
                 {inv.shippedTo.lines.join("\n")}
-                {`\n${inv.shippingLabel}\nAdult signature required`}
+                {`\n${inv.shippingLabel}`}
               </Text>
             </View>
             )}
@@ -345,7 +346,6 @@ function InvoiceDoc({
           </Text>
           <Text style={[s.footText, { textAlign: "right" }]}>
             You must be 21+ to purchase.
-            {"\n"}Adult signature required at delivery.
           </Text>
         </View>
       </Page>

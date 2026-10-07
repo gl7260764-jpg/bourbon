@@ -97,7 +97,7 @@ export default function ReturnsPage() {
               return.
             </li>
             <li>
-              We&apos;ll send a UPS Adult Signature pickup label. The bottles
+              We&apos;ll send a UPS pickup label. The bottles
               must be packed in the original carton (or equivalent
               spirits-rated packaging) for the carrier to accept them.
             </li>

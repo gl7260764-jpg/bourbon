@@ -244,7 +244,7 @@ export const LOCATIONS: Location[] = [
       {
         heading: "Shipping to Louisville and Beyond",
         paragraphs: [
-          "If the trip is not happening this time, we ship. Kentucky permits direct-to-consumer alcohol shipping, so orders reach Louisville addresses without difficulty; an adult signature is required on delivery. Rules elsewhere vary considerably by state, and a handful prohibit it outright.",
+          "If the trip is not happening this time, we ship. Kentucky permits direct-to-consumer alcohol shipping, so orders reach Louisville addresses without difficulty. Rules elsewhere vary considerably by state, and a handful prohibit it outright.",
         ],
       },
     ],
@@ -272,7 +272,7 @@ export const LOCATIONS: Location[] = [
       {
         question: "Do you ship bourbon to Louisville?",
         answer:
-          "Yes. Kentucky allows direct-to-consumer shipping, so Louisville addresses are straightforward. An adult signature is required at delivery. Rules for other states vary and some prohibit it entirely.",
+          "Yes. Kentucky allows direct-to-consumer shipping, so Louisville addresses are straightforward. Rules for other states vary and some prohibit it entirely.",
       },
     ],
   },
@@ -396,7 +396,7 @@ export const LOCATIONS: Location[] = [
       {
         question: "Do you ship bourbon to Lexington?",
         answer:
-          "Yes. Kentucky permits direct-to-consumer shipping, so Lexington addresses are straightforward, and an adult signature is required at delivery. Availability for allocated releases changes constantly — the online collection shows what is actually in stock.",
+          "Yes. Kentucky permits direct-to-consumer shipping, so Lexington addresses are straightforward. Availability for allocated releases changes constantly — the online collection shows what is actually in stock.",
       },
     ],
   },
@@ -487,7 +487,7 @@ export const LOCATIONS: Location[] = [
         paragraphs: [
           "Ohio's rules do not follow you south. Kentucky's limit is 0.08 and enforcement on the roads around Bardstown is not casual — this is a bourbon county and the police know exactly what visitors are there to do.",
           "Tastings accumulate faster than most people expect: several distilleries, three or four pours each, a good share of it above 100 proof. Nominate a driver, book a coach, or stay the night. Rideshare in Nelson County thins out badly after dark, so it is not a plan. Tell us when you book if you are driving and we will arrange your tasting around it.",
-          "If the trip is not happening this year, we ship. Rules for sending spirits across state lines vary a great deal and change often, and Ohio's are not Kentucky's — the shipping page carries the current state-by-state position, and an adult signature is required at delivery wherever we can ship.",
+          "If the trip is not happening this year, we ship. Rules for sending spirits across state lines vary a great deal and change often, and Ohio's are not Kentucky's — the shipping page carries the current state-by-state position.",
         ],
       },
     ],
@@ -520,7 +520,7 @@ export const LOCATIONS: Location[] = [
       {
         question: "Do you ship bourbon to Ohio?",
         answer:
-          "Shipping spirits across state lines is governed state by state and the rules change, so check the shipping page for the current position before ordering. Where we can ship, an adult signature is required at delivery.",
+          "Shipping spirits across state lines is governed state by state and the rules change, so check the shipping page for the current position before ordering.",
       },
     ],
   },
@@ -610,7 +610,7 @@ export const LOCATIONS: Location[] = [
       {
         heading: "If You Cannot Make the Drive",
         paragraphs: [
-          "We ship, but the rules for sending spirits across state lines are set state by state and they change, so check the shipping page for the current position before you order. An adult signature is required at delivery wherever we can send a bottle.",
+          "We ship, but the rules for sending spirits across state lines are set state by state and they change, so check the shipping page for the current position before you order.",
           "Allocated releases are the part worth planning around. They arrive in fixed quantities that cannot be increased, they move quickly, and no page can promise them — the online collection shows what is genuinely in stock at any given moment.",
         ],
       },
@@ -753,7 +753,7 @@ export const LOCATIONS: Location[] = [
       {
         question: "Can you ship to a Frankfort address instead?",
         answer:
-          "Yes. Kentucky permits direct-to-consumer shipping, so Frankfort addresses are straightforward. An adult signature is required at delivery, and the shipping page carries the current terms.",
+          "Yes. Kentucky permits direct-to-consumer shipping, so Frankfort addresses are straightforward, and the shipping page carries the current terms.",
       },
       {
         question: "What else is worth seeing in Bardstown?",
@@ -877,7 +877,7 @@ export const LOCATIONS: Location[] = [
       {
         question: "Can you ship to an Indiana address instead?",
         answer:
-          "Rules for shipping spirits across state lines vary by state and change often. The shipping page carries the current position, and an adult signature is required at delivery wherever we can ship.",
+          "Rules for shipping spirits across state lines vary by state and change often. The shipping page carries the current position.",
       },
     ],
   },
@@ -963,7 +963,7 @@ export const LOCATIONS: Location[] = [
         heading: "Carrying Bottles Home",
         paragraphs: [
           "If you are flying, bottles must go in checked baggage — anything above 100ml is out of the cabin, and spirits above 70 percent alcohol (140 proof) cannot fly at all. Some barrel proof releases have gone over that line, so check the proof on the bottle before you plan to carry it home.",
-          "Shipping is usually the simpler answer. Rules vary by state and change often, so the shipping page carries the current position, and an adult signature is required at delivery wherever we can send.",
+          "Shipping is usually the simpler answer. Rules vary by state and change often, so the shipping page carries the current position.",
         ],
       },
     ],
@@ -1108,7 +1108,7 @@ export const LOCATIONS: Location[] = [
       {
         question: "Can you ship to an Ohio address instead?",
         answer:
-          "Rules for shipping spirits across state lines vary by state and change often. The shipping page carries the current position, and an adult signature is required at delivery wherever we can send.",
+          "Rules for shipping spirits across state lines vary by state and change often. The shipping page carries the current position.",
       },
     ],
   },
@@ -1226,7 +1226,7 @@ export const LOCATIONS: Location[] = [
       {
         question: "Can you ship to a Missouri address instead?",
         answer:
-          "Rules for shipping spirits across state lines vary by state and change often. The shipping page carries the current position, and an adult signature is required at delivery.",
+          "Rules for shipping spirits across state lines vary by state and change often. The shipping page carries the current position.",
       },
     ],
   },
@@ -1312,7 +1312,7 @@ export const LOCATIONS: Location[] = [
         heading: "Carrying Bottles Home",
         paragraphs: [
           "If you are flying, bottles go in checked baggage only — anything above 100ml is out of the cabin, and spirits above 70 percent alcohol (140 proof) cannot fly at all. Some barrel proof releases have gone over that line, so check the proof before you plan to carry one.",
-          "Shipping is often simpler. Rules vary by state and change often, so the shipping page carries the current position, and an adult signature is required at delivery.",
+          "Shipping is often simpler. Rules vary by state and change often, so the shipping page carries the current position.",
         ],
       },
     ],
@@ -1464,7 +1464,7 @@ export const LOCATIONS: Location[] = [
       {
         question: "Can you ship to a Michigan address instead?",
         answer:
-          "Rules for shipping spirits across state lines vary by state and change often. The shipping page carries the current position, and an adult signature is required at delivery.",
+          "Rules for shipping spirits across state lines vary by state and change often. The shipping page carries the current position.",
       },
     ],
   },
@@ -1530,7 +1530,7 @@ export const LOCATIONS: Location[] = [
       {
         heading: "Shipping to Bowling Green",
         paragraphs: [
-          "If the drive is not happening this month, we ship. Kentucky permits direct-to-consumer spirits shipping, so Bowling Green addresses are straightforward, and an adult signature with ID is required at delivery. Rules outside Kentucky vary considerably and a handful of states prohibit it altogether.",
+          "If the drive is not happening this month, we ship. Kentucky permits direct-to-consumer spirits shipping, so Bowling Green addresses are straightforward. Rules outside Kentucky vary considerably and a handful of states prohibit it altogether.",
         ],
       },
     ],
@@ -1622,7 +1622,7 @@ export const LOCATIONS: Location[] = [
       {
         heading: "Shipping to Owensboro",
         paragraphs: [
-          "Kentucky permits direct-to-consumer spirits shipping, so Owensboro orders arrive without complication and an adult signature with photo ID is required at delivery. If you are sending a bottle to someone in another state, check the rules first — several states prohibit inbound spirits shipments entirely.",
+          "Kentucky permits direct-to-consumer spirits shipping, so Owensboro orders arrive without complication. If you are sending a bottle to someone in another state, check the rules first — several states prohibit inbound spirits shipments entirely.",
         ],
       },
     ],

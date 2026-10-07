@@ -160,8 +160,7 @@ export default function AboutPage() {
           </h2>
           <p className="text-bourbon-stone text-base sm:text-lg leading-relaxed">
             We ship to every state where it&apos;s legal to receive bourbon by
-            mail. Every package requires an adult signature at delivery and
-            government-issued ID matching the order name. Full details on
+            mail. Full details on
             state restrictions, transit times and free-shipping thresholds are
             on our{" "}
             <Link
