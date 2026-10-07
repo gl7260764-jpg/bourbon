@@ -269,14 +269,14 @@ export default function ProductDetailClient({ product }: { product: ProductDetai
 
           {/* Info */}
           <div className="flex flex-col">
-            <p className="text-bourbon-gold text-[10px] sm:text-xs tracking-[0.3em] uppercase mb-2 sm:mb-3">
+            <p className="max-lg:order-[-4] text-bourbon-gold text-[10px] sm:text-xs tracking-[0.3em] uppercase mb-2 sm:mb-3">
               {product.productionStyleLabel}
             </p>
-            <h1 className="font-[family-name:var(--font-playfair)] text-3xl sm:text-4xl md:text-5xl font-bold text-bourbon-deep leading-tight mb-2">
+            <h1 className="max-lg:order-[-3] font-[family-name:var(--font-playfair)] text-3xl sm:text-4xl md:text-5xl font-bold text-bourbon-deep leading-tight mb-2">
               {product.name}
             </h1>
             {product.subtitle && (
-              <p className="text-bourbon-stone text-base sm:text-lg mb-4">{product.subtitle}</p>
+              <p className="max-lg:order-[-2] text-bourbon-stone text-base sm:text-lg mb-4">{product.subtitle}</p>
             )}
 
             {product.reviewCount > 0 && (
@@ -318,8 +318,15 @@ export default function ProductDetailClient({ product }: { product: ProductDetai
               {product.description}
             </p>
 
-            {/* Price + buy */}
-            <div className="bg-white border border-bourbon-deep/10 p-4 sm:p-6 mb-6">
+            {/* Price + buy.
+                On a phone this sits directly under the title, above the
+                description: somebody who already knows the bottle should not
+                have to scroll past three paragraphs to buy it. Done with flex
+                order rather than a second copy of the block — duplicating it
+                would mean two of every button and two of the quantity state.
+                Only the four elements that move carry an order; everything
+                after keeps the default 0 and so keeps its source order. */}
+            <div className="max-lg:order-[-1] bg-white border border-bourbon-deep/10 p-4 sm:p-6 mb-6">
               {isBottleOnly ? (
                 /* Bottle-only allocation — premium, no chooser */
                 <>
