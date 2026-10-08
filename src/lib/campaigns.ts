@@ -54,6 +54,7 @@ export function fieldsOf(c: Campaign): CampaignFields {
     ctaUrl: c.ctaUrl,
     urgency: c.urgency,
     productId: c.productId,
+    productIds: campaignProductIds(c),
     priceOverride: c.priceOverride,
     compareAtOverride: c.compareAtOverride,
     audience: c.audience === "SELECTED" ? "SELECTED" : "ALL",
@@ -61,8 +62,63 @@ export function fieldsOf(c: Campaign): CampaignFields {
   };
 }
 
+/**
+ * The bottles on a campaign, old shape or new.
+ *
+ * productIds wins once set. A draft written before that column existed has
+ * only productId and must keep resolving to the same single bottle rather
+ * than silently losing its feature.
+ */
+export function campaignProductIds(
+  c: Pick<Campaign, "productId" | "productIds">,
+): string[] {
+  if (c.productIds.length > 0) return c.productIds;
+  return c.productId ? [c.productId] : [];
+}
+
 const money = (v: Prisma.Decimal | number) =>
   new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(Number(v));
+
+/** Several bottles, kept in the operator's order. */
+export async function loadFeaturedBottles(ids: string[]): Promise<FeaturedBottle[]> {
+  if (ids.length === 0) return [];
+  const rows = await prisma.product.findMany({
+    where: { id: { in: ids } },
+    select: {
+      id: true,
+      name: true,
+      slug: true,
+      bottlePrice: true,
+      compareAtPrice: true,
+      images: {
+        orderBy: [{ isPrimary: "desc" }, { sortOrder: "asc" }],
+        take: 1,
+        select: { url: true, alt: true },
+      },
+    },
+  });
+  /* findMany returns rows in the database's order, not the order asked for,
+     so they are re-sorted against `ids`. A product deleted since it was
+     picked drops out rather than leaving a hole in the grid. */
+  const byId = new Map(rows.map((r) => [r.id, r]));
+  return ids
+    .map((id) => byId.get(id))
+    .filter((p): p is NonNullable<typeof p> => Boolean(p))
+    .map((p) => {
+      const img = p.images[0];
+      return {
+        name: p.name,
+        imageUrl: img ? (img.url.startsWith("/") ? `${SITE}${img.url}` : img.url) : null,
+        imageAlt: img?.alt || p.name,
+        price: money(p.bottlePrice),
+        compareAt:
+          p.compareAtPrice && Number(p.compareAtPrice) > Number(p.bottlePrice)
+            ? money(p.compareAtPrice)
+            : null,
+        url: `${SITE}/products/${p.slug}`,
+      };
+    });
+}
 
 export async function loadFeaturedBottle(productId: string | null): Promise<FeaturedBottle | null> {
   if (!productId) return null;
@@ -98,7 +154,7 @@ export async function loadFeaturedBottle(productId: string | null): Promise<Feat
 }
 
 export async function resolveContent(fields: CampaignFields): Promise<CampaignContent> {
-  return resolveCampaignContent(fields, await loadFeaturedBottle(fields.productId), SITE);
+  return resolveCampaignContent(fields, await loadFeaturedBottles(fields.productIds), SITE);
 }
 
 /** The exact HTML a preview shows and a test sends. */

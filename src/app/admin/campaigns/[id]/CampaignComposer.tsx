@@ -50,14 +50,14 @@ async function post<T>(campaignId: string, payload: Record<string, unknown>, sig
 export default function CampaignComposer({
   campaignId,
   initialFields,
-  initialBottle,
+  initialBottles,
   initialPreview,
   subscribers,
   mailer,
 }: {
   campaignId: string;
   initialFields: CampaignFields;
-  initialBottle: Bottle | null;
+  initialBottles: Bottle[];
   initialPreview: Preview;
   subscribers: { email: string; location: string | null }[];
   mailer: { ready: boolean; missing: string[]; from: string | null };
@@ -68,7 +68,10 @@ export default function CampaignComposer({
   const fieldsJson = JSON.stringify(fields);
   const dirty = fieldsJson !== savedJson;
 
-  const [bottle, setBottle] = useState<Bottle | null>(initialBottle);
+  const [bottles, setBottles] = useState<Bottle[]>(initialBottles);
+  /* The first is the featured one; every blank-field fallback and the hero
+     image come from it, exactly as the single bottle used to. */
+  const bottle = bottles[0] ?? null;
   const [preview, setPreview] = useState<Preview>(initialPreview);
   /* Which fields the preview on screen was rendered from. The server renders
      the first one, so nothing is fetched until something changes. The nonce
@@ -276,12 +279,21 @@ export default function CampaignComposer({
           </section>
 
           <section className={cardCls}>
-            <h2 className={cardTitleCls}>Featured bottle <span className="font-sans text-xs font-normal text-bourbon-stone">optional</span></h2>
+            <h2 className={cardTitleCls}>Bottles <span className="font-sans text-xs font-normal text-bourbon-stone">optional</span></h2>
+            <p className="-mt-2 mb-4 text-xs text-bourbon-stone">
+              The first is featured — its image leads the email and its details
+              fill anything you leave blank. Any after it appear as a grid under
+              the button.
+            </p>
             <BottlePicker
-              bottle={bottle}
-              onPick={(b) => {
-                setBottle(b);
-                set("productId", b?.id ?? null);
+              bottles={bottles}
+              max={CAMPAIGN_LIMITS.products}
+              onChange={(next) => {
+                setBottles(next);
+                set("productIds", next.map((b) => b.id));
+                /* Kept in step so a draft saved now still resolves on any path
+                   that has not moved off the old single column. */
+                set("productId", next[0]?.id ?? null);
               }}
             />
           </section>
@@ -550,7 +562,23 @@ function Field({
   );
 }
 
-function BottlePicker({ bottle, onPick }: { bottle: Bottle | null; onPick: (b: Bottle | null) => void }) {
+/**
+ * Pick the bottles a campaign features.
+ *
+ * The FIRST is special and says so: it fills any field the operator left
+ * blank and supplies the hero image, exactly as the single featured bottle
+ * always did. The rest render as a grid under the call to action, which is
+ * why they can be reordered — the order here is the order in the email.
+ */
+function BottlePicker({
+  bottles,
+  onChange,
+  max,
+}: {
+  bottles: Bottle[];
+  onChange: (next: Bottle[]) => void;
+  max: number;
+}) {
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
   const [results, setResults] = useState<PickerResult[]>([]);
@@ -577,72 +605,124 @@ function BottlePicker({ bottle, onPick }: { bottle: Bottle | null; onPick: (b: B
     };
   }, [q, open]);
 
-  if (bottle) {
-    return (
-      <div className="flex items-center gap-3 border border-bourbon-deep/10 p-3">
-        {bottle.imageUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={bottle.imageUrl} alt="" className="w-12 h-12 object-contain bg-[#F4F1EC] shrink-0" />
-        ) : (
-          <div className="w-12 h-12 bg-[#F4F1EC] shrink-0" />
-        )}
-        <div className="min-w-0 flex-1">
-          <p className="text-sm font-medium text-bourbon-deep truncate">{bottle.name}</p>
-          <p className="text-xs text-bourbon-stone tabular-nums">{bottle.price}</p>
-        </div>
-        <button
-          type="button"
-          onClick={() => onPick(null)}
-          className="min-h-11 px-3 text-xs tracking-widest uppercase font-semibold text-bourbon-stone hover:text-rose-700 cursor-pointer"
-        >
-          Remove
-        </button>
-      </div>
-    );
-  }
+  const full = bottles.length >= max;
+
+  const move = (from: number, to: number) => {
+    if (to < 0 || to >= bottles.length) return;
+    const next = [...bottles];
+    const [moved] = next.splice(from, 1);
+    next.splice(to, 0, moved);
+    onChange(next);
+  };
 
   return (
     <div>
-      <input
-        className={inputCls}
-        value={q}
-        onChange={(e) => setQ(e.target.value)}
-        onFocus={() => setOpen(true)}
-        placeholder="Search bottles by name, distillery or SKU"
-        aria-label="Search bottles"
-      />
-      {open && (
-        <ul className="mt-2 max-h-72 overflow-y-auto border border-bourbon-deep/10 divide-y divide-bourbon-deep/5">
-          {busy && results.length === 0 && <li className="px-3 py-3 text-sm text-bourbon-stone">Searching…</li>}
-          {!busy && results.length === 0 && <li className="px-3 py-3 text-sm text-bourbon-stone">No bottles match.</li>}
-          {results.map((p) => (
-            <li key={p.id}>
-              <button
-                type="button"
-                onClick={() => {
-                  onPick({ id: p.id, name: p.name, price: p.price, imageUrl: p.imageUrl });
-                  setOpen(false);
-                  setQ("");
-                }}
-                className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-bourbon-deep/[0.03] cursor-pointer"
-              >
-                {p.imageUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={p.imageUrl} alt="" className="w-10 h-10 object-contain bg-[#F4F1EC] shrink-0" />
-                ) : (
-                  <div className="w-10 h-10 bg-[#F4F1EC] shrink-0" />
-                )}
-                <span className="min-w-0 flex-1">
-                  <span className="block text-sm text-bourbon-deep truncate">{p.name}</span>
-                  <span className="block text-xs text-bourbon-stone truncate">
-                    {p.distillery} · {p.price}
-                    {p.availability === "SOLD_OUT" && <span className="text-rose-700"> · sold out</span>}
-                  </span>
-                </span>
-              </button>
+      {bottles.length > 0 && (
+        <ul className="mb-3 divide-y divide-bourbon-deep/5 border border-bourbon-deep/10">
+          {bottles.map((b, i) => (
+            <li key={b.id} className="flex items-center gap-3 p-3">
+              {b.imageUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={b.imageUrl} alt="" className="w-12 h-12 object-contain bg-[#F4F1EC] shrink-0" />
+              ) : (
+                <div className="w-12 h-12 bg-[#F4F1EC] shrink-0" />
+              )}
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-medium text-bourbon-deep truncate">{b.name}</p>
+                <p className="text-xs text-bourbon-stone tabular-nums">
+                  {b.price}
+                  {i === 0 && <span className="text-bourbon-gold"> · featured</span>}
+                </p>
+              </div>
+              <div className="flex shrink-0 items-center">
+                <button
+                  type="button"
+                  onClick={() => move(i, i - 1)}
+                  disabled={i === 0}
+                  aria-label={`Move ${b.name} earlier`}
+                  className="min-h-11 px-2 text-bourbon-stone hover:text-bourbon-deep disabled:opacity-25 cursor-pointer disabled:cursor-not-allowed"
+                >
+                  ↑
+                </button>
+                <button
+                  type="button"
+                  onClick={() => move(i, i + 1)}
+                  disabled={i === bottles.length - 1}
+                  aria-label={`Move ${b.name} later`}
+                  className="min-h-11 px-2 text-bourbon-stone hover:text-bourbon-deep disabled:opacity-25 cursor-pointer disabled:cursor-not-allowed"
+                >
+                  ↓
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onChange(bottles.filter((x) => x.id !== b.id))}
+                  className="min-h-11 px-3 text-xs tracking-widest uppercase font-semibold text-bourbon-stone hover:text-rose-700 cursor-pointer"
+                >
+                  Remove
+                </button>
+              </div>
             </li>
           ))}
         </ul>
+      )}
+
+      {full ? (
+        <p className="text-xs text-bourbon-stone">
+          That is the maximum of {max}. Remove one to add another.
+        </p>
+      ) : (
+        <>
+          <input
+            className={inputCls}
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            onFocus={() => setOpen(true)}
+            placeholder={bottles.length ? "Add another bottle" : "Search bottles by name, distillery or SKU"}
+            aria-label="Search bottles"
+          />
+          {open && (
+            <ul className="mt-2 max-h-72 overflow-y-auto border border-bourbon-deep/10 divide-y divide-bourbon-deep/5">
+              {busy && results.length === 0 && <li className="px-3 py-3 text-sm text-bourbon-stone">Searching…</li>}
+              {!busy && results.length === 0 && <li className="px-3 py-3 text-sm text-bourbon-stone">No bottles match.</li>}
+              {results.map((p) => {
+                const picked = bottles.some((x) => x.id === p.id);
+                return (
+                  <li key={p.id}>
+                    <button
+                      type="button"
+                      disabled={picked}
+                      onClick={() => {
+                        onChange([...bottles, { id: p.id, name: p.name, price: p.price, imageUrl: p.imageUrl }]);
+                        setOpen(false);
+                        setQ("");
+                      }}
+                      className={`w-full flex items-center gap-3 px-3 py-2 text-left ${
+                        picked
+                          ? "opacity-40 cursor-not-allowed"
+                          : "hover:bg-bourbon-deep/[0.03] cursor-pointer"
+                      }`}
+                    >
+                      {p.imageUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={p.imageUrl} alt="" className="w-10 h-10 object-contain bg-[#F4F1EC] shrink-0" />
+                      ) : (
+                        <div className="w-10 h-10 bg-[#F4F1EC] shrink-0" />
+                      )}
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-sm text-bourbon-deep truncate">{p.name}</span>
+                        <span className="block text-xs text-bourbon-stone truncate">
+                          {p.distillery} · {p.price}
+                          {p.availability === "SOLD_OUT" && <span className="text-rose-700"> · sold out</span>}
+                          {picked && <span className="text-bourbon-gold"> · already added</span>}
+                        </span>
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </>
       )}
     </div>
   );

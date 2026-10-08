@@ -50,6 +50,10 @@ export interface CampaignContent {
   imageAlt: string;
   price: string;
   compareAt: string;
+  /* Bottles after the featured one. They render as a grid below the call to
+     action rather than competing with the hero, so a campaign can show a
+     range without the email losing a single thing to click. */
+  extraBottles: FeaturedBottle[];
 }
 
 function esc(s: string): string {
@@ -71,9 +75,13 @@ function absolute(url: string, siteUrl: string): string {
  */
 export function resolveCampaignContent(
   fields: CampaignFields,
-  bottle: FeaturedBottle | null,
+  bottles: FeaturedBottle[] | FeaturedBottle | null,
   siteUrl: string,
 ): CampaignContent {
+  /* Still accepts a single bottle so older callers and stored snapshots keep
+     resolving identically. */
+  const list = Array.isArray(bottles) ? bottles : bottles ? [bottles] : [];
+  const bottle = list[0] ?? null;
   const ctaUrl = fields.ctaUrl ? absolute(fields.ctaUrl, siteUrl) : (bottle?.url ?? "");
   return {
     subject: fields.subject,
@@ -90,7 +98,36 @@ export function resolveCampaignContent(
     imageAlt: bottle?.imageAlt ?? "",
     price: fields.priceOverride || bottle?.price || "",
     compareAt: fields.compareAtOverride || bottle?.compareAt || "",
+    extraBottles: list.slice(1),
   };
+}
+
+/** Lays the extra bottles out two per row, which is all email can manage. */
+function bottleRows(list: FeaturedBottle[]): string {
+  const out: string[] = [];
+  for (let i = 0; i < list.length; i += 2) {
+    const pair = list.slice(i, i + 2);
+    const cells = pair.map(bottleCell).join("");
+    // An odd final bottle needs an empty partner or the table stretches it.
+    out.push(`<tr>${cells}${pair.length === 1 ? '<td width="50%"></td>' : ""}</tr>`);
+  }
+  return out.join("");
+}
+
+function bottleCell(b: FeaturedBottle): string {
+  const img = b.imageUrl
+    ? `<img src="${esc(b.imageUrl)}" alt="${esc(b.imageAlt || b.name)}" width="110" style="display:block;width:110px;max-width:100%;height:auto;border:0;margin:0 auto 10px">`
+    : "";
+  const was = b.compareAt
+    ? ` <span style="font-weight:400;font-size:12px;color:${MUTED};text-decoration:line-through">${esc(b.compareAt)}</span>`
+    : "";
+  const open = b.url ? `<a href="${esc(b.url)}" style="text-decoration:none;color:inherit">` : "";
+  const close = b.url ? "</a>" : "";
+  return `<td width="50%" valign="top" style="padding:0 8px 22px;text-align:center">${open}${img}<div style="font:600 13px/1.35 Inter,Arial,sans-serif;color:${DEEP};padding:0 2px">${esc(b.name)}</div>${
+    b.price
+      ? `<div style="font:700 14px/1.3 Inter,Arial,sans-serif;color:${DEEP};margin-top:5px">${esc(b.price)}${was}</div>`
+      : ""
+  }${close}</td>`;
 }
 
 /** Reasons this content cannot be sent yet. Empty means it can. */
@@ -169,6 +206,24 @@ export function renderCampaignHtml(
     ? `<div style="margin:0 0 14px;font:600 13px/1.5 Inter,Arial,sans-serif;color:${AMBER_DARK}">${esc(c.urgency)}</div>`
     : "";
 
+  /* Two per row as a table, because Outlook supports neither flex nor grid.
+     Each cell is 50% so the pair reflows on a phone, and the whole block is
+     omitted when there is nothing after the hero. */
+  const extras = (c.extraBottles ?? []).filter((b) => b.name);
+  const grid = extras.length
+    ? `<tr><td style="padding:30px 0 0">
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+          <tr><td style="border-top:1px solid ${RULE};padding:0 0 18px"></td></tr>
+          <tr><td style="font:700 11px/1 Inter,Arial,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:${MUTED};padding:0 0 16px">Also in this release</td></tr>
+          <tr><td>
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+              ${bottleRows(extras)}
+            </table>
+          </td></tr>
+        </table>
+      </td></tr>`
+    : "";
+
   /* Solid gold with near-black text is 6.6:1 — the same button the invoice
      email uses. Table-based so Outlook keeps the padding. */
   const button =
@@ -199,6 +254,7 @@ ${preheader}
           <tr><td>
             ${eyebrow}${heading}${price}${bodyHtml(c.body)}${urgency}${button}
           </td></tr>
+            ${grid}
         </table>
       </td></tr>
       <tr><td style="padding:22px 16px 0;text-align:center;font:400 12px/1.7 Inter,Arial,sans-serif;color:${MUTED}">

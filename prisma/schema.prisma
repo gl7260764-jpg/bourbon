@@ -458,9 +458,18 @@ model Campaign {
 
   /// Featured bottle. Its name, image, price and link fill any field above
   /// left blank; a filled field always wins.
+  ///
+  /// Superseded by productIds and kept only so drafts written before that
+  /// column existed still resolve. Read through campaignProductIds(), never
+  /// directly.
   productId         String?
-  priceOverride     String  @default("")
-  compareAtOverride String  @default("")
+  /// Bottles in this campaign, in the order they appear. The FIRST is the
+  /// featured one and behaves exactly as productId used to — it fills blank
+  /// fields and supplies the hero image. The rest render as a grid below the
+  /// call to action.
+  productIds        String[] @default([])
+  priceOverride     String   @default("")
+  compareAtOverride String   @default("")
 
   audience       String   @default("ALL")
   /// Only read when audience is SELECTED. Intersected with SUBSCRIBED at send

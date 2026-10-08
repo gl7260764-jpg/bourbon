@@ -13,6 +13,9 @@ export const CAMPAIGN_LIMITS = {
   urgency: 150,
   price: 30,
   selectedEmails: 5_000,
+  /* Enough for a release, few enough that the email stays an email. Twelve
+     bottles is six rows of two under the call to action. */
+  products: 12,
 } as const;
 
 /** Above this many recipients the operator types the count to confirm a send. */
@@ -34,7 +37,10 @@ export interface CampaignFields {
   ctaLabel: string;
   ctaUrl: string;
   urgency: string;
+  /** Superseded by productIds; kept so older drafts still resolve. */
   productId: string | null;
+  /** Bottles in order. The first is featured and fills blank fields. */
+  productIds: string[];
   priceOverride: string;
   compareAtOverride: string;
   audience: CampaignAudience;
@@ -51,6 +57,7 @@ export const EMPTY_CAMPAIGN_FIELDS: CampaignFields = {
   ctaUrl: "",
   urgency: "",
   productId: null,
+  productIds: [],
   priceOverride: "",
   compareAtOverride: "",
   audience: "ALL",
@@ -103,6 +110,15 @@ export function normalizeCampaignFields(raw: unknown): {
   const productId =
     typeof r.productId === "string" && r.productId.trim() ? r.productId.trim() : null;
 
+  /* De-duplicated so the same bottle cannot appear twice in the grid, and
+     capped so a slip cannot turn one email into a catalogue. */
+  const rawIds = Array.isArray(r.productIds) ? r.productIds : [];
+  const productIds = [
+    ...new Set(
+      rawIds.filter((v): v is string => typeof v === "string" && v.trim().length > 0).map((v) => v.trim()),
+    ),
+  ].slice(0, CAMPAIGN_LIMITS.products);
+
   const selected = Array.isArray(r.selectedEmails) ? r.selectedEmails : [];
   const selectedEmails = [
     ...new Set(
@@ -124,6 +140,7 @@ export function normalizeCampaignFields(raw: unknown): {
       ctaUrl,
       urgency: text(r.urgency, CAMPAIGN_LIMITS.urgency),
       productId,
+      productIds,
       priceOverride: text(r.priceOverride, CAMPAIGN_LIMITS.price),
       compareAtOverride: text(r.compareAtOverride, CAMPAIGN_LIMITS.price),
       audience: r.audience === "SELECTED" ? "SELECTED" : "ALL",

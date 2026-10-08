@@ -9,9 +9,10 @@ import {
 import { sendProblems, type CampaignContent } from "@/lib/campaign-template";
 import { campaignMailerConfig } from "@/lib/campaign-mailer";
 import {
+  campaignProductIds,
   countRemaining,
   fieldsOf,
-  loadFeaturedBottle,
+  loadFeaturedBottles,
   renderPreview,
   resolveContent,
   sendSummary,
@@ -32,14 +33,14 @@ export default async function CampaignPage({ params }: { params: Promise<{ id: s
 
   if (status === "DRAFT") {
     const fields = fieldsOf(campaign);
-    const [subscribers, bottle, content, recipients] = await Promise.all([
+    const [subscribers, bottles, content, recipients] = await Promise.all([
       prisma.subscriber.findMany({
         where: { status: "SUBSCRIBED" },
         orderBy: { createdAt: "desc" },
         take: 5000,
         select: { email: true, visitor: { select: { city: true, country: true } } },
       }),
-      loadFeaturedBottle(campaign.productId),
+      loadFeaturedBottles(campaignProductIds(campaign)),
       resolveContent(fields),
       countRemaining(campaign),
     ]);
@@ -48,11 +49,13 @@ export default async function CampaignPage({ params }: { params: Promise<{ id: s
       <CampaignComposer
         campaignId={campaign.id}
         initialFields={fields}
-        initialBottle={
-          bottle && campaign.productId
-            ? { id: campaign.productId, name: bottle.name, price: bottle.price, imageUrl: bottle.imageUrl }
-            : null
-        }
+        /* Zipped back against the ids: loadFeaturedBottles drops any product
+           deleted since it was picked, so the two lists can differ in length
+           and must not be matched by index. */
+        initialBottles={campaignProductIds(campaign)
+          .map((id, i) => ({ id, b: bottles[i] }))
+          .filter((x): x is { id: string; b: (typeof bottles)[number] } => Boolean(x.b))
+          .map(({ id, b }) => ({ id, name: b.name, price: b.price, imageUrl: b.imageUrl }))}
         initialPreview={{
           html: renderPreview(content).html,
           problems: sendProblems(content),
