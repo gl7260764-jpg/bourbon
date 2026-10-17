@@ -6,6 +6,7 @@ import {
 } from "@/lib/commerce";
 import { Prisma, PaymentMethod, ShippingMethod } from "@prisma/client";
 import { isValidUsPhone, toE164Us, US_PHONE_ERROR } from "@/lib/phone";
+import { canShipTo, cannotShipMessage } from "@/lib/shipping-states";
 import { issueLoginLink } from "@/lib/login-link";
 import { notifyAsync } from "@/lib/ntfy";
 import { signInLinkUrl } from "@/lib/emails/signInLinkEmail";
@@ -116,6 +117,14 @@ export async function POST(req: NextRequest) {
      rewritten into a US one. */
   if (address.country.trim().toUpperCase() !== "US") {
     return badRequest("We currently ship within the United States only.");
+  }
+  /* And only to the handful of states where a licensed retailer may ship
+     spirits. Same reasoning as the country check above: the checkout offers
+     only shippable states, but this is a public endpoint, so without the check
+     here the selector is decoration. Refused rather than coerced — there is no
+     sensible state to silently substitute for one we cannot ship to. */
+  if (!canShipTo(address.region)) {
+    return badRequest(cannotShipMessage(address.region));
   }
   // Shipping is no longer selectable and is always free, so nothing about it
   // is validated against the request any more — see below where it's forced.

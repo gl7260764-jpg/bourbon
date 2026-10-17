@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { SHIPPABLE_STATES } from "@/lib/shipping-states";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -556,13 +557,39 @@ export default function CheckoutClient() {
                   />
                 </div>
                 <div>
-                  <FieldLabel htmlFor="region">State / Region</FieldLabel>
-                  <Input
+                  <FieldLabel htmlFor="region">State</FieldLabel>
+                  {/* A selector, not a text field. Spirits may only be shipped
+                      by a retailer into a few jurisdictions, so a free-text box
+                      invited an order we would have to cancel after taking the
+                      customer's money. Offering only what we can actually ship
+                      turns that refusal into something they learn before they
+                      have filled the rest of the form. The API re-checks it —
+                      see the order route; this list is convenience, not the
+                      rule. */}
+                  <select
                     id="region"
                     autoComplete="address-level1"
                     value={address.region}
                     onChange={(e) => setAddress({ ...address, region: e.target.value })}
-                  />
+                    className="w-full bg-white border border-bourbon-deep/15 px-3 py-3 text-bourbon-deep text-sm focus:outline-none focus:border-bourbon-gold transition-colors"
+                  >
+                    <option value="">Select a state</option>
+                    {SHIPPABLE_STATES.map((s) => (
+                      <option key={s.code} value={s.code}>
+                        {s.name}
+                      </option>
+                    ))}
+                  </select>
+                  <p className="mt-1.5 text-bourbon-stone text-xs">
+                    Only states where we are licensed to ship spirits are
+                    listed.{" "}
+                    <a
+                      href="/shipping"
+                      className="text-bourbon-gold underline underline-offset-2"
+                    >
+                      Why so few?
+                    </a>
+                  </p>
                 </div>
                 <div>
                   <FieldLabel htmlFor="postal">ZIP / Postal</FieldLabel>
