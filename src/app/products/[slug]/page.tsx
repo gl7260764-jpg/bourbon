@@ -6,6 +6,8 @@ import { buildProductMeta, getProductSeo } from "@/lib/product-seo";
 import ProductDetailClient, { type ProductDetailData } from "./ProductDetailClient";
 import RelatedProducts, { type RelatedProductCard } from "./RelatedProducts";
 import { ageLabel } from "@/lib/product-format";
+import ProductFaq from "@/components/ProductFaq";
+import { faqsForProduct } from "@/lib/product-faq";
 
 const PRODUCTION_STYLE_LABELS: Record<ProductionStyle, string> = {
   SINGLE_BARREL: "Single Barrel",
@@ -265,6 +267,22 @@ export default async function ProductPage({ params }: PageProps) {
     ],
   };
 
+  /* Emitted only when the bottle actually has answers. An empty FAQPage is a
+     structured-data error, not a neutral no-op. */
+  const faqs = faqsForProduct(product.slug);
+  const faqJsonLd =
+    faqs.length > 0
+      ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqs.map((f) => ({
+            "@type": "Question",
+            name: f.question,
+            acceptedAnswer: { "@type": "Answer", text: f.answer },
+          })),
+        }
+      : null;
+
   return (
     <>
       <script
@@ -275,9 +293,18 @@ export default async function ProductPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
       <ProductDetailClient product={data} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-        <RelatedProducts products={related} categoryName={data.category.name} />
+        <ProductFaq items={faqs} productName={product.name} />
+        <div className={faqs.length > 0 ? "mt-14" : ""}>
+          <RelatedProducts products={related} categoryName={data.category.name} />
+        </div>
       </div>
     </>
   );
