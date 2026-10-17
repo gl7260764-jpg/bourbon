@@ -139,7 +139,8 @@ export async function chatInvoice(invoice: Invoice): Promise<{ ok: boolean; erro
        far better outcome than an invoice that does not arrive. */
     let media: { publicId: string; bytes: number } | null = null;
     try {
-      const pdf = await renderInvoicePdf(snap);
+      // Compact: this one becomes a picture in a chat bubble, not a download.
+      const pdf = await renderInvoicePdf(snap, "invoice", true);
       const up = await uploadInvoiceImage(pdf);
       media = { publicId: up.publicId, bytes: up.bytes };
     } catch (err) {

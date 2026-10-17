@@ -36,7 +36,8 @@ export async function openOrderChat(
     let media: { publicId: string; bytes: number } | null = null;
     try {
       const snapshot = buildInvoiceSnapshot(order, "", order.createdAt);
-      const pdf = await renderInvoicePdf(snapshot, "receipt");
+      // Compact: this one becomes a picture in a chat bubble, not a download.
+      const pdf = await renderInvoicePdf(snapshot, "receipt", true);
       const up = await uploadInvoiceImage(pdf);
       media = { publicId: up.publicId, bytes: up.bytes };
     } catch (err) {

@@ -90,7 +90,9 @@ const s = StyleSheet.create({
 
   goldRule: { height: 2, backgroundColor: GOLD },
 
-  body: { paddingHorizontal: 40, paddingTop: 26, flexGrow: 1 },
+  /* No flexGrow: it would stretch to fill the page and push the footer back
+     to the bottom, recreating the gap the change above removes. */
+  body: { paddingHorizontal: 40, paddingTop: 26 },
 
   parties: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" },
   party: { width: "37%" },
@@ -140,8 +142,11 @@ const s = StyleSheet.create({
   grandLabel: { fontSize: 6.4, fontWeight: 700, letterSpacing: 1.2, color: GOLD },
   grandValue: { fontSize: 17, fontWeight: 700, color: CREAM },
 
+  /* Flows after the content rather than pinned to the page bottom. Pinned, a
+     one-line invoice left a band of empty paper between the total and the
+     footer that read as a rendering fault rather than as white space. */
   foot: {
-    position: "absolute", bottom: 28, left: 40, right: 40,
+    marginHorizontal: 40, marginTop: 28,
     borderTopWidth: 1, borderTopColor: RULE, paddingTop: 16,
     flexDirection: "row", justifyContent: "space-between",
   },
@@ -163,12 +168,39 @@ function pillColors(status: InvoiceSnapshot["status"]) {
  */
 export type DocVariant = "invoice" | "receipt";
 
+/**
+ * Page height for the chat picture.
+ *
+ * A4 is right for a document someone prints. It is wrong for a picture in a
+ * chat bubble, where the unused half of the page is just a tall grey nothing
+ * the reader has to scroll past. Estimated from the parts that actually vary —
+ * the line items, and whether there is a note beside the totals — then clamped
+ * so a long invoice still paginates as A4 rather than becoming one endless page.
+ */
+const A4 = [595.28, 841.89] as const;
+
+function compactHeight(inv: InvoiceSnapshot, variant: DocVariant): number {
+  /* Measured against a rendered page, not guessed: letterhead 150, parties 95,
+     table head 24, totals block 130, footer 66, page padding 55. The first
+     pass used 430 and clipped the total and the footer straight off the
+     bottom — an estimate that runs short destroys the document, while one
+     that runs long only leaves a little paper, so this errs long. */
+  const CHROME = 520;
+  const ROW = 36;
+  /* The receipt carries a what-happens-next note beside the totals, which can
+     run to three lines where the invoice has nothing at all. */
+  const note = variant === "receipt" ? 60 : 0;
+  return Math.min(A4[1], CHROME + inv.lines.length * ROW + note);
+}
+
 function InvoiceDoc({
   inv,
   variant = "invoice",
+  compact = false,
 }: {
   inv: InvoiceSnapshot;
   variant?: DocVariant;
+  compact?: boolean;
 }) {
   const t = inv.totals;
   const receipt = variant === "receipt";
@@ -192,7 +224,10 @@ function InvoiceDoc({
         receipt ? `Order confirmation ${inv.orderNumber}` : `Invoice for order ${inv.orderNumber}`
       }
     >
-      <Page size="A4" style={s.page}>
+      <Page
+        size={compact ? [A4[0], compactHeight(inv, variant)] : "A4"}
+        style={s.page}
+      >
         {/* letterhead */}
         <View style={s.band}>
           <View style={s.bandTop}>
@@ -339,7 +374,7 @@ function InvoiceDoc({
           </View>
         </View>
 
-        <View style={s.foot} fixed>
+        <View style={s.foot}>
           <Text style={s.footText}>
             {inv.seller.name} · {inv.seller.lines[1]}
             {"\n"}Six generations of Kentucky bourbon since 1876
@@ -357,9 +392,11 @@ function InvoiceDoc({
 export async function renderInvoicePdf(
   inv: InvoiceSnapshot,
   variant: DocVariant = "invoice",
+  /** Page trimmed to its content. For the chat picture, never for a download. */
+  compact = false,
 ): Promise<Buffer> {
   registerFonts();
-  return renderToBuffer(<InvoiceDoc inv={inv} variant={variant} />);
+  return renderToBuffer(<InvoiceDoc inv={inv} variant={variant} compact={compact} />);
 }
 
 /** Filename used for the attachment and the download. */
