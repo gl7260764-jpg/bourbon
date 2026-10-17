@@ -66,7 +66,14 @@ textarea,
 /* No custom scrollbar. A gold thumb on a near-black track was painted over
    every scrollable surface on the site, including light ones, where it read
    as a stray yellow stripe rather than a control. The platform scrollbar is
-   the one people already know how to use. */
+   the one people already know how to use.
+
+   Where a surface does hide its bar — the chat inbox and thread — it is done
+   with arbitrary utilities at the call site, not a class here. A hand-written
+   rule combining scrollbar-width with -ms-overflow-style was dropped from the
+   build entirely: the legacy property is discarded, and the rule it left
+   behind went with it. Written as utilities, Tailwind emits them because it
+   can see them in the markup. */
 
 /* ----- Animation primitives (formerly framer-motion) -----
    The classes below cover the patterns that previously used

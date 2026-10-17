@@ -1,9 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { countryFlag } from "@/lib/geo";
 import { useRouter, useSearchParams } from "next/navigation";
 import InvoiceCard from "@/components/InvoiceCard";
+import ChatAvatar from "@/components/ChatAvatar";
 
 const LIST_POLL_MS = 4000;
 const THREAD_POLL_MS = 3000;
@@ -144,10 +144,13 @@ export default function ChatClient({ vapidPublicKey }: { vapidPublicKey: string 
           on screen together from lg up, so it stays put there. */}
       <div className={activeId ? "hidden lg:block" : "block"}>
         <header className="mb-6">
-          <h1 className="font-[family-name:var(--font-playfair)] text-2xl sm:text-3xl font-bold text-bourbon-deep">
+          <p className="text-bourbon-gold text-xs tracking-[0.3em] uppercase mb-2">
+            Conversations
+          </p>
+          <h1 className="font-[family-name:var(--font-playfair)] text-3xl sm:text-4xl font-bold text-bourbon-deep">
             Live Chat
           </h1>
-          <p className="text-sm text-bourbon-deep/60 mt-1">
+          <p className="text-sm text-bourbon-stone mt-2">
             Reply to visitors in real time. Enable notifications to get pinged
             on this device.
           </p>
@@ -184,52 +187,90 @@ export default function ChatClient({ vapidPublicKey }: { vapidPublicKey: string 
       >
         {/* Inbox */}
         <aside
-          className={`overflow-y-auto rounded-xl border border-bourbon-deep/10 bg-white ${
+          className={`[scrollbar-width:none] [&::-webkit-scrollbar]:hidden overflow-y-auto border border-bourbon-deep/10 bg-white ${
             activeId ? "hidden lg:block" : "block"
           }`}
         >
           {conversations.length === 0 ? (
-            <p className="p-6 text-sm text-bourbon-deep/50">No conversations yet.</p>
+            <p className="p-6 text-sm text-bourbon-stone">
+              No conversations yet. They appear here the moment someone writes
+              in from the storefront.
+            </p>
           ) : (
             <ul className="divide-y divide-bourbon-deep/5">
               {conversations.map((c) => (
                 <li key={c.id}>
                   <button
                     onClick={() => openConversation(c.id)}
-                    className={`flex w-full flex-col gap-1 px-4 py-3 text-left transition-colors ${
-                      activeId === c.id ? "bg-bourbon-gold/10" : "hover:bg-bourbon-deep/5"
+                    /* A gold rail on the active row rather than a tinted
+                       background: the tint had to be strong enough to see,
+                       which made the row louder than the thread beside it. */
+                    className={`relative flex w-full items-start gap-3 py-3 pl-4 pr-3 text-left transition-colors ${
+                      activeId === c.id
+                        ? "bg-bourbon-gold/[0.07]"
+                        : "hover:bg-bourbon-deep/[0.03]"
                     }`}
                   >
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="flex min-w-0 items-center gap-1.5">
-                        <span className="shrink-0 text-base leading-none" title={c.location ?? undefined} aria-hidden="true">
-                          {c.countryCode ? countryFlag(c.countryCode) : "🌐"}
-                        </span>
-                        <span className="min-w-0 truncate text-sm font-medium text-bourbon-deep">
+                    {activeId === c.id && (
+                      <span
+                        aria-hidden="true"
+                        className="absolute inset-y-0 left-0 w-[3px] bg-bourbon-gold"
+                      />
+                    )}
+
+                    <ChatAvatar
+                      name={c.name || c.email || c.codename}
+                      seed={c.email || c.codename}
+                      countryCode={c.countryCode}
+                      location={c.location}
+                    />
+
+                    <span className="min-w-0 flex-1">
+                      <span className="flex items-baseline justify-between gap-2">
+                        <span
+                          className={`min-w-0 truncate text-sm ${
+                            c.adminUnread > 0
+                              ? "font-semibold text-bourbon-deep"
+                              : "font-medium text-bourbon-deep/90"
+                          }`}
+                        >
                           {c.name || c.email || c.codename}
                         </span>
+                        {c.adminUnread > 0 && (
+                          /* Gold, not a red alert. Nothing here is an error —
+                             it is somebody waiting, and red was the only
+                             colour on the page that belonged to no one. */
+                          <span className="ml-auto inline-flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-bourbon-gold px-1.5 text-[11px] font-bold tabular-nums text-bourbon-deep">
+                            {c.adminUnread}
+                          </span>
+                        )}
                       </span>
-                      {c.adminUnread > 0 && (
-                        <span className="ml-auto inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 text-[11px] font-semibold text-white">
-                          {c.adminUnread}
-                        </span>
-                      )}
-                    </div>
-                    {/* Second line: the address when the first line used a
-                        name, the codename when it used an address, plus where
-                        they are. Never repeats what is already above it. */}
-                    <span className="truncate text-[11px] text-bourbon-deep/45">
-                      {[
-                        c.name && c.email ? c.email : null,
-                        c.name || c.email ? c.codename : null,
-                        c.location,
-                      ]
-                        .filter(Boolean)
-                        .join(" · ")}
-                    </span>
-                    <span className="truncate text-xs text-bourbon-deep/55">
-                      {c.lastMessageFrom === "ADMIN" ? "You: " : ""}
-                      {c.preview || "…"}
+
+                      {/* The address when the first line used a name, the
+                          codename when it used an address, plus where they
+                          are. Never repeats what is already above it. */}
+                      <span className="mt-0.5 block truncate text-[11px] text-bourbon-deep/45">
+                        {[
+                          c.name && c.email ? c.email : null,
+                          c.name || c.email ? c.codename : null,
+                          c.location,
+                        ]
+                          .filter(Boolean)
+                          .join(" · ")}
+                      </span>
+
+                      <span
+                        className={`mt-1 block truncate text-xs ${
+                          c.adminUnread > 0
+                            ? "text-bourbon-deep/75"
+                            : "text-bourbon-deep/50"
+                        }`}
+                      >
+                        {c.lastMessageFrom === "ADMIN" && (
+                          <span className="text-bourbon-deep/40">You: </span>
+                        )}
+                        {c.preview || "…"}
+                      </span>
                     </span>
                   </button>
                 </li>
@@ -252,8 +293,21 @@ export default function ChatClient({ vapidPublicKey }: { vapidPublicKey: string 
               onBack={closeConversation}
             />
           ) : (
-            <div className="flex flex-1 items-center justify-center p-8 text-sm text-bourbon-deep/40">
-              Select a conversation to start chatting.
+            <div className="flex flex-1 flex-col items-center justify-center gap-3 p-8 text-center">
+              <span
+                aria-hidden="true"
+                className="flex h-12 w-12 items-center justify-center border border-bourbon-gold/40 text-bourbon-gold"
+              >
+                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20 11.5a7.5 7.5 0 0 1-10.9 6.7L4 20l1.8-5.1A7.5 7.5 0 1 1 20 11.5Z" />
+                </svg>
+              </span>
+              <p className="font-[family-name:var(--font-playfair)] text-lg font-bold text-bourbon-deep">
+                Pick a conversation
+              </p>
+              <p className="max-w-xs text-sm text-bourbon-stone">
+                Choose someone on the left to read their thread and reply.
+              </p>
             </div>
           )}
         </section>
@@ -652,6 +706,14 @@ function Thread({
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M15 19l-7-7 7-7" />
           </svg>
         </button>
+        {/* The same monogram the inbox row shows, so opening a conversation
+            does not swap one representation of a person for another. No flag
+            here: `who` carries no country, and the list row already has it. */}
+        <ChatAvatar
+          name={who.name || who.email || who.codename || "Unidentified visitor"}
+          seed={who.email || who.codename || undefined}
+          size="sm"
+        />
         <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-semibold text-bourbon-deep">
           {who.name || who.email || who.codename || "Unidentified visitor"}
@@ -693,7 +755,7 @@ function Thread({
         )}
       </div>
 
-      <div ref={scrollRef} className="chat-canvas flex-1 space-y-1.5 overflow-y-auto p-4">
+      <div ref={scrollRef} className="chat-canvas [scrollbar-width:none] [&::-webkit-scrollbar]:hidden flex-1 space-y-1.5 overflow-y-auto p-4">
         {messages.map((m) => (
           <div
             key={m.id}
