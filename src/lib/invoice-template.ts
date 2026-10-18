@@ -185,11 +185,24 @@ export function renderInvoiceHtml(
   <tr><td style="padding:26px 40px 0">
     <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
       <tr>
-        <!-- No payment block. What someone pays against is issued per order
-             and lives behind the dashboard login; printing anything about it
-             on a document that gets emailed and forwarded only invites a
-             forged copy. The totals stand alone. -->
-        <td></td>
+        <!-- The chosen rail, named and nothing more. What someone pays
+             AGAINST is issued per order and lives behind the dashboard
+             login; printing that on a document that gets emailed and
+             forwarded only invites a forged copy. The name carries none of
+             that risk. Empty cell when the rail names nothing useful, so the
+             totals keep their column either way. -->
+        <td style="vertical-align:top;padding-right:26px">
+          ${
+            inv.paymentLabel
+              ? `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="background:#FFFFFF;border:1px solid ${RULE};border-left:3px solid ${GOLD}">
+            <tr><td style="padding:13px 16px">
+              <div style="font-size:9px;font-weight:700;letter-spacing:1.3px;color:${MUTED};text-transform:uppercase;margin-bottom:7px">Payment method</div>
+              <div style="font-size:15px;font-weight:600;color:${DEEP}">${esc(inv.paymentLabel)}</div>
+            </td></tr>
+          </table>`
+              : ""
+          }
+        </td>
         <td style="width:300px;vertical-align:top">
           <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
             ${totalRow("Subtotal", money(t.subtotal, inv.currency), DEEP)}

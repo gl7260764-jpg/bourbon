@@ -119,17 +119,23 @@ const s = StyleSheet.create({
      row's only child: without it they collapse to the left edge. On a receipt
      the next-steps box grows to fill, so this changes nothing there. */
   lower: { flexDirection: "row", marginTop: 22, alignItems: "flex-start", justifyContent: "flex-end" },
-  payBox: {
-    /* flexBasis 0 is load-bearing: react-pdf sizes a flexGrow item from its
-       CONTENT when no basis is given, so a long payment instruction widened
-       this box straight over the totals column instead of wrapping inside it. */
+  /* The wrapper takes the space; the box inside hugs its own content.
+     flexBasis 0 is load-bearing on the wrapper: react-pdf sizes a flexGrow
+     item from its CONTENT when no basis is given, which is how a long payment
+     string once widened this straight over the totals column. alignItems on a
+     column container controls the horizontal, so flex-start is what stops the
+     box stretching the full width around a word as short as "Zelle". */
+  payWrap: {
     flexGrow: 1, flexBasis: 0, minWidth: 0,
-    marginRight: 26, backgroundColor: "#FFFFFF",
+    marginRight: 26, alignItems: "flex-start",
+  },
+  payBox: {
+    maxWidth: "100%", backgroundColor: "#FFFFFF",
     borderWidth: 1, borderColor: RULE, borderLeftWidth: 3, borderLeftColor: GOLD,
-    padding: 13,
+    paddingVertical: 13, paddingHorizontal: 16,
   },
   payTitle: { fontSize: 5.8, fontWeight: 700, letterSpacing: 1.3, color: MUTED, marginBottom: 7 },
-  payText: { fontSize: 8.2, lineHeight: 1.7, color: STONE },
+  payValue: { fontSize: 11, fontWeight: 600, color: DEEP },
 
   totals: { width: 215, flexShrink: 0 },
   totalRow: { flexDirection: "row", justifyContent: "space-between", paddingVertical: 5 },
@@ -174,12 +180,12 @@ export type DocVariant = "invoice" | "receipt";
  * A4 is right for a document someone prints. It is wrong for a picture in a
  * chat bubble, where the unused half of the page is just a tall grey nothing
  * the reader has to scroll past. Estimated from the parts that actually vary —
- * the line items, and whether there is a note beside the totals — then clamped
+ * the line items, and whether a payment method prints beside the totals — then clamped
  * so a long invoice still paginates as A4 rather than becoming one endless page.
  */
 const A4 = [595.28, 841.89] as const;
 
-function compactHeight(inv: InvoiceSnapshot, variant: DocVariant): number {
+function compactHeight(inv: InvoiceSnapshot): number {
   /* Measured against a rendered page, not guessed: letterhead 150, parties 95,
      table head 24, totals block 130, footer 66, page padding 55. The first
      pass used 430 and clipped the total and the footer straight off the
@@ -187,10 +193,18 @@ function compactHeight(inv: InvoiceSnapshot, variant: DocVariant): number {
      that runs long only leaves a little paper, so this errs long. */
   const CHROME = 520;
   const ROW = 36;
-  /* The receipt carries a what-happens-next note beside the totals, which can
-     run to three lines where the invoice has nothing at all. */
-  const note = variant === "receipt" ? 60 : 0;
-  return Math.min(A4[1], CHROME + inv.lines.length * ROW + note);
+  /* Slack, not a measurement of the payment box.
+     Measured off a rendered page: the payment box runs about 62pt against the
+     totals column's 103pt, so sitting BESIDE the totals it never drives this
+     row's height — shortening its text from three lines to one changed the
+     document's height by nothing at all. What this reserve actually absorbs is
+     variance CHROME's fixed 520 cannot see: a long delivery address, a bottle
+     name that wraps. Dropping it to 16 left 7pt between the footer and the cut,
+     which is one wrapped line from clipping. 60 keeps about 51pt. An estimate
+     that runs short destroys the document; one that runs long costs a little
+     paper in a chat bubble. */
+  const payment = inv.paymentLabel ? 60 : 0;
+  return Math.min(A4[1], CHROME + inv.lines.length * ROW + payment);
 }
 
 function InvoiceDoc({
@@ -208,12 +222,17 @@ function InvoiceDoc({
   const pc = receipt
     ? { backgroundColor: "#FEF3C7", borderColor: "#E4BE6A", color: "#92400E" }
     : pillColors(inv.status);
-  /* Null on an invoice — the document says nothing about paying at all. */
-  const note = receipt
-    ? {
-        title: "WHAT HAPPENS NEXT",
-        body: "We have your order and are preparing it now. Payment details come separately — sign in to your account to see them, and reply in your messages if anything needs changing.",
-      }
+  /* The rail the customer chose, named and nothing more.
+     What they pay AGAINST — wallet address, handle, reference — is issued per
+     order and lives behind the dashboard login. Printing that on a document
+     that gets emailed and forwarded is what invites a forged copy, and is why
+     it came off this document in the first place. A name carries none of that
+     risk and still answers the question the old next-steps note danced around:
+     how am I paying for this one?
+     Null when the rail names nothing useful (a bare OTHER), in which case the
+     document says nothing rather than printing an empty label. */
+  const payment = inv.paymentLabel
+    ? { title: "PAYMENT METHOD", value: inv.paymentLabel }
     : null;
 
   return (
@@ -225,7 +244,7 @@ function InvoiceDoc({
       }
     >
       <Page
-        size={compact ? [A4[0], compactHeight(inv, variant)] : "A4"}
+        size={compact ? [A4[0], compactHeight(inv)] : "A4"}
         style={s.page}
       >
         {/* letterhead */}
@@ -330,16 +349,16 @@ function InvoiceDoc({
             </View>
           ))}
 
-          {/* totals, and on a receipt the next-steps note beside them.
-              An invoice carries no payment block at all: what someone pays
-              against is issued per order and lives behind the dashboard
-              login, so repeating anything about it on a document that gets
-              emailed and forwarded only invites a forged copy. */}
+          {/* totals, with the chosen payment method beside them. Both
+              documents carry it: the question is the same whether the page
+              says ORDER RECEIVED or INVOICE. */}
           <View style={s.lower}>
-            {note && (
-              <View style={s.payBox}>
-                <Text style={s.payTitle}>{note.title}</Text>
-                <Text style={s.payText}>{note.body}</Text>
+            {payment && (
+              <View style={s.payWrap}>
+                <View style={s.payBox}>
+                  <Text style={s.payTitle}>{payment.title}</Text>
+                  <Text style={s.payValue}>{payment.value}</Text>
+                </View>
               </View>
             )}
 
