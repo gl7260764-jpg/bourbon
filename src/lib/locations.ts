@@ -255,7 +255,8 @@ export const LOCATIONS: Location[] = [
           "There are several downtown visitor experiences on Whiskey Row, but most large-scale production sits outside the city. Bourbon & Oak is in Bardstown, about 40 miles south-east and a 45 minute drive.",
       },
       {
-        question: "How long does it take to drive from Louisville to Bardstown?",
+        question:
+          "How long does it take to drive from Louisville to Bardstown?",
         answer:
           "Roughly 45 minutes on a clear run. I-65 south to the Bluegrass Parkway east is quickest; KY-245 takes about ten minutes longer and is far more scenic.",
       },
@@ -283,7 +284,8 @@ export const LOCATIONS: Location[] = [
     isPrimarySite: false,
     cardSummary:
       "An hour west along the Bluegrass Parkway, past more of the Kentucky Bourbon Trail than any other approach.",
-    driveNote: "59 miles · about 1 hr 5 min via US-60 and the Bluegrass Parkway",
+    driveNote:
+      "59 miles · about 1 hr 5 min via US-60 and the Bluegrass Parkway",
     title: "Visiting From Lexington",
     h1: "A Bourbon Distillery an Hour From Lexington",
     subtitle:
@@ -384,7 +386,8 @@ export const LOCATIONS: Location[] = [
           "US-60 west to the Bluegrass Parkway and west to Exit 21 is quickest. Note that the parkway does not connect directly to I-64, so routing via the interstate takes longer. US-62 through Lawrenceburg and Bloomfield is about twenty-five minutes slower and considerably prettier.",
       },
       {
-        question: "Can I do the Kentucky Bourbon Trail as a day trip from Lexington?",
+        question:
+          "Can I do the Kentucky Bourbon Trail as a day trip from Lexington?",
         answer:
           "Part of it, comfortably. Two distilleries in a day is realistic with an hour's drive each way. Attempting four means seeing very little of any of them, and the trail as a whole needs several days.",
       },
@@ -412,7 +415,8 @@ export const LOCATIONS: Location[] = [
     h1: "Kentucky Bourbon Country, Two Hours South of Cincinnati",
     subtitle:
       "We have one distillery and it is in Bardstown, Kentucky — 131 miles south of Cincinnati, and the natural anchor for a bourbon weekend.",
-    metaTitle: "Bourbon Distillery Near Cincinnati | Bourbon & Oak, Bardstown KY",
+    metaTitle:
+      "Bourbon Distillery Near Cincinnati | Bourbon & Oak, Bardstown KY",
     metaDescription:
       "Bourbon & Oak is 131 miles south of Cincinnati in Bardstown, Kentucky — about two hours ten minutes via I-71. Routes, where to stay, and how to plan a bourbon weekend.",
     keywords: [
@@ -503,7 +507,8 @@ export const LOCATIONS: Location[] = [
           "Not one of ours. Bourbon & Oak has a single site, in Bardstown, Kentucky, about two hours south. Bardstown is the closest place to Cincinnati where several working bourbon distilleries sit within a few minutes of each other.",
       },
       {
-        question: "Can I visit the Kentucky Bourbon Trail as a day trip from Cincinnati?",
+        question:
+          "Can I visit the Kentucky Bourbon Trail as a day trip from Cincinnati?",
         answer:
           "You can, with an early start and no more than two tours, but it means roughly four and a half hours of driving in a day. A two-night weekend based in or near Bardstown gets you far more for the same fuel.",
       },
@@ -536,7 +541,8 @@ export const LOCATIONS: Location[] = [
     h1: "A Kentucky Bourbon Distillery Two and a Half Hours From Nashville",
     subtitle:
       "One straight run north on I-65 separates Nashville from Bardstown — 154 miles, one time zone, and the difference between Tennessee whiskey and Kentucky bourbon.",
-    metaTitle: "Bourbon Distillery Near Nashville | Bourbon & Oak, Bardstown KY",
+    metaTitle:
+      "Bourbon Distillery Near Nashville | Bourbon & Oak, Bardstown KY",
     metaDescription:
       "Bourbon & Oak is 154 miles north of Nashville in Bardstown, Kentucky — about two and a half hours up I-65. The route, the time-zone change, where to stay, and how to plan the trip.",
     keywords: [
@@ -554,7 +560,7 @@ export const LOCATIONS: Location[] = [
     heroAlt:
       "Allocated Kentucky bourbon bottles lined up at the Bourbon & Oak distillery, two and a half hours north of Nashville",
     intro: [
-      "Bourbon & Oak has no Nashville location and no Tennessee location. There is one distillery, in Bardstown, Kentucky, 154 miles north of you. We say that plainly because the results for \"bourbon distillery near Nashville\" are full of pages that imply otherwise.",
+      'Bourbon & Oak has no Nashville location and no Tennessee location. There is one distillery, in Bardstown, Kentucky, 154 miles north of you. We say that plainly because the results for "bourbon distillery near Nashville" are full of pages that imply otherwise.',
       "The good news is that the drive is about as simple as American road trips get: I-65 north, until Tennessee runs out and then some. Two and a half hours later you are in the town that calls itself the Bourbon Capital of the World, with more working distilleries inside fifteen minutes than Nashville has inside two hours.",
     ],
     sections: [
@@ -632,12 +638,14 @@ export const LOCATIONS: Location[] = [
           "Yes. Nashville is on Central time and Bardstown is on Eastern, and the boundary crosses I-65 in south-central Kentucky between Cave City and Elizabethtown. Driving north you lose an hour, so set off earlier than the map suggests.",
       },
       {
-        question: "Can I do the Kentucky Bourbon Trail as a day trip from Nashville?",
+        question:
+          "Can I do the Kentucky Bourbon Trail as a day trip from Nashville?",
         answer:
           "Technically, with a very early start and two tours at most, but that is five hours of driving in a day. Two nights based in or near Bardstown is the trip most Nashville visitors are happier with.",
       },
       {
-        question: "What is the difference between Tennessee whiskey and Kentucky bourbon?",
+        question:
+          "What is the difference between Tennessee whiskey and Kentucky bourbon?",
         answer:
           "Tennessee whiskey is filtered through sugar-maple charcoal before it goes into the barrel — the Lincoln County Process. Bourbon is not, which leaves more of the raw distillate character in the barrel to develop. Everything else, from the corn-dominant mash bill to the new charred oak, is broadly the same.",
       },
@@ -678,7 +686,7 @@ export const LOCATIONS: Location[] = [
     heroAlt:
       "Backlit shelves in the Bourbon & Oak tasting room, an hour from Frankfort, Kentucky",
     intro: [
-      "Bourbon & Oak has no Frankfort location. There is one distillery, in Bardstown, 56 miles south-west of the capital — a little over an hour on a clear run. We state that plainly because plenty of results for \"bourbon distillery near Frankfort\" imply a branch that does not exist.",
+      'Bourbon & Oak has no Frankfort location. There is one distillery, in Bardstown, 56 miles south-west of the capital — a little over an hour on a clear run. We state that plainly because plenty of results for "bourbon distillery near Frankfort" imply a branch that does not exist.',
       "Of every city on this page, Frankfort is the easiest. It is close enough that you can see us and be back for dinner, and close enough that the two towns genuinely make one day rather than two.",
     ],
     sections: [
@@ -774,7 +782,8 @@ export const LOCATIONS: Location[] = [
     h1: "A Kentucky Bourbon Distillery Two and a Half Hours From Indianapolis",
     subtitle:
       "One interstate, one state line and one time zone separate Indianapolis from Bardstown — and Indiana's own distilling history makes the drive better company than most.",
-    metaTitle: "Bourbon Distillery Near Indianapolis | Bourbon & Oak, Bardstown KY",
+    metaTitle:
+      "Bourbon Distillery Near Indianapolis | Bourbon & Oak, Bardstown KY",
     metaDescription:
       "Bourbon & Oak is 154 miles south of Indianapolis in Bardstown, Kentucky — about two and a half hours down I-65. The route, the time-zone change, where to stay, and how to plan the trip.",
     keywords: [
@@ -1546,7 +1555,8 @@ export const LOCATIONS: Location[] = [
           "Bowling Green has bars and retailers with strong Kentucky whiskey selections, but the large working distilleries sit north in the Bardstown, Loretto and Frankfort corridor. Bourbon & Oak is in Bardstown, 76 miles away.",
       },
       {
-        question: "Can I do a bourbon day trip from Bowling Green without driving?",
+        question:
+          "Can I do a bourbon day trip from Bowling Green without driving?",
         answer:
           "Not directly. There is no train or public bus to Bardstown. The practical options are a hire car, a private driver, or joining a coach tour that departs from Louisville about an hour north of you.",
       },
@@ -1569,7 +1579,8 @@ export const LOCATIONS: Location[] = [
     isPrimarySite: false,
     cardSummary:
       "Kentucky's fourth city, two hours west of us, with a bourbon history of its own worth knowing.",
-    driveNote: "92 miles · about 1 hr 45 min via the Bluegrass and Natcher parkways",
+    driveNote:
+      "92 miles · about 1 hr 45 min via the Bluegrass and Natcher parkways",
     title: "Bourbon Distillery Near Owensboro",
     h1: "A Kentucky Distillery Under Two Hours From Owensboro",
     subtitle:
@@ -1776,7 +1787,8 @@ export const LOCATIONS: Location[] = [
         ],
       },
       {
-        heading: "Kentucky Bourbon and Tennessee Whiskey Are Not the Same Thing",
+        heading:
+          "Kentucky Bourbon and Tennessee Whiskey Are Not the Same Thing",
         paragraphs: [
           "Both are made from a mash of at least 51% corn and aged in new charred oak. The legal difference that matters is a step Tennessee producers apply and Kentucky ones generally do not: filtering the new spirit through sugar maple charcoal before barrelling, known as the Lincoln County Process.",
           "That step strips some of the heavier congeners and produces a softer, sweeter, slightly sootier spirit. It is not a lesser process, and Tennessee whiskey that has been through it is still, by federal definition, capable of meeting the bourbon standard. It simply tastes different, and the difference is easiest to hear when you try them close together rather than months apart.",
@@ -1809,7 +1821,8 @@ export const LOCATIONS: Location[] = [
           "Bardstown is about 235 miles north of Knoxville, roughly three hours forty-five minutes via I-75 to Lexington and then the Bluegrass Parkway west. It is a weekend trip rather than a day trip.",
       },
       {
-        question: "What is the difference between Tennessee whiskey and Kentucky bourbon?",
+        question:
+          "What is the difference between Tennessee whiskey and Kentucky bourbon?",
         answer:
           "Both use a mash of at least 51% corn aged in new charred oak. Tennessee producers additionally filter the new spirit through sugar maple charcoal before barrelling — the Lincoln County Process — which removes some heavier congeners and gives a softer, sweeter, slightly sootier character.",
       },
@@ -1822,6 +1835,436 @@ export const LOCATIONS: Location[] = [
         question: "Can I bring bourbon home to Tennessee from Kentucky?",
         answer:
           "Personal transport of alcohol across state lines is governed by state law and quantity limits vary, so check Tennessee's current allowance before buying in volume. For anything beyond a bottle or two it is worth confirming in advance.",
+      },
+    ],
+  },
+  {
+    slug: "cleveland",
+    updatedAt: "2026-10-18",
+    city: "Cleveland",
+    isPrimarySite: false,
+    cardSummary:
+      "One interstate for five hundred minutes. I-71 runs from downtown Cleveland to downtown Louisville without asking anything of you but patience.",
+    driveNote: "about 380 miles · roughly 6 hr 30 min via I-71 south",
+    title: "Visiting From Cleveland",
+    h1: "A Kentucky Bourbon Distillery About Six and a Half Hours From Cleveland",
+    subtitle:
+      "I-71 south, almost the whole way — Columbus, Cincinnati, Louisville, and then fifteen slow miles of two-lane road into Bardstown.",
+    metaTitle:
+      "Bourbon Distillery Near Cleveland | Bourbon & Oak, Bardstown KY",
+    metaDescription:
+      "Bourbon & Oak is about 380 miles south of Cleveland in Bardstown, Kentucky — roughly six and a half hours down I-71. The route, the two chokepoints, why you should not fly, and why Cleveland already owns a piece of this story.",
+    keywords: [
+      "bourbon distillery near Cleveland",
+      "Cleveland to Bardstown",
+      "Cleveland to Kentucky bourbon trail",
+      "I-71 south road trip",
+      "bourbon trip from Cleveland Ohio",
+      "Cleveland to Louisville drive",
+      "Kentucky bourbon weekend from Ohio",
+      "distillery tour from Cleveland",
+    ],
+    heroImage: "/blog-age.webp",
+    heroAlt:
+      "Aged Kentucky bourbon at the Bourbon & Oak distillery in Bardstown, about six and a half hours south of Cleveland",
+    intro: [
+      'Bourbon & Oak has no Cleveland location and no Ohio location. There is one distillery, in Bardstown, Kentucky, roughly 380 miles south of you. We say that plainly because a search for "bourbon distillery near Cleveland" returns a great deal of writing that implies otherwise.',
+      "What Cleveland does have is a genuine claim on this story — not a marketing one, an actual documented one, involving a set of copper stills that spent twenty years in a Bardstown garage before an Ohio distiller bought them. More on that below. First, the drive.",
+    ],
+    sections: [
+      {
+        heading: "The Drive From Cleveland",
+        paragraphs: [
+          "About 380 miles and roughly six and a half hours. The remarkable thing is how little navigation it asks for: I-71 begins at the I-90 interchange in downtown Cleveland and ends in downtown Louisville, and you are on it for something like eighty-five per cent of the trip.",
+          "There is exactly one fork that matters. I-71 and I-75 run combined from Cincinnati across the Ohio River, and they separate near Walton, Kentucky. Stay on I-71 for Louisville. I-75 goes to Lexington, and taking it by accident costs you about an hour.",
+          "At Louisville, leave I-71 at Exit 9A for I-265 — the Gene Snyder Freeway — and run south. That is the signed route for traffic heading to I-65 south, and it keeps you clear of the Kennedy Interchange downtown. Then I-65 south to Exit 112, and KY-245 east for the last fifteen miles.",
+        ],
+        list: [
+          "About 380 miles, roughly 6 hours 30 minutes on a clear run",
+          "I-71 south from downtown Cleveland through Columbus and Cincinnati",
+          "Bear right onto I-71 at the I-75 split near Walton, KY — this is the one costly wrong turn",
+          "Louisville: I-71 Exit 9A onto I-265 (Gene Snyder) south, avoiding downtown",
+          "I-65 south to Exit 112, then KY-245 east 15 miles into Bardstown",
+          "No time-zone change — Cleveland and Bardstown are both on Eastern time",
+        ],
+      },
+      {
+        heading: "Two Chokepoints and One Hill",
+        paragraphs: [
+          "The route has no mountains and no passes. What it has are two construction zones and one notorious grade, and all three are worth knowing before you set off rather than from the middle of a queue.",
+          "Cincinnati is the serious one. The Brent Spence Bridge Corridor Project broke ground in May 2026 on precisely the stretch of I-71 you need, and the existing 1963 bridge has been restriped from four lanes each way to three. Ramp closures are live and the corridor is not due to finish until around 2031. It is toll-free — both states took federal money specifically so it would not have to be tolled — but check conditions before you leave.",
+          "Immediately south of that bridge comes the Cut-in-the-Hill, the grade through Covington and Fort Wright. It has a local nickname we will not repeat approvingly and a crash record that earned it a concrete median wall. Southbound you are climbing it, which is the better direction to take it in, but it closes often enough to be the single likeliest place on this trip to lose an hour.",
+          "Columbus is the quieter problem: the I-70/I-71 downtown rebuild is a multi-year programme now expected to run past 2030, about 150 miles into your drive.",
+        ],
+      },
+      {
+        heading: "Do Not Fly This One",
+        paragraphs: [
+          "There is no nonstop flight from Cleveland Hopkins to Louisville. Google Flights, Kayak and the route databases all agree, and a Southwest page claiming dozens of weekly Cleveland-to-Louisville flights is counting connections rather than nonstops.",
+          "Which means flying is four to five hours gate to gate through Chicago, Detroit, Atlanta or Washington, plus getting to the airport, plus security, plus collecting a rental car at the far end, plus the forty-five-minute drive from Louisville down to us. Driving is genuinely the faster door-to-door option from Cleveland, and you arrive with your own car and somewhere to put the bottles.",
+        ],
+        list: [
+          "No nonstop CLE to SDF exists — every itinerary connects",
+          "Louisville Muhammad Ali International (SDF) is the nearest airport to us",
+          "SDF to Bardstown is about 40 miles and roughly 45 minutes",
+          "Bardstown's own Samuels Field is general aviation only, with no scheduled service",
+        ],
+      },
+      {
+        heading: "Worth Stopping For On I-71",
+        paragraphs: [
+          "Six and a half hours is a lot of interstate, and the Ohio stretch has more going on just off the ramps than the signage suggests.",
+        ],
+        list: [
+          "Grandpa's Cheesebarn at Ashland, around an hour in, off Exit 186",
+          "The Ohio State Reformatory at Mansfield, where The Shawshank Redemption was filmed, off Exit 169",
+          "Columbus, roughly the halfway mark, for COSI and the Short North",
+          "Kings Island at Mason, off Exit 25 for southbound traffic",
+          "Bernheim Arboretum and Research Forest at Clermont, directly off Exit 112 on your final approach",
+          "Jim Beam's home site, also at Clermont, a mile and a half east on KY-245",
+        ],
+      },
+      {
+        heading: "Cleveland Already Owns a Piece of This",
+        paragraphs: [
+          "Here is the story. In 1976, Vendome Copper & Brass Works of Louisville built a set of pot stills for the original Michter's distillery at Schaefferstown, Pennsylvania. That distillery closed around 1990 and the stills were auctioned off. They ended up with David Beam, and they sat in a garage next to his motel — in Bardstown, a few minutes from where we are — for roughly twenty years.",
+          "In 2011 they were bought by Tom Herbruck of Tom's Foolery Distillery in Chagrin Falls, just east of Cleveland. When Michter's came looking for them, they were told the equipment had been sold to Tom's Foolery the day before. In 2015 Herbruck sold them on to Michter's, and in January 2018 they were installed at Fort Nelson in Louisville, where the first Kentucky run through them was made by Ben Beam — David Beam's grandson.",
+          "So a set of Louisville-built stills went from Pennsylvania to a Bardstown garage to an Ohio distillery twenty minutes from Cleveland, and then back to Kentucky. If you have visited Tom's Foolery, you have stood where they stood.",
+        ],
+      },
+      {
+        heading: "And Cleveland's Own Whiskey History",
+        paragraphs: [
+          "It is older than most Clevelanders realise. The first distillery in the settlement dates to 1800 — a secondhand still brought from Virginia, set up on the Cuyahoga at the foot of Superior Street, producing about two quarts of raw spirits a day. By 1831 there was a distillery on the strip of land cut off by the river's old bed and new channel, and that is how the district got the name it still carries: Whiskey Island.",
+          "We will be honest about the rest, because the Encyclopedia of Cleveland History is: distilling never came close to brewing in Cleveland's economy, and it faded as a factor after 1860. Cleveland is a beer town with a whiskey footnote, not a whiskey town. But the footnote has a place name attached to it, which is more than most cities manage.",
+          "The modern scene is small and genuinely distinctive. Cleveland Whiskey on Stones Levee pressure-ages its spirit and finishes it with woods you could never build a barrel from. Western Reserve Distillers in Lakewood works organically with grain from a farm seventy-odd miles away. And Tom's Foolery is still out at Chagrin Falls, making applejack, bourbon and rye — having replaced those Michter's stills with a new one built in Cleveland.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "How far is Bardstown, Kentucky from Cleveland?",
+        answer:
+          "About 380 miles, or roughly six and a half hours of driving. It is almost all one road: I-71 south from downtown Cleveland to Louisville, then I-65 south to Exit 112 and KY-245 east into Bardstown.",
+      },
+      {
+        question: "Is there a nonstop flight from Cleveland to Louisville?",
+        answer:
+          "No. Every itinerary connects, typically through Chicago, Detroit, Atlanta or Washington, which puts flying at four to five hours gate to gate before you add airports and a rental car. Driving is the faster door-to-door option from Cleveland.",
+      },
+      {
+        question: "Do I change time zones driving from Cleveland to Bardstown?",
+        answer:
+          "No. Cleveland and Bardstown are both on Eastern time, and the whole route stays in it. Kentucky is a split-zone state, but the Central line sits west and south of Bardstown, so you never reach it.",
+      },
+      {
+        question:
+          "What is the worst stretch of the Cleveland to Kentucky drive?",
+        answer:
+          "Cincinnati. The Brent Spence Bridge corridor has been under construction since May 2026 and the bridge is restriped from four lanes to three each way. Immediately south of it is the Cut-in-the-Hill grade through Covington, which has a bad crash record and closes often.",
+      },
+      {
+        question: "Can I do Cleveland to Bardstown as a day trip?",
+        answer:
+          "No. Thirteen hours of driving round trip before you have seen anything, and you cannot sensibly taste bourbon and then drive six and a half hours home. Stay overnight in Bardstown, or break the journey in Louisville.",
+      },
+      {
+        question: "Does Cleveland have any connection to Kentucky bourbon?",
+        answer:
+          "A real one. The pot stills now running at Michter's Fort Nelson in Louisville spent twenty years in a Bardstown garage before Tom's Foolery Distillery in Chagrin Falls, just outside Cleveland, bought them in 2011 and sold them on to Michter's in 2015.",
+      },
+    ],
+  },
+  {
+    slug: "pittsburgh",
+    updatedAt: "2026-10-18",
+    city: "Pittsburgh",
+    isPrimarySite: false,
+    cardSummary:
+      "Seven hours west and south, ending at the exit ramp where Pittsburgh's own whiskey has been made since 1987.",
+    driveNote: "about 420 miles · roughly 7 hr via I-79, I-70 and I-71",
+    title: "Visiting From Pittsburgh",
+    h1: "A Kentucky Bourbon Distillery About Seven Hours From Pittsburgh",
+    subtitle:
+      "You are coming from the place that made American whiskey first — and the last exit of your drive is where Old Overholt ended up.",
+    metaTitle:
+      "Bourbon Distillery Near Pittsburgh | Bourbon & Oak, Bardstown KY",
+    metaDescription:
+      "Bourbon & Oak is about 420 miles from Pittsburgh in Bardstown, Kentucky — roughly seven hours via Wheeling, Columbus and Cincinnati. The route, the tolls you will not pay, and why Pittsburgh outproduced Kentucky in 1810.",
+    keywords: [
+      "bourbon distillery near Pittsburgh",
+      "Pittsburgh to Bardstown",
+      "Pittsburgh to Kentucky bourbon trail",
+      "Monongahela rye",
+      "Whiskey Rebellion",
+      "Old Overholt Pennsylvania",
+      "bourbon trip from Pittsburgh",
+      "Pittsburgh to Louisville drive",
+    ],
+    heroImage: "/process-cooperage.webp",
+    heroAlt:
+      "Charred oak barrels at Bourbon & Oak in Bardstown, Kentucky, about seven hours from Pittsburgh",
+    intro: [
+      "Bourbon & Oak has no Pittsburgh location and no Pennsylvania location. There is one distillery, in Bardstown, Kentucky, about 420 miles away. We are saying so plainly, as we do on every one of these pages.",
+      "What makes Pittsburgh different from the other cities we write these for is that you are not visiting whiskey country. You are leaving it. Western Pennsylvania made American whiskey before Kentucky did, at greater volume, and the story of how that ended is the most interesting thing on this page.",
+    ],
+    sections: [
+      {
+        heading: "The Drive From Pittsburgh",
+        paragraphs: [
+          "About 420 miles and roughly seven hours. Three interstates do almost all of it: I-79 south for the first half-hour, I-70 west across the top of West Virginia and the width of Ohio, then I-71 south from Columbus to Louisville.",
+          "The first turn comes quickly. I-79 and I-70 run together for a couple of miles through Washington, Pennsylvania, and you take I-70 west toward Wheeling. Twenty minutes later you cross the Ohio River at Wheeling, pass through the Wheeling Tunnel — the only tunnel on the whole route — and climb Two-Mile Hill out of the valley.",
+          "After Columbus you join I-71 south. The one fork that matters is at Walton, Kentucky, where I-71 and I-75 separate: bear right for I-71 and Louisville. Take I-75 by mistake and you are going to Lexington. I-71 ends at the Kennedy Interchange in downtown Louisville, where you pick up I-65 south, come off at Exit 112, and run KY-245 east for the last fifteen miles.",
+        ],
+        list: [
+          "About 420 miles, roughly 7 hours with one stop",
+          "I-79 south to Washington, PA, then I-70 west toward Wheeling",
+          "I-70 across the Ohio River at Wheeling and on through Cambridge and Zanesville to Columbus",
+          "I-71 south from Columbus through Cincinnati and the Brent Spence Bridge",
+          "Bear right for I-71 at the I-75 split near Walton, KY",
+          "I-65 south from Louisville to Exit 112, then KY-245 east 15 miles into Bardstown",
+          "No time-zone change — Pittsburgh and Bardstown are both Eastern",
+        ],
+      },
+      {
+        heading: "No Mountains, and No Tolls",
+        paragraphs: [
+          "People expect to cross the Appalachians going from Pittsburgh to Kentucky. You do not. The Allegheny Front — the escarpment that actually divides the mountains from the plateau — lies east of Pittsburgh, and Pittsburgh is already on the far side of it. Heading for Kentucky you follow the water downhill across the dissected plateau. The mountains are behind you before you start.",
+          "The real climbs are modest: Two-Mile Hill out of Wheeling, and the rolling country across eastern Ohio. If you want hills, the alternate route south through West Virginia on I-79 to Charleston and then west on I-64 is genuinely hillier, about thirty-five miles longer, and skips Columbus and Cincinnati entirely.",
+          "On tolls, the main route is free. It does not touch the Pennsylvania Turnpike — I-70 only shares road with the Turnpike well east of Pittsburgh — and the Blue Grass Parkway has been toll-free since 1991.",
+        ],
+        list: [
+          "No mountain pass and no summit on the main route",
+          "One tunnel: the Wheeling Tunnel, about a quarter of a mile",
+          "No tolls on the main route; the Turnpike section of I-70 is east of Pittsburgh and not used",
+          "Louisville's RiverLink tolls apply to the I-65 river bridges going north — you turn south, so you pay nothing",
+          "Wheeling is a chronic work zone; I-470 and US 40 are the signed ways round it",
+        ],
+      },
+      {
+        heading: "Pittsburgh Made American Whiskey First",
+        paragraphs: [
+          "In 1810, Pennsylvania shipped somewhere around six and a half million gallons of distilled spirits, most of it Monongahela rye. Kentucky in the same year produced roughly two and a quarter million, most of it corn whiskey. Pennsylvania was outproducing Kentucky by about three to one, and the Monongahela valley was the centre of American distilling.",
+          "Monongahela rye was its own thing, not a regional variation on bourbon. Corn was not plentiful in the valley, so the mash was rye and barley malt in a ratio of roughly four to one — the exact inverse of a bourbon mash bill. Pennsylvania distillers sweet-mashed rather than sour-mashed, almost universally. Many used a three-chamber still, a pot-and-column hybrid, and aged in heated multi-storey warehouses with no ricks at all.",
+          "The scale was serious. John Gibson's distillery on the east bank of the Monongahela, built in 1856, was at one point the largest rye distillery in the world. It ran until 1919, when the property was sold to Pittsburgh Steel. The biggest rye distillery on earth became a steel mill, which is about as concise a summary of what happened to the valley as you could want.",
+        ],
+      },
+      {
+        heading: "The Whiskey Rebellion, and a Myth to Retire",
+        paragraphs: [
+          "The 1791 excise on distilled spirits was the first federal tax on a domestic product, and it landed hardest on exactly the wrong people. Small western stills paid about nine cents a gallon while large eastern distillers could elect a flat per-still rate that worked out nearer six. Worse, it had to be paid in coin, and coin barely existed on the frontier — where whiskey itself served as currency. Farmers were asked to pay a higher rate, in money they did not have, on the thing they were using as money.",
+          "It escalated at Bower Hill in July 1794 and again at Braddock's Field that August, where something like seven thousand people assembled. Washington federalised nearly thirteen thousand militiamen and rode at their head — the only sitting president ever to lead troops in the field. Ten men were tried for treason, two were convicted, and Washington pardoned both. One was Philip Wigle, whose name is on a distillery in the Strip District today.",
+          "Now the myth. You will read that the rebels fled to Kentucky and founded the bourbon industry. They did not. Kentucky had something like five hundred distilleries already operating, federal marshals had exactly the same jurisdiction there, and Kentucky had its own anti-tax violence. David Bradford, the rebellion's own spokesman, fled to Spanish territory — not Kentucky.",
+          "The true migration story is better anyway, and it happened a century and a half later: the whiskey did not walk to Kentucky, the brands were sold there.",
+        ],
+      },
+      {
+        heading: "Old Overholt Is Waiting at Your Exit",
+        paragraphs: [
+          "Henry Overholt settled at West Overton, south-east of Pittsburgh, in 1800. His son Abraham took over the distillery in 1810 and a second site opened at Broad Ford in 1853. In 1881 the business passed to Abraham's grandson — Henry Clay Frick — who brought in Andrew Mellon as a partner.",
+          "That partnership is why the brand still exists. Mellon's government connections secured a permit to sell existing stock as medicinal whiskey through Prohibition, so Old Overholt survived the dry years that killed almost everything else in the valley. Distilling at Broad Ford stopped in 1951, and in 1987 the James B. Beam Distilling Company bought the brand and moved production to Kentucky.",
+          "Where it is made now is the part worth knowing. Old Overholt comes out of the Jim Beam distillery at Clermont, Kentucky — which sits at I-65 Exit 112. That is your exit. The last turn of a Pittsburgh driver's seven-hour journey is the ramp serving the place where Pennsylvania's oldest whiskey brand ended up.",
+          "Frick, incidentally, was born on the Overholt farm in 1849 and worked at his grandfather's Broad Ford distillery as a young man. The site is preserved as West Overton Village, near Scottdale — but it is south-east of the city, the wrong way entirely for this trip. Make it a separate day.",
+        ],
+      },
+      {
+        heading: "Worth Stopping For",
+        paragraphs: [
+          "The first stop is barely a detour at all, and for a Pittsburgh driver it is the right way to start this particular journey.",
+        ],
+        list: [
+          "Washington, PA — right at the I-70/I-79 split, 27 miles out. The David Bradford House is a National Historic Landmark, and Liberty Pole Spirits makes a Monongahela-style rye at 61% rye in the same town",
+          "Wheeling, WV — the 1849 Wheeling Suspension Bridge, now permanently pedestrian-only, is a few minutes off I-70",
+          "Cambridge, OH — I-70 Exit 180, the natural first-third fuel stop",
+          "Columbus, OH — roughly the halfway mark and the sensible overnight if you split the drive",
+          "Bernheim Forest and Jim Beam at Clermont, both directly off your final exit",
+        ],
+      },
+      {
+        heading: "Flying, and Whether to Bother",
+        paragraphs: [
+          "There is a nonstop, which puts Pittsburgh ahead of most cities we write these pages for. Breeze Airways flies Pittsburgh to Louisville in about an hour and a half, but only a couple of days a week, so the schedule rather than the flight time decides whether it works for you. Everything else connects, typically around three and a half hours.",
+          "From Louisville Muhammad Ali International it is about forty minutes south to us. If the Breeze schedule lines up with your weekend it is comfortably the faster option; if it does not, seven hours of driving beats a connection through Detroit.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "How far is Bardstown, Kentucky from Pittsburgh?",
+        answer:
+          "About 420 miles, or roughly seven hours with one stop. The route is I-79 south briefly, I-70 west through Wheeling and Columbus, I-71 south through Cincinnati to Louisville, then I-65 south to Exit 112 and KY-245 into Bardstown.",
+      },
+      {
+        question:
+          "Does the drive from Pittsburgh to Kentucky cross the Appalachians?",
+        answer:
+          "No. The Allegheny Front lies east of Pittsburgh, and the city already sits on the plateau side of it, so you travel downhill across dissected plateau rather than over mountains. The only notable climb is Two-Mile Hill out of Wheeling.",
+      },
+      {
+        question: "Are there tolls between Pittsburgh and Bardstown?",
+        answer:
+          "Not on the main route. It never uses the Pennsylvania Turnpike, and the Blue Grass Parkway has been toll-free since 1991. Louisville's RiverLink tolls only apply to the I-65 bridges heading north over the Ohio River, and you turn south.",
+      },
+      {
+        question: "Is there a direct flight from Pittsburgh to Louisville?",
+        answer:
+          "Yes, but a thin one. Breeze Airways flies it nonstop in about an hour and a half, only a couple of days a week, so check the schedule before planning around it. Louisville airport is roughly forty minutes from Bardstown.",
+      },
+      {
+        question:
+          "Did Whiskey Rebellion distillers flee to Kentucky and start bourbon?",
+        answer:
+          "No, despite how often it is repeated. Kentucky already had hundreds of distilleries, federal marshals held the same jurisdiction there, and the rebellion's own spokesman David Bradford fled to Spanish territory instead. Historians consistently reject the migration story.",
+      },
+      {
+        question: "What happened to Pennsylvania rye whiskey?",
+        answer:
+          "Prohibition and steel. Rye was already slipping before 1919, and the valley's distilleries were sold off or converted — the world's largest rye distillery became a Pittsburgh Steel property. The surviving brands left: Old Overholt went to Kentucky in 1987, and others became Canadian.",
+      },
+    ],
+  },
+  {
+    slug: "memphis",
+    updatedAt: "2026-10-18",
+    city: "Memphis",
+    isPrimarySite: false,
+    cardSummary:
+      "I-40 east to Nashville, I-65 north into Kentucky, and an hour that disappears in the last forty-five miles.",
+    driveNote: "about 355 miles · roughly 5 hr 30 min via I-40 and I-65",
+    title: "Visiting From Memphis",
+    h1: "A Kentucky Bourbon Distillery About Five and a Half Hours From Memphis",
+    subtitle:
+      "Two interstates, one parkway, and a time-zone line that waits until the very end of the drive to take an hour off you.",
+    metaTitle: "Bourbon Distillery Near Memphis | Bourbon & Oak, Bardstown KY",
+    metaDescription:
+      "Bourbon & Oak is about 355 miles from Memphis in Bardstown, Kentucky — roughly five and a half hours via Nashville. The route, where you lose an hour, and what actually separates Tennessee whiskey from bourbon.",
+    keywords: [
+      "bourbon distillery near Memphis",
+      "Memphis to Bardstown",
+      "Memphis to Kentucky bourbon trail",
+      "Tennessee whiskey versus bourbon",
+      "bourbon trip from Memphis",
+      "Memphis to Louisville drive",
+      "Kentucky bourbon weekend from Tennessee",
+      "Lincoln County Process",
+    ],
+    heroImage: "/shop-shelves.webp",
+    heroAlt:
+      "Kentucky bourbon on the shelves at Bourbon & Oak in Bardstown, about five and a half hours north-east of Memphis",
+    intro: [
+      "Bourbon & Oak has no Memphis location and no Tennessee location. There is one distillery, in Bardstown, Kentucky, about 355 miles from you. We mention it because Memphis sits in whiskey country already, and the question of what separates what we make from what Tennessee makes has a genuinely interesting answer.",
+      "The drive is straightforward and the arithmetic is not, because you lose an hour on the way — and not where you would expect to lose it.",
+    ],
+    sections: [
+      {
+        heading: "The Drive From Memphis",
+        paragraphs: [
+          "About 355 miles, and roughly five and a half hours of actual driving. Bardstown's own visitor directions take you this way, and it is the fastest option: I-40 east across Tennessee to Nashville, then I-65 north into Kentucky.",
+          "Leave I-65 at Exit 93, just past Elizabethtown, for the Bluegrass Parkway east. Come off at Exit 21 onto US-31E and you are two miles from the middle of Bardstown.",
+          "There is a second finish worth knowing. Stay on I-65 past Exit 93 to Exit 112 at Clermont, then take KY-245 south-east for fifteen miles. It costs you about twenty minutes, and it is the signed start of the Kentucky Bourbon Trail — Bernheim Forest and Jim Beam's home site are both on it, so the extra time buys you something.",
+        ],
+        list: [
+          "About 355 miles, roughly 5 hours 30 minutes of driving on a clear run",
+          "I-40 east to Nashville — 212 miles, and the only big city en route",
+          "I-65 north from downtown Nashville into Kentucky",
+          "I-65 Exit 93 to the Bluegrass Parkway east, then Exit 21 onto US-31E",
+          "Or stay to I-65 Exit 112 and take KY-245 in past Bernheim and Jim Beam — about 20 minutes longer",
+          "Elizabethtown, around I-65 Exits 91 to 94, is the last real cluster of fuel and food",
+        ],
+      },
+      {
+        heading: "The Hour You Lose, and Where",
+        paragraphs: [
+          "Memphis is on Central time. Bardstown is on Eastern. You lose an hour going, and get it back coming home — but the geography of it catches people out every season.",
+          "You might assume the change happens at the Kentucky state line. It does not. The whole Tennessee leg is Central, and so is most of Kentucky's I-65 corridor: Bowling Green is Central, Mammoth Cave is Central, Cave City is Central. The line falls between I-65 Exit 71 and Exit 76, somewhere around twenty miles south of Elizabethtown.",
+          "Put plainly: you stay on Memphis time for roughly the first three hundred miles and lose the hour in the last forty-five. A seven o'clock departure from Memphis does not get you here at half past twelve. It gets you here at half past one, and every year somebody misses a booking because of it.",
+        ],
+        list: [
+          "Memphis is Central, Bardstown is Eastern — one hour lost eastbound",
+          "The line sits between I-65 Exits 71 and 76, about twenty miles south of Elizabethtown",
+          "Bowling Green, Mammoth Cave and Cave City are all still on Central time",
+          "Build the change into your departure time, not your arrival time",
+        ],
+      },
+      {
+        heading: "Why Not Cut Across Western Kentucky",
+        paragraphs: [
+          "People look at a map and reasonably wonder why they should drive east to Nashville before turning north. The western route — US-51 up to Fulton, the Purchase Parkway, I-24, then the Western Kentucky Parkway east — does exist, and it is a few miles shorter.",
+          "It is also consistently slower, by somewhere between fifteen and thirty-five minutes, and the reason is structural: there is no interstate from Memphis into western Kentucky. The first hundred and twenty-five miles are US-51, an at-grade highway with signals, and the Western Kentucky Parkway is a two-lane-each-way parkway rather than an interstate.",
+          "It has one other catch. The parkway's western forty miles are signed as I-69 while the eastern stretch keeps the parkway name, which confuses navigation apps and printed directions alike. And between Eddyville and Elizabethtown there is no town of any size for about a hundred and forty miles, so fuel at I-24 whether you think you need to or not.",
+        ],
+      },
+      {
+        heading: "Worth Stopping For",
+        paragraphs: [
+          "The Tennessee half is flat and fast. The Kentucky half has most of the reasons to get off the road.",
+        ],
+        list: [
+          "Casey Jones Village at Jackson, Tennessee, off I-40 Exit 80A, about an hour and a half in",
+          "The National Corvette Museum at Bowling Green, off I-65 Exit 28, beside the assembly plant",
+          "Mammoth Cave National Park, the longest known cave system anywhere, off I-65 Exit 48 or 53",
+          "Abraham Lincoln's birthplace at Hodgenville, about thirteen miles off I-65 Exit 81",
+          "Bernheim Arboretum and Jim Beam at Clermont, if you take the Exit 112 finish",
+        ],
+      },
+      {
+        heading: "Tennessee Whiskey and Bourbon: The Actual Difference",
+        paragraphs: [
+          "This is the question we get from Memphis visitors more than any other, and most of the answers in circulation are wrong in an interesting way.",
+          "Federal law defines bourbon in 27 CFR 5.143: at least 51% corn, distilled at no more than 160 proof, into the barrel at no more than 125, new charred oak, nothing added for colour or flavour, bottled at 80 proof or above. There is no state requirement anywhere in it. Bourbon does not have to come from Kentucky.",
+          "Tennessee passed its own law in 2013. To be sold as Tennessee Whiskey a spirit must meet every one of those federal bourbon conditions — and then two more: it must be made and aged in Tennessee, and it must be filtered through maple charcoal before ageing. That filtration is the Lincoln County Process, and Tennessee is the only place that has written it into statute.",
+          "So the honest answer is that almost all Tennessee whiskey would legally qualify as bourbon. Its makers simply choose not to use the word. Tennessee whiskey is bourbon, plus a filtration step, plus a state line — and the difference you taste comes from the charcoal, not from the label.",
+        ],
+        list: [
+          "Bourbon is federal: 27 CFR 5.143, with no state-of-origin requirement at all",
+          "Tennessee Whiskey is state law: the federal bourbon standard, plus Tennessee production, plus maple-charcoal filtering before ageing",
+          "The Lincoln County Process is required in Tennessee and neither required nor forbidden for bourbon",
+          "Most Tennessee whiskey could be labelled bourbon. The producers decline the term rather than fail the test",
+        ],
+      },
+      {
+        heading: "What Memphis Has of Its Own",
+        paragraphs: [
+          "Worth saying first: Memphis is not near the famous Tennessee distilleries. Jack Daniel's at Lynchburg is about 240 miles from you — further than Nashville, and in the opposite direction from us. George Dickel near Tullahoma is further still. Whatever the state's reputation, a Memphian is not local to any of it.",
+          "What Memphis does have is its own small scene. Old Dominick opened on South Front Street in 2017, reviving a family brand that traces back to 1866, and makes a high-rye straight bourbon alongside its vodkas. B.R. Distilling, just north of downtown, has been making Blue Note since 2014.",
+          "Blue Note comes with a detail we rather enjoy: the whiskey is distilled in Kentucky and then blended and aged in Memphis. The best-known bourbon to carry the city's name starts out as Kentucky distillate. The two places are more entangled than the rivalry suggests.",
+          "One last contrast. Memphis and Louisville are two of the largest air-freight hubs on the planet, and there is no passenger flight between them. You can send a parcel overnight; you cannot fly yourself. Which is a long way of saying: drive.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "How far is Bardstown, Kentucky from Memphis?",
+        answer:
+          "About 355 miles, and roughly five and a half hours of driving via I-40 east to Nashville and I-65 north. Allow six and a half hours of clock time, because you lose an hour crossing into Eastern time.",
+      },
+      {
+        question:
+          "Where do you change time zones driving from Memphis to Kentucky?",
+        answer:
+          "Later than almost everyone expects. The line falls between I-65 Exits 71 and 76, about twenty miles south of Elizabethtown — so Bowling Green, Mammoth Cave and Cave City are all still Central. You keep Memphis time for roughly three hundred miles and lose the hour in the last forty-five.",
+      },
+      {
+        question:
+          "Is it faster to drive through western Kentucky instead of Nashville?",
+        answer:
+          "No. The western route via US-51 and the Western Kentucky Parkway is a few miles shorter but consistently fifteen to thirty-five minutes slower, because there is no interstate from Memphis into western Kentucky. The first 125 miles are an at-grade highway with traffic signals.",
+      },
+      {
+        question:
+          "What is the difference between Tennessee whiskey and bourbon?",
+        answer:
+          "Tennessee whiskey must meet every federal requirement for bourbon and then two more: it must be made and aged in Tennessee, and filtered through maple charcoal before ageing — the Lincoln County Process. Almost all of it would legally qualify as bourbon; its makers simply choose not to use the word.",
+      },
+      {
+        question: "Is there a direct flight from Memphis to Louisville?",
+        answer:
+          "Not for passengers. Both airports' schedules list the other only under cargo. Memphis and Louisville are two of the biggest air-freight hubs in the world with no passenger service between them, so driving is the practical option.",
+      },
+      {
+        question: "Is Jack Daniel's near Memphis?",
+        answer:
+          "No. Lynchburg is about 240 miles from Memphis — further away than Nashville, and in the opposite direction from Kentucky. Tennessee's famous distilleries are all in the middle of the state.",
       },
     ],
   },
