@@ -151,10 +151,12 @@ const s = StyleSheet.create({
   /* Flows after the content rather than pinned to the page bottom. Pinned, a
      one-line invoice left a band of empty paper between the total and the
      footer that read as a rendering fault rather than as white space. */
+  /* No longer a row: the age notice that used to sit opposite the seller
+     block is gone, and space-between around a single child only reads as a
+     layout that lost something. */
   foot: {
     marginHorizontal: 40, marginTop: 28,
     borderTopWidth: 1, borderTopColor: RULE, paddingTop: 16,
-    flexDirection: "row", justifyContent: "space-between",
   },
   footText: { fontSize: 6.6, lineHeight: 1.6, color: MUTED },
 });
@@ -397,9 +399,6 @@ function InvoiceDoc({
           <Text style={s.footText}>
             {inv.seller.name} · {inv.seller.lines[1]}
             {"\n"}Six generations of Kentucky bourbon since 1876
-          </Text>
-          <Text style={[s.footText, { textAlign: "right" }]}>
-            You must be 21+ to purchase.
           </Text>
         </View>
       </Page>

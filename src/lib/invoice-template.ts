@@ -236,9 +236,6 @@ export function renderInvoiceHtml(
         <td style="padding-top:22px;font:400 9px/1.6 Inter,Arial,sans-serif;color:${MUTED};vertical-align:top">
           ${esc(inv.seller.name)} &middot; ${esc(inv.seller.lines[1])}<br>Six generations of Kentucky bourbon since 1876
         </td>
-        <td style="padding-top:22px;font:400 9px/1.6 Inter,Arial,sans-serif;color:${MUTED};text-align:right;vertical-align:top">
-          You must be 21+ to purchase.
-        </td>
       </tr>
     </table>
   </td></tr>
