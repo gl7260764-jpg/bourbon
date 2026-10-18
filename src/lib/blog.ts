@@ -208,8 +208,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
     seo: {
-      metaTitle:
-        "How Distillers Pick a Single Barrel Bourbon (Honey Barrel)",
+      metaTitle: "How Distillers Pick a Single Barrel Bourbon (Honey Barrel)",
       metaDescription:
         "Inside the barrel pick — how master distillers walk a Kentucky rickhouse, what they taste for, and why char and rick position make a honey barrel.",
       focusKeyword: "single barrel bourbon",
@@ -393,7 +392,8 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         type: "recipe",
         name: "The Mint Julep",
-        glass: "Pewter or silver julep cup, frosted in the freezer for 30 minutes",
+        glass:
+          "Pewter or silver julep cup, frosted in the freezer for 30 minutes",
         ingredients: [
           "2.5 oz Kentucky bourbon (90 to 100 proof)",
           "0.5 oz rich simple syrup (2 parts sugar to 1 part water)",
@@ -517,8 +517,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
     seo: {
-      metaTitle:
-        "5 Easy Summer Bourbon Cocktails (Julep, Smash, Sour)",
+      metaTitle: "5 Easy Summer Bourbon Cocktails (Julep, Smash, Sour)",
       metaDescription:
         "Five tested summer bourbon cocktails — Kentucky Mint Julep, Bourbon Smash, Whiskey Sour, Paper Plane and our distillery's bourbon lemonade recipe.",
       focusKeyword: "summer bourbon cocktails",
@@ -764,8 +763,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
     seo: {
-      metaTitle:
-        "Inside Rickhouse No. 7 — Our 20,000-Barrel Warehouse",
+      metaTitle: "Inside Rickhouse No. 7 — Our 20,000-Barrel Warehouse",
       metaDescription:
         "Our seventh aging warehouse is now stocking barrels. Rickhouse No. 7 adds 20,000 barrels of metal-clad, temperature-monitored bourbon capacity.",
       focusKeyword: "rickhouse",
@@ -937,9 +935,17 @@ export const BLOG_POSTS: BlogPost[] = [
         title: "In the interest of transparency",
         text: "We sell all ten of these. That is precisely why we can print real stock status instead of a vague note about narrow distribution - and why we will tell you plainly, below, which of these we think are not worth their current asking price.",
       },
-      { type: "heading", level: 2, text: "The 10 Best Bourbon Bottles, Ranked" },
+      {
+        type: "heading",
+        level: 2,
+        text: "The 10 Best Bourbon Bottles, Ranked",
+      },
 
-      { type: "heading", level: 3, text: "1. Pappy Van Winkle Family Reserve 15 Year" },
+      {
+        type: "heading",
+        level: 3,
+        text: "1. Pappy Van Winkle Family Reserve 15 Year",
+      },
       {
         type: "paragraph",
         text: "There is a reasonable argument that [[product:pappy-van-winkle-15-year|Pappy Van Winkle 15 Year]] is over-discussed, and no serious argument that it is overrated. Fifteen years in a wheated mash bill is the sweet spot of the entire Van Winkle range: old enough that the oak has turned to leather, dark caramel and pipe tobacco, young enough that the wheat still carries a soft bakery sweetness underneath. The 20 and 23 year expressions are more impressive; this one is more drinkable, and drinkability is what we are ranking.",
@@ -1029,7 +1035,11 @@ export const BLOG_POSTS: BlogPost[] = [
         ],
       },
 
-      { type: "heading", level: 3, text: "6. Blanton's Original Single Barrel" },
+      {
+        type: "heading",
+        level: 3,
+        text: "6. Blanton's Original Single Barrel",
+      },
       {
         type: "paragraph",
         text: "The bottle that invented the category. [[product:blantons-original-single-barrel|Blanton's Original Single Barrel]] was the first commercially marketed single barrel bourbon in the world, and the horse and jockey stopper - eight of them spelling B-L-A-N-T-O-N-S across a collection - has done more for bourbon merchandising than any advertising campaign. Fortunately the whiskey earns it: creamy vanilla, citrus, a light nutmeg spice, and remarkable consistency for something drawn from a single cask.",
@@ -1047,7 +1057,11 @@ export const BLOG_POSTS: BlogPost[] = [
         ],
       },
 
-      { type: "heading", level: 3, text: "7. Colonel E.H. Taylor, Jr. Barrel Proof" },
+      {
+        type: "heading",
+        level: 3,
+        text: "7. Colonel E.H. Taylor, Jr. Barrel Proof",
+      },
       {
         type: "paragraph",
         text: "The E.H. Taylor range is built on the Bottled-in-Bond Act of 1897, a piece of consumer protection legislation that predates the FDA and still guarantees a single distillery, a single season, at least four years in a federally supervised warehouse, and exactly 100 proof. [[product:eh-taylor-barrel-proof|E.H. Taylor Barrel Proof]] breaks the 100 proof rule deliberately, arriving uncut at 131 proof.",
@@ -1134,7 +1148,11 @@ export const BLOG_POSTS: BlogPost[] = [
         text: "Chasing one specific bottle is the most expensive and least satisfying way to build a bourbon shelf. Learning which profile you like - wheated or high rye, 90 proof or barrel strength - and then buying the best available bottle in that profile will get you a better shelf, faster, for less money. That is what the next section is for.",
       },
 
-      { type: "heading", level: 2, text: "If You Cannot Find It, Drink This Instead" },
+      {
+        type: "heading",
+        level: 2,
+        text: "If You Cannot Find It, Drink This Instead",
+      },
       {
         type: "paragraph",
         text: "This is the section every other guide omits, and it is the most useful thing on this page. Each line below pairs a bottle from the ranking with the closest thing we can realistically supply, chosen on flavour profile rather than on prestige.",
@@ -1179,7 +1197,11 @@ export const BLOG_POSTS: BlogPost[] = [
         text: "Buy from a retailer who accepts returns and can tell you which distributor the case came from. A private sale at a car park with cash and no recourse is where almost every counterfeit story begins.",
       },
 
-      { type: "heading", level: 2, text: "What These Bottles Should Actually Cost" },
+      {
+        type: "heading",
+        level: 2,
+        text: "What These Bottles Should Actually Cost",
+      },
       {
         type: "paragraph",
         text: "Two things have moved at once over the past few years. Retail prices on allocated bourbon have risen, and secondary market prices have softened from their peak. The gap between what a bottle is meant to cost and what it trades for is narrower than it was in 2021, which is good news for drinkers and irritating news for anyone who bought purely as an investment.",
@@ -1377,7 +1399,11 @@ export const BLOG_POSTS: BlogPost[] = [
         title: "Note what is not on that list",
         text: "There is no minimum age. A bourbon aged for one day in a new charred barrel is legally bourbon. The age requirements people assume exist belong to the tighter categories below - which is exactly why those categories are worth knowing.",
       },
-      { type: "heading", level: 2, text: "Straight, Bonded, and the Categories That Actually Mean Something" },
+      {
+        type: "heading",
+        level: 2,
+        text: "Straight, Bonded, and the Categories That Actually Mean Something",
+      },
       {
         type: "paragraph",
         text: "Straight bourbon adds a minimum of two years in the barrel, and forbids added colouring or flavouring outright. If a straight bourbon is under four years old, the label must state its age. That single rule is why so many bottles carry no age statement at all: once past four years, the producer may stay silent.",
@@ -1543,7 +1569,11 @@ export const BLOG_POSTS: BlogPost[] = [
         type: "paragraph",
         text: "The law fixes only the corn: at least 51 percent, which supplies sweetness and body. Distillers then choose what fills the remainder, alongside a small amount of malted barley that provides the enzymes for fermentation. Two schools have emerged, and the gap between them is far wider than the gap between a good bourbon and a great one.",
       },
-      { type: "heading", level: 2, text: "Wheated Bourbon: Soft, Round, Bakery" },
+      {
+        type: "heading",
+        level: 2,
+        text: "Wheated Bourbon: Soft, Round, Bakery",
+      },
       {
         type: "paragraph",
         text: "Replace the rye with winter wheat and you remove the spice rather than adding a flavour. Wheat is a quiet grain. It contributes very little of its own character, which lets the corn sweetness and the oak come forward unopposed. The result is a bourbon that reads as soft, honeyed and gently bready - vanilla, caramel, baked apple, sometimes a note like warm shortbread.",
@@ -1556,7 +1586,11 @@ export const BLOG_POSTS: BlogPost[] = [
         type: "paragraph",
         text: "If you want to learn the profile without the allocated price, [[product:weller-12-year|Weller 12 Year]] shares the mash bill and the warehouses at 90 proof. Move up to [[product:weller-full-proof|W.L. Weller Full Proof]] at 114 proof to see what the same recipe does undiluted, and [[product:william-larue-weller|William Larue Weller]] is where the style reaches its ceiling.",
       },
-      { type: "heading", level: 2, text: "High-Rye Bourbon: Spice, Structure, Bite" },
+      {
+        type: "heading",
+        level: 2,
+        text: "High-Rye Bourbon: Spice, Structure, Bite",
+      },
       {
         type: "paragraph",
         text: "Rye is the opposite of a quiet grain. Even at fifteen or twenty percent of the mash it asserts itself - black pepper, mint, clove, a dry herbal edge that cuts across the corn sweetness. Where a wheater is a round shape in the mouth, a high-rye bourbon has corners.",
@@ -1713,7 +1747,11 @@ export const BLOG_POSTS: BlogPost[] = [
         type: "paragraph",
         text: "There is a version of whiskey tasting that is entirely theatre, and it puts sensible people off the whole business. This is not that. Everything below changes what you actually perceive in the glass, and most of it costs nothing.",
       },
-      { type: "heading", level: 2, text: "1. The Glass Matters More Than the Bottle" },
+      {
+        type: "heading",
+        level: 2,
+        text: "1. The Glass Matters More Than the Bottle",
+      },
       {
         type: "paragraph",
         text: "A rocks tumbler has a wide mouth, which lets aromatics escape before they reach you. A tulip-shaped nosing glass - a Glencairn or a small copita - narrows toward the rim and concentrates them. Swapping glassware is the single largest improvement most drinkers can make, and it is more consequential than moving up a price tier in bottles. Serve the same whiskey in both, side by side, and the difference is not subtle.",
@@ -1737,7 +1775,11 @@ export const BLOG_POSTS: BlogPost[] = [
         type: "paragraph",
         text: "The demonstration worth doing at home: pour [[product:eh-taylor-barrel-proof|E.H. Taylor Barrel Proof]] at 131 proof, taste it neat, then add three drops and taste again. Very little else teaches the lesson so quickly. Ice is a different matter - it dilutes as it melts, so you never taste the same drink twice, and the cold suppresses aromatics. Excellent on a hot afternoon, useless for evaluation.",
       },
-      { type: "heading", level: 2, text: "5. Build the Flight in the Right Order" },
+      {
+        type: "heading",
+        level: 2,
+        text: "5. Build the Flight in the Right Order",
+      },
       {
         type: "paragraph",
         text: "Palate fatigue is real and it arrives faster than people expect. Three whiskeys is a good session; five is the practical maximum. Always run from lowest proof to highest - a 130 proof barrel strength bourbon will flatten your palate for anything gentler that follows.",
@@ -1756,7 +1798,11 @@ export const BLOG_POSTS: BlogPost[] = [
         title: "Two practical rules",
         text: "Plain water between pours, not sparkling - carbonation irritates the palate. And write one honest line per whiskey before you discuss it with anyone else. Tasting notes are extraordinarily suggestible; once somebody says cherry, everyone tastes cherry.",
       },
-      { type: "heading", level: 2, text: "6. Vocabulary Is a Tool, Not a Test" },
+      {
+        type: "heading",
+        level: 2,
+        text: "6. Vocabulary Is a Tool, Not a Test",
+      },
       {
         type: "paragraph",
         text: "Nobody is scoring you. The purpose of naming what you taste is to make the memory retrievable, so that next time you can buy deliberately rather than hopefully. Four questions are enough: is it sweet or dry, is it spicy or soft, is the finish short or long, and would you buy it again. Anyone able to answer those consistently is tasting better than most people who can recite a wheel of descriptors.",
@@ -2106,7 +2152,11 @@ export const BLOG_POSTS: BlogPost[] = [
         type: "paragraph",
         text: "The water matters here, and it is the reason Kentucky became the centre of the industry. The state sits on a limestone shelf that filters out iron - which would turn whiskey black and taste metallic - while leaving calcium and magnesium behind, both of which yeast are happy to work in.",
       },
-      { type: "heading", level: 2, text: "3. Fermentation, and the Sour Mash Trick" },
+      {
+        type: "heading",
+        level: 2,
+        text: "3. Fermentation, and the Sour Mash Trick",
+      },
       {
         type: "paragraph",
         text: "The cooled mash goes into a fermenter, yeast is pitched, and over three to five days it converts the sugar into alcohol and a great deal of flavour. What comes out is called distiller's beer, sitting somewhere around 8 to 10 percent alcohol - and it genuinely does taste like a sour, grainy beer.",
@@ -2129,7 +2179,11 @@ export const BLOG_POSTS: BlogPost[] = [
         type: "paragraph",
         text: "Bourbon may not be distilled above 160 proof, and that ceiling is deliberate. The higher you distil, the more congeners you strip out, and congeners are flavour. Distil to 190 and you have neutral spirit; vodka is defined by its absence of character. The finished clear spirit is called white dog or new make, and tasting it neat is worth doing once - it is sweet, hot and unmistakably corn, with none of the colour, vanilla or spice you associate with the finished product. All of that is still to come from the wood.",
       },
-      { type: "heading", level: 2, text: "5. The Barrel - Where Most of the Flavour Comes From" },
+      {
+        type: "heading",
+        level: 2,
+        text: "5. The Barrel - Where Most of the Flavour Comes From",
+      },
       {
         type: "paragraph",
         text: "This is the first of the two stages that really matter. The white dog is cut with water to no more than 125 proof and filled into a new barrel of charred American white oak. New is the costly word: scotch, rum and tequila producers may reuse casks for decades, but every drop of bourbon requires a fresh one. Those used bourbon barrels are then sold on, which is why so much of the world's whisky ages in ex-bourbon wood.",
@@ -2142,7 +2196,11 @@ export const BLOG_POSTS: BlogPost[] = [
         type: "paragraph",
         text: "The char layer is what supplies vanillin, oak lactones and tannins - vanilla, caramel, coconut, baking spice, toasted nut - and it also acts as a filter, stripping sulphur compounds out of the young spirit over time.",
       },
-      { type: "heading", level: 2, text: "6. The Rickhouse - Where Time Does the Work" },
+      {
+        type: "heading",
+        level: 2,
+        text: "6. The Rickhouse - Where Time Does the Work",
+      },
       {
         type: "paragraph",
         text: "The second stage that decides everything. Barrels are stacked on wooden ricks in warehouses that are deliberately not climate controlled, because the whole process depends on Kentucky's violent temperature swings. When the weather warms, the liquid expands into the char layer and extracts colour and flavour. When it cools, the wood contracts and pushes it back out. Bourbon breathes in and out of the wood, thousands of times, for years.",
@@ -2288,7 +2346,8 @@ export const BLOG_POSTS: BlogPost[] = [
   // ─────────────────────────────────────────────────────────────────────────
   {
     slug: "does-older-bourbon-mean-better",
-    title: "Does Older Bourbon Mean Better? What Age Statements Really Tell You",
+    title:
+      "Does Older Bourbon Mean Better? What Age Statements Really Tell You",
     subtitle:
       "A number on the label is the least reliable predictor of quality in American whiskey. Here is what it does and does not promise.",
     excerpt:
@@ -2339,7 +2398,11 @@ export const BLOG_POSTS: BlogPost[] = [
         type: "paragraph",
         text: "The practical consequence is that most bourbon reaches its best somewhere between eight and fifteen years. Below that it can taste hot and grain-forward; well beyond it, the wood starts winning.",
       },
-      { type: "heading", level: 2, text: "What Over-Oaked Actually Tastes Like" },
+      {
+        type: "heading",
+        level: 2,
+        text: "What Over-Oaked Actually Tastes Like",
+      },
       {
         type: "paragraph",
         text: "Too long in the barrel is a real and unpleasant outcome, not a theoretical one. Tannins accumulate until the whiskey turns drying and astringent, like over-steeped tea. Sweetness and fruit disappear behind bitter wood, sawdust and a sharp pencil-shavings note. The finish shortens rather than lengthens, because there is nothing left underneath the oak to carry it.",
@@ -2589,7 +2652,11 @@ export const BLOG_POSTS: BlogPost[] = [
         type: "paragraph",
         text: "The fifth member, and the one we do not currently stock. Eighteen year old straight rye at 90 proof - the opposite approach to the Handy, trading intensity for depth and a soft, dry, herbal complexity that only long-aged rye achieves. Worth knowing about so you can recognise a complete set, and worth trying if you ever get the chance at a bar.",
       },
-      { type: "heading", level: 2, text: "Why the Specifications Change Every Year" },
+      {
+        type: "heading",
+        level: 2,
+        text: "Why the Specifications Change Every Year",
+      },
       {
         type: "paragraph",
         text: "This is the part that catches people out, and it is the single most useful thing to understand about BTAC. There is no fixed recipe for a given bottle. Each year the distillery selects barrels on merit, and whatever those barrels give is what goes in - so age and proof shift, sometimes dramatically, from release to release.",
@@ -2612,7 +2679,11 @@ export const BLOG_POSTS: BlogPost[] = [
         type: "paragraph",
         text: "Retailers therefore distribute by lottery, waitlist, loyalty history or bundling, and every method leaves most customers disappointed because the arithmetic guarantees it. Anyone offering you guaranteed BTAC at retail, in quantity, on demand, is worth a second look - and the authenticity checks in [[link:/blog/best-bourbon-bottles-ranked|the ranked buying guide]] are worth running before money changes hands.",
       },
-      { type: "heading", level: 2, text: "Where to Start, and What to Drink Meanwhile" },
+      {
+        type: "heading",
+        level: 2,
+        text: "Where to Start, and What to Drink Meanwhile",
+      },
       {
         type: "paragraph",
         text: "If you are new to the collection, start with William Larue Weller if you like sweetness and body, or Thomas H. Handy if you want something that will teach you the most. Leave Eagle Rare 17 until you specifically want elegance rather than intensity, and treat Stagg as a bottle to grow into.",
@@ -2769,7 +2840,11 @@ export const BLOG_POSTS: BlogPost[] = [
         type: "paragraph",
         text: "Having watched a great many people arrive at our gate either delighted or defeated, the difference is almost always planning. Here is what actually works.",
       },
-      { type: "heading", level: 2, text: "Book Two Distilleries a Day. Three at Most." },
+      {
+        type: "heading",
+        level: 2,
+        text: "Book Two Distilleries a Day. Three at Most.",
+      },
       {
         type: "paragraph",
         text: "This is the single most useful thing on this page. Tours run 60 to 90 minutes. Add driving, parking, waiting for your slot and a tasting flight at the end, and each stop realistically consumes two and a half hours. Four stops is a ten hour day in which you will taste roughly twenty whiskeys and remember approximately four.",
@@ -2926,7 +3001,8 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
     faq: [
       {
-        question: "How many distilleries can you visit in one day on the Bourbon Trail?",
+        question:
+          "How many distilleries can you visit in one day on the Bourbon Trail?",
         answer:
           "Two comfortably, three at a push. Each stop consumes about two and a half hours once you include driving, parking and a tasting flight, and palate fatigue makes anything past the third largely wasted.",
       },
@@ -2995,7 +3071,11 @@ export const BLOG_POSTS: BlogPost[] = [
         type: "paragraph",
         text: "Buy [[product:weller-12-year|Weller 12 Year]] and [[product:blantons-original-single-barrel|Blanton's Original Single Barrel]] and taste them side by side at similar proof. One is soft, honeyed and bready; the other is peppery and structured. Whichever you reach for again tells you where to spend for the next two years. [[link:/blog/wheated-vs-high-rye-bourbon|The mash bill guide]] explains the mechanics.",
       },
-      { type: "heading", level: 2, text: "Rule Two: Cover the Range, Not the Top" },
+      {
+        type: "heading",
+        level: 2,
+        text: "Rule Two: Cover the Range, Not the Top",
+      },
       {
         type: "paragraph",
         text: "A shelf of five bottles all costing $250 is a worse collection than five bottles spanning $40 to $250, because the expensive shelf cannot answer most of the questions a collection exists to answer. You need something for a Tuesday, something for a cocktail, something for a guest who does not drink much bourbon, and something for the evening you want to concentrate.",
@@ -3011,7 +3091,11 @@ export const BLOG_POSTS: BlogPost[] = [
           "One genuine special-occasion bottle — and only one, at first.",
         ],
       },
-      { type: "heading", level: 2, text: "Rule Three: Stay Off the Secondary Market Early" },
+      {
+        type: "heading",
+        level: 2,
+        text: "Rule Three: Stay Off the Secondary Market Early",
+      },
       {
         type: "paragraph",
         text: "The secondary market is where new collectors lose the most money fastest, for three reasons. Prices are set by scarcity rather than quality, so you frequently pay a large premium for a whiskey you would not have chosen blind. Counterfeits are common at the top end, and refilled Van Winkle bottles circulate constantly. And new releases are at their most expensive in the first weeks after launch, when demand is loudest.",
@@ -3025,7 +3109,11 @@ export const BLOG_POSTS: BlogPost[] = [
         title: "The patience discount",
         text: "Waiting is the cheapest tool a collector has. Retail prices on allocated bourbon have risen while secondary prices have softened from their peak, and a bottle that is impossible to find in October is often merely difficult by March. Very little in bourbon rewards urgency.",
       },
-      { type: "heading", level: 2, text: "Rule Four: Get On Lists, Not Waiting Lists" },
+      {
+        type: "heading",
+        level: 2,
+        text: "Rule Four: Get On Lists, Not Waiting Lists",
+      },
       {
         type: "paragraph",
         text: "Allocated bottles are distributed by retailers, not by distilleries, and the quantities are fixed years before release. Retailers hand them out by lottery, loyalty history or bundling. The practical consequence is that a relationship with two or three shops you buy from regularly is worth far more than being on twenty anonymous email lists.",
@@ -3428,7 +3516,8 @@ export const BLOG_POSTS: BlogPost[] = [
           "No. Sugar, bitters and water flatten precisely the detail you pay for in an aged bottle. Eagle Rare 17 Year at $250 and Van Winkle Lot B at $300 both make drinks indistinguishable from ones built on an $80 bottled in bond bourbon.",
       },
       {
-        question: "Is a high rye or wheated bourbon better in an Old Fashioned?",
+        question:
+          "Is a high rye or wheated bourbon better in an Old Fashioned?",
         answer:
           "High rye for the classic build. Rye spice occupies the same mid-palate space as the sugar and pushes back against it. Wheated bourbon makes a rounder, sweeter drink that needs about a third less syrup and orange bitters rather than Angostura.",
       },
@@ -4068,7 +4157,11 @@ export const BLOG_POSTS: BlogPost[] = [
         title: "The single barrel exception",
         text: "Single barrel is the one production term in this territory that carries real meaning, because it is verifiable on the bottle: a genuine single barrel release usually prints its barrel number, warehouse and rick position. [[product:blantons-original-single-barrel|Blanton's Original]] does exactly that. If a label claims single barrel and gives you no barrel to point at, treat the claim as decoration.",
       },
-      { type: "heading", level: 2, text: "The Line That Tells You Who Made It" },
+      {
+        type: "heading",
+        level: 2,
+        text: "The Line That Tells You Who Made It",
+      },
       {
         type: "paragraph",
         text: "Somewhere on the back, usually in the smallest type on the bottle, is a phrase like Distilled by, Produced by, or Bottled by, followed by a company and a town. These are not interchangeable, and the difference is the most consequential thing on the label.",
@@ -4202,7 +4295,8 @@ export const BLOG_POSTS: BlogPost[] = [
           "Distilled Spirits Plant — the federal registration of the physical site where the whiskey was made. Each number identifies exactly one facility, so two brands sharing a DSP number were distilled in the same building.",
       },
       {
-        question: "What is the difference between distilled by and produced by?",
+        question:
+          "What is the difference between distilled by and produced by?",
         answer:
           "Distilled by means that company ran the still. Produced by is deliberately vague and often means they bought whiskey somebody else distilled. Bottled by says only that they filled the glass.",
       },
@@ -4318,7 +4412,8 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
     seo: {
-      metaTitle: "Bottled in Bond Explained: The 1897 Act and What It Guarantees",
+      metaTitle:
+        "Bottled in Bond Explained: The 1897 Act and What It Guarantees",
       metaDescription:
         "What bottled in bond means, the four federal requirements, why the proof is fixed at exactly 100, and why it is the only whiskey label claim that cannot be gamed.",
       focusKeyword: "bottled in bond",
@@ -4403,7 +4498,8 @@ export const BLOG_POSTS: BlogPost[] = [
           "One of the first US consumer protection laws, passed when adulterated whiskey was a genuine public health problem and decades before the FDA existed. It created a voluntary standard strict enough that meeting it was itself a guarantee.",
       },
       {
-        question: "Does bottled in bond mean the whiskey is only four years old?",
+        question:
+          "Does bottled in bond mean the whiskey is only four years old?",
         answer:
           "No. Four years is the minimum. Plenty of bonded whiskey is considerably older — the label simply stops describing age past that floor.",
       },
@@ -4438,7 +4534,11 @@ export const BLOG_POSTS: BlogPost[] = [
         type: "paragraph",
         text: "These two phrases sit side by side on the same shelf, in the same typeface, at similar prices, and they are not the same kind of statement. One describes a verifiable fact about a specific cask. The other is a phrase with no legal definition whatsoever. Knowing which is which changes how you read a whole shelf.",
       },
-      { type: "heading", level: 2, text: "Single Barrel: One Cask, Bottled Alone" },
+      {
+        type: "heading",
+        level: 2,
+        text: "Single Barrel: One Cask, Bottled Alone",
+      },
       {
         type: "paragraph",
         text: "A single barrel release is exactly what it says. One cask is selected, emptied, and bottled on its own without being married to anything else. It typically yields somewhere between 150 and 250 bottles depending on age and how much the angels took, and when those are gone that expression of that whiskey no longer exists.",
@@ -4451,7 +4551,11 @@ export const BLOG_POSTS: BlogPost[] = [
         type: "paragraph",
         text: "The consequence is variation, and it is the point rather than a defect. Two bottles of the same single barrel expression bought a year apart will not taste identical, because they came from different casks that sat in different parts of the warehouse. We walk through how that selection actually happens in [[link:/blog/master-distiller-barrel-selection-guide|the barrel selection guide]].",
       },
-      { type: "heading", level: 2, text: "Small Batch: A Number Nobody Defined" },
+      {
+        type: "heading",
+        level: 2,
+        text: "Small Batch: A Number Nobody Defined",
+      },
       {
         type: "paragraph",
         text: "There is no federal definition of small batch. None. No maximum barrel count, no ceiling on bottles produced, no requirement to disclose anything. The term was popularised in the 1980s to distinguish carefully-married whiskey from mass production, and it worked so well as marketing that it now appears on bottles produced by the hundreds of thousands.",
@@ -4584,7 +4688,8 @@ export const BLOG_POSTS: BlogPost[] = [
           "A single barrel chosen by a specific retailer or bar from a lineup the distillery offers for tasting. Its quality is the quality of the palate that selected it, which is why the same expression varies between shops.",
       },
       {
-        question: "Why do two bottles of the same single barrel taste different?",
+        question:
+          "Why do two bottles of the same single barrel taste different?",
         answer:
           "Because they came from different casks. Position in the rickhouse changes how a barrel matures, so two barrels filled the same day from the same batch can taste noticeably different after a decade.",
       },
@@ -4646,7 +4751,11 @@ export const BLOG_POSTS: BlogPost[] = [
         type: "paragraph",
         text: "The exception is fat. Fat coats the palate and blunts alcohol, which is why rich food makes strong whiskey drink softer than it does alone. That is a genuinely useful lever — a bourbon that seems too hot neat will often behave perfectly beside something fatty.",
       },
-      { type: "heading", level: 2, text: "Three Pairings Worth Building Around" },
+      {
+        type: "heading",
+        level: 2,
+        text: "Three Pairings Worth Building Around",
+      },
       { type: "heading", level: 3, text: "Aged cheddar and a wheated bourbon" },
       {
         type: "paragraph",
@@ -4815,7 +4924,11 @@ export const BLOG_POSTS: BlogPost[] = [
         type: "paragraph",
         text: "Walk into a good shop and ask for Pappy. You will be told, politely, that they do not have it, that they do not know when they will, and that the list closed months ago. This is not theatre. It is arithmetic, and once you see the arithmetic the whole frustrating business makes sense.",
       },
-      { type: "heading", level: 2, text: "Allocation Is a Decision Made a Decade Ago" },
+      {
+        type: "heading",
+        level: 2,
+        text: "Allocation Is a Decision Made a Decade Ago",
+      },
       {
         type: "paragraph",
         text: "A bourbon released this year was distilled and barrelled years before. A 15-year release was filled when the person buying it may not have been drinking bourbon at all. Whoever decided how many barrels to fill that season was guessing at demand more than a decade out, in a market that has since grown beyond anyone's forecast.",
@@ -4824,7 +4937,11 @@ export const BLOG_POSTS: BlogPost[] = [
         type: "paragraph",
         text: "There is no lever to pull now. You cannot age whiskey faster, and you cannot go back and fill more barrels in 2011. The supply of a 15-year whiskey in 2026 was fixed in 2011 and has only shrunk since, because the angels take their share every year — which we cover in [[link:/blog/the-angels-share|why age costs what it does]].",
       },
-      { type: "heading", level: 2, text: "What Allocation Actually Looks Like" },
+      {
+        type: "heading",
+        level: 2,
+        text: "What Allocation Actually Looks Like",
+      },
       {
         type: "paragraph",
         text: "The distillery decides how many cases each distributor gets. The distributor decides how many bottles each retailer gets. The retailer decides who gets the two or three they were given. By the time it reaches a shelf, a national release has been divided several times, and the last division is a shop owner with six bottles and two hundred regulars.",
@@ -5169,7 +5286,8 @@ export const BLOG_POSTS: BlogPost[] = [
     publishedAt: "2026-08-29",
     readTimeMinutes: 8,
     heroImage: "/process-rickhouse.webp",
-    heroAlt: "Barrels resting in a Kentucky rickhouse losing whiskey to evaporation",
+    heroAlt:
+      "Barrels resting in a Kentucky rickhouse losing whiskey to evaporation",
     tags: [
       "angel's share",
       "bourbon evaporation",
@@ -5435,7 +5553,8 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
     seo: {
-      metaTitle: "How to Build a Bourbon Home Bar: Six Bottles That Cover Everything",
+      metaTitle:
+        "How to Build a Bourbon Home Bar: Six Bottles That Cover Everything",
       metaDescription:
         "A home bar built on roles rather than accumulation — the house pour, cocktail base, soft one, conversation bottle, barrel proof and occasion bottle, plus the short equipment list.",
       focusKeyword: "bourbon home bar",
@@ -5677,15 +5796,35 @@ export const BLOG_POSTS: BlogPost[] = [
       wordClusters: [
         {
           cluster: "Grains",
-          terms: ["corn", "rye", "winter wheat", "malted barley", "grain bill", "sour mash"],
+          terms: [
+            "corn",
+            "rye",
+            "winter wheat",
+            "malted barley",
+            "grain bill",
+            "sour mash",
+          ],
         },
         {
           cluster: "Flavor",
-          terms: ["black pepper", "cinnamon", "caramel", "honeyed", "dry finish", "mid-palate"],
+          terms: [
+            "black pepper",
+            "cinnamon",
+            "caramel",
+            "honeyed",
+            "dry finish",
+            "mid-palate",
+          ],
         },
         {
           cluster: "Process",
-          terms: ["fermentation", "entry proof", "yeast strain", "enzyme conversion", "cook"],
+          terms: [
+            "fermentation",
+            "entry proof",
+            "yeast strain",
+            "enzyme conversion",
+            "cook",
+          ],
         },
       ],
     },
@@ -5702,7 +5841,8 @@ export const BLOG_POSTS: BlogPost[] = [
           "A mash bill is the recipe of grains used to make the whiskey, given as percentages by weight. U.S. law requires bourbon to be at least 51% corn; the rest is typically rye or wheat plus a small amount of malted barley.",
       },
       {
-        question: "What is the difference between high-rye and wheated bourbon?",
+        question:
+          "What is the difference between high-rye and wheated bourbon?",
         answer:
           "High-rye bourbon uses 18% or more rye and tastes peppery, dry and structured with a short, brisk finish. Wheated bourbon replaces rye with wheat, which adds little flavor of its own and leaves a soft, sweet, honeyed profile with a long fade.",
       },
@@ -5732,7 +5872,13 @@ export const BLOG_POSTS: BlogPost[] = [
       "https://images.unsplash.com/photo-1516594915697-87eb3b1c14ea?w=1600&q=85",
     heroAlt:
       "Rows of wine and sherry casks used for finishing bourbon in a dim warehouse",
-    tags: ["barrel finish", "secondary maturation", "port cask", "sherry cask", "toasted barrel"],
+    tags: [
+      "barrel finish",
+      "secondary maturation",
+      "port cask",
+      "sherry cask",
+      "toasted barrel",
+    ],
     content: [
       {
         type: "paragraph",
@@ -5844,19 +5990,43 @@ export const BLOG_POSTS: BlogPost[] = [
       wordClusters: [
         {
           cluster: "Casks",
-          terms: ["port pipe", "oloroso butt", "French oak", "rum cask", "toasted oak", "new charred oak"],
+          terms: [
+            "port pipe",
+            "oloroso butt",
+            "French oak",
+            "rum cask",
+            "toasted oak",
+            "new charred oak",
+          ],
         },
         {
           cluster: "Flavor",
-          terms: ["dried fig", "red fruit", "cocoa", "baking spice", "tannin", "mouthfeel"],
+          terms: [
+            "dried fig",
+            "red fruit",
+            "cocoa",
+            "baking spice",
+            "tannin",
+            "mouthfeel",
+          ],
         },
         {
           cluster: "Judgement",
-          terms: ["age statement", "integration", "disclosure", "over-finished", "base whiskey"],
+          terms: [
+            "age statement",
+            "integration",
+            "disclosure",
+            "over-finished",
+            "base whiskey",
+          ],
         },
       ],
     },
-    relatedProducts: ["blood-oath", "eagle-rare-10-year", "eh-taylor-barrel-proof"],
+    relatedProducts: [
+      "blood-oath",
+      "eagle-rare-10-year",
+      "eh-taylor-barrel-proof",
+    ],
     faq: [
       {
         question: "Is barrel-finished whiskey still legally bourbon?",
@@ -5894,7 +6064,13 @@ export const BLOG_POSTS: BlogPost[] = [
       "https://images.unsplash.com/photo-1582819509237-d6c264ee9a34?w=1600&q=85",
     heroAlt:
       "Close-up of the back label of a bourbon bottle showing the distillery and bottling statement",
-    tags: ["sourced bourbon", "non-distiller producer", "MGP", "label reading", "transparency"],
+    tags: [
+      "sourced bourbon",
+      "non-distiller producer",
+      "MGP",
+      "label reading",
+      "transparency",
+    ],
     content: [
       {
         type: "paragraph",
@@ -6007,15 +6183,33 @@ export const BLOG_POSTS: BlogPost[] = [
       wordClusters: [
         {
           cluster: "Label terms",
-          terms: ["distilled by", "bottled by", "produced by", "DSP number", "state of distillation"],
+          terms: [
+            "distilled by",
+            "bottled by",
+            "produced by",
+            "DSP number",
+            "state of distillation",
+          ],
         },
         {
           cluster: "Industry",
-          terms: ["non-distiller producer", "MGP Lawrenceburg", "contract distilling", "bulk whiskey", "master blender"],
+          terms: [
+            "non-distiller producer",
+            "MGP Lawrenceburg",
+            "contract distilling",
+            "bulk whiskey",
+            "master blender",
+          ],
         },
         {
           cluster: "Judgement",
-          terms: ["transparency", "traceability", "heritage claims", "age statement", "batch variation"],
+          terms: [
+            "transparency",
+            "traceability",
+            "heritage claims",
+            "age statement",
+            "batch variation",
+          ],
         },
       ],
     },
@@ -6062,7 +6256,13 @@ export const BLOG_POSTS: BlogPost[] = [
       "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=1600&q=85",
     heroAlt:
       "A warm bourbon cocktail in a heatproof glass with a cinnamon stick and orange peel",
-    tags: ["winter cocktails", "hot toddy", "old fashioned", "milk punch", "mulled cider"],
+    tags: [
+      "winter cocktails",
+      "hot toddy",
+      "old fashioned",
+      "milk punch",
+      "mulled cider",
+    ],
     content: [
       {
         type: "paragraph",
@@ -6265,19 +6465,43 @@ export const BLOG_POSTS: BlogPost[] = [
       wordClusters: [
         {
           cluster: "Technique",
-          terms: ["off the boil", "honey syrup", "clarification", "coffee filter", "dilution", "expressed peel"],
+          terms: [
+            "off the boil",
+            "honey syrup",
+            "clarification",
+            "coffee filter",
+            "dilution",
+            "expressed peel",
+          ],
         },
         {
           cluster: "Spice",
-          terms: ["cinnamon", "star anise", "allspice", "clove", "nutmeg", "maple"],
+          terms: [
+            "cinnamon",
+            "star anise",
+            "allspice",
+            "clove",
+            "nutmeg",
+            "maple",
+          ],
         },
         {
           cluster: "Serving",
-          terms: ["heatproof mug", "chilled coupe", "large cube", "warmed glass", "batch"],
+          terms: [
+            "heatproof mug",
+            "chilled coupe",
+            "large cube",
+            "warmed glass",
+            "batch",
+          ],
         },
       ],
     },
-    relatedProducts: ["eagle-rare-10-year", "eh-taylor-small-batch", "russells-reserve-13-year"],
+    relatedProducts: [
+      "eagle-rare-10-year",
+      "eh-taylor-small-batch",
+      "russells-reserve-13-year",
+    ],
     faq: [
       {
         question: "What bourbon should I use in winter cocktails?",
@@ -6427,19 +6651,43 @@ export const BLOG_POSTS: BlogPost[] = [
       wordClusters: [
         {
           cluster: "Glass types",
-          terms: ["Glencairn", "copita", "tumbler", "snifter", "tulip bowl", "stemmed glass"],
+          terms: [
+            "Glencairn",
+            "copita",
+            "tumbler",
+            "snifter",
+            "tulip bowl",
+            "stemmed glass",
+          ],
         },
         {
           cluster: "Aroma",
-          terms: ["ethanol vapour", "volatiles", "esters", "nosing", "concentration", "dispersal"],
+          terms: [
+            "ethanol vapour",
+            "volatiles",
+            "esters",
+            "nosing",
+            "concentration",
+            "dispersal",
+          ],
         },
         {
           cluster: "Practice",
-          terms: ["pour size", "resting", "watch glass", "dilution", "detergent residue"],
+          terms: [
+            "pour size",
+            "resting",
+            "watch glass",
+            "dilution",
+            "detergent residue",
+          ],
         },
       ],
     },
-    relatedProducts: ["george-t-stagg", "william-larue-weller", "blantons-original-single-barrel"],
+    relatedProducts: [
+      "george-t-stagg",
+      "william-larue-weller",
+      "blantons-original-single-barrel",
+    ],
     faq: [
       {
         question: "Does the glass really change how bourbon tastes?",
@@ -6458,13 +6706,858 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
   },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 30. Why Kentucky — Fundamentals
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "why-bourbon-is-made-in-kentucky",
+    title: "Why Kentucky? The Honest Answer",
+    subtitle:
+      "Bourbon does not legally have to come from Kentucky. Almost all of it does anyway, and the real reasons are less romantic than the ones you usually get.",
+    excerpt:
+      "Limestone water, hot summers, a river and a lot of history. Some of that story holds up and some of it is repeated far more confidently than the evidence supports — here is which is which.",
+    category: "Fundamentals",
+    author: "Eleanor Hayes",
+    authorTitle: "Master Distiller, Bourbon & Oak",
+    publishedAt: "2026-10-18",
+    readTimeMinutes: 9,
+    heroImage: "/process-rickhouse.webp",
+    heroAlt:
+      "Barrels resting in a Kentucky rickhouse through the seasonal temperature swing that matures bourbon",
+    tags: [
+      "why Kentucky bourbon",
+      "limestone water",
+      "bourbon climate",
+      "Kentucky bourbon history",
+      "bourbon law",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "Here is the part that surprises people: there is no law anywhere requiring bourbon to be made in Kentucky. It must be made in the United States, from at least 51% corn, aged in new charred oak, barrelled at no more than 125 proof and bottled at no less than 80. Texas, New York and Washington all make bourbon that meets every one of those tests. Kentucky is not in the definition.",
+      },
+      {
+        type: "paragraph",
+        text: "And yet the overwhelming majority of the world's bourbon comes from one state, most of it from a handful of counties you could drive across in an afternoon. That is worth explaining properly, because the usual explanation is half right and half marketing.",
+      },
+      { type: "heading", level: 2, text: "The Water Story, Carefully" },
+      {
+        type: "paragraph",
+        text: "Central Kentucky sits on a thick shelf of limestone. Water moving through it picks up calcium and magnesium and leaves iron behind. That last part matters: iron reacts with the tannins coming out of charred oak and turns whiskey dark, bitter and unpleasant. A distiller drawing hard, iron-free water has one fewer problem to solve.",
+      },
+      {
+        type: "paragraph",
+        text: "All of that is true. What is harder to defend is how much of the finished flavour gets credited to it. Most bourbon is cut to bottling strength with water that has been treated, and the proportion of a bottle's character that traces to the local aquifer rather than to grain, yeast, fermentation and above all wood is small. The limestone mattered enormously to the first distillers, who had no way to treat anything. It matters less now than the signage suggests.",
+      },
+      {
+        type: "callout",
+        title: "Where this story comes from",
+        text: 'Almost every confident claim you will read about Kentucky limestone water traces back to distillery marketing rather than to published analysis. The geology is real and the iron problem is real. The leap from there to "this is why it tastes better" is one the evidence does not make.',
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "The Climate Does More Than the Water",
+      },
+      {
+        type: "paragraph",
+        text: "If one natural factor deserves the credit, it is the weather, and specifically how violently it changes. Kentucky summers are genuinely hot and the winters genuinely cold. A barrel is not a sealed container; oak breathes. Heat pushes the whiskey into the wood, cold pulls it back out, and every cycle drags more sugar, vanillin and colour out of the char.",
+      },
+      {
+        type: "paragraph",
+        text: "This is why a bourbon at eight years can taste more developed than a Scotch at fifteen. Scotland's cool, damp, even climate moves whiskey in and out of the wood far more gently. Neither is better. They are different machines running at different speeds, and Kentucky's runs hot.",
+      },
+      {
+        type: "paragraph",
+        text: "The cost of that speed is evaporation, which is why a genuinely old Kentucky bourbon is rare and expensive rather than merely patient. We have written separately about what a barrel gives up each year, and the arithmetic is unforgiving.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Corn, and a River Going the Right Way",
+      },
+      {
+        type: "paragraph",
+        text: "Corn grew well here, and corn is the bulk of the mash. But plenty of places grow corn. The part that actually decided it was the Ohio River, and where it goes.",
+      },
+      {
+        type: "paragraph",
+        text: "A farmer west of the Appalachians in the late 1700s had a transport problem. Grain was bulky, heavy and perishable, and the mountains stood between him and the eastern markets. Distilled into whiskey, the same harvest became compact, stable and worth several times more by weight. Loaded onto a flatboat it could go down the Ohio to the Mississippi and on to New Orleans, which is where a great deal of it went.",
+      },
+      {
+        type: "list",
+        items: [
+          "Grain was hard to move and spoiled; whiskey was dense, stable and valuable.",
+          "The Ohio River ran west and south, away from the mountains that blocked wagon routes east.",
+          "Barrels sat on boats for weeks or months in the heat, which aged them whether anyone intended it or not.",
+          "Kentucky had the limestone, the corn and the river in the same place — few other regions had all three.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "That long hot float downriver is probably the most underrated fact in bourbon's history. Nobody set out to invent barrel ageing. It happened to whiskey in transit, people noticed the barrels that had travelled furthest tasted best, and an accident became a method.",
+      },
+      { type: "heading", level: 2, text: "The Part That Is Just History" },
+      {
+        type: "paragraph",
+        text: 'The honest answer to "why Kentucky" is that an industry concentrated where an industry already was. Once the warehouses, coopers, bottlers, trucking routes and generations of people who know how to run a still are all in one place, the gravity is enormous. A new distillery in Kentucky can hire someone who has done the job for twenty years. A new distillery in a state with no bourbon history has to train them.',
+      },
+      {
+        type: "paragraph",
+        text: "Prohibition concentrated it further. The handful of operations permitted to keep producing for medicinal purposes were mostly here, so when repeal came, Kentucky had working plants, aged stock and licences while most of the country was starting from nothing. The gap that opened in 1920 never really closed.",
+      },
+      {
+        type: "callout",
+        text: "None of this means good bourbon cannot be made elsewhere. It increasingly is. It means the deck is stacked, and has been for two centuries.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "What This Means for a Bottle on Your Shelf",
+      },
+      {
+        type: "paragraph",
+        text: 'Treat "Kentucky Straight Bourbon" as a useful signal and not a guarantee. It tells you the whiskey was distilled and aged in a state with deep competence and a hard climate, which is worth something real. It does not tell you the distillery is old, that the liquid is theirs, or that anyone walked a rickhouse to choose it.',
+      },
+      {
+        type: "paragraph",
+        text: "For that you read the rest of the label — the age statement if there is one, the proof, whether it says distilled by or merely produced by. A [[product:blantons-original-single-barrel|single barrel from one named rickhouse]] tells you considerably more about its origin than the word Kentucky does.",
+      },
+    ],
+    seo: {
+      metaTitle: "Why Is Bourbon Made in Kentucky? The Honest Answer",
+      metaDescription:
+        "Bourbon does not legally have to come from Kentucky. Limestone water, the climate swing, the Ohio River and two centuries of history — what actually explains it, and which parts are marketing.",
+      focusKeyword: "why is bourbon made in Kentucky",
+      primaryKeywords: [
+        "why is bourbon made in Kentucky",
+        "Kentucky limestone water bourbon",
+        "does bourbon have to be made in Kentucky",
+        "Kentucky bourbon climate",
+      ],
+      longTailKeywords: [
+        "does bourbon have to come from kentucky by law",
+        "why does kentucky limestone water matter for bourbon",
+        "why does bourbon age faster than scotch",
+        "why did bourbon start in kentucky",
+        "is kentucky straight bourbon better",
+      ],
+      wordClusters: [
+        {
+          cluster: "Geology",
+          terms: [
+            "limestone shelf",
+            "iron-free water",
+            "calcium",
+            "magnesium",
+            "aquifer",
+          ],
+        },
+        {
+          cluster: "Climate",
+          terms: [
+            "temperature swing",
+            "barrel breathing",
+            "char extraction",
+            "angel's share",
+            "maturation speed",
+          ],
+        },
+        {
+          cluster: "History",
+          terms: [
+            "Ohio River",
+            "flatboat",
+            "New Orleans trade",
+            "Prohibition",
+            "medicinal whiskey",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "blantons-original-single-barrel",
+      "eagle-rare-10-year",
+      "weller-12-year",
+      "eh-taylor-small-batch",
+    ],
+    faq: [
+      {
+        question: "Does bourbon have to be made in Kentucky?",
+        answer:
+          'No. Bourbon must be made in the United States from at least 51% corn and aged in new charred oak, but no law ties it to Kentucky. Texas, New York and Washington all produce legal bourbon. Only the words "Kentucky Straight Bourbon" require the state.',
+      },
+      {
+        question: "Why is Kentucky limestone water good for bourbon?",
+        answer:
+          "Limestone filters iron out of the water and adds calcium and magnesium. Iron is the important part: it reacts with tannins from charred oak and turns whiskey dark and bitter. How much of the finished flavour it explains is far less certain than distillery signage suggests.",
+      },
+      {
+        question: "Why does Kentucky's climate matter for ageing bourbon?",
+        answer:
+          "Oak breathes. Hot summers push whiskey into the wood and cold winters pull it back out, and each cycle extracts more from the char. Kentucky's swing is severe, which is why its bourbon matures faster than whisky aged in a cool, even climate.",
+      },
+      {
+        question: "What did the Ohio River have to do with bourbon?",
+        answer:
+          "It solved a transport problem. Grain was heavy and spoiled; distilled into whiskey it became compact, stable and valuable, and the river carried it west and south to New Orleans. Barrels aged for months in the heat on the way, which is how barrel ageing was discovered rather than invented.",
+      },
+      {
+        question:
+          "Is Kentucky bourbon actually better than bourbon from elsewhere?",
+        answer:
+          "Not automatically. Kentucky has the climate, the infrastructure and two centuries of accumulated skill, which stacks the odds. But the state on the label tells you nothing about the age, the proof or whether the distillery made the liquid itself.",
+      },
+    ],
+  },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 33. Kentucky's Bourbon Towns — Travel
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "kentucky-bourbon-towns-compared",
+    title: "Kentucky's Bourbon Towns, and What Each One Is For",
+    subtitle:
+      "Bardstown, Louisville, Frankfort, Lawrenceburg, Loretto, Versailles. They are not interchangeable, and picking the wrong base costs you a day in the car.",
+    excerpt:
+      "The distilleries are spread across half a dozen towns with real distances between them. Here is what each town actually offers, who it suits, and which combinations work in a weekend.",
+    category: "Travel",
+    author: "Wyatt Brennan",
+    authorTitle: "Head Bartender, The Cellar at Bourbon & Oak",
+    publishedAt: "2026-10-18",
+    readTimeMinutes: 10,
+    heroImage: "/visit-shop.webp",
+    heroAlt:
+      "Kentucky bourbon on the shelves of a tasting room in Bardstown, the centre of the state's distilling country",
+    tags: [
+      "Kentucky bourbon towns",
+      "Bardstown",
+      "Louisville",
+      "Frankfort",
+      "bourbon trail",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "People talk about the Kentucky Bourbon Trail as though it were a road. It is not. It is a scattering of distilleries across several counties, and the towns they sit in have genuinely different characters. Choosing between them is the single decision that most affects how your trip goes, and it gets made casually.",
+      },
+      {
+        type: "paragraph",
+        text: "One useful warning before the list: distillery addresses are confusing. Several operations carry the mailing address of one town while sitting closer to another, and directories disagree with each other as a result. Trust a map over a postal address when you plan.",
+      },
+      { type: "heading", level: 2, text: "Bardstown — The Dense One" },
+      {
+        type: "paragraph",
+        text: "If you want the most distilleries per mile driven, this is it. Heaven Hill is here, the largest family-owned American spirits producer by barrel inventory. So are Barton 1792, Willett and Lux Row, and the town has the plainest claim to the title of Bourbon Capital of the World.",
+      },
+      {
+        type: "paragraph",
+        text: "What makes Bardstown work as a base is not just density but scale: it is a small town, so you can walk to dinner, and the distilleries are close enough that a slow morning does not wreck the day. It is also where [[link:/visit/bardstown|our own distillery sits]], on the same ground since 1876.",
+      },
+      {
+        type: "list",
+        items: [
+          "Best for: a first trip, and anyone who wants to drive as little as possible.",
+          "On site or nearby: Heaven Hill, Barton 1792, Willett, Lux Row.",
+          "Watch for: it is small. Book dinner, especially at weekends and in autumn.",
+        ],
+      },
+      { type: "heading", level: 2, text: "Louisville — The Urban One" },
+      {
+        type: "paragraph",
+        text: "Louisville does something none of the rural towns can: it puts distilleries on a city street. The Whiskey Row revival brought Old Forester, Angel's Envy, Rabbit Hole and the Evan Williams Bourbon Experience into walking distance of each other and of a real restaurant scene.",
+      },
+      {
+        type: "paragraph",
+        text: "The trade-off is that urban distilleries are mostly finishing, bottling and visitor operations. If you want to stand in a working rickhouse that smells of evaporating whiskey, you will be driving out of town to do it. Louisville is the better city and the lesser rickhouse experience, and which matters more is a question about you.",
+      },
+      {
+        type: "list",
+        items: [
+          "Best for: non-drinking companions, a short trip, anyone flying in — [[link:/visit/louisville|the airport is here]].",
+          "On site: Old Forester, Angel's Envy, Rabbit Hole, Evan Williams Bourbon Experience.",
+          "Watch for: walkable does not mean complete. Plan at least one day out of the city.",
+        ],
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Frankfort and Versailles — The Grand Ones",
+      },
+      {
+        type: "paragraph",
+        text: "Buffalo Trace anchors [[link:/visit/frankfort|Frankfort]] and is a National Historic Landmark, and the scale of the place lands differently in person than in photographs. Castle & Key is in the same area, in a restored Victorian complex that is worth seeing for the architecture alone.",
+      },
+      {
+        type: "paragraph",
+        text: "Half an hour east, Woodford Reserve sits on McCracken Pike outside Versailles in horse country, and the drive to it through Woodford County is the prettiest approach to any distillery in the state. Pair the two and you have a full, unhurried day.",
+      },
+      {
+        type: "list",
+        items: [
+          "Best for: the most famous names, and the best scenery of any cluster.",
+          "On site: Buffalo Trace and Castle & Key near Frankfort; Woodford Reserve near Versailles.",
+          "Watch for: Buffalo Trace tours are free and book out far in advance. Plan weeks ahead, not days.",
+        ],
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Lawrenceburg — The Two-Distillery Town",
+      },
+      {
+        type: "paragraph",
+        text: "Anderson County has Wild Turkey and Four Roses, which between them cover an unusually wide stretch of what bourbon can be. Wild Turkey runs bold and high-proof; Four Roses runs ten separate recipes across two mash bills and five yeast strains, and will explain all of them if you let it.",
+      },
+      {
+        type: "paragraph",
+        text: "It is a thin town for an overnight, but as a day out from [[link:/visit/lexington|Lexington]] or Frankfort it is one of the most instructive pairings available — two houses, two philosophies, half an hour apart.",
+      },
+      { type: "heading", level: 2, text: "Loretto — The Pilgrimage" },
+      {
+        type: "paragraph",
+        text: "Maker's Mark sits on Star Hill Farm in Marion County, and it is a National Historic Landmark and a genuinely beautiful site. It is also properly remote. The drive out from Bardstown is about forty minutes through farmland, and there is very little else out there.",
+      },
+      {
+        type: "paragraph",
+        text: "Treat it as a half-day excursion rather than a stop between two others. People who try to slot it in as a third distillery after two morning tours end up rushing the best-looking site on the trail.",
+      },
+      {
+        type: "callout",
+        title: "The one scheduling mistake everyone makes",
+        text: "These towns look close together on a map and are not. Bardstown to Frankfort is around an hour. Louisville to Lawrenceburg is longer. Two distilleries in two different towns in one day is comfortable; three is a car journey with whiskey in it.",
+      },
+      { type: "heading", level: 2, text: "Which Base to Pick" },
+      {
+        type: "list",
+        items: [
+          "Flying in, short trip, mixed group: Louisville. Walkable, with a day trip out.",
+          "First proper bourbon trip: Bardstown. Most distilleries, least driving.",
+          "You have been before and want the famous houses: Frankfort, with Versailles alongside.",
+          "You care about how recipes differ: Lawrenceburg, for Four Roses alone.",
+          "You want one perfect site and do not mind the drive: Loretto.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "Whatever you pick, buy at the distillery when something catches you. Gift shops carry bottlings that never reach general distribution, and the [[product:elmer-t-lee-single-barrel|single barrel you taste on a tour]] is frequently the exact thing you cannot find at home.",
+      },
+    ],
+    seo: {
+      metaTitle: "Kentucky's Bourbon Towns Compared | Where to Base Your Trip",
+      metaDescription:
+        "Bardstown, Louisville, Frankfort, Versailles, Lawrenceburg and Loretto — which distilleries are in each, how far apart they really are, and which town to base a bourbon trip in.",
+      focusKeyword: "Kentucky bourbon towns",
+      primaryKeywords: [
+        "Kentucky bourbon towns",
+        "where to stay Kentucky bourbon trail",
+        "Bardstown vs Louisville bourbon",
+        "bourbon trail base town",
+      ],
+      longTailKeywords: [
+        "should i stay in bardstown or louisville for the bourbon trail",
+        "which kentucky town has the most distilleries",
+        "how far is bardstown from frankfort",
+        "where is makers mark distillery located",
+        "which distilleries are in louisville kentucky",
+      ],
+      wordClusters: [
+        {
+          cluster: "Towns",
+          terms: [
+            "Bardstown",
+            "Louisville",
+            "Frankfort",
+            "Versailles",
+            "Lawrenceburg",
+            "Loretto",
+            "Nelson County",
+          ],
+        },
+        {
+          cluster: "Distilleries",
+          terms: [
+            "Heaven Hill",
+            "Barton 1792",
+            "Buffalo Trace",
+            "Woodford Reserve",
+            "Four Roses",
+            "Wild Turkey",
+            "Maker's Mark",
+          ],
+        },
+        {
+          cluster: "Planning",
+          terms: [
+            "base town",
+            "drive time",
+            "tour booking",
+            "Whiskey Row",
+            "gift shop exclusives",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "elmer-t-lee-single-barrel",
+      "blantons-original-single-barrel",
+      "weller-12-year",
+      "eh-taylor-small-batch",
+      "russells-reserve-13-year",
+    ],
+    faq: [
+      {
+        question:
+          "Should I stay in Bardstown or Louisville for the bourbon trail?",
+        answer:
+          "Bardstown if you want the most distilleries with the least driving, Louisville if you are flying in, travelling with non-drinkers, or want restaurants and walkable urban distilleries. Louisville's distilleries are largely visitor and bottling operations rather than working rickhouses.",
+      },
+      {
+        question: "Which Kentucky town has the most distilleries?",
+        answer:
+          "Bardstown and the surrounding Nelson County area. Heaven Hill, Barton 1792, Willett and Lux Row are all in or near the town, which is why it calls itself the Bourbon Capital of the World.",
+      },
+      {
+        question: "Where is Maker's Mark?",
+        answer:
+          "On Star Hill Farm at Loretto, in Marion County — a National Historic Landmark, and genuinely remote. It is roughly forty minutes from Bardstown through farmland, so treat it as a half-day excursion rather than a quick third stop.",
+      },
+      {
+        question: "How far apart are the Kentucky bourbon towns?",
+        answer:
+          "Further than the map suggests. Bardstown to Frankfort is about an hour, and Loretto is forty minutes from Bardstown in the other direction. Two distilleries in two towns in a day works comfortably; three becomes a driving day.",
+      },
+      {
+        question: "Which distilleries are in Frankfort?",
+        answer:
+          "Buffalo Trace, a National Historic Landmark and the anchor of the area, and Castle & Key in a restored Victorian complex nearby. Woodford Reserve is about half an hour east, outside Versailles.",
+      },
+    ],
+  },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 32. Distillery Tour — Behind the Scenes
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "what-happens-on-a-distillery-tour",
+    title: "What Actually Happens on a Distillery Tour",
+    subtitle:
+      "An hour, in order: the grain, the cook, the smell that catches people out, the rickhouse heat, and the pour at the end.",
+    excerpt:
+      "Most guides to bourbon tourism tell you how to book. Nobody tells you what you are about to be standing in front of, what it will smell like, or which questions are worth asking while you have a distiller in front of you.",
+    category: "Behind the Scenes",
+    author: "Eleanor Hayes",
+    authorTitle: "Master Distiller, Bourbon & Oak",
+    publishedAt: "2026-10-18",
+    readTimeMinutes: 9,
+    heroImage: "/process-fermenter.webp",
+    heroAlt: "An open fermenter of bubbling bourbon mash on a distillery tour",
+    tags: [
+      "distillery tour",
+      "bourbon tourism",
+      "fermenter",
+      "rickhouse",
+      "bourbon tasting",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "A distillery tour follows the whiskey, in the order the whiskey goes. Once you know the sequence the whole hour makes sense, and you stop nodding politely at a tank and start seeing what it is for.",
+      },
+      { type: "heading", level: 2, text: "Grain, and the Mill" },
+      {
+        type: "paragraph",
+        text: "It opens with sacks or a silo and a recipe. This is the mash bill — corn first by law, then rye or wheat, then malted barley. You will usually be handed a dish of each grain to smell. Do it properly. The malted barley in particular smells like a biscuit, and it is the only thing in the building that will smell sweet until much later.",
+      },
+      {
+        type: "paragraph",
+        text: "The mill cracks that grain open. Nothing dramatic happens here, but it is loud, and it is the one step where the guide will mention particle size as if it matters. It does: grind too fine and the mash sets like concrete, too coarse and you leave sugar behind.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "The Cook, and the Part That Surprises People",
+      },
+      {
+        type: "paragraph",
+        text: "Cracked grain goes into hot water in a cooker, and starch becomes sugar. Then it is pitched with yeast into a fermenter, and this is where most tours lose their composure.",
+      },
+      {
+        type: "paragraph",
+        text: "An open fermenter is a vat several times your height, full of mash in violent motion. On day one it looks like porridge. By day two or three it is churning, foaming and giving off carbon dioxide hard enough that leaning over the rim will make you flinch and pull back. Guides enjoy inviting people to lean in. It is not dangerous at the rail, but it is genuinely startling, and it does not smell like whiskey — it smells sour, bready and faintly of beer, because that is essentially what it is.",
+      },
+      {
+        type: "callout",
+        title: "Ask this one",
+        text: 'Ask whether they run a sour mash, and what proportion of backset goes into each cook. Everyone says "sour mash" on the label; far fewer visitors ever ask what it actually means. It is spent mash from a previous batch, added to drop the pH, keep bacteria down and hold the house character steady from batch to batch.',
+      },
+      { type: "heading", level: 2, text: "The Still" },
+      {
+        type: "paragraph",
+        text: "What comes out of the fermenter is distiller's beer, at single-digit alcohol. The column still concentrates it. In most Kentucky distilleries this is a tall copper-and-steel column rather than the onion-shaped pot still people picture, and the second pass happens in a doubler or thumper beside it.",
+      },
+      {
+        type: "paragraph",
+        text: "Somewhere here you will be shown clear spirit running through a glass case. That is new make — white dog — and it is bourbon in every respect except the one that matters. Nothing you are looking at is brown yet. All of the colour, and most of what people describe as the flavour, is still sitting in a stack of empty barrels somewhere else on site.",
+      },
+      { type: "heading", level: 2, text: "The Rickhouse" },
+      {
+        type: "paragraph",
+        text: "If one part of the tour is worth the ticket, it is this. A rickhouse is a many-storey timber frame holding thousands of barrels, and in summer the upper floors are brutally hot. The smell is the thing: thick, sweet, oaky and alcoholic, and it is whiskey leaving. That is the angel's share, happening around you.",
+      },
+      {
+        type: "list",
+        items: [
+          "Barrels on upper floors run hotter, age faster and come out bolder and more oak-driven.",
+          "Lower floors run cooler and slower and tend to stay softer and sweeter.",
+          "This is why two barrels filled the same day from the same batch taste different a decade later.",
+          "It is also why single barrel bottlings vary, and why a distiller walks the floors to choose them.",
+          "Expect stairs, uneven boards, and in July, real heat. Wear something you can climb in.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "If you are lucky, someone draws a sample straight from a barrel with a copper thief. Barrel-strength whiskey out of the wood is a long way from what the same liquid becomes at bottling proof — hotter, thicker and considerably more interesting than most people expect.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "The Tasting, and How Not to Waste It",
+      },
+      {
+        type: "paragraph",
+        text: "Tours end with pours, usually three, usually small, usually in a room designed to sell you something afterwards. None of that makes the whiskey less good, but it does mean the hour is working on you, and a little method helps.",
+      },
+      {
+        type: "list",
+        ordered: true,
+        items: [
+          "Smell with your mouth slightly open. A closed nose over a high-proof pour gets you ethanol and nothing else.",
+          "Take a small first sip purely to acclimatise. Judge the second one.",
+          "Ask for water on the side, and add it a drop at a time to the strongest pour.",
+          "Go in proof order, lowest first, whatever order they are poured in.",
+          "Eat something beforehand. Three pours before lunch at eleven in the morning is more than it sounds.",
+        ],
+      },
+      { type: "heading", level: 2, text: "Questions Worth Asking" },
+      {
+        type: "paragraph",
+        text: "You have a person in front of you who does this for a living. Most visitors ask how long it ages and leave it there.",
+      },
+      {
+        type: "list",
+        items: [
+          "What is your entry proof into the barrel, and has it changed?",
+          "Where in the rickhouse did this particular bottling come from?",
+          "Do you distil everything you sell here, or is any of it sourced?",
+          "What does your yeast add, and how long have you run that strain?",
+          "Which barrels disappointed you this year?",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "That last one is the best question on the list. A guide who can answer it honestly is telling you something real about how the place runs, and the answer is usually far more interesting than the script.",
+      },
+      {
+        type: "callout",
+        text: "A tour is an hour of context that permanently changes how a bottle reads. After you have stood in a hot rickhouse, an age statement stops being a number on a label and starts being a decision somebody made two decades ago.",
+      },
+    ],
+    seo: {
+      metaTitle: "What Happens on a Bourbon Distillery Tour | Step by Step",
+      metaDescription:
+        "What you actually see on a bourbon distillery tour, in order — the mash bill, the fermenter, the still, the rickhouse and the tasting — plus the questions worth asking while you are there.",
+      focusKeyword: "what happens on a distillery tour",
+      primaryKeywords: [
+        "what happens on a distillery tour",
+        "bourbon distillery tour what to expect",
+        "distillery tour guide",
+        "bourbon tasting tour",
+      ],
+      longTailKeywords: [
+        "what do you see on a bourbon distillery tour",
+        "what does a fermenter smell like",
+        "what to wear on a distillery tour",
+        "questions to ask on a distillery tour",
+        "what is white dog bourbon",
+      ],
+      wordClusters: [
+        {
+          cluster: "Production",
+          terms: [
+            "mash bill",
+            "cooker",
+            "fermenter",
+            "sour mash",
+            "backset",
+            "column still",
+            "doubler",
+            "white dog",
+          ],
+        },
+        {
+          cluster: "Maturation",
+          terms: [
+            "rickhouse",
+            "barrel thief",
+            "floor position",
+            "angel's share",
+            "barrel strength",
+          ],
+        },
+        {
+          cluster: "Visiting",
+          terms: [
+            "tasting flight",
+            "proof order",
+            "adding water",
+            "what to wear",
+            "tour booking",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "eh-taylor-single-barrel",
+      "blantons-original-single-barrel",
+      "elmer-t-lee-single-barrel",
+      "stagg-bourbon",
+    ],
+    faq: [
+      {
+        question: "What do you actually see on a bourbon distillery tour?",
+        answer:
+          "The process in order: the grains of the mash bill, the mill, the cooker, an open fermenter, the column still and doubler, then a rickhouse full of ageing barrels. Most tours finish with a tasting of two or three pours.",
+      },
+      {
+        question: "What does a bourbon fermenter smell like?",
+        answer:
+          "Sour, bready and faintly of beer — not of whiskey. It is mash mid-ferment, throwing off enough carbon dioxide that leaning over the rim will make you pull back sharply.",
+      },
+      {
+        question: "What should I wear on a distillery tour?",
+        answer:
+          "Closed shoes you can climb stairs in. Rickhouses have steep stairs and uneven boards, and upper floors get genuinely hot in summer. Layers help, because the warehouse and the still house are very different temperatures.",
+      },
+      {
+        question: "What is white dog?",
+        answer:
+          "Unaged spirit straight off the still, clear rather than brown. It is legally bourbon in every respect except time in wood — which is where the colour and most of the flavour come from.",
+      },
+      {
+        question: "Why do barrels from the same batch taste different?",
+        answer:
+          "Where they sat. Upper rickhouse floors run hotter and age faster, producing bolder, more oak-driven whiskey; lower floors stay cooler and softer. That variation is the whole basis of single barrel selection.",
+      },
+    ],
+  },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 31. Buying Allocated Bourbon Safely — Buying Guide
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "how-to-buy-allocated-bourbon-safely",
+    title: "Buying Allocated Bourbon Without Getting Burned",
+    subtitle:
+      "The bottle you want sells for several times its list price, the seller is a stranger, and most of the price guides you will find are two years out of date.",
+    excerpt:
+      "Counterfeits, stale price data and sellers who vanish after payment. What actually protects you when buying a bottle that costs more than its label says — and what only looks like it does.",
+    category: "Buying Guide",
+    author: "Wyatt Brennan",
+    authorTitle: "Head Bartender, The Cellar at Bourbon & Oak",
+    publishedAt: "2026-10-18",
+    readTimeMinutes: 10,
+    heroImage: "/blog-collecting.webp",
+    heroAlt:
+      "Allocated bourbon bottles on a shelf, the kind that trade well above their list price",
+    tags: [
+      "allocated bourbon",
+      "fake bourbon",
+      "counterfeit whiskey",
+      "secondary market",
+      "bourbon prices",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "There is a category of bourbon where the number on the label and the number you pay have almost nothing to do with each other. A bottle listed at three hundred dollars changes hands for fifteen hundred. The distillery sets one price, allocation does the rest, and everything after that happens between strangers.",
+      },
+      {
+        type: "paragraph",
+        text: "That gap is where the problems live. Here is what genuinely reduces your risk, and what people believe helps but does not.",
+      },
+      { type: "heading", level: 2, text: "Most Fakes Are Real Bottles" },
+      {
+        type: "paragraph",
+        text: "This is the thing to understand before anything else. The common counterfeit in the United States is not a forged bottle with a bad label. It is a genuine, empty bottle — bought openly, because empties of sought-after bourbon have their own resale market — refilled with something cheap and resealed.",
+      },
+      {
+        type: "paragraph",
+        text: "Which means most of the authentication advice circulating online is checking the wrong thing. The glass is real. The label is real, because it was printed by the distillery. The capsule may well be real too. Holding it up to the light and admiring the print quality tells you nothing at all.",
+      },
+      {
+        type: "callout",
+        title: "A method that does not work",
+        text: "You will see people recommend checking the tax strip. Federal tax strips were discontinued decades ago, and nothing in the published guidance from distillers treats a strip as proof of anything. Do not let its presence or absence reassure you either way.",
+      },
+      { type: "heading", level: 2, text: "What Actually Helps" },
+      {
+        type: "paragraph",
+        text: "Short version: who you buy from matters far more than what the bottle looks like. Buffalo Trace's own brand people say plainly that you should not buy their allocated bottles on the secondary market at all, which is blunt advice from a party with no reason to be dramatic about it.",
+      },
+      {
+        type: "list",
+        items: [
+          "Buy from a seller with a name, a business address and something to lose. A retailer who will still exist next month behaves differently from an account created last week.",
+          "Treat a price well under the going rate as a warning, not a find. Nobody sells a scarce bottle cheaply by accident.",
+          "Ask a direct question about shipping, age verification and who signs for it. Evasion on that is the clearest single signal there is.",
+          "Be suspicious of photos that are blurry, cropped tight, or reused — ask for a new photo of the actual bottle with something specific in frame.",
+          "On numbered or single barrel bottles, the number is data. Bottle numbers from empties sold publicly have turned up later on supposedly sealed bottles.",
+          "Pay by a method with a dispute process. A bank transfer to a stranger has none.",
+        ],
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Know the Real Price Before You Shop",
+      },
+      {
+        type: "paragraph",
+        text: "The second trap is softer than fraud and catches far more people: paying a fair-looking price that stopped being fair two years ago.",
+      },
+      {
+        type: "paragraph",
+        text: "The bourbon secondary market is not a one-way ratchet. Several formerly ferocious bottles have fallen hard. The Weller range is a clear example — bottles that genuinely traded at four to seven hundred dollars during the boom now change hands for a fraction of that, and the decline is still visible month to month in auction records.",
+      },
+      {
+        type: "paragraph",
+        text: "The difficulty is that the internet remembers the peak. A great deal of the pricing content that ranks well was written in 2023 or 2024 and never updated, so a buyer researching in good faith finds the old number, treats it as the going rate, and pays it happily to someone who knows better.",
+      },
+      {
+        type: "list",
+        items: [
+          "Check the date on any price guide before you trust it. If it carries no date, discard it.",
+          "Prefer sources that publish dated, completed sales over sources that publish asking prices.",
+          "Asking prices run well above clearing prices — often by half again. They are two different numbers and they get quoted interchangeably.",
+          "Price by release year on anything from an annual collection. A 2023 bottling and a 2025 bottling of the same name are not the same product and do not trade at the same price.",
+        ],
+      },
+      {
+        type: "callout",
+        text: "A fair price for an allocated bottle is a real thing, but it has a date attached. Any figure quoted to you without one is a guess wearing a suit.",
+      },
+      { type: "heading", level: 2, text: "The Age-Statement Trap" },
+      {
+        type: "paragraph",
+        text: "Within a single family, names stay the same while the liquid underneath changes. Proof moves between annual releases. Age statements get dropped. A bottle that was fifteen years old in one release may carry no age statement in the next, and the shelf price often does not move to match.",
+      },
+      {
+        type: "paragraph",
+        text: "Read the actual label rather than the brand. A [[product:george-t-stagg|barrel-proof release with its proof printed on the front]] tells you exactly what is in it that year. The same name on a different year's bottle can be a meaningfully different whiskey.",
+      },
+      { type: "heading", level: 2, text: "When to Simply Walk Away" },
+      {
+        type: "paragraph",
+        text: "Some bottles are not worth the exposure at any price you will be offered. If a seller cannot be identified, will not answer plainly, or wants payment in a form you cannot reverse, there is no bottle rare enough to justify it.",
+      },
+      {
+        type: "paragraph",
+        text: "The consolation is that the gap between the famous allocated bottles and the very good ordinary ones is far narrower than the price gap suggests. A [[product:eh-taylor-small-batch|bonded small batch]] or a [[product:eagle-rare-10-year|ten-year single barrel]] bought from someone you can phone will give you a better evening than a doubtful bottle bought from someone you cannot.",
+      },
+    ],
+    seo: {
+      metaTitle:
+        "How to Buy Allocated Bourbon Safely | Fakes, Prices & Red Flags",
+      metaDescription:
+        "Most fake bourbon is a genuine bottle refilled, so checking the label proves nothing. What actually protects you, why online price guides are usually stale, and when to walk away.",
+      focusKeyword: "how to buy allocated bourbon safely",
+      primaryKeywords: [
+        "how to buy allocated bourbon safely",
+        "how to spot fake bourbon",
+        "bourbon secondary market prices",
+        "counterfeit bourbon",
+      ],
+      longTailKeywords: [
+        "how to tell if a bottle of pappy is fake",
+        "is it safe to buy bourbon on the secondary market",
+        "why are bourbon secondary prices falling",
+        "what is a fair price for allocated bourbon",
+        "do bourbon tax strips prove authenticity",
+      ],
+      wordClusters: [
+        {
+          cluster: "Counterfeits",
+          terms: [
+            "refilled bottles",
+            "empty bottle market",
+            "resealed capsule",
+            "bottle numbering",
+            "provenance",
+          ],
+        },
+        {
+          cluster: "Pricing",
+          terms: [
+            "asking price",
+            "clearing price",
+            "auction records",
+            "stale price guides",
+            "release year",
+          ],
+        },
+        {
+          cluster: "Seller risk",
+          terms: [
+            "payment reversal",
+            "age verification",
+            "shipping restrictions",
+            "red flags",
+            "trusted retailer",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "pappy-van-winkle-15-year",
+      "george-t-stagg",
+      "weller-12-year",
+      "eh-taylor-small-batch",
+      "eagle-rare-10-year",
+      "blantons-original-single-barrel",
+    ],
+    faq: [
+      {
+        question: "How can you tell if a bottle of bourbon is fake?",
+        answer:
+          "Often you cannot from the bottle alone, because the usual counterfeit is a genuine empty refilled and resealed. The glass, label and capsule are all real. Provenance — who you are buying from and what they can prove — protects you where inspection does not.",
+      },
+      {
+        question: "Do tax strips prove a bourbon bottle is authentic?",
+        answer:
+          "No. Federal tax strips were discontinued decades ago and no distiller treats them as proof of authenticity. Their presence or absence tells you nothing useful.",
+      },
+      {
+        question:
+          "Is it safe to buy allocated bourbon on the secondary market?",
+        answer:
+          "It carries real risk, and Buffalo Trace's own brand representatives advise against it for their allocated bottles. If you do, buy from an identifiable business, pay by a reversible method, and treat an unusually low price as a warning.",
+      },
+      {
+        question: "Why do online bourbon price guides disagree so much?",
+        answer:
+          "Most quote asking prices rather than completed sales, and asking prices run well above what bottles actually clear for. Many also date from the 2023 to 2024 peak and were never updated, so they overstate today's market, sometimes badly.",
+      },
+      {
+        question: "Are bourbon secondary prices still rising?",
+        answer:
+          "Not uniformly. Several once-ferocious bottles have fallen significantly from their peak, with the Weller range among the clearest examples. Check dated auction records rather than an undated guide before agreeing a price.",
+      },
+    ],
+  },
 ];
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
 export function getAllPosts(): BlogPost[] {
   return [...BLOG_POSTS].sort((a, b) =>
-    a.publishedAt < b.publishedAt ? 1 : -1
+    a.publishedAt < b.publishedAt ? 1 : -1,
   );
 }
 
