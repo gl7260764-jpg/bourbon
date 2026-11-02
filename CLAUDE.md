@@ -8,6 +8,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run build` — Production build
 - `npm run start` — Start production server
 - `npm run lint` — Run ESLint
+- `npm run check:sitemap` — Assert the sitemap covers every indexable route
+
+## Sitemap
+
+`src/app/sitemap.ts` is generated from `src/lib/blog.ts`, `src/lib/locations.ts`
+and the product table, so content enrols itself. Run `npm run check:sitemap`
+after adding, renaming or removing any public page — it fails if an indexable
+route is missing from the sitemap or a sitemap URL has no route. A page that
+should stay out declares `index: false` in its static `export const metadata`.
 
 ## Architecture
 
