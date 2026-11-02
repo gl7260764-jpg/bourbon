@@ -7551,6 +7551,1037 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
   },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 34. Yeast — Craftsmanship
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "bourbon-yeast-explained",
+    title: "Yeast: The Ingredient Nobody Talks About",
+    subtitle:
+      "Grain gets a mash bill on the label and wood gets the credit for flavour. The organism that actually makes the alcohol is kept in a locked fridge and never mentioned.",
+    excerpt:
+      "Two distilleries can run the same recipe, the same water and the same barrels and produce whiskeys you would never confuse. Often the difference is a strain of yeast one of them has been keeping alive for decades.",
+    category: "Craftsmanship",
+    author: "Eleanor Hayes",
+    authorTitle: "Master Distiller, Bourbon & Oak",
+    publishedAt: "2026-11-02",
+    readTimeMinutes: 8,
+    heroImage: "/process-fermenter.webp",
+    heroAlt:
+      "Bourbon mash fermenting in an open fermenter, where yeast does the work that decides much of the flavour",
+    tags: [
+      "bourbon yeast",
+      "fermentation",
+      "proprietary yeast strain",
+      "congeners",
+      "sour mash",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "A bourbon label will tell you the grain. A tour will spend twenty minutes on the barrel. Almost nobody will tell you about the yeast, and that is strange, because yeast is the only thing in the building that is alive and the only thing that actually makes alcohol.",
+      },
+      {
+        type: "paragraph",
+        text: "It is also, at a lot of distilleries, the most closely guarded thing on site.",
+      },
+      { type: "heading", level: 2, text: "What Yeast Is Actually Doing" },
+      {
+        type: "paragraph",
+        text: "The cooker turns starch into sugar. Yeast turns that sugar into alcohol and carbon dioxide — but it does not stop there, and the rest is the interesting part. Alongside the ethanol it throws off a crowd of other compounds: esters, acids, aldehydes, higher alcohols. Collectively these are congeners, and they are where fruit, floral notes, banana, pear, green apple and a good deal of spice come from.",
+      },
+      {
+        type: "paragraph",
+        text: "Wood cannot put fruit into whiskey. Oak gives vanilla, caramel, coconut, baking spice and colour. If you are getting ripe banana or stewed apple off a glass of bourbon, the yeast put it there during a few days in the fermenter, and the barrel spent years failing to cover it up.",
+      },
+      {
+        type: "list",
+        items: [
+          "Alcohol is the yeast's main product; the congeners are the flavour.",
+          "Fruit and floral notes trace to fermentation, not to the barrel.",
+          "Fermentation temperature changes the result — run hot and you get different esters than running cool.",
+          "Fermentation length matters too, with longer ferments generally building more character.",
+          "The same strain in two different houses will still behave differently, because everything around it differs.",
+        ],
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Why Distilleries Guard Their Strain",
+      },
+      {
+        type: "paragraph",
+        text: "A mash bill can be copied in an afternoon. Anyone can buy new charred oak. A yeast strain that a distillery has propagated continuously for decades cannot be bought, and it is the one component of a house style a competitor genuinely cannot replicate.",
+      },
+      {
+        type: "paragraph",
+        text: "So the strains get treated like crown jewels. They are held in multiple locations in case of fire. There are long-told stories in Kentucky of distillers taking a jar of yeast home at the weekend so that a single disaster could not end a lineage, and whether or not every version of that story is literally true, the instinct behind it is real.",
+      },
+      {
+        type: "callout",
+        title: "The clearest proof it matters",
+        text: "Four Roses runs five proprietary yeast strains across two mash bills, which gives them ten distinct recipes from one distillery. Same water, same warehouses, same people — and ten recognisably different whiskeys. Nothing demonstrates the yeast's contribution more plainly.",
+      },
+      { type: "heading", level: 2, text: "Sour Mash Is Not a Flavour" },
+      {
+        type: "paragraph",
+        text: 'You will see "sour mash" on a great many labels and it is widely misread as a taste. It is not. It is a process control, and it exists to protect the yeast.',
+      },
+      {
+        type: "paragraph",
+        text: "A portion of spent mash from a previous distillation — the backset — goes into the new cook. That drops the pH, which does two useful things: it discourages the bacteria that would otherwise compete with the yeast, and it gives each batch a consistent starting acidity. The result is that batch two hundred ferments like batch one.",
+      },
+      {
+        type: "paragraph",
+        text: "It is the brewing equivalent of a sourdough starter, and like a sourdough starter its purpose is consistency rather than sourness. Almost every Kentucky bourbon is made this way, which is why the phrase on a label tells you considerably less than it appears to.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "What You Can Taste, and What to Ask",
+      },
+      {
+        type: "paragraph",
+        text: "Try this with two bourbons of similar age and proof from different houses. Set aside the oak notes — the vanilla, the caramel, the char — and concentrate on everything else. The fruit, the florals, the particular shape of the spice: that is the fermentation talking, and it is the most reliable signature of where a whiskey was made.",
+      },
+      {
+        type: "paragraph",
+        text: "It is also why [[product:blantons-original-single-barrel|single barrel bottlings]] are worth paying attention to. With no blending to average things out, whatever the yeast did in that one fermenter is still sitting in the glass, which is part of why two bottles of the same label can differ so much.",
+      },
+      {
+        type: "paragraph",
+        text: "If you are ever on a tour with someone who actually works there, ask how long they have run their strain and what they think it contributes. It is a better question than how long the whiskey ages, and the answer is usually more interesting.",
+      },
+    ],
+    seo: {
+      metaTitle: "Bourbon Yeast Explained | Why It Matters More Than You Think",
+      metaDescription:
+        "Yeast makes the alcohol and most of the fruit and floral flavour in bourbon, yet it never appears on a label. What it does, why distilleries guard their strains, and what sour mash actually means.",
+      focusKeyword: "bourbon yeast",
+      primaryKeywords: [
+        "bourbon yeast",
+        "what does yeast do in bourbon",
+        "sour mash meaning",
+        "bourbon fermentation",
+      ],
+      longTailKeywords: [
+        "why do distilleries keep yeast strains secret",
+        "what is sour mash in bourbon",
+        "does yeast affect bourbon flavour",
+        "what are congeners in whiskey",
+        "how long does bourbon ferment",
+      ],
+      wordClusters: [
+        {
+          cluster: "Fermentation",
+          terms: [
+            "congeners",
+            "esters",
+            "fermenter",
+            "distiller's beer",
+            "fermentation temperature",
+          ],
+        },
+        {
+          cluster: "Sour mash",
+          terms: [
+            "backset",
+            "setback",
+            "pH control",
+            "bacteria",
+            "batch consistency",
+          ],
+        },
+        {
+          cluster: "House style",
+          terms: [
+            "proprietary strain",
+            "yeast propagation",
+            "recipe variation",
+            "single barrel",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "blantons-original-single-barrel",
+      "elmer-t-lee-single-barrel",
+      "eh-taylor-single-barrel",
+      "weller-12-year",
+    ],
+    faq: [
+      {
+        question: "What does yeast do in bourbon?",
+        answer:
+          "It converts sugar into alcohol, and in doing so produces congeners — esters, acids and higher alcohols — that carry most of the fruit and floral character. Oak supplies vanilla, caramel and colour; the yeast supplies almost everything that is not wood.",
+      },
+      {
+        question: "What does sour mash actually mean?",
+        answer:
+          "That spent mash from a previous distillation, called backset, was added to the new cook to lower its pH. It suppresses competing bacteria and keeps each batch starting the same way. It is a consistency control, not a flavour, and nearly all Kentucky bourbon uses it.",
+      },
+      {
+        question: "Why do distilleries keep their yeast secret?",
+        answer:
+          "Because it is the one thing a competitor cannot copy. A mash bill can be replicated and barrels can be bought, but a strain propagated continuously for decades cannot be, which makes it the most defensible part of a house style.",
+      },
+      {
+        question: "Can yeast really change how bourbon tastes?",
+        answer:
+          "Substantially. Four Roses runs five yeast strains across two mash bills to produce ten distinct recipes from one distillery, with the same water, warehouses and staff. The differences between them are largely fermentation.",
+      },
+      {
+        question: "Does fermentation time affect bourbon flavour?",
+        answer:
+          "Yes. Both the length of the ferment and the temperature it runs at change which congeners the yeast produces, so two batches of identical grain can finish with noticeably different fruit and spice character.",
+      },
+    ],
+  },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 35. The Barrel — Behind the Scenes
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "how-a-bourbon-barrel-is-made",
+    title: "How a Bourbon Barrel Is Made",
+    subtitle:
+      "Thirty-odd pieces of oak, no glue, no nails, and a fire inside it. The container is an ingredient, and this is how it gets built.",
+    excerpt:
+      "Bourbon must go into new charred oak, so every barrel is used once and the cooperage is part of the recipe. Seasoning, raising, toasting, charring — and what the char numbers on a barrel head actually mean.",
+    category: "Behind the Scenes",
+    author: "Eleanor Hayes",
+    authorTitle: "Master Distiller, Bourbon & Oak",
+    publishedAt: "2026-11-02",
+    readTimeMinutes: 9,
+    heroImage: "/process-cooperage.webp",
+    heroAlt:
+      "Oak staves being raised and fired into a bourbon barrel at a cooperage",
+    tags: [
+      "bourbon barrel",
+      "cooperage",
+      "char level",
+      "American white oak",
+      "barrel making",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "Bourbon law is short and most of it is about grain and proof. One clause is about the container: new, charred oak. Not used, not toasted — new and charred. That single requirement means every barrel of bourbon ever made went into a vessel built for it and never used for bourbon again, and it makes the cooperage part of the recipe rather than part of the packaging.",
+      },
+      { type: "heading", level: 2, text: "The Wood, and Why It Is Oak" },
+      {
+        type: "paragraph",
+        text: "American white oak does something most timber cannot: it holds liquid. Its vessels are plugged with growths that block the pores lengthwise, so a barrel made from it will keep whiskey inside for twenty years while still breathing with the weather. Red oak, which looks similar on a stave, will not — liquid runs straight through it.",
+      },
+      {
+        type: "paragraph",
+        text: "The wood is also loaded with the compounds bourbon takes its flavour from. Vanillin, which reads as vanilla. Lactones, which read as coconut. Wood sugars that caramelise under fire. The oak is not a neutral box; it is where most of what you taste is stored, waiting for heat to release it.",
+      },
+      { type: "heading", level: 2, text: "Seasoning: The Slow Part" },
+      {
+        type: "paragraph",
+        text: "Staves are not used green. They are stacked outdoors and left to weather, usually for many months and sometimes for years, through rain and sun and freeze. Kiln drying is faster and is also used, but open-air seasoning does something a kiln does not: rain leaches out harsh tannins, and fungi and bacteria working on the surface break down bitter compounds into gentler ones.",
+      },
+      {
+        type: "paragraph",
+        text: "This is why distilleries talk about stave seasoning at all, and why some pay for longer. A barrel built from wood seasoned two years behaves differently from one built from wood seasoned six months, and no amount of ageing afterwards undoes the difference.",
+      },
+      { type: "heading", level: 2, text: "Raising the Barrel" },
+      {
+        type: "paragraph",
+        text: "A cooper assembles roughly thirty staves inside a metal hoop, standing them in a circle so the whole thing opens outward like a wooden skirt. The staves are cut with a slight taper and a subtle curve, and nothing holds them to each other.",
+      },
+      {
+        type: "paragraph",
+        text: "That is the part worth repeating. There is no glue and there are no nails in the body of a bourbon barrel. It is held together by the pressure of steel hoops and by the wood swelling tight when it gets wet. A barrel is watertight because of geometry and friction, which is a two-thousand-year-old piece of engineering that nobody has improved on.",
+      },
+      {
+        type: "paragraph",
+        text: "To close that skirt, the staves are heated and steamed until they will bend, then drawn in with a cable until the far ends meet and the hoops can be driven down. Only the heads — the flat circles at each end — are cut to fit into a groove and sealed, traditionally with a reed.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Toast, Then Char — They Are Not the Same",
+      },
+      {
+        type: "paragraph",
+        text: "These two words get used interchangeably and they describe different things.",
+      },
+      {
+        type: "paragraph",
+        text: "Toasting is slow, moderate heat applied without open flame. It cooks the wood below the surface, caramelising wood sugars and developing the vanilla and spice compounds over several minutes. Charring is a short blast of direct fire that sets the inside of the barrel alight and leaves a layer of actual charcoal.",
+      },
+      {
+        type: "paragraph",
+        text: "Both matter, and they do different jobs. The toasted layer underneath is the pantry — that is where the flavour comes from. The charcoal on top is a filter, stripping sulphur compounds and other roughness out of the spirit as it moves in and out of the wood with the seasons. One gives, the other takes away.",
+      },
+      { type: "heading", level: 2, text: "What the Char Numbers Mean" },
+      {
+        type: "paragraph",
+        text: "Char is graded, and the grades are simply how long the fire is left burning inside the barrel. The common scale runs one to four.",
+      },
+      {
+        type: "list",
+        items: [
+          "Char #1 — around fifteen seconds. The lightest, leaving more toasted wood accessible and letting fruit and spice through.",
+          "Char #2 — around thirty seconds.",
+          "Char #3 — commonly cited anywhere from thirty-five to forty-five seconds, depending who you ask. A workhorse level.",
+          "Char #4 — around fifty-five seconds, and the one with a nickname. The surface cracks into shiny plates that look like hide, which is why it is called alligator char.",
+        ],
+      },
+      {
+        type: "callout",
+        title: "Worth knowing before you repeat it",
+        text: "The timings above are the figures the industry quotes, but sources genuinely disagree on char #3 — some say thirty-five seconds, others forty-five. Treat the numbers as the shape of the thing rather than as specifications, and note that some cooperages run scales beyond four.",
+      },
+      {
+        type: "paragraph",
+        text: "A heavier char does two things at once: more charcoal to filter through, and more cracked surface for the whiskey to get into. Lighter chars tend to leave more of the fruit and spice from fermentation audible; heavier chars push vanilla, caramel and colour forward. Neither is better, and a distillery choosing char #4 for one brand and char #3 for another is making a flavour decision as deliberate as the mash bill.",
+      },
+      { type: "heading", level: 2, text: "One Use, and Then Where?" },
+      {
+        type: "paragraph",
+        text: "Since the barrel must be new, a Kentucky distillery fills it once and then has a perfectly good cask it can never use for bourbon again. Those barrels go abroad and into other categories, which is why so much Scotch, Irish whiskey, rum and tequila is matured in ex-bourbon wood. A large slice of the world's whisky tastes the way it does because of a clause in American law.",
+      },
+      {
+        type: "paragraph",
+        text: "Some come back. Barrels are rebuilt, re-charred, or cut up into staves for finishing, and a [[link:/blog/barrel-finished-bourbon-guide|second cask]] is how a distillery adds a layer a new barrel cannot. But for the bourbon itself, it is one fill and one only — which is precisely why the thing is built with this much care.",
+      },
+    ],
+    seo: {
+      metaTitle:
+        "How a Bourbon Barrel Is Made | Cooperage, Toast and Char Levels",
+      metaDescription:
+        "Why bourbon barrels are American white oak, how staves are seasoned and raised without glue or nails, the difference between toasting and charring, and what char levels 1 to 4 mean.",
+      focusKeyword: "how a bourbon barrel is made",
+      primaryKeywords: [
+        "how a bourbon barrel is made",
+        "bourbon barrel char levels",
+        "alligator char",
+        "cooperage bourbon",
+      ],
+      longTailKeywords: [
+        "what is alligator char bourbon",
+        "difference between toasting and charring a barrel",
+        "why is bourbon aged in new charred oak",
+        "why american white oak for bourbon barrels",
+        "what happens to used bourbon barrels",
+      ],
+      wordClusters: [
+        {
+          cluster: "Materials",
+          terms: [
+            "American white oak",
+            "stave",
+            "barrel head",
+            "seasoning",
+            "tannins",
+            "vanillin",
+            "lactones",
+          ],
+        },
+        {
+          cluster: "Construction",
+          terms: [
+            "raising",
+            "steel hoops",
+            "no glue",
+            "steam bending",
+            "watertight",
+          ],
+        },
+        {
+          cluster: "Fire",
+          terms: [
+            "toasting",
+            "charring",
+            "char level",
+            "alligator char",
+            "charcoal filtration",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "eh-taylor-barrel-proof",
+      "blood-oath",
+      "stagg-bourbon",
+      "russells-reserve-13-year",
+      "george-t-stagg",
+    ],
+    faq: [
+      {
+        question: "Why is bourbon aged in new charred oak barrels?",
+        answer:
+          "Because the law requires it. Bourbon must go into a new charred oak container, so no barrel is used twice for bourbon. That makes the barrel an ingredient rather than packaging, and it is why so much of bourbon's flavour and all of its colour come from wood.",
+      },
+      {
+        question: "What is alligator char?",
+        answer:
+          "Char level 4, the heaviest of the common grades, produced by about fifty-five seconds of fire inside the barrel. The surface cracks into shiny plates resembling hide, which gives it the name, and the extra charcoal both filters the spirit and increases the surface it can reach.",
+      },
+      {
+        question:
+          "What is the difference between toasting and charring a barrel?",
+        answer:
+          "Toasting is slow, indirect heat that cooks the wood below the surface and develops vanilla and spice. Charring is a short blast of open flame that leaves a charcoal layer on top. The toasted wood supplies flavour; the charcoal filters out sulphur and roughness.",
+      },
+      {
+        question: "Are bourbon barrels glued or nailed together?",
+        answer:
+          "Neither. The body is held by steel hoop pressure and by the wood swelling when wet — roughly thirty tapered staves pressed against each other. Only the flat heads at each end sit in a cut groove and are sealed, traditionally with reed.",
+      },
+      {
+        question: "What happens to bourbon barrels after one use?",
+        answer:
+          "They are sold on. Because bourbon cannot reuse them, ex-bourbon casks go to Scotch, Irish whiskey, rum and tequila producers worldwide, or are rebuilt and re-charred. A great deal of the world's whisky is matured in wood a Kentucky distillery filled once.",
+      },
+    ],
+  },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 36. Rye vs Bourbon — Fundamentals
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "rye-whiskey-vs-bourbon",
+    title: "Rye Whiskey vs Bourbon: One Grain Apart",
+    subtitle:
+      "The legal difference is a single number. The difference in the glass is the difference between a cake and a cracker.",
+    excerpt:
+      "Both are American, both go into new charred oak, both are bottled at 80 proof or more. Swap the majority grain from corn to rye and almost everything about the drinking changes — including which cocktails work.",
+    category: "Fundamentals",
+    author: "Wyatt Brennan",
+    authorTitle: "Head Bartender, The Cellar at Bourbon & Oak",
+    publishedAt: "2026-11-02",
+    readTimeMinutes: 8,
+    heroImage: "/bar-cabinet.webp",
+    heroAlt: "Bottles of bourbon and rye whiskey on a bar cabinet shelf",
+    tags: [
+      "rye whiskey",
+      "bourbon vs rye",
+      "mash bill",
+      "Sazerac",
+      "Manhattan",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "Federal law defines both categories in the same place and with almost identical wording. Distil below 160 proof, barrel at 125 or less, use new charred oak, bottle at 80 or above, add nothing for colour or flavour. The categories part company on one clause: bourbon needs at least 51% corn, rye needs at least 51% rye.",
+      },
+      {
+        type: "paragraph",
+        text: "That is the whole legal distinction. One word in one line. And it produces two spirits nobody would mistake for each other.",
+      },
+      { type: "heading", level: 2, text: "What the Grain Actually Does" },
+      {
+        type: "paragraph",
+        text: "Corn is sweet and broad. It brings body, a rounded mouthfeel and the caramel-and-vanilla base that oak then builds on. A corn-led whiskey arrives soft and fills the middle of your palate.",
+      },
+      {
+        type: "paragraph",
+        text: "Rye is the opposite animal. It is dry, peppery and angular, with notes that run to black pepper, clove, mint, dill and anise. Where bourbon spreads out, rye draws in. It finishes faster and cleaner, and it leaves a sort of crispness that bourbon does not.",
+      },
+      {
+        type: "list",
+        items: [
+          "Bourbon: sweet, round, vanilla and caramel forward, longer and softer finish.",
+          "Rye: dry, peppery, herbal and mint-edged, tighter and quicker finish.",
+          "Both get colour, vanilla and oak spice from new charred oak — that part does not change.",
+          '"Straight" on either means at least two years in wood, and under four years the age must be stated.',
+          "A high-rye bourbon is still bourbon. More rye than its neighbours, but corn still has the majority.",
+        ],
+      },
+      {
+        type: "callout",
+        title: "The confusion worth clearing up",
+        text: "High-rye bourbon and rye whiskey are not the same thing. A high-rye bourbon might run 20 to 35% rye with corn still dominant. A rye whiskey has rye in the majority. The first is a bourbon with attitude; the second is a different category.",
+      },
+      { type: "heading", level: 2, text: "Why Rye Nearly Disappeared" },
+      {
+        type: "paragraph",
+        text: "Rye was America's first great whiskey, and it was centred on Pennsylvania and Maryland rather than Kentucky. In 1810 Pennsylvania shipped several times more spirit than Kentucky did, most of it rye from the Monongahela valley.",
+      },
+      {
+        type: "paragraph",
+        text: "Prohibition ended it. The distilleries closed, the land and labour went to industry, and by the time the country was drinking again the public had moved to lighter things — vodka, gin, Canadian whisky. Rye limped through the middle of the twentieth century as a category that barely sold, and several famous names were sold off, moved to Kentucky, or turned into Canadian products.",
+      },
+      {
+        type: "paragraph",
+        text: "It came back through bartenders. The cocktail revival of the 2000s needed a spirit that could hold its shape against vermouth and bitters, rediscovered that the original recipes called for rye, and dragged the category back into production. Rye today exists largely because people wanted to make a proper Manhattan.",
+      },
+      { type: "heading", level: 2, text: "Which One for Which Drink" },
+      {
+        type: "paragraph",
+        text: "This is where the difference stops being academic. Rye's dryness is a structural asset in a cocktail: it stands up to sweet modifiers instead of disappearing into them.",
+      },
+      {
+        type: "list",
+        items: [
+          "Manhattan — rye, properly. Sweet vermouth needs something dry to argue with, and bourbon makes it cloying.",
+          "Sazerac — rye by definition, with absinthe and Peychaud's. It is the drink the category is built around.",
+          "Old Fashioned — either, and genuinely a matter of taste. Bourbon gives a rounder, sweeter drink; rye gives a sharper, drier one.",
+          "Whiskey Sour — bourbon suits it, because the lemon already supplies the sharpness.",
+          "Boulevardier — bourbon for richness against the Campari, though rye works if you want it leaner.",
+          "Neat — whichever you prefer. There is no rule here and anyone who tells you otherwise is selling something.",
+        ],
+      },
+      { type: "heading", level: 2, text: "Where to Start With Rye" },
+      {
+        type: "paragraph",
+        text: "If bourbon is what you know, the jump can be abrupt. The useful bridge is a high-rye bourbon: still corn-led and familiar, but with the pepper turned up enough that you can hear what rye is going to do.",
+      },
+      {
+        type: "paragraph",
+        text: "From there, a proper rye at strength makes the case better than anything mild. [[product:thomas-h-handy-sazerac|A barrel-proof rye]] is dry and peppery in a way no bourbon is, with clove and cinnamon where a bourbon would give caramel — and it is the rye entry in a collection otherwise made up of bourbons, which tells you how differently the category drinks.",
+      },
+      {
+        type: "paragraph",
+        text: "Put a bourbon and a rye of similar proof side by side and taste them against each other rather than separately. The contrast does the teaching, and you will never need the legal definition again.",
+      },
+    ],
+    seo: {
+      metaTitle:
+        "Rye Whiskey vs Bourbon | The Real Difference, and Which to Use",
+      metaDescription:
+        "Bourbon needs 51% corn, rye needs 51% rye — that is the whole legal difference. What it does to the flavour, why rye nearly died out, and which spirit belongs in which cocktail.",
+      focusKeyword: "rye whiskey vs bourbon",
+      primaryKeywords: [
+        "rye whiskey vs bourbon",
+        "difference between rye and bourbon",
+        "is rye whiskey bourbon",
+        "high rye bourbon vs rye",
+      ],
+      longTailKeywords: [
+        "should i use rye or bourbon in a manhattan",
+        "what is the legal difference between rye and bourbon",
+        "is high rye bourbon the same as rye whiskey",
+        "why did rye whiskey disappear",
+        "what does rye whiskey taste like",
+      ],
+      wordClusters: [
+        {
+          cluster: "Law",
+          terms: [
+            "51% rye",
+            "51% corn",
+            "new charred oak",
+            "straight whiskey",
+            "age statement",
+          ],
+        },
+        {
+          cluster: "Flavour",
+          terms: [
+            "black pepper",
+            "clove",
+            "dill",
+            "mint",
+            "anise",
+            "caramel",
+            "vanilla",
+          ],
+        },
+        {
+          cluster: "Cocktails",
+          terms: [
+            "Manhattan",
+            "Sazerac",
+            "Old Fashioned",
+            "Boulevardier",
+            "vermouth",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "thomas-h-handy-sazerac",
+      "rock-hill-farms-single-barrel",
+      "blantons-original-single-barrel",
+      "russells-reserve-13-year",
+      "eh-taylor-small-batch",
+    ],
+    faq: [
+      {
+        question: "What is the difference between rye whiskey and bourbon?",
+        answer:
+          "One clause of law. Bourbon must be at least 51% corn and rye whiskey at least 51% rye; everything else — new charred oak, 160 proof distillation limit, 125 barrel entry, 80 proof minimum — is the same. Corn gives sweetness and body, rye gives dry pepper and herbs.",
+      },
+      {
+        question: "Is high-rye bourbon the same as rye whiskey?",
+        answer:
+          "No. A high-rye bourbon still has corn in the majority, with rye raised as the secondary grain. A rye whiskey has rye in the majority. The first is a bourbon with more spice; the second is a separate category.",
+      },
+      {
+        question: "Should a Manhattan be made with rye or bourbon?",
+        answer:
+          "Rye, traditionally and for a good reason. Sweet vermouth needs a dry spirit to balance it, and bourbon's sweetness can make the drink cloying. Bourbon is the better choice in a Whiskey Sour, where the lemon already supplies the edge.",
+      },
+      {
+        question: "Why did rye whiskey almost disappear?",
+        answer:
+          "Prohibition closed the Pennsylvania and Maryland distilleries that were its heartland, and by repeal the public had moved to lighter spirits. Rye survived marginally until the cocktail revival of the 2000s brought it back, largely because classic recipes call for it.",
+      },
+      {
+        question: "What does rye whiskey taste like compared to bourbon?",
+        answer:
+          "Drier and sharper. Expect black pepper, clove, mint, dill and anise where a bourbon gives caramel and vanilla, with a tighter, quicker finish. Both still carry oak spice and colour from the charred barrel.",
+      },
+    ],
+  },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 37. Hosting a Tasting — Buying Guide
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "how-to-host-a-bourbon-tasting",
+    title: "How to Host a Bourbon Tasting at Home",
+    subtitle:
+      "Four bottles, six people, two hours. The planning takes twenty minutes and it is the difference between a tasting and a party where people drank whiskey.",
+    excerpt:
+      "How many bottles, how much to pour, what order to run them in, what to feed people, and the one mistake that ruins the second half of the evening.",
+    category: "Buying Guide",
+    author: "Wyatt Brennan",
+    authorTitle: "Head Bartender, The Cellar at Bourbon & Oak",
+    publishedAt: "2026-11-02",
+    readTimeMinutes: 9,
+    heroImage: "/shop-shelves.webp",
+    heroAlt:
+      "A row of bourbon bottles lined up ready for a home tasting flight",
+    tags: [
+      "bourbon tasting",
+      "whiskey flight",
+      "hosting",
+      "tasting party",
+      "glassware",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "A home tasting is not a dinner party with bourbon on the table. The point is that people compare things, notice differences and leave knowing something they did not know. That needs a small amount of structure, and almost none of it is expensive.",
+      },
+      { type: "heading", level: 2, text: "Four Bottles. Not Six." },
+      {
+        type: "paragraph",
+        text: "Four is the number. Three works and feels slight; five is possible with a disciplined group; six is where palates stop cooperating and the evening turns into drinking. Your sense of smell fatigues far faster than you expect, and the last two pours of a long flight are wasted on everyone.",
+      },
+      {
+        type: "paragraph",
+        text: "Pour small. Half an ounce per person per bottle is plenty for tasting, and generous compared with what most distilleries pour. Four bottles at half an ounce is two ounces of whiskey each across two hours, which is a sane evening. Keep the bottles out so anyone can revisit a favourite properly afterwards.",
+      },
+      { type: "heading", level: 2, text: "Pick a Theme With One Variable" },
+      {
+        type: "paragraph",
+        text: "A flight teaches something when only one thing changes across it. Four unrelated good bottles teach nothing except which one people liked.",
+      },
+      {
+        type: "list",
+        items: [
+          "Proof ladder — the same style from about 90 proof up to barrel strength. The clearest lesson for beginners.",
+          "Mash bill — a wheated, a traditional, a high-rye and a rye, at similar proof. Shows what grain does.",
+          "Age ladder — the same brand at different ages, which makes the cost of time painfully clear.",
+          "One distillery — several expressions from one house, to find the thread they share.",
+          "Single barrel versus small batch — two bottlings of the same label, to show how much one barrel varies.",
+        ],
+      },
+      {
+        type: "callout",
+        title: "Order matters more than selection",
+        text: "Always run lowest proof first, whatever the theme. A barrel-proof pour early will flatten everyone's palate and every bottle after it will taste thin and sweet. If one bottle is markedly stronger than the rest, it goes last.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "Glasses, and What to Do If You Have None",
+      },
+      {
+        type: "paragraph",
+        text: "A tulip-shaped glass concentrates aroma at the rim and genuinely helps. Glencairns are the standard and are cheap. If you do not have six of them, small wine glasses work well and are better than heavy tumblers, which are designed to show off ice rather than smell.",
+      },
+      {
+        type: "paragraph",
+        text: "Everyone needs their own glass per pour, or one glass and a rinse jug. Label the glasses or the mats — masking tape and a pen is fine. By pour three somebody will have forgotten which is which, and an argument about it derails the room.",
+      },
+      {
+        type: "list",
+        items: [
+          "One tulip-shaped glass per person, per pour if you can manage it.",
+          "A jug of room-temperature water and a pipette or teaspoon for adding drops.",
+          "A separate glass of drinking water for everyone. People forget, and then blame the whiskey.",
+          "Paper and pens. People write more than they expect to, and it makes them pay attention.",
+          "A spit or dump cup. Nobody has to finish anything, and saying so out loud takes the pressure off.",
+        ],
+      },
+      { type: "heading", level: 2, text: "Feed People, Carefully" },
+      {
+        type: "paragraph",
+        text: "Guests must eat before and during, but strongly flavoured food between pours wrecks the comparison. Keep the tasting table plain and put the real food out afterwards.",
+      },
+      {
+        type: "list",
+        items: [
+          "On the table: plain crackers, plain bread, still water. That is genuinely all you need.",
+          "Avoid during: cheese, chocolate, anything smoked, anything citrus, anything pickled.",
+          "Serve a proper meal before or after, not during.",
+          "Dark chocolate and aged cheese are excellent with bourbon — just not while you are comparing bottles.",
+        ],
+      },
+      { type: "heading", level: 2, text: "Running the Two Hours" },
+      {
+        type: "paragraph",
+        text: "Structure it lightly. Pour one bottle at a time for everybody, then talk about it before moving on. Keep the labels hidden if you want honest opinions — people taste the price otherwise, and a blind flight is far more fun.",
+      },
+      {
+        type: "list",
+        ordered: true,
+        items: [
+          "Pour one. Everyone noses it before anybody tastes, with mouths slightly open.",
+          "Taste. First sip only acclimatises, so judge the second.",
+          'Go round the room. Anyone who says "I just like it" is allowed to say that.',
+          "Add water to the same pour — a few drops, not a splash — and see what changes.",
+          "Move on, and keep the glass. People will want to go back at the end.",
+          "Reveal the labels and prices last, then let everyone return to whichever they liked.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "The water step is the one people skip and the one that teaches the most. A few drops can open a tight, hot pour dramatically, and watching a whiskey change in the glass is more convincing than any description.",
+      },
+      { type: "heading", level: 2, text: "What to Buy" },
+      {
+        type: "paragraph",
+        text: "You do not need allocated bottles for this, and a flight of famous names is usually a worse evening than a well-built ladder of ordinary ones. A proof ladder from [[product:eagle-rare-10-year|a 90-proof ten year]] up through [[product:eh-taylor-small-batch|a bonded 100 proof]] and on to [[product:stagg-bourbon|something at barrel strength]] costs a fraction of one trophy bottle and demonstrates far more.",
+      },
+      {
+        type: "paragraph",
+        text: "If you want one bottle to end on, make it the strongest rather than the rarest. Finishing at full proof leaves people with the clearest memory of the evening, and it is the pour they will talk about afterwards.",
+      },
+    ],
+    seo: {
+      metaTitle:
+        "How to Host a Bourbon Tasting at Home | Flight, Order & Setup",
+      metaDescription:
+        "How many bottles to pour, how much, what order, which glasses, what to feed people and how to run the evening — a practical guide to hosting a bourbon tasting at home.",
+      focusKeyword: "how to host a bourbon tasting",
+      primaryKeywords: [
+        "how to host a bourbon tasting",
+        "bourbon tasting at home",
+        "whiskey flight order",
+        "bourbon tasting party",
+      ],
+      longTailKeywords: [
+        "how many bourbons for a tasting",
+        "how much to pour for a whiskey tasting",
+        "what order should you taste whiskey in",
+        "what food to serve at a bourbon tasting",
+        "do you need glencairn glasses for a tasting",
+      ],
+      wordClusters: [
+        {
+          cluster: "Setup",
+          terms: [
+            "Glencairn",
+            "tulip glass",
+            "pour size",
+            "dump cup",
+            "pipette",
+          ],
+        },
+        {
+          cluster: "Structure",
+          terms: [
+            "proof ladder",
+            "blind tasting",
+            "flight order",
+            "palate fatigue",
+            "adding water",
+          ],
+        },
+        {
+          cluster: "Hosting",
+          terms: [
+            "crackers",
+            "palate cleanser",
+            "tasting notes",
+            "guest count",
+            "theme",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "eagle-rare-10-year",
+      "eh-taylor-small-batch",
+      "stagg-bourbon",
+      "weller-12-year",
+      "blantons-original-single-barrel",
+      "elmer-t-lee-single-barrel",
+    ],
+    faq: [
+      {
+        question: "How many bourbons should a tasting include?",
+        answer:
+          "Four. Three feels slight, five works with a disciplined group, and by six your sense of smell has fatigued and the last pours are wasted. Half an ounce per person per bottle is plenty.",
+      },
+      {
+        question: "What order should you taste bourbon in?",
+        answer:
+          "Lowest proof first, always, regardless of theme. A barrel-proof pour early flattens the palate and makes everything after it taste thin and sweet. If one bottle is much stronger than the rest, put it last.",
+      },
+      {
+        question: "What food should you serve at a bourbon tasting?",
+        answer:
+          "Plain crackers, plain bread and water during the tasting itself. Cheese, chocolate, smoked food and citrus are excellent with bourbon but ruin a comparison, so serve the real meal before or afterwards.",
+      },
+      {
+        question: "Do you need Glencairn glasses for a bourbon tasting?",
+        answer:
+          "They help, because the tulip shape concentrates aroma, and they are inexpensive. Small wine glasses are a good substitute. Heavy tumblers are the worst option for tasting — they are built to display ice, not to deliver smell.",
+      },
+      {
+        question: "Should you add water when tasting bourbon?",
+        answer:
+          "Yes, as a deliberate step. Taste the pour neat first, then add a few drops of room-temperature water to the same glass and taste again. On a high-proof whiskey the change is dramatic, and it teaches more than any tasting note.",
+      },
+    ],
+  },
+  // ─────────────────────────────────────────────────────────────────────────
+  // 38. Myths — Fundamentals
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "bourbon-myths-checked",
+    title: "Eight Bourbon Myths, Checked Against the Rules",
+    subtitle:
+      "Some of these are repeated by people who should know better, and two of them appear on distillery signage.",
+    excerpt:
+      "Bourbon has to come from Kentucky. It has to be aged four years. A tax strip proves a bottle is real. Sour mash is a flavour. None of these is true, and the actual answers are more interesting.",
+    category: "Fundamentals",
+    author: "Eleanor Hayes",
+    authorTitle: "Master Distiller, Bourbon & Oak",
+    publishedAt: "2026-11-02",
+    readTimeMinutes: 10,
+    heroImage: "/image1.webp",
+    heroAlt:
+      "Bourbon in a glass beside a bottle, the subject of more confident misinformation than most spirits",
+    tags: [
+      "bourbon myths",
+      "bourbon law",
+      "sour mash",
+      "Tennessee whiskey",
+      "bourbon facts",
+    ],
+    content: [
+      {
+        type: "paragraph",
+        text: "Bourbon attracts confident explanation. Some of it is marketing that hardened into fact, some is a half-remembered tour, and some is simply repeated often enough to sound settled. Here are eight that come up constantly, measured against what the regulations and the record actually say.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "1. Bourbon Has to Be Made in Kentucky",
+      },
+      {
+        type: "paragraph",
+        text: "No. Federal regulation requires bourbon to be made in the United States, from at least 51% corn, distilled below 160 proof, barrelled at 125 or less in new charred oak, and bottled at 80 proof or above. There is no state anywhere in the definition. Texas, New York and Washington all make legal bourbon.",
+      },
+      {
+        type: "paragraph",
+        text: 'What does require the state is the phrase "Kentucky Straight Bourbon". That is a geographic claim and it is enforceable. Plain "bourbon" is not.',
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "2. Bourbon Must Be Aged a Minimum Number of Years",
+      },
+      {
+        type: "paragraph",
+        text: "This one trips up almost everybody, including people in the trade. Bourbon has no minimum ageing requirement at all. It must touch new charred oak, and legally that is the whole of it — spirit that entered a new charred barrel and came straight back out is bourbon.",
+      },
+      {
+        type: "paragraph",
+        text: "The two-year rule belongs to the word straight. Straight bourbon must spend at least two years in wood, and if it is under four years old the age must be stated on the label. So an age statement appearing on a bottle is itself informative: it usually means the whiskey is younger than four, not older.",
+      },
+      {
+        type: "callout",
+        title: "A useful consequence",
+        text: "If a bottle carries no age statement, the law only tells you it is at least four years old, assuming it says straight. It does not tell you it is old. Plenty of no-age-statement bourbon is four to six years, and a few are considerably more. The label is being deliberately quiet either way.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "3. Ninety-Five Per Cent of Bourbon Comes From Kentucky",
+      },
+      {
+        type: "paragraph",
+        text: "You will see this everywhere, including on pages that should be careful. We went looking for a source and could not find a solid one — the figure circulates through travel writing and marketing copy and is rarely attributed to anything checkable.",
+      },
+      {
+        type: "paragraph",
+        text: 'The underlying point is sound: the overwhelming majority of American bourbon is made in Kentucky, by a wide margin. But a specific number repeated without a source is not a fact, it is a rumour with a decimal point. We say "almost all" and leave it there. The [[link:/blog/why-bourbon-is-made-in-kentucky|reasons it concentrated in Kentucky]] stand up perfectly well without an invented statistic.',
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "4. Whiskey Rebellion Distillers Fled to Kentucky and Founded Bourbon",
+      },
+      {
+        type: "paragraph",
+        text: "A lovely story, and historians reject it. Kentucky already had hundreds of distilleries operating by the time of the rebellion in the 1790s, so there was no empty frontier to found. Federal marshals had exactly the same jurisdiction in Kentucky as in Pennsylvania, which makes it a poor place to flee a federal tax. Kentucky had its own anti-tax violence over the same excise.",
+      },
+      {
+        type: "paragraph",
+        text: "And the rebellion's own spokesman, David Bradford, fled to Spanish territory rather than Kentucky — which rather undercuts the premise.",
+      },
+      {
+        type: "paragraph",
+        text: "The true migration happened much later and was commercial rather than fugitive: Pennsylvania's rye industry was destroyed by Prohibition and industrial conversion, and the surviving brands were sold. Old Overholt, born in western Pennsylvania, has been made in Kentucky since 1987.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "5. Tennessee Whiskey Is Not Bourbon",
+      },
+      {
+        type: "paragraph",
+        text: "Legally, almost all of it would qualify. Tennessee's own 2013 statute requires everything the federal bourbon standard requires — 51% corn, the distillation and barrel-entry proof limits, new charred oak, the bottling minimum — and then adds two conditions: it must be made and aged in Tennessee, and filtered through maple charcoal before ageing.",
+      },
+      {
+        type: "paragraph",
+        text: "Adding a filtration step does not disqualify anything federally. So Tennessee whiskey is, in the main, bourbon that meets an extra state requirement and whose producers choose not to use the word. The difference you taste comes from the charcoal, not from a different category.",
+      },
+      { type: "heading", level: 2, text: "6. Sour Mash Is a Flavour" },
+      {
+        type: "paragraph",
+        text: "It is a process control. A measure of spent mash from a previous distillation — backset — goes into the new cook to lower its pH, which suppresses competing bacteria and gives every batch the same starting conditions.",
+      },
+      {
+        type: "paragraph",
+        text: "Its purpose is consistency, in the way a sourdough starter's purpose is consistency rather than sourness. Nearly every Kentucky bourbon is made this way, which means the phrase on a label distinguishes almost nothing. If you want to know what is actually shaping the flavour at that stage, it is [[link:/blog/bourbon-yeast-explained|the yeast]].",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "7. A Tax Strip Proves a Bottle Is Genuine",
+      },
+      {
+        type: "paragraph",
+        text: "It proves nothing. Federal tax strips were discontinued decades ago, and no distiller treats their presence or absence as evidence of authenticity.",
+      },
+      {
+        type: "paragraph",
+        text: "Worse, the advice points at the wrong thing entirely. The common counterfeit in the United States is a genuine empty bottle, bought openly, refilled with something cheap and resealed. The glass is real, the label is real, and inspecting them tells you nothing. [[link:/blog/how-to-buy-allocated-bourbon-safely|Who you buy from]] is the protection; packaging is not.",
+      },
+      {
+        type: "heading",
+        level: 2,
+        text: "8. Limestone Water Is Why Bourbon Tastes Good",
+      },
+      {
+        type: "paragraph",
+        text: "Partly true and heavily oversold. Kentucky's limestone does filter iron out of the water, and that matters — iron reacts with the tannins coming out of charred oak and turns whiskey dark and bitter. A distiller with naturally iron-free water has one fewer problem.",
+      },
+      {
+        type: "paragraph",
+        text: "But most bourbon is cut to bottling strength with treated water, and the share of a finished bottle's character that traces to the local aquifer rather than to grain, yeast, fermentation and above all wood is small. The limestone was decisive for distillers in 1800 who could not treat anything. On a modern bottle it is a nice piece of geology doing less work than the signage implies.",
+      },
+      { type: "heading", level: 2, text: "Why These Persist" },
+      {
+        type: "paragraph",
+        text: 'Most of these are not lies so much as simplifications that got comfortable. "Bourbon is from Kentucky" is a useful shorthand that happens to be legally wrong. "Aged four years" is a real rule attached to a different word. The limestone story is true and then stretched.',
+      },
+      {
+        type: "paragraph",
+        text: "The reason to get them right is not pedantry. Each one, corrected, tells you something genuinely useful about what to buy: that the state on the label guarantees less than you thought, that an age statement often means young rather than old, and that no amount of examining a bottle will tell you whether what is inside it is real.",
+      },
+    ],
+    seo: {
+      metaTitle: "Eight Bourbon Myths, Checked | What the Rules Actually Say",
+      metaDescription:
+        "Bourbon does not have to come from Kentucky, has no minimum age, and sour mash is not a flavour. Eight widely repeated bourbon claims checked against federal regulation and the record.",
+      focusKeyword: "bourbon myths",
+      primaryKeywords: [
+        "bourbon myths",
+        "does bourbon have to be made in Kentucky",
+        "bourbon minimum age requirement",
+        "is tennessee whiskey bourbon",
+      ],
+      longTailKeywords: [
+        "does bourbon have to be aged 4 years",
+        "is sour mash a flavour",
+        "do tax strips prove bourbon is real",
+        "did whiskey rebellion distillers start bourbon",
+        "is 95 percent of bourbon made in kentucky",
+      ],
+      wordClusters: [
+        {
+          cluster: "Regulation",
+          terms: [
+            "51% corn",
+            "new charred oak",
+            "straight bourbon",
+            "age statement",
+            "bottling proof",
+          ],
+        },
+        {
+          cluster: "Misconceptions",
+          terms: [
+            "sour mash",
+            "tax strip",
+            "limestone water",
+            "Kentucky requirement",
+            "minimum ageing",
+          ],
+        },
+        {
+          cluster: "History",
+          terms: [
+            "Whiskey Rebellion",
+            "Old Overholt",
+            "Prohibition",
+            "Tennessee statute",
+            "Lincoln County Process",
+          ],
+        },
+      ],
+    },
+    relatedProducts: [
+      "eh-taylor-small-batch",
+      "blantons-original-single-barrel",
+      "thomas-h-handy-sazerac",
+      "weller-12-year",
+      "eagle-rare-10-year",
+    ],
+    faq: [
+      {
+        question: "Does bourbon have to be made in Kentucky?",
+        answer:
+          'No. Federal regulation requires it to be made in the United States from at least 51% corn and aged in new charred oak, with no state requirement. Only the phrase "Kentucky Straight Bourbon" obliges the state.',
+      },
+      {
+        question: "Does bourbon have a minimum ageing requirement?",
+        answer:
+          'Bourbon itself has none — it must enter new charred oak, and that is all. The two-year minimum belongs to "straight" bourbon, and under four years the age must be printed on the label.',
+      },
+      {
+        question: "Is sour mash a flavour?",
+        answer:
+          "No, it is a process control. Spent mash from a previous distillation is added to the new cook to lower pH, suppress bacteria and keep batches consistent. Nearly all Kentucky bourbon uses it, so the phrase distinguishes little.",
+      },
+      {
+        question: "Is Tennessee whiskey bourbon?",
+        answer:
+          "Legally, almost all of it would qualify. Tennessee's statute requires everything the federal bourbon standard does, plus Tennessee production and maple-charcoal filtering before ageing. Its producers simply choose not to use the word.",
+      },
+      {
+        question: "Do tax strips prove a bottle of bourbon is genuine?",
+        answer:
+          "No. Federal tax strips were discontinued decades ago and no distiller treats them as proof. Most counterfeits are genuine bottles refilled and resealed, so the packaging is real and inspecting it proves nothing.",
+      },
+      {
+        question: "Is limestone water really why Kentucky bourbon tastes good?",
+        answer:
+          "It helps but is oversold. Limestone filters out iron, which would otherwise react with oak tannins and turn whiskey bitter. Most bourbon is cut with treated water, and grain, yeast, fermentation and wood account for far more of the flavour.",
+      },
+    ],
+  },
 ];
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
