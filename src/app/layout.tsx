@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
 import SiteChrome from "@/components/SiteChrome";
 import InstallPrompt from "@/components/InstallPrompt";
+import { DISTILLERY } from "@/lib/locations";
 import "./globals.css";
 
 export const viewport: Viewport = {
@@ -65,7 +66,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "Bourbon & Oak",
-    images: [{ url: DEFAULT_OG_IMAGE, width: 1200, height: 630, alt: "Bourbon & Oak — Kentucky bourbon distillery" }],
+    images: [
+      {
+        url: DEFAULT_OG_IMAGE,
+        width: 1200,
+        height: 630,
+        alt: "Bourbon & Oak — Kentucky bourbon distillery",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -88,19 +96,23 @@ const organizationJsonLd = {
   description:
     "Family-owned Kentucky bourbon distillery in Bardstown — single-barrel, small-batch and allocated Kentucky bourbon since 1876.",
   foundingDate: "1876",
+  /* Read from DISTILLERY rather than retyped. locations.ts calls itself the
+     source of truth for NAP "across every location page and the Organization
+     schema in layout.tsx — these must never disagree", and a second hardcoded
+     copy here is precisely how they come to disagree. */
   address: {
     "@type": "PostalAddress",
-    streetAddress: "1876 Oak Barrel Lane",
-    addressLocality: "Bardstown",
-    addressRegion: "KY",
-    postalCode: "40004",
-    addressCountry: "US",
+    streetAddress: DISTILLERY.streetAddress,
+    addressLocality: DISTILLERY.addressLocality,
+    addressRegion: DISTILLERY.addressRegion,
+    postalCode: DISTILLERY.postalCode,
+    addressCountry: DISTILLERY.addressCountry,
   },
   contactPoint: {
     "@type": "ContactPoint",
-    telephone: "+1-502-555-0199",
+    telephone: DISTILLERY.telephone,
     contactType: "customer service",
-    email: "support@bourbonoaklover.com",
+    email: DISTILLERY.email,
   },
   sameAs: [],
 };
@@ -143,7 +155,9 @@ export default function RootLayout({
         />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationJsonLd),
+          }}
         />
         <SiteChrome>{children}</SiteChrome>
         <InstallPrompt />

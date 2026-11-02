@@ -21,7 +21,8 @@ export interface InvoiceParty {
   name: string;
   lines: string[];
   email: string;
-  /** Buyer's contact number. Empty for the seller block, which has none. */
+  /** Contact number. Set on both parties: the buyer's so a courier can reach
+      them, ours so they can reach a person. */
   phone?: string;
 }
 
@@ -68,7 +69,8 @@ export type InvoiceStatus = "PAID" | "DUE" | "VOID";
 
 /** What the invoice should say about payment, from the order's own state. */
 export function statusForOrder(order: Order): InvoiceStatus {
-  if (order.settlementState === "PAID" || order.status === "PAID") return "PAID";
+  if (order.settlementState === "PAID" || order.status === "PAID")
+    return "PAID";
   if (order.status === "SHIPPED" || order.status === "DELIVERED") return "PAID";
   return "DUE";
 }
@@ -95,7 +97,8 @@ export function money(n: number, currency = "USD"): string {
 export function formatUsPhone(raw: string | null | undefined): string {
   if (!raw) return "";
   const digits = raw.replace(/\D/g, "");
-  const ten = digits.length === 11 && digits.startsWith("1") ? digits.slice(1) : digits;
+  const ten =
+    digits.length === 11 && digits.startsWith("1") ? digits.slice(1) : digits;
   if (ten.length !== 10) return raw.trim();
   return `(${ten.slice(0, 3)}) ${ten.slice(3, 6)}-${ten.slice(6)}`;
 }
@@ -116,8 +119,12 @@ const SELLER: InvoiceParty = {
     `${DISTILLERY.addressLocality}, ${DISTILLERY.addressRegion} ${DISTILLERY.postalCode}`,
     "United States",
   ],
-  // Deliberately no telephone. DISTILLERY.telephone is still a placeholder
-  // (555-0199) and a fake number on an invoice is worse than none at all.
+  /* The seller's own number, now that there is a real one to print. It was
+     left off while DISTILLERY.telephone was a 555-01xx placeholder, on the
+     grounds that a fake number on an invoice is worse than none — the same
+     reason the customer's number went on: a courier with a delivery problem
+     needs somebody to ring. */
+  phone: formatUsPhone(DISTILLERY.telephone),
   email: DISTILLERY.email,
 };
 
@@ -144,10 +151,7 @@ export function buildInvoiceSnapshot(
   ].filter((l) => l.trim().length > 0);
 
   const lines: InvoiceLine[] = order.items.map((it) => {
-    const detail = [
-      it.ageLabel,
-      it.isCase ? "Case of 6 · 750ml" : "750ml",
-    ]
+    const detail = [it.ageLabel, it.isCase ? "Case of 6 · 750ml" : "750ml"]
       .filter(Boolean)
       .join(" · ");
     return {
@@ -215,7 +219,9 @@ export function buildInvoiceSnapshot(
  * the same number, which is why the caller retries on the unique constraint
  * rather than trusting this to be race-free on its own.
  */
-export async function nextInvoiceNumber(now: Date = new Date()): Promise<string> {
+export async function nextInvoiceNumber(
+  now: Date = new Date(),
+): Promise<string> {
   const year = now.getUTCFullYear();
   const prefix = `INV-${year}-`;
   const last = await prisma.invoice.findFirst({

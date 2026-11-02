@@ -19,7 +19,13 @@ export const metadata: Metadata = {
 
 /* One stroke weight, one grid, drawn here rather than pulled from a set that
    would ship a hundred unused glyphs. */
-function Icon({ path, className = "" }: { path: React.ReactNode; className?: string }) {
+function Icon({
+  path,
+  className = "",
+}: {
+  path: React.ReactNode;
+  className?: string;
+}) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -52,6 +58,11 @@ const ClockIcon = (
   <>
     <circle cx="12" cy="12" r="8.5" />
     <path d="M12 7.5V12l3 2" />
+  </>
+);
+const PhoneIcon = (
+  <>
+    <path d="M7.5 3.5h-3a1.5 1.5 0 0 0-1.5 1.6c.45 6.9 6 12.45 12.9 12.9a1.5 1.5 0 0 0 1.6-1.5v-3a1.5 1.5 0 0 0-1.3-1.49l-2.2-.3a1.5 1.5 0 0 0-1.45.66l-.7 1.05a12.5 12.5 0 0 1-4.17-4.17l1.05-.7a1.5 1.5 0 0 0 .66-1.45l-.3-2.2A1.5 1.5 0 0 0 7.5 3.5Z" />
   </>
 );
 
@@ -137,6 +148,20 @@ export default function ContactPage() {
             </a>
           </Channel>
 
+          <Channel icon={PhoneIcon} label="Phone">
+            {/* tel: keeps the digits only — a formatted href fails to dial on
+                some Android handsets. The visible text stays readable. */}
+            <a
+              href="tel:+19203181390"
+              className="text-bourbon-deep font-semibold hover:text-bourbon-gold transition-colors"
+            >
+              (920) 318-1390
+            </a>
+            <p className="text-bourbon-stone text-xs mt-1">
+              During the hours below. Outside them, email reaches us faster.
+            </p>
+          </Channel>
+
           <Channel icon={ClockIcon} label="Hours">
             <dl className="text-sm space-y-1">
               <div className="flex justify-between gap-4">
@@ -145,7 +170,9 @@ export default function ContactPage() {
               </div>
               <div className="flex justify-between gap-4">
                 <dt className="text-bourbon-stone">Saturday</dt>
-                <dd className="text-bourbon-deep tabular-nums">10am – 4pm ET</dd>
+                <dd className="text-bourbon-deep tabular-nums">
+                  10am – 4pm ET
+                </dd>
               </div>
               <div className="flex justify-between gap-4">
                 <dt className="text-bourbon-stone">Sunday</dt>

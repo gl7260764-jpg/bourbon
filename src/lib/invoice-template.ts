@@ -128,7 +128,9 @@ export function renderInvoiceHtml(
     <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-top:26px;border-top:1px solid rgba(250,250,249,.15)">
       <tr>
         <td style="padding-top:17px;vertical-align:bottom;font:400 10px/1.7 Inter,Arial,sans-serif;color:rgba(250,250,249,.6)">
-          ${esc(inv.seller.lines[0])} &middot; ${esc(inv.seller.lines[1])}<br>${esc(inv.seller.email)}
+          ${esc(inv.seller.lines[0])} &middot; ${esc(inv.seller.lines[1])}<br>${esc(inv.seller.email)}${
+            inv.seller.phone ? ` &middot; ${esc(inv.seller.phone)}` : ""
+          }
         </td>
         <td style="padding-top:17px;vertical-align:bottom;text-align:right">
           <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="right"><tr>
@@ -294,7 +296,11 @@ export function renderInvoiceEmail(
       ? `Invoice ${esc(inv.invoiceNumber)} for order ${esc(inv.orderNumber)} has been withdrawn. Nothing is payable against it.`
       : `Here is your invoice for order ${esc(inv.orderNumber)}. The full breakdown is on the invoice itself.`;
 
-  const totalLabel = paid ? "Total paid" : voided ? "Invoice total" : "Total due";
+  const totalLabel = paid
+    ? "Total paid"
+    : voided
+      ? "Invoice total"
+      : "Total due";
   const pdfLine = opts.hasPdf
     ? `<p style="margin:0 0 4px">A PDF copy is attached to this email.</p>`
     : "";

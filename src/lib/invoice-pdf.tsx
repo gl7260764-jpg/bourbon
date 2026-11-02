@@ -45,7 +45,9 @@ function registerFonts() {
   });
   Font.register({
     family: "Playfair",
-    fonts: [{ src: path.join(FONT_DIR, "PlayfairDisplay-Bold.ttf"), fontWeight: 700 }],
+    fonts: [
+      { src: path.join(FONT_DIR, "PlayfairDisplay-Bold.ttf"), fontWeight: 700 },
+    ],
   });
   /* Without this, react-pdf never breaks a long unbroken string — a product
      name with no spaces would run off the page rather than wrap. */
@@ -62,30 +64,98 @@ const RULE = "#E8E5E0";
 const GREEN = "#15803D";
 
 const s = StyleSheet.create({
-  page: { fontFamily: "Inter", fontSize: 9, color: DEEP, backgroundColor: CREAM },
+  page: {
+    fontFamily: "Inter",
+    fontSize: 9,
+    color: DEEP,
+    backgroundColor: CREAM,
+  },
 
-  band: { backgroundColor: DEEP, paddingHorizontal: 40, paddingTop: 32, paddingBottom: 28 },
-  bandTop: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" },
+  band: {
+    backgroundColor: DEEP,
+    paddingHorizontal: 40,
+    paddingTop: 32,
+    paddingBottom: 28,
+  },
+  bandTop: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+  },
   logoRow: { flexDirection: "row", alignItems: "center" },
   badge: {
-    width: 30, height: 30, borderWidth: 1.2, borderColor: GOLD,
-    alignItems: "center", justifyContent: "center", marginRight: 9,
+    width: 30,
+    height: 30,
+    borderWidth: 1.2,
+    borderColor: GOLD,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 9,
   },
-  badgeText: { fontFamily: "Playfair", fontWeight: 700, fontSize: 16, color: GOLD },
-  wordmark: { fontFamily: "Playfair", fontWeight: 700, fontSize: 17, color: CREAM },
-  est: { fontSize: 6, fontWeight: 600, letterSpacing: 1.7, color: GOLD, marginTop: 3 },
-  invoiceWord: { fontSize: 26, fontWeight: 700, letterSpacing: 3.6, color: CREAM, textAlign: "right" },
+  badgeText: {
+    fontFamily: "Playfair",
+    fontWeight: 700,
+    fontSize: 16,
+    color: GOLD,
+  },
+  wordmark: {
+    fontFamily: "Playfair",
+    fontWeight: 700,
+    fontSize: 17,
+    color: CREAM,
+  },
+  est: {
+    fontSize: 6,
+    fontWeight: 600,
+    letterSpacing: 1.7,
+    color: GOLD,
+    marginTop: 3,
+  },
+  invoiceWord: {
+    fontSize: 26,
+    fontWeight: 700,
+    letterSpacing: 3.6,
+    color: CREAM,
+    textAlign: "right",
+  },
   /* "ORDER RECEIVED" is more than twice the characters of "INVOICE", so it
      cannot carry the same size and tracking without running off the page. */
-  receiptWord: { fontSize: 15, fontWeight: 700, letterSpacing: 2.2, color: CREAM, textAlign: "right" },
-  invoiceNo: { fontSize: 8, letterSpacing: 0.8, color: "#8C8885", marginTop: 5, textAlign: "right" },
+  receiptWord: {
+    fontSize: 15,
+    fontWeight: 700,
+    letterSpacing: 2.2,
+    color: CREAM,
+    textAlign: "right",
+  },
+  invoiceNo: {
+    fontSize: 8,
+    letterSpacing: 0.8,
+    color: "#8C8885",
+    marginTop: 5,
+    textAlign: "right",
+  },
 
-  bandRule: { borderTopWidth: 1, borderTopColor: "#2A2724", marginTop: 22, paddingTop: 14 },
-  bandBottom: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end" },
+  bandRule: {
+    borderTopWidth: 1,
+    borderTopColor: "#2A2724",
+    marginTop: 22,
+    paddingTop: 14,
+  },
+  bandBottom: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-end",
+  },
   sellerLine: { fontSize: 8, lineHeight: 1.6, color: "#8C8885" },
   metaRow: { flexDirection: "row" },
   metaCell: { marginLeft: 26, alignItems: "flex-end" },
-  metaLabel: { fontSize: 5.8, fontWeight: 700, letterSpacing: 1.3, color: "#6E6A67", marginBottom: 4 },
+  metaLabel: {
+    fontSize: 5.8,
+    fontWeight: 700,
+    letterSpacing: 1.3,
+    color: "#6E6A67",
+    marginBottom: 4,
+  },
   metaValue: { fontSize: 9, fontWeight: 600, color: CREAM },
 
   goldRule: { height: 2, backgroundColor: GOLD },
@@ -94,9 +164,19 @@ const s = StyleSheet.create({
      to the bottom, recreating the gap the change above removes. */
   body: { paddingHorizontal: 40, paddingTop: 26 },
 
-  parties: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" },
+  parties: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+  },
   party: { width: "37%" },
-  lbl: { fontSize: 5.8, fontWeight: 700, letterSpacing: 1.3, color: MUTED, marginBottom: 6 },
+  lbl: {
+    fontSize: 5.8,
+    fontWeight: 700,
+    letterSpacing: 1.3,
+    color: MUTED,
+    marginBottom: 6,
+  },
   who: { fontSize: 10.5, fontWeight: 600, color: DEEP, marginBottom: 4 },
   addr: { fontSize: 8.2, lineHeight: 1.65, color: STONE },
 
@@ -104,7 +184,14 @@ const s = StyleSheet.create({
   pillText: { fontSize: 6.6, fontWeight: 700, letterSpacing: 1 },
 
   thead: { flexDirection: "row", backgroundColor: DEEP, marginTop: 24 },
-  th: { fontSize: 5.8, fontWeight: 700, letterSpacing: 1.2, color: CREAM, paddingVertical: 7, paddingHorizontal: 9 },
+  th: {
+    fontSize: 5.8,
+    fontWeight: 700,
+    letterSpacing: 1.2,
+    color: CREAM,
+    paddingVertical: 7,
+    paddingHorizontal: 9,
+  },
   tr: { flexDirection: "row", borderBottomWidth: 1, borderBottomColor: RULE },
   td: { paddingVertical: 10, paddingHorizontal: 9 },
   cDesc: { width: "52%" },
@@ -118,7 +205,12 @@ const s = StyleSheet.create({
   /* justifyContent matters only on an invoice, where the totals are now the
      row's only child: without it they collapse to the left edge. On a receipt
      the next-steps box grows to fill, so this changes nothing there. */
-  lower: { flexDirection: "row", marginTop: 22, alignItems: "flex-start", justifyContent: "flex-end" },
+  lower: {
+    flexDirection: "row",
+    marginTop: 22,
+    alignItems: "flex-start",
+    justifyContent: "flex-end",
+  },
   /* The wrapper takes the space; the box inside hugs its own content.
      flexBasis 0 is load-bearing on the wrapper: react-pdf sizes a flexGrow
      item from its CONTENT when no basis is given, which is how a long payment
@@ -126,26 +218,54 @@ const s = StyleSheet.create({
      column container controls the horizontal, so flex-start is what stops the
      box stretching the full width around a word as short as "Zelle". */
   payWrap: {
-    flexGrow: 1, flexBasis: 0, minWidth: 0,
-    marginRight: 26, alignItems: "flex-start",
+    flexGrow: 1,
+    flexBasis: 0,
+    minWidth: 0,
+    marginRight: 26,
+    alignItems: "flex-start",
   },
   payBox: {
-    maxWidth: "100%", backgroundColor: "#FFFFFF",
-    borderWidth: 1, borderColor: RULE, borderLeftWidth: 3, borderLeftColor: GOLD,
-    paddingVertical: 13, paddingHorizontal: 16,
+    maxWidth: "100%",
+    backgroundColor: "#FFFFFF",
+    borderWidth: 1,
+    borderColor: RULE,
+    borderLeftWidth: 3,
+    borderLeftColor: GOLD,
+    paddingVertical: 13,
+    paddingHorizontal: 16,
   },
-  payTitle: { fontSize: 5.8, fontWeight: 700, letterSpacing: 1.3, color: MUTED, marginBottom: 7 },
+  payTitle: {
+    fontSize: 5.8,
+    fontWeight: 700,
+    letterSpacing: 1.3,
+    color: MUTED,
+    marginBottom: 7,
+  },
   payValue: { fontSize: 11, fontWeight: 600, color: DEEP },
 
   totals: { width: 215, flexShrink: 0 },
-  totalRow: { flexDirection: "row", justifyContent: "space-between", paddingVertical: 5 },
+  totalRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 5,
+  },
   totalLabel: { fontSize: 8.4, color: STONE },
   totalValue: { fontSize: 8.4, fontWeight: 600, color: DEEP },
   grand: {
-    flexDirection: "row", justifyContent: "space-between", alignItems: "center",
-    backgroundColor: DEEP, paddingVertical: 11, paddingHorizontal: 13, marginTop: 9,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: DEEP,
+    paddingVertical: 11,
+    paddingHorizontal: 13,
+    marginTop: 9,
   },
-  grandLabel: { fontSize: 6.4, fontWeight: 700, letterSpacing: 1.2, color: GOLD },
+  grandLabel: {
+    fontSize: 6.4,
+    fontWeight: 700,
+    letterSpacing: 1.2,
+    color: GOLD,
+  },
   grandValue: { fontSize: 17, fontWeight: 700, color: CREAM },
 
   /* Flows after the content rather than pinned to the page bottom. Pinned, a
@@ -155,16 +275,29 @@ const s = StyleSheet.create({
      block is gone, and space-between around a single child only reads as a
      layout that lost something. */
   foot: {
-    marginHorizontal: 40, marginTop: 28,
-    borderTopWidth: 1, borderTopColor: RULE, paddingTop: 16,
+    marginHorizontal: 40,
+    marginTop: 28,
+    borderTopWidth: 1,
+    borderTopColor: RULE,
+    paddingTop: 16,
   },
   footText: { fontSize: 6.6, lineHeight: 1.6, color: MUTED },
 });
 
 function pillColors(status: InvoiceSnapshot["status"]) {
-  if (status === "PAID") return { backgroundColor: "#DCFCE7", borderColor: "#86EFAC", color: GREEN };
-  if (status === "VOID") return { backgroundColor: "#F4F4F5", borderColor: "#D4D4D8", color: "#71717A" };
-  return { backgroundColor: "#FEF3C7", borderColor: "#E4BE6A", color: "#92400E" };
+  if (status === "PAID")
+    return { backgroundColor: "#DCFCE7", borderColor: "#86EFAC", color: GREEN };
+  if (status === "VOID")
+    return {
+      backgroundColor: "#F4F4F5",
+      borderColor: "#D4D4D8",
+      color: "#71717A",
+    };
+  return {
+    backgroundColor: "#FEF3C7",
+    borderColor: "#E4BE6A",
+    color: "#92400E",
+  };
 }
 
 /**
@@ -239,21 +372,24 @@ function InvoiceDoc({
 
   return (
     <Document
-      title={receipt ? `Order ${inv.orderNumber}` : `Invoice ${inv.invoiceNumber}`}
+      title={
+        receipt ? `Order ${inv.orderNumber}` : `Invoice ${inv.invoiceNumber}`
+      }
       author="Bourbon & Oak Distillery"
       subject={
-        receipt ? `Order confirmation ${inv.orderNumber}` : `Invoice for order ${inv.orderNumber}`
+        receipt
+          ? `Order confirmation ${inv.orderNumber}`
+          : `Invoice for order ${inv.orderNumber}`
       }
     >
-      <Page
-        size={compact ? [A4[0], compactHeight(inv)] : "A4"}
-        style={s.page}
-      >
+      <Page size={compact ? [A4[0], compactHeight(inv)] : "A4"} style={s.page}>
         {/* letterhead */}
         <View style={s.band}>
           <View style={s.bandTop}>
             <View style={s.logoRow}>
-              <View style={s.badge}><Text style={s.badgeText}>B</Text></View>
+              <View style={s.badge}>
+                <Text style={s.badgeText}>B</Text>
+              </View>
               <View>
                 <Text style={s.wordmark}>Bourbon &amp; Oak</Text>
                 <Text style={s.est}>EST. 1876</Text>
@@ -275,6 +411,7 @@ function InvoiceDoc({
                 {inv.seller.lines[0]} · {inv.seller.lines[1]}
                 {"\n"}
                 {inv.seller.email}
+                {inv.seller.phone ? ` · ${inv.seller.phone}` : ""}
               </Text>
               <View style={s.metaRow}>
                 <View style={s.metaCell}>
@@ -282,8 +419,12 @@ function InvoiceDoc({
                   <Text style={s.metaValue}>{inv.orderNumber}</Text>
                 </View>
                 <View style={s.metaCell}>
-                  <Text style={s.metaLabel}>{receipt ? "PLACED" : "ISSUED"}</Text>
-                  <Text style={s.metaValue}>{formatIssueDate(inv.issuedAt)}</Text>
+                  <Text style={s.metaLabel}>
+                    {receipt ? "PLACED" : "ISSUED"}
+                  </Text>
+                  <Text style={s.metaValue}>
+                    {formatIssueDate(inv.issuedAt)}
+                  </Text>
                 </View>
                 {!receipt && (
                   <View style={s.metaCell}>
@@ -316,16 +457,24 @@ function InvoiceDoc({
                 receipt they never do — it is one address, and printing it
                 twice just reads as a mistake. */}
             {!receipt && (
-            <View style={s.party}>
-              <Text style={s.lbl}>SHIPPED TO</Text>
-              <Text style={s.who}>{inv.shippedTo.name}</Text>
-              <Text style={s.addr}>
-                {inv.shippedTo.lines.join("\n")}
-                {`\n${inv.shippingLabel}`}
-              </Text>
-            </View>
+              <View style={s.party}>
+                <Text style={s.lbl}>SHIPPED TO</Text>
+                <Text style={s.who}>{inv.shippedTo.name}</Text>
+                <Text style={s.addr}>
+                  {inv.shippedTo.lines.join("\n")}
+                  {`\n${inv.shippingLabel}`}
+                </Text>
+              </View>
             )}
-            <View style={[s.pill, { backgroundColor: pc.backgroundColor, borderColor: pc.borderColor }]}>
+            <View
+              style={[
+                s.pill,
+                {
+                  backgroundColor: pc.backgroundColor,
+                  borderColor: pc.borderColor,
+                },
+              ]}
+            >
               <Text style={[s.pillText, { color: pc.color }]}>
                 {receipt ? "ORDER RECEIVED" : STATUS_LABEL[inv.status]}
               </Text>
@@ -340,14 +489,22 @@ function InvoiceDoc({
             <Text style={[s.th, s.cAmt]}>AMOUNT</Text>
           </View>
           {inv.lines.map((l, i) => (
-            <View key={i} style={[s.tr, i % 2 === 1 ? { backgroundColor: "#FFFFFF" } : {}]} wrap={false}>
+            <View
+              key={i}
+              style={[s.tr, i % 2 === 1 ? { backgroundColor: "#FFFFFF" } : {}]}
+              wrap={false}
+            >
               <View style={[s.td, s.cDesc]}>
                 <Text style={s.itemName}>{l.description}</Text>
                 {l.detail ? <Text style={s.itemDetail}>{l.detail}</Text> : null}
               </View>
               <Text style={[s.td, s.cQty, s.cell]}>{l.quantity}</Text>
-              <Text style={[s.td, s.cUnit, s.cell]}>{money(l.unitPrice, inv.currency)}</Text>
-              <Text style={[s.td, s.cAmt, s.cell]}>{money(l.amount, inv.currency)}</Text>
+              <Text style={[s.td, s.cUnit, s.cell]}>
+                {money(l.unitPrice, inv.currency)}
+              </Text>
+              <Text style={[s.td, s.cAmt, s.cell]}>
+                {money(l.amount, inv.currency)}
+              </Text>
             </View>
           ))}
 
@@ -367,7 +524,9 @@ function InvoiceDoc({
             <View style={s.totals}>
               <View style={s.totalRow}>
                 <Text style={s.totalLabel}>Subtotal</Text>
-                <Text style={s.totalValue}>{money(t.subtotal, inv.currency)}</Text>
+                <Text style={s.totalValue}>
+                  {money(t.subtotal, inv.currency)}
+                </Text>
               </View>
               {t.discountLabel ? (
                 <View style={s.totalRow}>
@@ -379,7 +538,9 @@ function InvoiceDoc({
               ) : null}
               <View style={s.totalRow}>
                 <Text style={s.totalLabel}>Shipping</Text>
-                <Text style={s.totalValue}>{money(t.shipping, inv.currency)}</Text>
+                <Text style={s.totalValue}>
+                  {money(t.shipping, inv.currency)}
+                </Text>
               </View>
               <View style={s.totalRow}>
                 <Text style={s.totalLabel}>Tax</Text>
@@ -414,7 +575,9 @@ export async function renderInvoicePdf(
   compact = false,
 ): Promise<Buffer> {
   registerFonts();
-  return renderToBuffer(<InvoiceDoc inv={inv} variant={variant} compact={compact} />);
+  return renderToBuffer(
+    <InvoiceDoc inv={inv} variant={variant} compact={compact} />,
+  );
 }
 
 /** Filename used for the attachment and the download. */

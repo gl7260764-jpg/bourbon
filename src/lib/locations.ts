@@ -55,7 +55,7 @@ export const DISTILLERY = {
   addressRegion: "KY",
   postalCode: "40004",
   addressCountry: "US",
-  telephone: "+1-502-555-0199",
+  telephone: "+1-920-318-1390",
   email: "support@bourbonoaklover.com",
   latitude: "37.8095",
   longitude: "-85.4669",
@@ -107,7 +107,7 @@ export const LOCATIONS: Location[] = [
         ],
         list: [
           "1876 Oak Barrel Lane, Bardstown, KY 40004",
-          "Phone: (502) 555-0199",
+          "Phone: (920) 318-1390",
           "Email: support@bourbonoaklover.com",
           "Free on-site parking, including coach and RV spaces",
         ],
@@ -179,7 +179,7 @@ export const LOCATIONS: Location[] = [
       {
         question: "Is the distillery accessible?",
         answer:
-          "The tasting room, bottling line and parking are step-free. Rickhouse floors are reached by stairs and the surfaces are uneven working warehouse floors, so please call ahead on (502) 555-0199 and we will plan a route that works.",
+          "The tasting room, bottling line and parking are step-free. Rickhouse floors are reached by stairs and the surfaces are uneven working warehouse floors, so please call ahead on (920) 318-1390 and we will plan a route that works.",
       },
     ],
   },
