@@ -7,8 +7,24 @@ import {
   DASHBOARD_CHAT_EVENT,
   isDashboardChatOpen,
 } from "@/lib/dashboard-chat-signal";
+import {
+  INSTALL_PROMPT_DELAY_MS,
+  INSTALL_PROMPT_EVENT,
+  isInstallPromptOpen,
+} from "@/lib/install-prompt-signal";
 
 const POLL_INTERVAL_MS = 4000;
+
+/* The launcher teaser is a one-time nudge, not a recurring interruption: once
+   someone has seen it — or opened the chat — it does not come back on this
+   device. Late enough that it is not the first thing to move on a page someone
+   just opened, early enough to catch them while they are still browsing. */
+const TEASER_SEEN_KEY = "bourbon-chat-teaser-seen";
+/* Deliberately past the install banner's own delay. Showing first and being
+   replaced a few seconds later reads as a glitch, so the teaser waits out the
+   banner's turn entirely: if the banner appears, this timer is cleared and the
+   teaser only gets its chance once the banner is dismissed. */
+const TEASER_DELAY_MS = INSTALL_PROMPT_DELAY_MS + 4000;
 
 interface ChatMessage {
   id: string;
@@ -117,7 +133,9 @@ export default function ChatWidget() {
         const data = (await res.json()) as { messages: ChatMessage[] };
         if (data.messages?.length) {
           mergeMessages(data.messages);
-          const fromAdmin = data.messages.filter((m) => m.sender === "ADMIN").length;
+          const fromAdmin = data.messages.filter(
+            (m) => m.sender === "ADMIN",
+          ).length;
           if (fromAdmin) setUnseen((n) => n + fromAdmin);
         }
       } catch {
@@ -272,19 +290,72 @@ export default function ChatWidget() {
   useEffect(() => {
     // Read the current state first — the dashboard may have set it before this
     // component existed — then follow changes.
-    const t = window.setTimeout(() => setDashboardChatOpen(isDashboardChatOpen()), 0);
+    const t = window.setTimeout(
+      () => setDashboardChatOpen(isDashboardChatOpen()),
+      0,
+    );
     const onPanel = (e: Event) => {
       setDashboardChatOpen(Boolean((e as CustomEvent<boolean>).detail));
     };
     window.addEventListener(DASHBOARD_CHAT_EVENT, onPanel as EventListener);
     return () => {
       window.clearTimeout(t);
-      window.removeEventListener(DASHBOARD_CHAT_EVENT, onPanel as EventListener);
+      window.removeEventListener(
+        DASHBOARD_CHAT_EVENT,
+        onPanel as EventListener,
+      );
     };
   }, []);
 
+  const [teaser, setTeaser] = useState(false);
+  const [bannerUp, setBannerUp] = useState(false);
+
+  /* Read the flag first — the banner may have gone up before this mounted —
+     then follow changes. Same two-part read as the dashboard signal above. */
+  useEffect(() => {
+    const t = window.setTimeout(() => setBannerUp(isInstallPromptOpen()), 0);
+    const onBanner = (e: Event) => {
+      setBannerUp(Boolean((e as CustomEvent<boolean>).detail));
+    };
+    window.addEventListener(INSTALL_PROMPT_EVENT, onBanner as EventListener);
+    return () => {
+      window.clearTimeout(t);
+      window.removeEventListener(
+        INSTALL_PROMPT_EVENT,
+        onBanner as EventListener,
+      );
+    };
+  }, []);
+
+  /* Suppressed while a reply is already waiting: the unread badge is the
+     stronger signal, and "ask us" would be the wrong sentence to put next to
+     an answer someone has not read yet. */
+  useEffect(() => {
+    /* Never both at once. While the banner is up the timer does not even
+       start; the teaser is hidden at render rather than switched off here,
+       which keeps this effect free of a direct setState. */
+    if (open || unseen > 0 || bannerUp) return;
+    try {
+      if (localStorage.getItem(TEASER_SEEN_KEY) === "true") return;
+    } catch {
+      // Private mode or blocked storage: show it, just do not remember it.
+    }
+    const t = window.setTimeout(() => setTeaser(true), TEASER_DELAY_MS);
+    return () => window.clearTimeout(t);
+  }, [open, unseen, bannerUp]);
+
+  const dismissTeaser = () => {
+    setTeaser(false);
+    try {
+      localStorage.setItem(TEASER_SEEN_KEY, "true");
+    } catch {
+      // Nothing to do — it returns next visit, which is acceptable.
+    }
+  };
+
   const openWidget = () => {
     userInteractedRef.current = true;
+    dismissTeaser();
     setOpen(true);
     setUnseen(0);
   };
@@ -301,29 +372,75 @@ export default function ChatWidget() {
     <>
       {/* Launcher bubble */}
       {!open && (
-        <button
-          onClick={openWidget}
-          aria-label={
-            unseen > 0
-              ? `Open chat, ${unseen} new ${unseen === 1 ? "message" : "messages"}`
-              : "Open chat"
-          }
-          className="fixed bottom-5 right-5 z-[90] flex h-14 w-14 items-center justify-center rounded-full bg-bourbon-gold text-bourbon-deep shadow-lg shadow-black/30 transition-transform hover:scale-105 cursor-pointer"
-        >
-          <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M8 10h.01M12 10h.01M16 10h.01M21 12a9 9 0 11-3.6-7.2L21 3l-1.2 3.4A8.96 8.96 0 0121 12z"
-            />
-          </svg>
-          {unseen > 0 && (
-            <span className="absolute -top-1 -right-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 text-[11px] font-bold tabular-nums text-white ring-2 ring-bourbon-deep animate-pulse-badge">
-              {unseen > 9 ? "9+" : unseen}
-            </span>
+        <div className="fixed bottom-5 right-5 z-[90] flex items-end gap-3">
+          {teaser && !bannerUp && (
+            <div
+              role="status"
+              className="animate-pop-in mb-1.5 flex max-w-[16rem] items-start gap-1.5 rounded-xl border border-bourbon-gold/30 bg-bourbon-dark py-2.5 pl-3.5 pr-2 shadow-xl shadow-black/40"
+            >
+              <p className="text-[13px] leading-snug text-bourbon-cream/90">
+                Hunting a particular bottle?{" "}
+                <span className="font-semibold text-bourbon-gold">Ask us</span>{" "}
+                — a person answers.
+              </p>
+              <button
+                onClick={dismissTeaser}
+                aria-label="Dismiss"
+                className="-mt-0.5 shrink-0 cursor-pointer rounded p-1 text-bourbon-cream/40 transition-colors hover:text-bourbon-cream"
+              >
+                <svg
+                  className="h-3.5 w-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path d="M6 6l12 12M18 6L6 18" />
+                </svg>
+              </button>
+            </div>
           )}
-        </button>
+
+          {/* The halo is a sibling, not a child: the button takes a transform
+              on hover, which would make it a stacking context and bury a
+              negative-z-index child behind its own gold fill. */}
+          <div className="group relative shrink-0">
+            <span
+              aria-hidden="true"
+              className="animate-launcher-halo pointer-events-none absolute inset-0 rounded-full bg-bourbon-gold"
+            />
+            <button
+              onClick={openWidget}
+              aria-label={
+                unseen > 0
+                  ? `Open chat, ${unseen} new ${unseen === 1 ? "message" : "messages"}`
+                  : "Open chat"
+              }
+              className="relative flex h-16 w-16 cursor-pointer items-center justify-center rounded-full bg-bourbon-gold text-bourbon-deep shadow-lg shadow-black/40 ring-1 ring-bourbon-warm/40 transition-transform duration-300 hover:scale-105"
+            >
+              <svg
+                className="h-7 w-7"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8 10h.01M12 10h.01M16 10h.01M21 12a9 9 0 11-3.6-7.2L21 3l-1.2 3.4A8.96 8.96 0 0121 12z"
+                />
+              </svg>
+              {unseen > 0 && (
+                <span className="absolute -top-1 -right-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 text-[11px] font-bold tabular-nums text-white ring-2 ring-bourbon-deep animate-pulse-badge">
+                  {unseen > 9 ? "9+" : unseen}
+                </span>
+              )}
+            </button>
+          </div>
+        </div>
       )}
 
       {/* Chat panel */}
@@ -365,14 +482,27 @@ export default function ChatWidget() {
               aria-label="Close chat"
               className="text-bourbon-cream/60 hover:text-bourbon-gold cursor-pointer"
             >
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
           </div>
 
           {/* Messages */}
-          <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
+          <div
+            ref={scrollRef}
+            className="flex-1 space-y-3 overflow-y-auto px-4 py-4"
+          >
             {/* An empty thread opens on an invitation rather than a fake
                 message from us. The old typed greeting looked like a reply
                 nobody had written, and it pushed the composer down on a
@@ -380,9 +510,19 @@ export default function ChatWidget() {
             {messages.length === 0 ? (
               <div className="flex h-full flex-col items-center justify-center px-6 text-center">
                 <span className="mb-4 flex h-14 w-14 items-center justify-center border border-bourbon-gold/40 bg-bourbon-gold/10">
-                  <svg className="h-6 w-6 text-bourbon-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-                      d="M21 11.5a8.38 8.38 0 01-9 8.4 8.5 8.5 0 01-3.8-.9L3 21l1.9-5.2A8.38 8.38 0 014 11.5a8.5 8.5 0 018.5-8.5 8.38 8.38 0 018.5 8.5z" />
+                  <svg
+                    className="h-6 w-6 text-bourbon-gold"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M21 11.5a8.38 8.38 0 01-9 8.4 8.5 8.5 0 01-3.8-.9L3 21l1.9-5.2A8.38 8.38 0 014 11.5a8.5 8.5 0 018.5-8.5 8.38 8.38 0 018.5 8.5z"
+                    />
                   </svg>
                 </span>
                 <p className="font-[family-name:var(--font-playfair)] text-lg font-bold text-bourbon-cream">
@@ -413,7 +553,10 @@ export default function ChatWidget() {
                   autoComplete="email"
                   inputMode="email"
                   value={email}
-                  onChange={(e) => { setEmail(e.target.value); setStartError(null); }}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setStartError(null);
+                  }}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       e.preventDefault();
@@ -430,7 +573,10 @@ export default function ChatWidget() {
                   }`}
                 />
                 {startError && (
-                  <p className="mt-1.5 px-1 text-[11px] text-red-400" role="alert">
+                  <p
+                    className="mt-1.5 px-1 text-[11px] text-red-400"
+                    role="alert"
+                  >
                     {startError}
                   </p>
                 )}
@@ -461,7 +607,11 @@ export default function ChatWidget() {
               />
               <button
                 onClick={emailCaptured ? send : startWithEmail}
-                disabled={!draft.trim() || sending || (!emailCaptured && !email.includes("@"))}
+                disabled={
+                  !draft.trim() ||
+                  sending ||
+                  (!emailCaptured && !email.includes("@"))
+                }
                 title={
                   !emailCaptured && !email.includes("@")
                     ? "Add your email so we can reply"
@@ -470,8 +620,18 @@ export default function ChatWidget() {
                 aria-label="Send message"
                 className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-bourbon-gold text-bourbon-deep transition-opacity hover:bg-bourbon-amber disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
               >
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M13 6l6 6-6 6" />
+                <svg
+                  className="h-5 w-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 12h14M13 6l6 6-6 6"
+                  />
                 </svg>
               </button>
             </div>
@@ -482,7 +642,13 @@ export default function ChatWidget() {
   );
 }
 
-function Bubble({ sender, body }: { sender: "VISITOR" | "ADMIN"; body: string }) {
+function Bubble({
+  sender,
+  body,
+}: {
+  sender: "VISITOR" | "ADMIN";
+  body: string;
+}) {
   const isVisitor = sender === "VISITOR";
   return (
     <div className={`flex ${isVisitor ? "justify-end" : "justify-start"}`}>

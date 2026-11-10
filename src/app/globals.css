@@ -160,6 +160,28 @@ textarea,
   opacity: 0;
 }
 
+/* Chat launcher. The one control on the page that opens a conversation with a
+   person, and nothing else points at it — so it advertises itself the way the
+   install button does, on the same 2.8s cycle so the two beat together rather
+   than fighting. A halo growing out of the bubble rather than a ring around a
+   dot: the target is 64px, and the 2.6x the dot travels would throw a wash
+   across a third of a phone viewport. */
+@keyframes bourbon-launcher-halo {
+  0%        { transform: scale(1);   opacity: 0.45; }
+  60%, 100% { transform: scale(1.7); opacity: 0; }
+}
+.animate-launcher-halo { animation: bourbon-launcher-halo 2.8s cubic-bezier(0, 0, 0.2, 1) infinite; }
+
+/* Stops once the pointer or keyboard arrives, same as the attention ring, so
+   the hover state reads without a pulse crawling underneath it. focus-within
+   rather than focus-visible because the focus lands on the button inside the
+   group, not the group itself. Unlayered for the same reason as above. */
+.group:hover .animate-launcher-halo,
+.group:focus-within .animate-launcher-halo {
+  animation: none;
+  opacity: 0;
+}
+
 /* Testimonial marquee. The track holds the list twice and travels exactly
    -50%, so when the animation restarts the second copy is already where the
    first was — a seamless belt with no jump and no JS.
@@ -266,6 +288,8 @@ textarea,
   /* The badge carries a count, so it stays put and fully visible — only the
      motion goes. */
   .animate-pulse-badge { animation: none; }
+  /* Pure decoration — no count, no state. It goes entirely. */
+  .animate-launcher-halo { animation: none; opacity: 0; }
 }
 
 /* Chat canvas. A warm paper ground with a faint oak-grain tick, so a thread

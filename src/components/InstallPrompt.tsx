@@ -1,6 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import {
+  INSTALL_PROMPT_DELAY_MS,
+  setInstallPromptOpen,
+} from "@/lib/install-prompt-signal";
 import { usePathname } from "next/navigation";
 import {
   type BeforeInstallPromptEvent,
@@ -21,7 +25,7 @@ import {
   isDashboardChatOpen,
 } from "@/lib/dashboard-chat-signal";
 
-const DELAY_MS = 10_000;
+const DELAY_MS = INSTALL_PROMPT_DELAY_MS;
 
 export default function InstallPrompt() {
   /* Mounted from the root layout, which is outside SiteChrome's admin branch,
@@ -134,9 +138,21 @@ export default function InstallPrompt() {
      the timed banner would be a second ask stacked on the first — and it
      covers the composer and the order receipt the buyer was just sent here to
      read. Same signal the floating chat widget uses to get out of the way. */
-  if (!visible || pathname?.startsWith("/admin") || chatOpen) return null;
+  const onScreen = Boolean(
+    visible && !pathname?.startsWith("/admin") && !chatOpen,
+  );
 
-  const isMac = typeof navigator !== "undefined" && /Mac/i.test(navigator.platform);
+  /* Publish that so the chat teaser can stand down rather than landing on top
+     of this banner — see install-prompt-signal. */
+  useEffect(() => {
+    setInstallPromptOpen(onScreen);
+    return () => setInstallPromptOpen(false);
+  }, [onScreen]);
+
+  if (!onScreen) return null;
+
+  const isMac =
+    typeof navigator !== "undefined" && /Mac/i.test(navigator.platform);
   const bookmarkKey = isMac ? "⌘ + D" : "Ctrl + D";
 
   const headline =
@@ -188,8 +204,18 @@ export default function InstallPrompt() {
           aria-label="Dismiss"
           className="absolute top-2.5 right-2.5 z-10 p-1 text-bourbon-stone/50 hover:text-bourbon-deep transition-colors cursor-pointer"
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M6 18L18 6M6 6l12 12" />
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.75}
+              d="M6 18L18 6M6 6l12 12"
+            />
           </svg>
         </button>
 
@@ -197,7 +223,12 @@ export default function InstallPrompt() {
             that it never covers the content the visitor is reading. */}
         <div className="flex items-start gap-3.5 p-4 pr-9">
           <span className="shrink-0 w-11 h-11 bg-bourbon-gold flex items-center justify-center">
-            <svg className="w-5 h-5 text-bourbon-deep" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              className="w-5 h-5 text-bourbon-deep"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -216,7 +247,10 @@ export default function InstallPrompt() {
               {/* Marketing copy only — nothing is issued or redeemable here,
                   matching how the newsletter popup states its 10%. */}
               {showOffer && (
-                <span className="text-bourbon-gold"> — save 5% on every order</span>
+                <span className="text-bourbon-gold">
+                  {" "}
+                  — save 5% on every order
+                </span>
               )}
             </h3>
             <p className="text-bourbon-stone text-[13px] leading-snug mt-1">
@@ -245,24 +279,48 @@ export default function InstallPrompt() {
             {platform === "ios-safari" ? (
               <ol className="text-bourbon-stone text-[13px] space-y-1.5 list-decimal list-inside leading-relaxed">
                 <li>
-                  Tap the <span className="text-bourbon-deep font-semibold">Share</span> icon at the bottom of Safari.
+                  Tap the{" "}
+                  <span className="text-bourbon-deep font-semibold">Share</span>{" "}
+                  icon at the bottom of Safari.
                 </li>
                 <li>
                   Scroll and tap{" "}
-                  <span className="text-bourbon-deep font-semibold">Add to Home Screen</span>.
+                  <span className="text-bourbon-deep font-semibold">
+                    Add to Home Screen
+                  </span>
+                  .
                 </li>
                 <li>
-                  Tap <span className="text-bourbon-deep font-semibold">Add</span> in the top-right.
+                  Tap{" "}
+                  <span className="text-bourbon-deep font-semibold">Add</span>{" "}
+                  in the top-right.
                 </li>
               </ol>
             ) : platform === "android-chrome" ? (
               <ol className="text-bourbon-stone text-[13px] space-y-1.5 list-decimal list-inside leading-relaxed">
-                <li>Open the browser <span className="text-bourbon-deep font-semibold">menu</span> (three dots).</li>
                 <li>
-                  Tap <span className="text-bourbon-deep font-semibold">Install app</span> or{" "}
-                  <span className="text-bourbon-deep font-semibold">Add to Home Screen</span>.
+                  Open the browser{" "}
+                  <span className="text-bourbon-deep font-semibold">menu</span>{" "}
+                  (three dots).
                 </li>
-                <li>Confirm <span className="text-bourbon-deep font-semibold">Install</span>.</li>
+                <li>
+                  Tap{" "}
+                  <span className="text-bourbon-deep font-semibold">
+                    Install app
+                  </span>{" "}
+                  or{" "}
+                  <span className="text-bourbon-deep font-semibold">
+                    Add to Home Screen
+                  </span>
+                  .
+                </li>
+                <li>
+                  Confirm{" "}
+                  <span className="text-bourbon-deep font-semibold">
+                    Install
+                  </span>
+                  .
+                </li>
               </ol>
             ) : (
               <div className="text-bourbon-stone text-[13px] leading-relaxed">
@@ -270,7 +328,8 @@ export default function InstallPrompt() {
                 <kbd className="px-1.5 py-0.5 bg-white border border-bourbon-deep/15 text-bourbon-deep font-mono text-[11px]">
                   {bookmarkKey}
                 </kbd>{" "}
-                to bookmark this page. In Chrome or Edge you can also click the install icon in the address bar.
+                to bookmark this page. In Chrome or Edge you can also click the
+                install icon in the address bar.
               </div>
             )}
           </div>
