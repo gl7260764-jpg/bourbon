@@ -12,6 +12,14 @@ import {
   INSTALL_PROMPT_EVENT,
   isInstallPromptOpen,
 } from "@/lib/install-prompt-signal";
+import {
+  LAUNCHER_SIZE,
+  useDraggableLauncher,
+} from "@/lib/use-draggable-launcher";
+
+/** One per third of the halo cycle, so the waves are evenly spaced. */
+const HALO_WAVES = [0, 1, 2];
+const HALO_CYCLE_S = 2.8;
 
 const POLL_INTERVAL_MS = 4000;
 
@@ -307,6 +315,9 @@ export default function ChatWidget() {
     };
   }, []);
 
+  const { position, side, dragging, consumeDrag, dragHandlers } =
+    useDraggableLauncher();
+
   const [teaser, setTeaser] = useState(false);
   const [bannerUp, setBannerUp] = useState(false);
 
@@ -354,6 +365,9 @@ export default function ChatWidget() {
   };
 
   const openWidget = () => {
+    // Carrying the bubble across the page ends in a click on it. That is not a
+    // request to open the chat.
+    if (consumeDrag()) return;
     userInteractedRef.current = true;
     dismissTeaser();
     setOpen(true);
@@ -372,11 +386,34 @@ export default function ChatWidget() {
     <>
       {/* Launcher bubble */}
       {!open && (
-        <div className="fixed bottom-5 right-5 z-[90] flex items-end gap-3">
-          {teaser && !bannerUp && (
+        /* The wrapper IS the bubble's box, so dragging moves one thing and the
+           teaser hangs off whichever side has room. Positioned by left/top only
+           once it has been moved; until then it keeps the plain corner offsets,
+           which also means nothing jumps on hydration. */
+        <div
+          className="group fixed z-[90]"
+          style={
+            position
+              ? {
+                  left: position.x,
+                  top: position.y,
+                  width: LAUNCHER_SIZE,
+                  height: LAUNCHER_SIZE,
+                }
+              : {
+                  right: 20,
+                  bottom: 20,
+                  width: LAUNCHER_SIZE,
+                  height: LAUNCHER_SIZE,
+                }
+          }
+        >
+          {teaser && !bannerUp && !dragging && (
             <div
               role="status"
-              className="animate-pop-in mb-1.5 flex max-w-[16rem] items-start gap-1.5 rounded-xl border border-bourbon-gold/30 bg-bourbon-dark py-2.5 pl-3.5 pr-2 shadow-xl shadow-black/40"
+              className={`animate-pop-in absolute bottom-0 flex w-[min(16rem,calc(100vw-6rem))] items-start gap-1.5 rounded-xl border border-bourbon-gold/30 bg-bourbon-dark py-2.5 pl-3.5 pr-2 shadow-xl shadow-black/40 ${
+                side === "right" ? "right-full mr-3" : "left-full ml-3"
+              }`}
             >
               <p className="text-[13px] leading-snug text-bourbon-cream/90">
                 Hunting a particular bottle?{" "}
@@ -403,49 +440,69 @@ export default function ChatWidget() {
             </div>
           )}
 
-          {/* The halo is a sibling, not a child: the button takes a transform
+          {/* Siblings of the button, not children: the button takes a transform
               on hover, which would make it a stacking context and bury a
-              negative-z-index child behind its own gold fill. */}
-          <div className="group relative shrink-0">
-            <span
-              aria-hidden="true"
-              className="animate-launcher-halo pointer-events-none absolute inset-0 rounded-full bg-bourbon-gold"
-            />
-            <button
-              onClick={openWidget}
-              aria-label={
-                unseen > 0
-                  ? `Open chat, ${unseen} new ${unseen === 1 ? "message" : "messages"}`
-                  : "Open chat"
-              }
-              className="relative flex h-16 w-16 cursor-pointer items-center justify-center rounded-full bg-bourbon-gold text-bourbon-deep shadow-lg shadow-black/40 ring-1 ring-bourbon-warm/40 transition-transform duration-300 hover:scale-105"
+              negative-z-index child behind its own gold fill. They also stand
+              down mid-drag — a ripple trailing a bubble being carried reads as
+              a smear. */}
+          {!dragging &&
+            HALO_WAVES.map((wave) => (
+              <span
+                key={wave}
+                aria-hidden="true"
+                className="animate-launcher-halo pointer-events-none absolute inset-0 rounded-full bg-bourbon-gold"
+                style={{
+                  animationDelay: `${-wave * (HALO_CYCLE_S / HALO_WAVES.length)}s`,
+                }}
+              />
+            ))}
+
+          <button
+            onClick={openWidget}
+            {...dragHandlers}
+            aria-label={
+              unseen > 0
+                ? `Open chat, ${unseen} new ${unseen === 1 ? "message" : "messages"}`
+                : "Open chat"
+            }
+            title="Drag to move"
+            className={`absolute inset-0 flex touch-none items-center justify-center rounded-full bg-bourbon-gold text-bourbon-deep shadow-lg shadow-black/40 ring-1 ring-bourbon-warm/40 ${
+              dragging
+                ? "scale-110 cursor-grabbing shadow-2xl"
+                : "cursor-grab transition-transform duration-300 hover:scale-105"
+            }`}
+          >
+            <svg
+              className="h-7 w-7"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <svg
-                className="h-7 w-7"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M8 10h.01M12 10h.01M16 10h.01M21 12a9 9 0 11-3.6-7.2L21 3l-1.2 3.4A8.96 8.96 0 0121 12z"
-                />
-              </svg>
-              {unseen > 0 && (
-                <span className="absolute -top-1 -right-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 text-[11px] font-bold tabular-nums text-white ring-2 ring-bourbon-deep animate-pulse-badge">
-                  {unseen > 9 ? "9+" : unseen}
-                </span>
-              )}
-            </button>
-          </div>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8 10h.01M12 10h.01M16 10h.01M21 12a9 9 0 11-3.6-7.2L21 3l-1.2 3.4A8.96 8.96 0 0121 12z"
+              />
+            </svg>
+            {unseen > 0 && (
+              <span className="absolute -top-1 -right-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 text-[11px] font-bold tabular-nums text-white ring-2 ring-bourbon-deep animate-pulse-badge">
+                {unseen > 9 ? "9+" : unseen}
+              </span>
+            )}
+          </button>
         </div>
       )}
 
       {/* Chat panel */}
       {open && (
-        <div className="fixed bottom-5 right-5 z-[90] flex h-[min(34rem,calc(100vh-2.5rem))] w-[min(24rem,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-xl border border-bourbon-gold/30 bg-bourbon-dark shadow-2xl shadow-black/40">
+        <div
+          /* Opens on the side the bubble was left on, so the panel does not
+             fly across the screen from the control that summoned it. */
+          className={`fixed bottom-5 z-[90] flex h-[min(34rem,calc(100vh-2.5rem))] w-[min(24rem,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-xl border border-bourbon-gold/30 bg-bourbon-dark shadow-2xl shadow-black/40 ${
+            side === "left" ? "left-5" : "right-5"
+          }`}
+        >
           {/* Header */}
           <div className="flex items-center justify-between bg-bourbon-deep px-4 py-3">
             <div>

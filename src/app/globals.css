@@ -163,12 +163,18 @@ textarea,
 /* Chat launcher. The one control on the page that opens a conversation with a
    person, and nothing else points at it — so it advertises itself the way the
    install button does, on the same 2.8s cycle so the two beat together rather
-   than fighting. A halo growing out of the bubble rather than a ring around a
-   dot: the target is 64px, and the 2.6x the dot travels would throw a wash
-   across a third of a phone viewport. */
+   than fighting.
+
+   Three waves rather than one, each started a third of a cycle behind the last
+   (the offsets are negative, set inline, so the ripple is already mid-flight on
+   the first frame instead of opening with a gap). Each wave is fainter than a
+   single one would be: three at full strength stack into a gold smear rather
+   than reading as rings. They travel further than the ring around the navbar
+   dot but not nearly as far proportionally — the target here is 64px, and the
+   2.6x that dot covers would wash a third of a phone screen. */
 @keyframes bourbon-launcher-halo {
-  0%        { transform: scale(1);   opacity: 0.45; }
-  60%, 100% { transform: scale(1.7); opacity: 0; }
+  0%        { transform: scale(1);   opacity: 0.38; }
+  70%, 100% { transform: scale(2.1); opacity: 0; }
 }
 .animate-launcher-halo { animation: bourbon-launcher-halo 2.8s cubic-bezier(0, 0, 0.2, 1) infinite; }
 
