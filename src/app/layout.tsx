@@ -3,6 +3,7 @@ import { Playfair_Display, Inter } from "next/font/google";
 import SiteChrome from "@/components/SiteChrome";
 import InstallPrompt from "@/components/InstallPrompt";
 import { DISTILLERY } from "@/lib/locations";
+import { SOCIAL_PROFILES } from "@/lib/social";
 import "./globals.css";
 
 export const viewport: Viewport = {
@@ -114,7 +115,7 @@ const organizationJsonLd = {
     contactType: "customer service",
     email: DISTILLERY.email,
   },
-  sameAs: [],
+  sameAs: SOCIAL_PROFILES.map((profile) => profile.url),
 };
 
 export default function RootLayout({
