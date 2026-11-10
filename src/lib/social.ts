@@ -24,7 +24,7 @@ export type SocialProfile = {
 export const SOCIAL_PROFILES: SocialProfile[] = [
   {
     name: "TikTok",
-    handle: "@buffalo.trcae.bou",
+    handle: "bourbon oak lover",
     url: "https://www.tiktok.com/@buffalo.trcae.bou",
     blurb: "Bottle finds and shelf checks, posted as we get them.",
   },
