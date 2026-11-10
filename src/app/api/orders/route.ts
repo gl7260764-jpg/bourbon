@@ -1,13 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import {
-  MIN_ORDER_TOTAL,
-  meetsMinimum,
-  shippingFor,
-} from "@/lib/commerce";
+import { MIN_ORDER_TOTAL, meetsMinimum, shippingFor } from "@/lib/commerce";
 import { Prisma, PaymentMethod, ShippingMethod } from "@prisma/client";
 import { isValidUsPhone, toE164Us, US_PHONE_ERROR } from "@/lib/phone";
 import { canShipTo, cannotShipMessage } from "@/lib/shipping-states";
 import { issueLoginLink } from "@/lib/login-link";
+import { addBuyerToMailingList } from "@/lib/mailing-list";
 import { notifyAsync } from "@/lib/ntfy";
 import { signInLinkUrl } from "@/lib/emails/signInLinkEmail";
 import { prisma } from "@/lib/prisma";
@@ -23,13 +20,7 @@ import {
 
 type ShippingId = "standard" | "express" | "overnight" | "white-glove";
 type PaymentId =
-  | "card"
-  | "paypal"
-  | "chime"
-  | "apple-pay"
-  | "crypto"
-  | "zelle"
-  | "cash-app";
+  "card" | "paypal" | "chime" | "apple-pay" | "crypto" | "zelle" | "cash-app";
 
 const PAYMENT_MAP: Record<PaymentId, PaymentMethod> = {
   card: "CARD",
@@ -95,7 +86,8 @@ export async function POST(req: NextRequest) {
   const totals = body.totals;
 
   if (!orderNumber) return badRequest("Missing orderNumber.");
-  if (!email || !email.includes("@")) return badRequest("Valid email is required.");
+  if (!email || !email.includes("@"))
+    return badRequest("Valid email is required.");
   if (!isValidUsPhone(rawPhone)) return badRequest(US_PHONE_ERROR);
   // Stored E.164 so the admin panel and order emails show one consistent shape.
   const phone = toE164Us(rawPhone)!;
@@ -199,7 +191,8 @@ export async function POST(req: NextRequest) {
 
     // A case price is only honoured when the product actually sells by the
     // case; otherwise fall back to the bottle price rather than inventing one.
-    const sellsCases = product.casePrice !== null && product.bottlesPerCase !== null;
+    const sellsCases =
+      product.casePrice !== null && product.bottlesPerCase !== null;
     if (line.isCase && !sellsCases) {
       return badRequest(
         `${product.name} is not sold by the case. Please refresh your cart and try again.`,
@@ -255,7 +248,10 @@ export async function POST(req: NextRequest) {
   // The client's own figures are ignored, but a mismatch means the buyer was
   // shown a different price than they're being charged — worth knowing about.
   const clientTotal = Number(totals?.total ?? NaN);
-  if (Number.isFinite(clientTotal) && Math.abs(clientTotal - computedTotal) >= 0.01) {
+  if (
+    Number.isFinite(clientTotal) &&
+    Math.abs(clientTotal - computedTotal) >= 0.01
+  ) {
     console.warn(
       `[orders] total mismatch on ${orderNumber}: client sent ${clientTotal}, server computed ${computedTotal}`,
     );
@@ -335,6 +331,16 @@ export async function POST(req: NextRequest) {
       include: { items: true },
     });
 
+    /* Buying is how most people join the list. Awaited rather than fired off,
+       so the write lands before the response and the address is on the list by
+       the time the confirmation email goes out — it resolves to a string in
+       every case instead of throwing, so it cannot cost the order. Someone who
+       has unsubscribed is left alone; see addBuyerToMailingList. */
+    const listResult = await addBuyerToMailingList(email);
+    if (listResult === "failed") {
+      console.error(`[orders] ${orderNumber}: buyer not added to mailing list`);
+    }
+
     /* Straight to the operator's phone. Fire and forget: the order is already
        written, and a failed notification must never fail a checkout. */
     notifyAsync({
@@ -343,8 +349,11 @@ export async function POST(req: NextRequest) {
       message: [
         `${address.fullName!.trim()} · ${email}`,
         `${resolvedLines.length} item${resolvedLines.length === 1 ? "" : "s"} · ${option.label}`,
+        listResult === "added" ? "New to the mailing list" : null,
         resolvedLines.map((l) => `${l.quantity}x ${l.productName}`).join(", "),
-      ].join("\n"),
+      ]
+        .filter((line): line is string => Boolean(line))
+        .join("\n"),
       url: `/admin/orders/${createdOrder.id}`,
     });
 
@@ -423,11 +432,20 @@ export async function POST(req: NextRequest) {
         }),
       ]);
 
-      const summarize = (label: string, to: string, r: PromiseSettledResult<boolean>) => {
+      const summarize = (
+        label: string,
+        to: string,
+        r: PromiseSettledResult<boolean>,
+      ) => {
         if (r.status === "rejected") {
-          console.error(`[POST /api/orders] ${label} email rejected (to=${to}):`, r.reason);
+          console.error(
+            `[POST /api/orders] ${label} email rejected (to=${to}):`,
+            r.reason,
+          );
         } else if (r.value === false) {
-          console.error(`[POST /api/orders] ${label} email returned false (to=${to}) — see [mailer] logs above for SMTP details.`);
+          console.error(
+            `[POST /api/orders] ${label} email returned false (to=${to}) — see [mailer] logs above for SMTP details.`,
+          );
         } else {
           console.log(`[POST /api/orders] ${label} email sent (to=${to})`);
         }
@@ -483,16 +501,19 @@ export async function POST(req: NextRequest) {
       { status: 201 },
     );
   } catch (err) {
-    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002") {
+    if (
+      err instanceof Prisma.PrismaClientKnownRequestError &&
+      err.code === "P2002"
+    ) {
       return NextResponse.json(
         { error: "Order number already exists." },
-        { status: 409 }
+        { status: 409 },
       );
     }
     console.error("[POST /api/orders] failed:", err);
     return NextResponse.json(
       { error: "Could not save order. Please try again." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
