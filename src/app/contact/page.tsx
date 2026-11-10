@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { SOCIAL_ICON_PATHS, SOCIAL_PROFILES } from "@/lib/social";
 import ContactForm from "./ContactForm";
 import OpenStatus from "./OpenStatus";
 
@@ -64,6 +65,12 @@ const PhoneIcon = (
   <>
     <path d="M7.5 3.5h-3a1.5 1.5 0 0 0-1.5 1.6c.45 6.9 6 12.45 12.9 12.9a1.5 1.5 0 0 0 1.6-1.5v-3a1.5 1.5 0 0 0-1.3-1.49l-2.2-.3a1.5 1.5 0 0 0-1.45.66l-.7 1.05a12.5 12.5 0 0 1-4.17-4.17l1.05-.7a1.5 1.5 0 0 0 .66-1.45l-.3-2.2A1.5 1.5 0 0 0 7.5 3.5Z" />
   </>
+);
+
+/* The brand marks are filled shapes, not line art like the icons above, so
+   each path overrides the stroke defaults Icon sets. */
+const socialIcon = (name: string) => (
+  <path d={SOCIAL_ICON_PATHS[name]} fill="currentColor" stroke="none" />
 );
 
 /** A single way to reach us. Hairlines, not nested cards. */
@@ -161,6 +168,26 @@ export default function ContactPage() {
               During the hours below. Outside them, email reaches us faster.
             </p>
           </Channel>
+
+          {SOCIAL_PROFILES.filter(
+            (profile) => SOCIAL_ICON_PATHS[profile.name],
+          ).map((profile) => (
+            <Channel
+              key={profile.name}
+              icon={socialIcon(profile.name)}
+              label={profile.name}
+            >
+              <a
+                href={profile.url}
+                target="_blank"
+                rel="me noopener noreferrer"
+                className="text-bourbon-deep font-semibold hover:text-bourbon-gold transition-colors break-words"
+              >
+                {profile.handle}
+              </a>
+              <p className="text-bourbon-stone text-xs mt-1">{profile.blurb}</p>
+            </Channel>
+          ))}
 
           <Channel icon={ClockIcon} label="Hours">
             <dl className="text-sm space-y-1">
