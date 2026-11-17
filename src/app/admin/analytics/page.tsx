@@ -4,6 +4,19 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { countryFlag, countryName } from "@/lib/geo";
 import { visitorLabel, deviceLabel, formatDuration } from "@/lib/visitor";
+import {
+  loadTrafficClassification,
+  parseTrafficMode,
+  trafficSql,
+  trafficIdFilter,
+  TRAFFIC_MODES,
+  TRAFFIC_MODE_LABELS,
+  DEFAULT_TRAFFIC_MODE,
+  BOT_REASONS,
+  BOT_REASON_LABELS,
+  BOT_REASON_BLURBS,
+  type TrafficMode,
+} from "@/lib/visitor-traffic";
 
 export const metadata = { title: "Analytics | Admin" };
 export const dynamic = "force-dynamic";
@@ -74,7 +87,7 @@ function buildDayRange(days: number): { key: string; label: string }[] {
 export default async function AnalyticsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string; sort?: string }>;
+  searchParams: Promise<{ page?: string; sort?: string; traffic?: string }>;
 }) {
   const sp = await searchParams;
   const sortKey: VisitorSort =
@@ -83,6 +96,38 @@ export default async function AnalyticsPage({
   const since = startOfUtcDay(DAYS_WINDOW - 1);
   const startOfToday = startOfUtcDay(0);
   const startOfLast7 = startOfUtcDay(6);
+
+  /* Who counts as a visitor, for every number on this page. This has to be
+     resolved before the reads below rather than alongside them, because it is
+     what they are filtered by — see src/lib/visitor-traffic.ts for why the
+     user-agent blocklist alone is not enough. */
+  const mode = parseTrafficMode(sp.traffic);
+  const traffic = await loadTrafficClassification();
+  const botIds = traffic.botIds;
+
+  // The same filter in the three shapes the queries below need it in.
+  const idFilter = trafficIdFilter(mode, botIds);
+  const onVisitor = trafficSql(mode, botIds, Prisma.sql`v."id"`);
+  const onVisitorId = trafficSql(mode, botIds, Prisma.sql`"visitorId"`);
+
+  /* Links have to carry the active filter, or clicking a sort or a page would
+     silently drop it and show different numbers under the same heading.
+     Omitting `page` resets to the first one, which is what changing a sort or
+     a filter should do. */
+  const linkTo = (next: {
+    sort?: VisitorSort;
+    page?: number;
+    traffic?: TrafficMode;
+  }): string => {
+    const q = new URLSearchParams();
+    const nextSort = next.sort ?? sortKey;
+    const nextMode = next.traffic ?? mode;
+    if (nextSort !== "recent") q.set("sort", nextSort);
+    if (nextMode !== DEFAULT_TRAFFIC_MODE) q.set("traffic", nextMode);
+    if (next.page && next.page > 1) q.set("page", String(next.page));
+    const query = q.toString();
+    return query ? `/admin/analytics?${query}` : "/admin/analytics";
+  };
 
   // Run everything in parallel — they're independent reads.
   const [
@@ -112,11 +157,13 @@ export default async function AnalyticsPage({
   ] = await Promise.all([
     prisma.order.count(),
     prisma.order.aggregate({ _sum: { total: true } }),
-    prisma.visitor.count(),
-    prisma.visitDay.count({ where: { date: { gte: startOfToday } } }),
+    prisma.visitor.count({ where: { id: idFilter } }),
+    prisma.visitDay.count({
+      where: { date: { gte: startOfToday }, visitorId: idFilter },
+    }),
     prisma.visitDay
       .findMany({
-        where: { date: { gte: startOfLast7 } },
+        where: { date: { gte: startOfLast7 }, visitorId: idFilter },
         distinct: ["visitorId"],
         select: { visitorId: true },
       })
@@ -134,7 +181,7 @@ export default async function AnalyticsPage({
       SELECT "date" AS day,
              COUNT(DISTINCT "visitorId")::bigint AS visitors
       FROM "VisitDay"
-      WHERE "date" >= ${since}
+      WHERE "date" >= ${since}${onVisitorId}
       GROUP BY day
       ORDER BY day ASC
     `,
@@ -151,13 +198,15 @@ export default async function AnalyticsPage({
     prisma.visitor.groupBy({
       by: ["countryCode"],
       _count: { _all: true },
-      where: { countryCode: { not: null } },
+      where: { countryCode: { not: null }, id: idFilter },
       orderBy: { _count: { countryCode: "desc" } },
       take: 10,
     }),
 
     // First-ever visit landed inside the window.
-    prisma.visitor.count({ where: { firstSeenAt: { gte: since } } }),
+    prisma.visitor.count({
+      where: { firstSeenAt: { gte: since }, id: idFilter },
+    }),
 
     // Came back on a later day than the one they were first seen — this is
     // the "old visitors return" number.
@@ -166,21 +215,24 @@ export default async function AnalyticsPage({
       FROM "VisitDay" vd
       JOIN "Visitor" v ON v."id" = vd."visitorId"
       WHERE vd."date" >= ${since}
-        AND v."firstSeenAt" < vd."date"
+        AND v."firstSeenAt" < vd."date"${onVisitor}
     `.then((r) => Number(r[0]?.c ?? 0)),
 
     // All-time loyalty: visitors seen on more than one distinct day.
     prisma.$queryRaw<{ c: bigint }[]>`
       SELECT COUNT(*)::bigint AS c FROM (
         SELECT "visitorId" FROM "VisitDay"
+        WHERE TRUE${onVisitorId}
         GROUP BY "visitorId" HAVING COUNT(*) > 1
       ) AS repeats
     `.then((r) => Number(r[0]?.c ?? 0)),
 
-    prisma.pageView.count({ where: { createdAt: { gte: since } } }),
+    prisma.pageView.count({
+      where: { createdAt: { gte: since }, visitorId: idFilter },
+    }),
 
     // Anonymous devices that have handed over an email.
-    prisma.visitor.count({ where: { email: { not: null } } }),
+    prisma.visitor.count({ where: { email: { not: null }, id: idFilter } }),
 
     // Where those addresses came from — tells you whether the popup is
     // actually pulling its weight against the footer form.
@@ -202,7 +254,7 @@ export default async function AnalyticsPage({
              COUNT(*) FILTER (WHERE v."firstSeenAt" < vd."date")::bigint AS returningv
       FROM "VisitDay" vd
       JOIN "Visitor" v ON v."id" = vd."visitorId"
-      WHERE vd."date" >= ${since}
+      WHERE vd."date" >= ${since}${onVisitor}
       GROUP BY day
       ORDER BY day ASC
     `,
@@ -212,7 +264,7 @@ export default async function AnalyticsPage({
              COUNT(*)::bigint                  AS views,
              COUNT(DISTINCT "visitorId")::bigint AS visitors
       FROM "PageView"
-      WHERE "createdAt" >= ${since}
+      WHERE "createdAt" >= ${since}${onVisitorId}
       GROUP BY "path"
       ORDER BY views DESC
       LIMIT 12
@@ -241,12 +293,13 @@ export default async function AnalyticsPage({
                SUM("activeMs")::int AS total_ms
         FROM "VisitSession" GROUP BY "visitorId"
       ) s ON s."visitorId" = v."id"
+      WHERE TRUE${onVisitor}
       ORDER BY ${VISITOR_SORTS[sortKey]}
       LIMIT ${VISITORS_PAGE_SIZE} OFFSET ${(pageNum - 1) * VISITORS_PAGE_SIZE}
     `,
 
     // Total row count, for the pager.
-    prisma.visitor.count(),
+    prisma.visitor.count({ where: { id: idFilter } }),
 
     // --- engagement time -------------------------------------------------
     // Average visit length. Only visits that actually reported time are
@@ -258,7 +311,7 @@ export default async function AnalyticsPage({
              COUNT(*)::bigint        AS sessions
       FROM "VisitSession"
       WHERE "startedAt" >= ${since}
-        AND "activeMs" > 0
+        AND "activeMs" > 0${onVisitorId}
     `,
 
     // Same rule for per-page dwell: durationMs IS NULL means "never
@@ -270,7 +323,7 @@ export default async function AnalyticsPage({
       FROM "PageView"
       WHERE "createdAt" >= ${since}
         AND "durationMs" IS NOT NULL
-        AND "durationMs" > 0
+        AND "durationMs" > 0${onVisitorId}
     `,
 
     // Attention, not traffic: ranked by total time spent, so a long-read page
@@ -285,7 +338,7 @@ export default async function AnalyticsPage({
       FROM "PageView"
       WHERE "createdAt" >= ${since}
         AND "durationMs" IS NOT NULL
-        AND "durationMs" > 0
+        AND "durationMs" > 0${onVisitorId}
       GROUP BY "path"
       ORDER BY totalms DESC
       LIMIT 12
@@ -293,7 +346,9 @@ export default async function AnalyticsPage({
 
     // Every visit in the window, measured or not — the denominator that keeps
     // the average honest about its own coverage.
-    prisma.visitSession.count({ where: { startedAt: { gte: since } } }),
+    prisma.visitSession.count({
+      where: { startedAt: { gte: since }, visitorId: idFilter },
+    }),
   ]);
 
   const totalRevenue = Number(totalRevenueAgg._sum.total ?? 0);
@@ -413,6 +468,32 @@ export default async function AnalyticsPage({
     0,
   );
 
+  /* Filter copy. Assembled here rather than inline because a JSX text node
+     that spans a newline loses its leading space at compile time. */
+  const botsWord = `${traffic.bots.toLocaleString()} visitor${traffic.bots === 1 ? "" : "s"}`;
+  const trafficBlurb: string =
+    mode === "humans"
+      ? traffic.bots > 0
+        ? `${botsWord} judged automated, and everything they did, are excluded from every number below.`
+        : "Nothing here looks automated, so no visitor is being excluded."
+      : mode === "bots"
+        ? `Showing only the ${botsWord} judged automated. Total orders and revenue are left whole — those come from checkout, not from visitor tracking.`
+        : `Nothing is excluded. ${traffic.bots.toLocaleString()} of these ${traffic.total.toLocaleString()} visitors look automated.`;
+
+  const unprovenNote: string | null =
+    traffic.unproven === 0
+      ? null
+      : traffic.unproven === 1
+        ? "One further visitor recorded no time at all and is still counted as a real person: somebody who leaves before the beacon fires looks exactly like a robot that never ran it."
+        : `A further ${traffic.unproven.toLocaleString()} visitors recorded no time at all and are still counted as real people: somebody who leaves before the beacon fires looks exactly like a robot that never ran it.`;
+
+  const visitorTotalLabel =
+    mode === "humans"
+      ? `${visitorTotal.toLocaleString()} real`
+      : mode === "bots"
+        ? `${visitorTotal.toLocaleString()} automated`
+        : `${visitorTotal.toLocaleString()} total`;
+
   // Collapse the flat page-view rows into one ordered journey per visitor.
   return (
     <>
@@ -429,11 +510,117 @@ export default async function AnalyticsPage({
         </p>
       </div>
 
+      {/* ---- Traffic filter -----------------------------------------------
+          This governs every visitor-derived number on the page, so it sits
+          above the KPIs instead of inside the visitors table. Plain links, not
+          a client component: the filtering happens in SQL, so the server has
+          to re-read anyway. */}
+      <section className="mb-10 pb-6 border-b border-bourbon-deep/10">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+          <div
+            className="flex items-stretch border border-bourbon-deep/15 divide-x divide-bourbon-deep/10"
+            role="group"
+            aria-label="Filter traffic by visitor kind"
+          >
+            {TRAFFIC_MODES.map((m) => {
+              const count =
+                m === "humans"
+                  ? traffic.humans
+                  : m === "bots"
+                    ? traffic.bots
+                    : traffic.total;
+              const active = mode === m;
+              return (
+                <Link
+                  key={m}
+                  href={linkTo({ traffic: m })}
+                  aria-current={active ? "page" : undefined}
+                  className={`text-[10px] tracking-widest uppercase px-3 py-2 transition-colors ${
+                    active
+                      ? "bg-bourbon-deep text-bourbon-cream"
+                      : "text-bourbon-stone hover:text-bourbon-deep hover:bg-bourbon-cream/60"
+                  }`}
+                >
+                  {TRAFFIC_MODE_LABELS[m]}
+                  <span
+                    className={`ml-2 tabular-nums ${
+                      active ? "text-bourbon-gold" : "text-bourbon-stone/60"
+                    }`}
+                  >
+                    {count.toLocaleString()}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+          <p className="text-bourbon-stone text-xs max-w-2xl leading-relaxed">
+            {trafficBlurb}
+          </p>
+        </div>
+
+        {/* The rules, in the open. A number this filter moves by 20% should
+            not be a black box, and the reasons are what make it auditable. */}
+        <details className="mt-4">
+          <summary className="text-bourbon-gold text-[10px] tracking-[0.2em] uppercase cursor-pointer hover:text-bourbon-amber transition-colors inline-block">
+            How a bot is spotted
+          </summary>
+          <div className="mt-3 max-w-3xl text-xs text-bourbon-stone leading-relaxed space-y-3">
+            <p>
+              A self-identifying crawler is rejected before it is ever stored,
+              and against this database that check caught{" "}
+              <span className="text-bourbon-deep font-semibold">
+                {traffic.countByReason["automation-ua"].toLocaleString()}
+              </span>{" "}
+              of{" "}
+              <span className="text-bourbon-deep font-semibold">
+                {traffic.total.toLocaleString()}
+              </span>
+              . Anything worth filtering sends a real browser&rsquo;s user
+              agent, so these rules read the shape of the traffic instead:
+            </p>
+            <ul className="space-y-2">
+              {BOT_REASONS.filter((r) => traffic.countByReason[r] > 0).map(
+                (r) => (
+                  <li key={r} className="flex gap-3">
+                    <span className="tabular-nums text-bourbon-deep font-semibold w-10 shrink-0 text-right">
+                      {traffic.countByReason[r].toLocaleString()}
+                    </span>
+                    <span>
+                      <span className="text-bourbon-deep font-semibold">
+                        {BOT_REASON_LABELS[r]}
+                      </span>
+                      {" — "}
+                      {BOT_REASON_BLURBS[r]}
+                    </span>
+                  </li>
+                ),
+              )}
+            </ul>
+            <p>
+              Two findings outrank all of it: a visitor who typed an email
+              address into a form on this site, and one whose browser ever
+              reported visible time on a page, is counted as a person whatever
+              else is true.{unprovenNote ? ` ${unprovenNote}` : ""}
+            </p>
+          </div>
+        </details>
+      </section>
+
       {/* KPI cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10 [&>*:last-child]:col-span-2 sm:[&>*:last-child]:col-span-1">
         <Kpi label="Total orders" value={totalOrders.toLocaleString()} />
         <Kpi label="Total revenue" value={formatMoney(totalRevenue)} />
-        <Kpi label="Unique visitors" value={totalVisitors.toLocaleString()} sub="all time" />
+        <Kpi
+          label="Unique visitors"
+          value={totalVisitors.toLocaleString()}
+          sub={
+            mode === "all"
+              ? "all time, bots included"
+              : mode === "bots"
+                ? "all time, bots only"
+                : "all time, bots excluded"
+          }
+        />
         <Kpi
           label="Visitors today"
           value={visitorsToday.toLocaleString()}
@@ -538,7 +725,7 @@ export default async function AnalyticsPage({
           </h2>
           <div className="flex items-center gap-3 flex-wrap">
             <span className="text-bourbon-stone text-[10px] tracking-widest uppercase">
-              {visitorTotal.toLocaleString()} total
+              {visitorTotalLabel}
             </span>
             <div className="flex items-center gap-1">
               {(
@@ -550,7 +737,7 @@ export default async function AnalyticsPage({
               ).map(([key, label]) => (
                 <Link
                   key={key}
-                  href={`/admin/analytics?sort=${key}`}
+                  href={linkTo({ sort: key })}
                   className={`text-[10px] tracking-widest uppercase px-2 py-1 transition-colors ${
                     sortKey === key
                       ? "bg-bourbon-deep text-bourbon-cream"
@@ -572,7 +759,7 @@ export default async function AnalyticsPage({
               Page {pageNum} is past the end of{" "}
               {visitorTotal.toLocaleString()} visitors.{" "}
               <Link
-                href={`/admin/analytics?sort=${sortKey}`}
+                href={linkTo({})}
                 className="text-bourbon-gold font-semibold hover:text-bourbon-amber transition-colors"
               >
                 Back to the first page
@@ -580,8 +767,9 @@ export default async function AnalyticsPage({
             </p>
           ) : (
             <p className="text-bourbon-stone text-sm py-6 text-center">
-              No visitors recorded yet. Rows appear as soon as someone browses
-              the site.
+              {mode === "bots"
+                ? "No automated visitors found. Every visitor on record looks like a real person."
+                : "No visitors recorded yet. Rows appear as soon as someone browses the site."}
             </p>
           )
         ) : (
@@ -602,6 +790,7 @@ export default async function AnalyticsPage({
                 <tbody>
                   {visitorRows.map((v) => {
                     const spent = formatDuration(v.total_ms);
+                    const botReason = traffic.reasonById.get(v.id);
                     return (
                       <tr
                         key={v.id}
@@ -617,6 +806,14 @@ export default async function AnalyticsPage({
                           {v.email && (
                             <span className="block text-bourbon-stone text-[10px] font-mono">
                               {visitorLabel(v.id)}
+                            </span>
+                          )}
+                          {botReason && (
+                            <span
+                              title={BOT_REASON_BLURBS[botReason]}
+                              className="inline-block mt-1 text-[9px] tracking-widest uppercase px-1.5 py-0.5 bg-bourbon-deep/5 text-bourbon-stone border border-bourbon-deep/10"
+                            >
+                              {BOT_REASON_LABELS[botReason]}
                             </span>
                           )}
                         </td>
@@ -683,7 +880,7 @@ export default async function AnalyticsPage({
                 <div className="flex items-center gap-2">
                   {pageNum > 1 ? (
                     <Link
-                      href={`/admin/analytics?sort=${sortKey}&page=${pageNum - 1}`}
+                      href={linkTo({ page: pageNum - 1 })}
                       className="text-bourbon-deep text-xs tracking-widest uppercase font-semibold px-3 py-1.5 border border-bourbon-deep/20 hover:border-bourbon-gold hover:text-bourbon-gold transition-colors"
                     >
                       ← Prev
@@ -698,7 +895,7 @@ export default async function AnalyticsPage({
                   </span>
                   {pageNum * VISITORS_PAGE_SIZE < visitorTotal ? (
                     <Link
-                      href={`/admin/analytics?sort=${sortKey}&page=${pageNum + 1}`}
+                      href={linkTo({ page: pageNum + 1 })}
                       className="text-bourbon-deep text-xs tracking-widest uppercase font-semibold px-3 py-1.5 border border-bourbon-deep/20 hover:border-bourbon-gold hover:text-bourbon-gold transition-colors"
                     >
                       Next →
