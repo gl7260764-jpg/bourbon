@@ -126,8 +126,9 @@ export default async function AdminFollowUpsPage() {
       {withWarnings > 0 && (
         <div className="mb-6 p-4 bg-amber-50 border border-amber-300">
           <p className="text-amber-900 text-sm font-semibold">
-            {withWarnings} draft{withWarnings === 1 ? " has a warning" : "s have warnings"} on
-            it.
+            {withWarnings === 1
+              ? "One draft has a warning on it."
+              : `${withWarnings} drafts have warnings on them.`}
           </p>
           <p className="text-amber-800 text-xs mt-1">
             A warning means the message would promise something we cannot yet
