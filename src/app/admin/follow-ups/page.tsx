@@ -74,9 +74,9 @@ export default async function AdminFollowUpsPage() {
         </h1>
         <p className="text-bourbon-stone text-sm mt-2 max-w-2xl">
           {pendingCount} order{pendingCount === 1 ? "" : "s"} are still unpaid,
-          worth {money(pendingValue)}. {queue.drafts.length} can be written to
-          now. Each draft is built from that order&rsquo;s own facts — nothing
-          sends until you press send.
+          worth {money(pendingValue)}. {queue.drafts.length}{" "}
+          can be written to now. Each draft is built from that order&rsquo;s own
+          facts — nothing sends until you press send.
         </p>
       </div>
 
