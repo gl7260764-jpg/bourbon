@@ -4,8 +4,10 @@ import { buildFollowUpEmail } from "@/lib/emails/followUpEmail";
 import { FOLLOW_UP_BATCH_SIZE } from "@/lib/follow-up-constants";
 import {
   draftForOrder,
+  saveDetailsTemplate,
   sendFollowUps,
   setFollowUpMuted,
+  stageOrderDetails,
   validateFollowUpEdit,
   type FollowUpSendItem,
 } from "@/lib/order-follow-up";
@@ -19,7 +21,15 @@ export const maxDuration = 60;
 /* Authorisation is the middleware's job: src/middleware.ts guards
    /api/admin/:path* the same way it guards /admin/:path*. */
 
-const ACTIONS = ["preview", "send", "send-batch", "mute", "unmute"] as const;
+const ACTIONS = [
+  "preview",
+  "send",
+  "send-batch",
+  "mute",
+  "unmute",
+  "stage-details",
+  "save-template",
+] as const;
 type Action = (typeof ACTIONS)[number];
 
 function fail(error: string, status: number) {
@@ -77,6 +87,34 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ subject: mail.subject, html: mail.html, draft });
       }
 
+      /* Write payment details against one order without telling the buyer.
+         Staged separately from sending so the operator can save them, watch
+         the draft change to match, and only then send. */
+      case "stage-details": {
+        if (!orderId) return fail("No order given.", 400);
+        const details = typeof body.details === "string" ? body.details : "";
+        const problem = await stageOrderDetails(orderId, details);
+        if (problem) return fail(problem, 400);
+        /* Optionally keep it as the starting point for this rail, so the next
+           order paying the same way does not have to be typed out again. */
+        if (body.alsoSaveTemplate === true && typeof body.railKey === "string") {
+          const railProblem = await saveDetailsTemplate(body.railKey, details);
+          if (railProblem) return fail(railProblem, 400);
+        }
+        revalidate();
+        return NextResponse.json({ ok: true, draft: await draftForOrder(orderId) });
+      }
+
+      case "save-template": {
+        const railKey = typeof body.railKey === "string" ? body.railKey : "";
+        if (!railKey) return fail("No payment method given.", 400);
+        const details = typeof body.details === "string" ? body.details : "";
+        const problem = await saveDetailsTemplate(railKey, details);
+        if (problem) return fail(problem, 400);
+        revalidate();
+        return NextResponse.json({ ok: true });
+      }
+
       case "send": {
         if (!orderId) return fail("No order given.", 400);
         const subject = typeof body.subject === "string" ? body.subject : undefined;
@@ -85,7 +123,10 @@ export async function POST(req: NextRequest) {
         const invalid = validateFollowUpEdit({ subject, paragraphs });
         if (invalid) return fail(invalid, 400);
 
-        const report = await sendFollowUps([{ orderId, subject, paragraphs }]);
+        const details = typeof body.details === "string" ? body.details : undefined;
+        const report = await sendFollowUps([
+          { orderId, subject, paragraphs, details },
+        ]);
         revalidate();
         if (!report.ok) return fail(report.error ?? "Nothing was sent.", 502);
         const outcome = report.outcomes[0];

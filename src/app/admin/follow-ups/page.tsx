@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { campaignMailerConfig } from "@/lib/campaign-mailer";
 import {
@@ -132,13 +131,10 @@ export default async function AdminFollowUpsPage() {
           </p>
           <p className="text-amber-800 text-xs mt-1">
             A warning means the message would promise something we cannot yet
-            do — most often payment details for a rail that has none
-            configured. Those are left out of &ldquo;select all&rdquo;. Fix them
-            under{" "}
-            <Link href="/admin/payment-methods" className="underline">
-              Payment methods
-            </Link>{" "}
-            and they clear.
+            do — almost always that the buyer has nowhere to pay. Fill the
+            details in on the draft itself and the warning clears; they go live
+            on that buyer&rsquo;s order page the moment you send. Warned drafts
+            are left out of &ldquo;select all&rdquo;.
           </p>
         </div>
       )}
@@ -155,6 +151,7 @@ export default async function AdminFollowUpsPage() {
             sentAt: h.sentAt.toISOString(),
           })),
         }))}
+        rails={queue.rails}
         canSend={mailer.ready}
       />
 

@@ -1,12 +1,17 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, SettlementState } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { firstNameOf } from "@/lib/order-welcome";
+import { getSetting, setSetting } from "@/lib/settings";
 import {
+  MAX_DETAILS_LEN,
   MAX_FOLLOW_UPS,
+  MIN_DETAILS_LEN,
   MIN_GAP_DAYS,
   STALE_DAYS,
+  detailsTemplateKey,
   type FollowUpDraft,
   type FollowUpTrack,
+  type RailDetailsRow,
 } from "@/lib/follow-up-constants";
 
 /**
@@ -48,6 +53,8 @@ export interface FollowUpQueue {
   drafts: FollowUpDraft[];
   /** Pending orders held back, and why. */
   held: { orderNumber: string; reason: string }[];
+  /** The payment rails in play, with the starting point saved for each. */
+  rails: RailDetailsRow[];
   totals: { count: number; value: number };
 }
 
@@ -96,8 +103,15 @@ interface OrderRow {
 }
 
 interface Context {
-  /** Payment option keys that have no instructions configured. */
-  railsWithoutDetails: Set<string>;
+  /**
+   * Per-rail starting points for payment details, by rail key.
+   *
+   * This replaces an earlier read of PaymentOption.instructions, which was
+   * wrong: that column is dead by design — rails deliberately carry no
+   * account details, and a warning pointing an operator at the Payment
+   * methods page sent them somewhere that says so in as many words.
+   */
+  detailsTemplates: Map<string, string>;
   /** Order ids whose buyer has a message we have not opened. */
   unansweredChat: Set<string>;
   /** Product ids deleted or retired since the order, among those ordered. */
@@ -163,9 +177,17 @@ function compose(
   order: OrderRow,
   track: FollowUpTrack,
   sequence: number,
-  facts: { firstName: string; bottles: string; ageDays: number; placedOn: string; rail: string },
+  facts: {
+    firstName: string;
+    bottles: string;
+    ageDays: number;
+    placedOn: string;
+    rail: string;
+    /** True when details go out with this send, so the copy can point at them. */
+    withDetails: boolean;
+  },
 ): { subject: string; paragraphs: string[]; ctaLabel: string } {
-  const { firstName, bottles, ageDays, placedOn, rail } = facts;
+  const { firstName, bottles, ageDays, placedOn, rail, withDetails } = facts;
   const hi = firstName ? `Hi ${firstName},` : "Hello,";
   const num = order.orderNumber;
   const sum = money(order.total);
@@ -180,7 +202,9 @@ function compose(
           paragraphs: [
             hi,
             `You placed order ${num} with us on ${placedOn} — ${bottles} — and we never sent you the details to pay with. That is our miss, not yours, and I am sorry it has sat this long.`,
-            `If you still want it, open your order below or simply reply to this email, and the details will be with you the same day. The ${sum} we quoted stands.`,
+            withDetails
+              ? `They are on your order page now. Open it below and everything you need to pay the ${sum} is there, along with somewhere to upload your receipt once you have.`
+              : `If you still want it, open your order below or simply reply to this email, and the details will be with you the same day. The ${sum} we quoted stands.`,
             `If you would rather leave it, reply with a word and we will close it off. Nothing is owed either way.`,
           ],
         };
@@ -190,7 +214,9 @@ function compose(
         ctaLabel: "Open my order",
         paragraphs: [
           hi,
-          `Following up once more on order ${num} (${bottles}, ${sum}). We never sent you payment details, and I would rather not let it quietly expire without asking.`,
+          withDetails
+            ? `Following up once more on order ${num} (${bottles}, ${sum}). The payment details are waiting on your order page — the button below opens it.`
+            : `Following up once more on order ${num} (${bottles}, ${sum}). We never sent you payment details, and I would rather not let it quietly expire without asking.`,
           `Reply either way — "send them" or "close it" — and I will act on it today.`,
         ],
       };
@@ -240,7 +266,9 @@ function compose(
           paragraphs: [
             hi,
             `You ordered ${bottles} from us on ${placedOn}, ${ageDays} days ago, and it never got as far as being paid.${ours}`,
-            `Rather than keep chasing it, I would rather just ask: do you still want it? If you do, open your order below — or reply with a yes — and I will have everything you need with you the same day. The ${sum} we quoted still stands.`,
+            withDetails
+              ? `Rather than keep chasing it, I would rather just ask: do you still want it? If you do, everything you need is already on your order page — open it below and the ${sum} we quoted still stands.`
+              : `Rather than keep chasing it, I would rather just ask: do you still want it? If you do, open your order below — or reply with a yes — and I will have everything you need with you the same day. The ${sum} we quoted still stands.`,
             `If you have moved on, reply "close it" and I will clear it from our books. You will not hear from me about it again, and nothing is owed.`,
           ],
         };
@@ -268,27 +296,40 @@ export function draftFor(order: OrderRow, ctx: Context): FollowUpDraft {
   const placedOn = dateOf(order.createdAt);
   const rail = order.paymentLabel ?? "your chosen payment method";
 
+  /* Details the buyer could actually pay against: what is staged on this
+     order, else the rail's starting point. A staged body with no issuedAt is
+     invisible to the buyer, which is what makes staging safe — the dashboard
+     only renders details once they have been issued. */
+  const railKey = order.paymentOptionKey;
+  const staged = order.paymentDetailsBody?.trim() ?? "";
+  const template = railKey ? (ctx.detailsTemplates.get(railKey) ?? "").trim() : "";
+  const detailsDraft = staged || template;
+  const needsDetails = order.paymentDetailsIssuedAt === null;
+  /* Sending issues the details too, but only when there is something real to
+     issue. Below MIN_DETAILS_LEN is a half-typed line, not an account. */
+  const willIssueDetails =
+    needsDetails && staged.length >= MIN_DETAILS_LEN;
+
   const { subject, paragraphs, ctaLabel } = compose(order, track, sequence, {
     firstName,
     bottles,
     ageDays,
     placedOn,
     rail,
+    withDetails: willIssueDetails || !needsDetails,
   });
 
   const warnings: string[] = [];
 
-  /* The one warning that can make a message untrue. DETAILS_OWED and
-     STILL_WANTED both promise details "the same day"; that promise is only
-     keepable if there is something to send. A rail with no instructions
-     configured and no per-order details written means there is not. */
-  if (
-    order.paymentDetailsBody === null &&
-    order.paymentOptionKey &&
-    ctx.railsWithoutDetails.has(order.paymentOptionKey)
-  ) {
+  /* The one warning that can make a message untrue: both DETAILS_OWED and
+     STILL_WANTED offer to put details in front of the buyer, and there is
+     nothing to put. Fixable right here rather than somewhere else — which is
+     the whole reason the details editor lives in this queue. */
+  if (needsDetails && staged.length < MIN_DETAILS_LEN) {
     warnings.push(
-      `No ${rail} details are configured, so the promise to send them today cannot be kept yet. Add them under Payment methods first.`,
+      template
+        ? `Nothing is staged against this order yet. The ${rail} starting point below is filled in — check it, add the reference to quote, and save it.`
+        : `This buyer has nowhere to pay: no ${rail} details exist for this order. Write them below and they go out with the email.`,
     );
   }
 
@@ -341,6 +382,10 @@ export function draftFor(order: OrderRow, ctx: Context): FollowUpDraft {
     subject,
     paragraphs,
     ctaLabel,
+    railKey,
+    needsDetails,
+    detailsDraft,
+    willIssueDetails,
     reason,
     warnings,
   };
@@ -389,8 +434,8 @@ export async function loadFollowUpQueue(): Promise<FollowUpQueue> {
     select: { ...QUEUE_SELECT, followUpMutedAt: true },
   });
 
-  const [rails, products, conversations] = await Promise.all([
-    prisma.paymentOption.findMany({ select: { key: true, instructions: true } }),
+  const [railRows, products, conversations] = await Promise.all([
+    prisma.paymentOption.findMany({ select: { key: true, label: true } }),
     prisma.product.findMany({
       where: {
         id: {
@@ -411,8 +456,8 @@ export async function loadFollowUpQueue(): Promise<FollowUpQueue> {
     }),
   ]);
 
-  const railsWithoutDetails = new Set(
-    rails.filter((r) => !r.instructions?.trim()).map((r) => r.key),
+  const detailsTemplates = await loadDetailsTemplates(
+    railRows.map((r) => r.key),
   );
 
   /* A deleted product and a retired one are the same problem from the buyer's
@@ -441,7 +486,7 @@ export async function loadFollowUpQueue(): Promise<FollowUpQueue> {
   );
 
   const ctx: Context = {
-    railsWithoutDetails,
+    detailsTemplates,
     unansweredChat,
     goneFromCatalogue,
     outOfStock,
@@ -479,14 +524,124 @@ export async function loadFollowUpQueue(): Promise<FollowUpQueue> {
     drafts.push(draftFor(order, ctx));
   }
 
+  /* Only the rails actually in the queue. A list of every rail the shop has
+     ever offered would bury the two that are blocking money today. */
+  const labelByKey = new Map(railRows.map((r) => [r.key, r.label]));
+  const railStats = new Map<string, { orders: number; needing: number }>();
+  for (const d of drafts) {
+    if (!d.railKey) continue;
+    const cur = railStats.get(d.railKey) ?? { orders: 0, needing: 0 };
+    railStats.set(d.railKey, {
+      orders: cur.orders + 1,
+      needing: cur.needing + (d.warnings.length > 0 && d.needsDetails ? 1 : 0),
+    });
+  }
+  const rails: RailDetailsRow[] = [...railStats]
+    .map(([key, stat]) => ({
+      key,
+      label: labelByKey.get(key) ?? key,
+      orders: stat.orders,
+      needing: stat.needing,
+      template: detailsTemplates.get(key) ?? "",
+    }))
+    // Rails with orders that have nowhere to pay come first: that is the work.
+    .sort((a, b) => b.needing - a.needing || b.orders - a.orders);
+
   return {
     drafts,
     held,
+    rails,
     totals: {
       count: drafts.length,
       value: drafts.reduce((sum, d) => sum + d.total, 0),
     },
   };
+}
+
+// --- Per-rail starting points ------------------------------------------------
+
+/** Every rail's saved starting point, in one pass over the Setting table. */
+export async function loadDetailsTemplates(
+  railKeys: string[],
+): Promise<Map<string, string>> {
+  if (railKeys.length === 0) return new Map();
+  const rows = await prisma.setting.findMany({
+    where: { key: { in: railKeys.map(detailsTemplateKey) } },
+    select: { key: true, value: true },
+  });
+  const byKey = new Map(rows.map((r) => [r.key, r.value]));
+  return new Map(
+    railKeys.map((key) => [key, byKey.get(detailsTemplateKey(key)) ?? ""]),
+  );
+}
+
+/**
+ * Save a rail's starting point.
+ *
+ * Deliberately NOT PaymentOption.instructions. That column is dead because
+ * rails must not carry account details, and nothing here changes that: this
+ * value is only ever typed into a per-order editor by an operator, and no
+ * buyer sees it until it has been saved against their own order.
+ */
+export async function saveDetailsTemplate(
+  railKey: string,
+  body: string,
+): Promise<string | null> {
+  const value = body.trim();
+  if (value.length > MAX_DETAILS_LEN) {
+    return `Keep the details under ${MAX_DETAILS_LEN} characters.`;
+  }
+  await setSetting(detailsTemplateKey(railKey), value);
+  return null;
+}
+
+/** One rail's starting point, for prefilling a single draft. */
+export async function detailsTemplateFor(railKey: string): Promise<string> {
+  return getSetting(detailsTemplateKey(railKey), "");
+}
+
+/**
+ * Stage payment details against one order without telling the buyer.
+ *
+ * The buyer's dashboard renders details only once `paymentDetailsIssuedAt` is
+ * set, so a staged body is invisible to them. That gap is the point: it lets
+ * an operator write and re-read the details, see the draft change to match,
+ * and send both in one go — rather than issuing details in one place, mailing
+ * from another, and hoping the two said the same thing.
+ */
+export async function stageOrderDetails(
+  orderId: string,
+  body: string,
+): Promise<string | null> {
+  const value = body.trim();
+  if (value.length < MIN_DETAILS_LEN) {
+    return "Write the actual details the buyer should pay against — account or wallet, and the reference to quote.";
+  }
+  if (value.length > MAX_DETAILS_LEN) {
+    return `Keep the details under ${MAX_DETAILS_LEN} characters.`;
+  }
+
+  const order = await prisma.order.findUnique({
+    where: { id: orderId },
+    select: { status: true, paymentDetailsIssuedAt: true },
+  });
+  if (!order) return "Order not found.";
+  if (order.status !== "PENDING") {
+    return "That order is no longer pending, so payment details would be meaningless.";
+  }
+  /* Already issued means the buyer is looking at the old text right now.
+     Correcting it belongs on the order page, which re-issues and re-notifies;
+     silently rewriting it from here would change what they see with no word
+     about why. */
+  if (order.paymentDetailsIssuedAt) {
+    return "These details have already been issued. Correct them from the order page, which tells the buyer they changed.";
+  }
+
+  await prisma.order.update({
+    where: { id: orderId },
+    data: { paymentDetailsBody: value },
+  });
+  return null;
 }
 
 /** One order's draft, re-derived from the database. The send path's source of truth. */
@@ -497,8 +652,10 @@ export async function draftForOrder(orderId: string): Promise<FollowUpDraft | nu
   });
   if (!order) return null;
 
-  const [rails, conversation] = await Promise.all([
-    prisma.paymentOption.findMany({ select: { key: true, instructions: true } }),
+  const [template, conversation] = await Promise.all([
+    order.paymentOptionKey
+      ? detailsTemplateFor(order.paymentOptionKey)
+      : Promise.resolve(""),
     prisma.conversation.findFirst({
       where: { orderId, adminUnread: { gt: 0 } },
       select: { id: true },
@@ -506,8 +663,8 @@ export async function draftForOrder(orderId: string): Promise<FollowUpDraft | nu
   ]);
 
   return draftFor(order, {
-    railsWithoutDetails: new Set(
-      rails.filter((r) => !r.instructions?.trim()).map((r) => r.key),
+    detailsTemplates: new Map(
+      order.paymentOptionKey ? [[order.paymentOptionKey, template]] : [],
     ),
     unansweredChat: conversation ? new Set([orderId]) : new Set(),
     // Supply is an operator warning on the queue, not a send-time concern: by
@@ -525,10 +682,23 @@ export interface FollowUpSendItem {
   /** The operator's edit, when they made one. Falls back to the derived draft. */
   subject?: string;
   paragraphs?: string[];
+  /**
+   * Payment details to stage against this order before the message goes.
+   * Staging and sending in one call is what makes the email true: the buyer
+   * opens the link and the details are already on the page.
+   */
+  details?: string;
 }
 
 export type FollowUpOutcome =
-  | { orderId: string; orderNumber: string; ok: true; track: FollowUpTrack }
+  | {
+      orderId: string;
+      orderNumber: string;
+      ok: true;
+      track: FollowUpTrack;
+      /** True when this send also gave the buyer somewhere to pay. */
+      issuedDetails: boolean;
+    }
   | { orderId: string; orderNumber: string; ok: false; error: string };
 
 export interface FollowUpSendReport {
@@ -537,6 +707,8 @@ export interface FollowUpSendReport {
   error?: string;
   sent: number;
   failed: number;
+  /** How many of those sends also gave a buyer somewhere to pay. */
+  issued: number;
   outcomes: FollowUpOutcome[];
 }
 
@@ -600,7 +772,7 @@ export async function sendFollowUps(
   items: FollowUpSendItem[],
 ): Promise<FollowUpSendReport> {
   if (items.length === 0) {
-    return { ok: true, sent: 0, failed: 0, outcomes: [] };
+    return { ok: true, sent: 0, failed: 0, issued: 0, outcomes: [] };
   }
 
   // Imported here rather than at the top of the module so that loading the
@@ -660,6 +832,23 @@ export async function sendFollowUps(
         continue;
       }
 
+      /* Stage first, draft second. The draft's wording depends on whether
+         the buyer will have somewhere to pay when they open the link, so the
+         details must be written before the message is composed — not after,
+         which is how you end up mailing "details to follow" alongside them. */
+      if (item.details !== undefined && item.details.trim()) {
+        const staged = await stageOrderDetails(item.orderId, item.details);
+        if (staged) {
+          outcomes.push({
+            orderId: item.orderId,
+            orderNumber: order.orderNumber,
+            ok: false,
+            error: staged,
+          });
+          continue;
+        }
+      }
+
       const draft = await draftForOrder(item.orderId);
       if (!draft) {
         outcomes.push({
@@ -706,7 +895,23 @@ export async function sendFollowUps(
           }),
           prisma.order.update({
             where: { id: item.orderId },
-            data: { followUpCount: { increment: 1 }, lastFollowUpAt: new Date() },
+            data: {
+              followUpCount: { increment: 1 },
+              lastFollowUpAt: new Date(),
+              /* Issuing rides along with the claim. The message is about to
+                 say the details are on the order page, so they have to be
+                 visible there before it leaves — and if the claim is lost to
+                 a second tab, nothing was issued either. Settlement only
+                 moves off AWAITING_DETAILS; an order further along keeps the
+                 state it has. */
+              ...(draft.willIssueDetails
+                ? {
+                    paymentDetailsIssuedAt: new Date(),
+                    paymentDetailsIssuedBy: FOLLOW_UP_OPERATOR,
+                    settlementState: SettlementState.AWAITING_PAYMENT,
+                  }
+                : {}),
+            },
           }),
         ]);
         followUpId = row.id;
@@ -763,6 +968,7 @@ export async function sendFollowUps(
               orderNumber: order.orderNumber,
               ok: true,
               track: draft.track,
+              issuedDetails: draft.willIssueDetails,
             }
           : {
               orderId: item.orderId,
@@ -777,7 +983,14 @@ export async function sendFollowUps(
   });
 
   if (!result.ok) {
-    return { ok: false, error: result.error, sent: 0, failed: 0, outcomes: [] };
+    return {
+      ok: false,
+      error: result.error,
+      sent: 0,
+      failed: 0,
+      issued: 0,
+      outcomes: [],
+    };
   }
 
   const outcomes = result.value;
@@ -785,6 +998,7 @@ export async function sendFollowUps(
     ok: true,
     sent: outcomes.filter((o) => o.ok).length,
     failed: outcomes.filter((o) => !o.ok).length,
+    issued: outcomes.filter((o) => o.ok && o.issuedDetails).length,
     outcomes,
   };
 }

@@ -62,6 +62,27 @@ export const MIN_GAP_DAYS = 7;
 /** Recipients per send request. Each one opens an SMTP round trip to Brevo. */
 export const FOLLOW_UP_BATCH_SIZE = 10;
 
+/**
+ * Per-order payment details, staged from the follow-up queue.
+ *
+ * Details are per order, not per rail — that is a decision this codebase
+ * already made, and the reason is that only a per-order write can quote a
+ * reference unique to that payment. `PaymentOption.instructions` is dead for
+ * exactly that reason and must not be revived.
+ *
+ * What the queue adds is a per-rail *starting point*, kept in the Setting
+ * table: typing the same Chime account four times is how mistakes get made.
+ * It only ever pre-fills the textarea. Nothing is shown to a buyer until an
+ * operator has saved it against their specific order.
+ */
+export const MIN_DETAILS_LEN = 10;
+export const MAX_DETAILS_LEN = 4000;
+
+/** Setting key holding the starting point for one rail's details. */
+export function detailsTemplateKey(railKey: string): string {
+  return `followup_details_${railKey}`;
+}
+
 export interface FollowUpDraft {
   orderId: string;
   orderNumber: string;
@@ -84,6 +105,24 @@ export interface FollowUpDraft {
   paragraphs: string[];
   /** Label on the button the template always appends. Not editable. */
   ctaLabel: string;
+
+  /** The rail's stable key, for saving details against it. */
+  railKey: string | null;
+  /**
+   * True when this buyer has never been given anywhere to pay. The queue's
+   * whole reason for existing: it is our omission, not their silence.
+   */
+  needsDetails: boolean;
+  /**
+   * Details already staged against this order, or the rail's starting point
+   * when nothing is staged. Pre-fills the editor; never sent in the email.
+   */
+  detailsDraft: string;
+  /**
+   * True when sending will also issue details to this buyer, which changes
+   * what the message can honestly say.
+   */
+  willIssueDetails: boolean;
   /** Why this track was chosen, for the operator — never sent. */
   reason: string;
   /** Things to know before pressing send. Never sent. */
@@ -97,4 +136,15 @@ export interface FollowUpHistoryRow {
   status: string;
   error: string | null;
   sentAt: string;
+}
+
+/** One payment rail in the queue, with the starting point saved for it. */
+export interface RailDetailsRow {
+  key: string;
+  label: string;
+  /** Orders in the queue paying by this rail. */
+  orders: number;
+  /** Orders on this rail still with nowhere to pay. */
+  needing: number;
+  template: string;
 }

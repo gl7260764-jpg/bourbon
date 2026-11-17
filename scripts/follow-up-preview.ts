@@ -10,7 +10,7 @@
  * no connection to Brevo and writes nothing.
  */
 import { PrismaClient } from "@prisma/client";
-import { draftFor } from "@/lib/order-follow-up";
+import { draftFor, loadDetailsTemplates } from "@/lib/order-follow-up";
 
 const prisma = new PrismaClient();
 const showAll = process.argv.includes("--all");
@@ -48,12 +48,8 @@ const rule = (ch = "-") => ch.repeat(72);
     },
   });
 
-  const rails = await prisma.paymentOption.findMany({
-    select: { key: true, instructions: true },
-  });
-  const railsWithoutDetails = new Set(
-    rails.filter((r) => !r.instructions?.trim()).map((r) => r.key),
-  );
+  const rails = await prisma.paymentOption.findMany({ select: { key: true } });
+  const detailsTemplates = await loadDetailsTemplates(rails.map((r) => r.key));
 
   // Supply, resolved the same way the admin queue resolves it, so a draft
   // read here carries the same warnings it would carry in the panel.
@@ -71,7 +67,7 @@ const rule = (ch = "-") => ch.repeat(72);
   const listed = new Map(products.map((p) => [p.id, p.availability]));
 
   const ctx = {
-    railsWithoutDetails,
+    detailsTemplates,
     // Chat is left out: it needs the admin inbox's unread counts and this
     // script is about reading the words, not the queue's completeness.
     unansweredChat: new Set<string>(),
@@ -100,8 +96,12 @@ const rule = (ch = "-") => ch.repeat(72);
 
   const warned = drafts.filter((d) => d.warnings.length > 0);
   console.log(`\nwith warnings: ${warned.length} of ${drafts.length}`);
+  const noWhereToPay = drafts.filter((d) => d.needsDetails && !d.detailsDraft.trim());
   console.log(
-    `rails with no instructions configured: ${[...railsWithoutDetails].join(", ") || "none"}`,
+    `buyers with nowhere to pay: ${noWhereToPay.length}` +
+      (noWhereToPay.length
+        ? ` (rails: ${[...new Set(noWhereToPay.map((d) => d.rail))].join(", ")})`
+        : ""),
   );
 
   const show = showAll
