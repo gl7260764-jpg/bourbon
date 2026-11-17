@@ -21,7 +21,11 @@ import { DISTILLERY } from "@/lib/locations";
  *   BREVO_SMTP_HOST / BREVO_SMTP_PORT optional overrides
  */
 
-const REQUIRED = ["BREVO_SMTP_USER", "BREVO_SMTP_KEY", "CAMPAIGN_FROM"] as const;
+const REQUIRED = [
+  "BREVO_SMTP_USER",
+  "BREVO_SMTP_KEY",
+  "CAMPAIGN_FROM",
+] as const;
 
 export interface CampaignMailerConfig {
   ready: boolean;
@@ -68,7 +72,12 @@ export function describeSmtpError(err: unknown): string {
   if (e?.code === "EAUTH") {
     return "Brevo rejected the SMTP login. Check BREVO_SMTP_USER and BREVO_SMTP_KEY — the key must be an SMTP key, not an API key.";
   }
-  if (e?.code === "ECONNECTION" || e?.code === "ETIMEDOUT" || e?.code === "ESOCKET" || e?.code === "EDNS") {
+  if (
+    e?.code === "ECONNECTION" ||
+    e?.code === "ETIMEDOUT" ||
+    e?.code === "ESOCKET" ||
+    e?.code === "EDNS"
+  ) {
     return "Could not reach Brevo's mail server. Nothing was sent — try again in a minute.";
   }
   if (e?.response) {
@@ -83,14 +92,23 @@ export interface CampaignEmail {
   subject: string;
   html: string;
   text: string;
-  unsubscribeUrl: string;
+  /**
+   * This recipient's own unsubscribe link, for a marketing send.
+   *
+   * Omitted for transactional mail that happens to share this relay — an
+   * order follow-up, say. Those are not list mail: the recipient is being
+   * written to because they bought something, so offering to unsubscribe them
+   * is both wrong and, in Gmail, an Unsubscribe button rendered beside
+   * instructions for paying us. When this is absent the two List-Unsubscribe
+   * headers are left off entirely.
+   */
+  unsubscribeUrl?: string;
   /** Groups the send in Brevo's statistics. */
   tag: string;
 }
 
 export type CampaignSendResult =
-  | { ok: true; messageId: string }
-  | { ok: false; error: string };
+  { ok: true; messageId: string } | { ok: false; error: string };
 
 /**
  * Open one pooled connection set for the duration of a batch, then close it.
@@ -106,11 +124,16 @@ export type CampaignSendResult =
  */
 export async function withCampaignMailer<T>(
   poolSize: number,
-  run: (send: (mail: CampaignEmail) => Promise<CampaignSendResult>) => Promise<T>,
+  run: (
+    send: (mail: CampaignEmail) => Promise<CampaignSendResult>,
+  ) => Promise<T>,
 ): Promise<{ ok: true; value: T } | { ok: false; error: string }> {
   const config = campaignMailerConfig();
   if (!config.ready) {
-    return { ok: false, error: `Brevo is not configured. Missing: ${config.missing.join(", ")}.` };
+    return {
+      ok: false,
+      error: `Brevo is not configured. Missing: ${config.missing.join(", ")}.`,
+    };
   }
 
   const transport = createTransport(poolSize);
@@ -134,12 +157,20 @@ export async function withCampaignMailer<T>(
         text: mail.text,
         headers: {
           /* RFC 8058 one-click unsubscribe. Gmail and Yahoo require both
-             headers for bulk senders, and they are sent on every message
-             regardless of what the visible footer says. The URL is this
-             recipient's own — one shared link would let anyone unsubscribe
-             the whole list. */
-          "List-Unsubscribe": `<${mail.unsubscribeUrl}>`,
-          "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+             headers for bulk senders, and they are sent on every marketing
+             message regardless of what the visible footer says. The URL is
+             this recipient's own — one shared link would let anyone
+             unsubscribe the whole list.
+
+             Both are dropped when no URL is supplied, which is how
+             transactional mail shares this relay without being dressed as
+             list mail. See CampaignEmail.unsubscribeUrl. */
+          ...(mail.unsubscribeUrl
+            ? {
+                "List-Unsubscribe": `<${mail.unsubscribeUrl}>`,
+                "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+              }
+            : {}),
           // Brevo groups statistics by this header.
           "X-Mailin-Tag": mail.tag,
         },
