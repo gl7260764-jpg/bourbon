@@ -35,6 +35,28 @@ thresholds in `src/lib/follow-up-constants.ts`.
 - No payment details ever go in the email, only a one-click sign-in link to
   the order. Same rule as `paymentDetailsEmail.ts`.
 
+## Analytics traffic filter
+
+`/admin/analytics` has a **Real users / Bots / All traffic** filter that
+rescopes every visitor-derived query, not just the table. Real users is the
+default. Rules live in `src/lib/visitor-traffic.ts`.
+
+- `isLikelyBot()` in `visitor.ts` runs at write time and catches whatever
+  names itself. Against real data that is **1 visitor in 2994** — do not
+  rebuild this filter on it. What gets through sends a genuine Chrome user
+  agent, so the rules read the *shape* of the traffic: agents that are not
+  browsers, visitors that never requested a page, and clusters of 8+ cookies
+  sharing one byte-identical agent with no engagement anywhere in the group.
+- **An email address or any measured dwell time outranks every other rule.**
+  Counting a bot overstates a number; dropping a customer deletes a real
+  person from the numbers. Two live visitors send a user agent of `"pc"` and
+  `"android"` and then stayed ~10s — the not-a-browser rule had them as
+  robots until engagement was made to override it. Keep that precedence.
+- Orders, revenue and subscriber sources are never filtered: they come from
+  checkout and signup forms, not from tracking.
+- Anything merely unproven stays counted as human and is disclosed in the
+  "How a bot is spotted" panel rather than quietly folded in.
+
 ## Architecture
 
 - **Framework**: Next.js 16 with App Router, React 19, TypeScript
