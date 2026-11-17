@@ -477,7 +477,7 @@ export default async function AnalyticsPage({
         ? `${botsWord} judged automated, and everything they did, are excluded from every number below.`
         : "Nothing here looks automated, so no visitor is being excluded."
       : mode === "bots"
-        ? `Showing only the ${botsWord} judged automated. Total orders and revenue are left whole — those come from checkout, not from visitor tracking.`
+        ? `Showing only the ${botsWord} judged automated. Orders, revenue and email sources are left whole — those come from checkout and signup forms, not from visitor tracking.`
         : `Nothing is excluded. ${traffic.bots.toLocaleString()} of these ${traffic.total.toLocaleString()} visitors look automated.`;
 
   const unprovenNote: string | null =
@@ -811,7 +811,7 @@ export default async function AnalyticsPage({
                           {botReason && (
                             <span
                               title={BOT_REASON_BLURBS[botReason]}
-                              className="inline-block mt-1 text-[9px] tracking-widest uppercase px-1.5 py-0.5 bg-bourbon-deep/5 text-bourbon-stone border border-bourbon-deep/10"
+                              className="block w-fit mt-1 text-[9px] tracking-widest uppercase px-1.5 py-0.5 bg-bourbon-deep/5 text-bourbon-stone border border-bourbon-deep/10"
                             >
                               {BOT_REASON_LABELS[botReason]}
                             </span>
