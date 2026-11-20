@@ -1,5 +1,7 @@
 # Google Search Console — URL submission list
 
+> **Up-to-date list:** [`seo/urls.csv`](seo/urls.csv) (track what you've submitted) and [`seo/urls.txt`](seo/urls.txt) (bare URLs to copy). Run `npm run seo:urls` after new pages go live. The tiers below still set the order.
+
 **85 indexable URLs.** Generated from the live sitemap, so this is exactly what Google is told to crawl.
 
 Sitemap: `https://bourbonoaklover.com/sitemap.xml` · Property: `https://bourbonoaklover.com/` (non-www)
